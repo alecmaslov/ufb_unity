@@ -3,17 +3,8 @@ using System.Collections;
 
 namespace UFB.Map {
 
-    public struct Coordinate {
-        public int x;
-        public int y;
-    }
-
-    public class Tile {
-        public string id;
-        public Coordinate coordinate; 
-    }
-
-
+    // handles rules and data for game map
+    // can also parse map json to create
     public class GameMap {
 
         string name;
