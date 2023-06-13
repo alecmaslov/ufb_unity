@@ -1,32 +1,33 @@
 
 namespace UFB.Player {
-    public struct StatusValue<T> {
-        public T value;
-        public T maxValue;
-    }
+    public struct StatusValue {
+        public int value;
+        public int maxValue;
 
+        public StatusValue(int value, int maxValue) {
+            this.value = value;
+            this.maxValue = maxValue;
+        }
 
-    // consider making a StatusItem that has
-    /// - StatusValue value
-    /// - Sprite icon
+        public float Percent {
+            get {
+                return (float)value / (float)maxValue;
+            }
+        }
 
-    /// or an IStatus
+        public void Add(int amount) {
+            value += amount;
+            if (value > maxValue) {
+                value = maxValue;
+            }
+        }
 
-    public struct PlayerStatus {
-        public StatusValue<int> Health;
-        public Energy Energy;
-
-        // I don't think the following things are really status
-        // objects, but rather are inventory items. 
-        // when we want to render the player status, it could be a combination
-        // of items in the inventory that have an IStatusValue
-
-
-        // public StatusValue<int> MeleeTokens;
-        // public StatusValue<int> MagicTokens;
-        // public StatusValue<int> EnergyShards;
-        // public StatusValue<int> EnergyCrystals;
-        // public StatusValue<int> HeartCrystals;
+        public void Subtract(int amount) {
+            value -= amount;
+            if (value < 0) {
+                value = 0;
+            }
+        }
     }
 
 
@@ -35,11 +36,16 @@ namespace UFB.Player {
     // should implement an interface so that various game APIs can
     // access a value and display it as a status value
     public interface IStatusValue {
-
+        int Value { get; }
     }
 
     public class Energy : IStatusValue {
         public int Value { get; private set; }
         public int Income { get; private set; } // amount of energy recieved each turn
+    }
+
+    public class Health : IStatusValue {
+        public int Value { get; private set; }
+        public int MaxValue { get; private set; }
     }
 }

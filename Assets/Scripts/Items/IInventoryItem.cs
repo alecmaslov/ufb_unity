@@ -11,12 +11,24 @@ namespace UFB.Items {
         Gold
     }
 
+    public enum PowerType {
+
+    }
+
+    public interface IPower {
+        void OnEquip();
+        void OnUnequip();
+    }
+
+    public interface IBonus {
+        
+    }
+
     public interface IInventoryItem {
         string DisplayName { get; }
         ItemType Type { get; }
-        Sprite Image { get; }
+        // Sprite Image { get; }
         void OnPickup();
         void OnUse();
-        void OnEquip();
     }
 }
