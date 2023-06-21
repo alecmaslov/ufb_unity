@@ -10,8 +10,16 @@ namespace UFB.Map {
     }
 
     public class Tile {
-        public string Id { get => $"tile_{Coordinate.x}_{Coordinate.y}"; }
-        public Coordinate Coordinate { get; set; } 
+        public string Id { get => $"tile_{ColumnName}_{RowName}"; }
+
+        public string ColumnName => _tileColumns[Coordinate.x];
+        public string RowName => Coordinate.y.ToString();
+
+        public Coordinate Coordinate { get; set; }
+
+        private readonly string[] _tileColumns =  { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
+                                                "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", 
+                                                "V", "W", "X", "Y", "Z" }; 
     }
 }
 

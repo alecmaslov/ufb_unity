@@ -9,7 +9,7 @@ export enum MeleeItemType {
     Shield = 'Shield',
 }
 
-export enum WeaponItemType {
+export enum RangedItemType {
     Bow = 'Bow',
     Crossbow = 'Crossbow',
     Cannon = 'Cannon',
@@ -26,20 +26,7 @@ export enum MagicItemType {
     VoidCrystal = 'Void Crystal',
 }
 
-export type ItemType = MeleeItemType | WeaponItemType | ArmorItemType | MagicItemType;
-
-
-// export enum PowerCostType {
-//     Health = 'Health',
-//     Energy = 'Energy',
-//     Magic = 'Magic',
-//     Gold = 'Gold',
-//     Arrow = 'Arrow',
-//     Bomb = 'Bomb',
-//     Potion = 'Potion',
-//     Landmine = 'Landmine',
-//     Elixir = 'Elixir',
-// }
+export type ItemType = MeleeItemType | RangedItemType | ArmorItemType | MagicItemType;
 
 export interface PowerCost {
     type: PlayerAttribute | string;
@@ -76,3 +63,17 @@ export interface Power {
     type: ItemType;
     behavior: PowerBehavior;
 }
+
+
+
+// export enum PowerCostType {
+//     Health = 'Health',
+//     Energy = 'Energy',
+//     Magic = 'Magic',
+//     Gold = 'Gold',
+//     Arrow = 'Arrow',
+//     Bomb = 'Bomb',
+//     Potion = 'Potion',
+//     Landmine = 'Landmine',
+//     Elixir = 'Elixir',
+// }
