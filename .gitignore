@@ -75,3 +75,9 @@ crashlytics-build.properties
 .env
 
 /Assets/Data
+
+
+Schema/node_modules/
+Schema/out/
+Schema/data/
+.DS_Store

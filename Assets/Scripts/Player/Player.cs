@@ -41,7 +41,6 @@ namespace UFB.Player
 
         public Quest[] Quests { get; set; }
 
-
         public Player(string name, int id) {
             Name = name;
             Id = id;
