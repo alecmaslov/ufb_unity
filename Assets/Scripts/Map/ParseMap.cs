@@ -75,7 +75,7 @@ namespace UFB.Map {
                 ColorUtility.TryParseHtmlString(Color.Color, out color);
 
             } catch (System.Exception e) {
-                Debug.Log("Error parsing color: " + e);
+                Debug.Log("Error parsing color: " + e + " Tile: " + Id);
                 color = UnityEngine.Color.white;
             }
             return color;
@@ -122,6 +122,18 @@ namespace UFB.Map {
     {
         public string Name { get; set; }
         public List<GameTile> Tiles { get; set; }
+        public int Dimensions { get => (int) Mathf.Sqrt(Tiles.Count); }
+
+        public Color[] GetUniqueColors() 
+        {
+            List<Color> colors = new List<Color>();
+            foreach (var tile in Tiles) {
+                if (!colors.Contains(tile.GetColor())) {
+                    colors.Add(tile.GetColor());
+                }
+            }
+            return colors.ToArray();
+        }
     }
 
 

@@ -77,7 +77,10 @@ function parseBackgroundLayer(layer: any, allTiles: Map<string, Partial<GameTile
     if (tile === undefined) throw new Error("Failed to find tile.");
     tile.type = parseTileType(tileCode);
     tile.spawnItems = [];
-    tile.color = parseTileColor(tileCode);
+
+    var color = parseTileColor(tileCode);
+    if (color === null) color = TileColorCodes.get("E")!;
+    tile.color = color;
     tile.layerName = layer.name;
     tile.edges = edges;
     tile.legacyCode = tileCode;

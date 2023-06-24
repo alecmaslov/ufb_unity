@@ -9,18 +9,12 @@ namespace UFB.Development {
     
     public class BoardSpawner : MonoBehaviour
     {
-
-        [Header("Entities")]
-        [SerializeField] private GameObject _tilePrefab;
-
         [SerializeField] private string _mapName = "kraken";
-
-        private GameBoard _gameBoard;
-
+     
         void Start()
         {
-            _gameBoard = GetComponent<GameBoard>();
-            _gameBoard.SpawnBoard(_mapName);
+            var gameBoard = GetComponent<GameBoard>();
+            gameBoard.SpawnBoard(_mapName);
         }
     }
 

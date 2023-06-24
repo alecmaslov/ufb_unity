@@ -1,5 +1,8 @@
 using UFB.Network;
 using UnityEngine;
+using UFB.Map;
+using UFB.Player;
+using UFB.Entities;
 
 namespace UFB.Gameplay {
 
@@ -9,8 +12,13 @@ namespace UFB.Gameplay {
         // main API through which either a game manager or a server 
         // connection provides commands to the game
 
+
         public static GameController Instance { get; private set; }
         public ServerConnection ServerConnection { get; private set; }
+
+        [SerializeField] private string _mapName = "kraken";
+        [SerializeField] private GameBoard _gameBoard;
+        private PlayerManager _playerManager;
 
         private void Awake() {
             if (Instance != null) {
@@ -20,6 +28,21 @@ namespace UFB.Gameplay {
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void Start()
+        {
+            if (_gameBoard == null) {
+                var gameBoardPrefab = Resources.Load("Prefabs/GameBoard") as GameObject;
+                var gameBoardObject = Instantiate(gameBoardPrefab, Vector3.zero, Quaternion.identity);
+                _gameBoard = GameObjectExtensions.GetOrAddComponent<GameBoard>(gameBoardObject);
+            }
+
+            var playerManagerPrefab = Resources.Load("Prefabs/PlayerManager") as GameObject;
+            var playerManagerObject = Instantiate(playerManagerPrefab, Vector3.zero, Quaternion.identity);
+            _playerManager = GameObjectExtensions.GetOrAddComponent<PlayerManager>(playerManagerObject);
+
+            _gameBoard.SpawnBoard(_mapName);
         }
 
         public void InitializeGame()

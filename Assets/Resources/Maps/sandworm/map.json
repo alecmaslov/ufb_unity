@@ -1303,7 +1303,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -1448,7 +1451,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -1839,7 +1845,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -1937,7 +1946,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -2391,7 +2403,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -2425,7 +2440,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -2902,7 +2920,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -2963,7 +2984,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -3097,7 +3121,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -3553,7 +3580,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -4057,7 +4087,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -4118,7 +4151,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -4277,7 +4313,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -4639,7 +4678,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -4673,7 +4715,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -5970,7 +6015,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -6870,7 +6918,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -8863,7 +8914,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -9164,7 +9218,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -10006,7 +10063,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -10069,7 +10129,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -10388,7 +10451,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -10994,7 +11060,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -11319,7 +11388,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -12318,7 +12390,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -12744,7 +12819,10 @@
       },
       "type": "Bridge",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [
         {
@@ -14136,7 +14214,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -14191,7 +14272,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -14739,7 +14823,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"
@@ -15315,7 +15402,10 @@
       },
       "type": "Void",
       "spawnItems": [],
-      "color": null,
+      "color": {
+        "name": "white",
+        "color": "#ffffff"
+      },
       "layerName": "Background",
       "edges": [],
       "legacyCode": "V"

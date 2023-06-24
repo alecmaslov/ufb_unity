@@ -3,7 +3,12 @@ guid: 8e3fd45a533325f408a442b5ea137fea
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Kirin_Low_UVs_rev05_lambert2_BaseMap
+    second: {fileID: 2800000, guid: f1f9e193915406741aff69debf1fde69, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
