@@ -9,9 +9,29 @@ public enum TransformType {
     Scale
 }
 
+
+/// eventually use this instead of a dictionary in TransformCoroutineManager
+public class CoroutineDuration {
+    public float Duration { get; set; }
+    public TransformType TransformType { get; set; }
+}
+
 public class TransformCoroutineManager : CoroutineManager {
-    public TransformSnapshot TargetSnapshot;
-    private TransformSnapshot _targetTransform;
+    public TransformSnapshot TargetSnapshot => _targetSnapshot;
+
+    public TransformSnapshot CurrentSnapshot => new TransformSnapshot(_owner.transform);
+
+    public Dictionary<string, TransformSnapshot> ReferenceSnapshots {
+        get {
+            if (_referenceSnapshots == null) {
+                _referenceSnapshots = new Dictionary<string, TransformSnapshot>();
+            }
+            return _referenceSnapshots;
+        }
+    }
+
+    private Dictionary<string, TransformSnapshot> _referenceSnapshots; // stored for later use
+    private TransformSnapshot _targetSnapshot;
     private bool _useLocal;
 
     private Dictionary<TransformType, float> _cachedDurations = new Dictionary<TransformType, float>();
@@ -24,22 +44,71 @@ public class TransformCoroutineManager : CoroutineManager {
     public TransformCoroutineManager(MonoBehaviour owner, Action onTransformStart = null, Action onTransformComplete = null, bool useLocal = false) : base(owner) {
         Vector3 position = useLocal ? owner.transform.localPosition : owner.transform.position;
         Quaternion rotation = useLocal ? owner.transform.localRotation : owner.transform.rotation;
-        this._targetTransform = new TransformSnapshot(position, rotation, owner.transform.localScale);
+        this._targetSnapshot = new TransformSnapshot(position, rotation, owner.transform.localScale);
         this._onTransformStart = onTransformStart;
         this._onTransformComplete = onTransformComplete;
+    }
+
+    /// <summary>
+    /// Add a reference snapshot at a given TransformSnapshot, referenced by key
+    /// </summary>
+    public void AddReferenceSnapshot(string key, TransformSnapshot snapshot) {
+        ReferenceSnapshots[key] = snapshot;
+    }
+
+    /// <summary>
+    /// Add a reference snapshot at the current transform, referenced by key
+    /// </summary>
+    public void AddReferenceSnapshot(string key)
+    {
+        ReferenceSnapshots[key] = CurrentSnapshot;
+    }
+
+    public void TransformToReferenceSnapshot(string key, float duration = 1f) {
+        if (!ReferenceSnapshots.ContainsKey(key)) {
+            Debug.LogError($"No reference snapshot found for key {key}");
+            return;
+        }
+        TransformTo(ReferenceSnapshots[key], duration);
+    }
+
+    public Vector3 GetReferencePosition(string key) {
+        if (!ReferenceSnapshots.ContainsKey(key)) {
+            Debug.LogError($"No reference snapshot found for key {key}");
+            return Vector3.zero;
+        }
+        return ReferenceSnapshots[key].Position;
+    }
+
+    public Quaternion GetReferenceRotation(string key) {
+        if (!ReferenceSnapshots.ContainsKey(key)) {
+            Debug.LogError($"No reference snapshot found for key {key}");
+            return Quaternion.identity;
+        }
+        return ReferenceSnapshots[key].Rotation;
+    }
+
+    public Vector3 GetReferenceScale(string key) {
+        if (!ReferenceSnapshots.ContainsKey(key)) {
+            Debug.LogError($"No reference snapshot found for key {key}");
+            return Vector3.zero;
+        }
+        return ReferenceSnapshots[key].Scale;
     }
 
     /// <summary>
     /// Efficiently update position of owner MonoBehavior transform 
     /// </summary>
     public void MoveTo(Vector3 position, float duration = 1f) {
-        if (Vector3.Equals(_targetTransform.Position, position))
+        if (Vector3.Equals(_targetSnapshot.Position, position))
             return;
-        _targetTransform.Position = position;
+        _targetSnapshot.Position = position;
         // check if the dict contains the timed position, also redundantly check if the coroutine is null (probably don't need this)
         if (_activeCoroutines.ContainsKey("TimedPosition") && _activeCoroutines["TimedPosition"] != null) {
             // Debug.Log($"Coroutine exists, extending duration by {duration}");
             // just extend the duration out, and update the target position
+            // look into more ways to extend this functionality, so that the extension is logarithmic
+            // or changes in a a way that is more expected
             _cachedDurations[TransformType.Position] += duration;
             return;
         }
@@ -51,10 +120,10 @@ public class TransformCoroutineManager : CoroutineManager {
                 "TimedPosition", 
                 (float t) => { 
                     if(_useLocal) {
-                        _owner.transform.localPosition = Vector3.Lerp(_owner.transform.localPosition, _targetTransform.Position, t);
+                        _owner.transform.localPosition = Vector3.Lerp(_owner.transform.localPosition, _targetSnapshot.Position, t);
                     }
                     else {
-                        _owner.transform.position = Vector3.Lerp(_owner.transform.position, _targetTransform.Position, t);
+                        _owner.transform.position = Vector3.Lerp(_owner.transform.position, _targetSnapshot.Position, t);
                     }
                 }, 
                 duration,
@@ -68,9 +137,9 @@ public class TransformCoroutineManager : CoroutineManager {
     /// Efficiently update rotation of owner MonoBehavior transform 
     /// </summary>
     public void RotateTo(Quaternion rotation, float duration = 1f) {
-        if (Quaternion.Equals(_targetTransform.Rotation, rotation))
+        if (Quaternion.Equals(_targetSnapshot.Rotation, rotation))
             return;
-        _targetTransform.Rotation = rotation;
+        _targetSnapshot.Rotation = rotation;
         if (_activeCoroutines.ContainsKey("TimedRotation") && _activeCoroutines["TimedRotation"] != null) {
             // Debug.Log($"Coroutine exists, extending duration by {duration}");
             _cachedDurations[TransformType.Rotation] += duration;
@@ -83,10 +152,10 @@ public class TransformCoroutineManager : CoroutineManager {
                 "TimedRotation", 
                 (float t) => { 
                     if(_useLocal) {
-                        _owner.transform.localRotation = Quaternion.Lerp(_owner.transform.localRotation, _targetTransform.Rotation, t);
+                        _owner.transform.localRotation = Quaternion.Lerp(_owner.transform.localRotation, _targetSnapshot.Rotation, t);
                     }
                     else {
-                        _owner.transform.rotation = Quaternion.Lerp(_owner.transform.rotation, _targetTransform.Rotation, t);
+                        _owner.transform.rotation = Quaternion.Lerp(_owner.transform.rotation, _targetSnapshot.Rotation, t);
                     }
                 }, 
                 duration,
@@ -99,9 +168,9 @@ public class TransformCoroutineManager : CoroutineManager {
     /// Efficiently update scale of owner MonoBehavior transform 
     /// </summary>
     public void ScaleTo(Vector3 scale, float duration = 1f) {
-        if (Vector3.Equals(_targetTransform.Scale, scale))
+        if (Vector3.Equals(_targetSnapshot.Scale, scale))
             return;
-        _targetTransform.Scale = scale;
+        _targetSnapshot.Scale = scale;
         if (_activeCoroutines.ContainsKey("TimedScale") && _activeCoroutines["TimedScale"] != null) {
             // Debug.Log($"Coroutine exists, extending duration by {duration}");
             _cachedDurations[TransformType.Scale] += duration;
@@ -112,7 +181,7 @@ public class TransformCoroutineManager : CoroutineManager {
             _owner, 
             TimedCachedDurationCoroutine(
                 "TimedScale", 
-                (float t) => { _owner.transform.localScale = Vector3.Lerp(_owner.transform.localScale, _targetTransform.Scale, t); }, 
+                (float t) => { _owner.transform.localScale = Vector3.Lerp(_owner.transform.localScale, _targetSnapshot.Scale, t); }, 
                 duration,
                 TransformType.Scale
             ),
@@ -129,13 +198,13 @@ public class TransformCoroutineManager : CoroutineManager {
     public void TransformTo(TransformSnapshot snapshot, float duration = 1f) {
         MoveTo(snapshot.Position, duration);
         RotateTo(snapshot.Rotation, duration);
-        // ScaleTo(snapshot.Scale, duration);
+        ScaleTo(snapshot.Scale, duration);
     }
 
     public void SetTargetTransform(TransformSnapshot snapshot) {
-        _targetTransform.Position = snapshot.Position;
-        _targetTransform.Rotation = snapshot.Rotation;
-        _targetTransform.Scale = snapshot.Scale;
+        _targetSnapshot.Position = snapshot.Position;
+        _targetSnapshot.Rotation = snapshot.Rotation;
+        _targetSnapshot.Scale = snapshot.Scale;
     }
 
     public void Freeze(TransformType? transformType = null) {
@@ -153,14 +222,14 @@ public class TransformCoroutineManager : CoroutineManager {
                 _activeCoroutines["TimedScale"] = null;
             }
             if(!_useLocal) {
-                _targetTransform.Position = _owner.transform.position;
-                _targetTransform.Rotation = _owner.transform.rotation;
+                _targetSnapshot.Position = _owner.transform.position;
+                _targetSnapshot.Rotation = _owner.transform.rotation;
             }
             else {
-                _targetTransform.Position = _owner.transform.localPosition;
-                _targetTransform.Rotation = _owner.transform.localRotation;
+                _targetSnapshot.Position = _owner.transform.localPosition;
+                _targetSnapshot.Rotation = _owner.transform.localRotation;
             }
-            _targetTransform.Scale = _owner.transform.localScale;
+            _targetSnapshot.Scale = _owner.transform.localScale;
             _onTransformComplete?.Invoke();
             return;
         }
@@ -169,26 +238,26 @@ public class TransformCoroutineManager : CoroutineManager {
                 _activeCoroutines["TimedPosition"].Stop();
                 _activeCoroutines["TimedPosition"] = null;
                 if(!_useLocal) {
-                    _targetTransform.Position = _owner.transform.position;
+                    _targetSnapshot.Position = _owner.transform.position;
                 }
                 else {
-                    _targetTransform.Position = _owner.transform.localPosition;
+                    _targetSnapshot.Position = _owner.transform.localPosition;
                 }
                 break;
             case TransformType.Rotation:
                 _activeCoroutines["TimedRotation"].Stop();
                 _activeCoroutines["TimedRotation"] = null;
                 if(!_useLocal) {
-                    _targetTransform.Rotation = _owner.transform.rotation;
+                    _targetSnapshot.Rotation = _owner.transform.rotation;
                 }
                 else {
-                    _targetTransform.Rotation = _owner.transform.localRotation;
+                    _targetSnapshot.Rotation = _owner.transform.localRotation;
                 }
                 break;
             case TransformType.Scale:
                 _activeCoroutines["TimedScale"].Stop();
                 _activeCoroutines["TimedScale"] = null;
-                _targetTransform.Scale = _owner.transform.localScale;
+                _targetSnapshot.Scale = _owner.transform.localScale;
                 break;
         }
         if (!HasActiveCoroutines())

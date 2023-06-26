@@ -17,6 +17,11 @@ namespace UFB.Entities {
 
         }
 
+        public void TraverseRoute() {
+            // player moves over a series of tiles, and events at those 
+            // tiles can be triggered
+        }
+
         public void MoveToTile(GameTile tile) {
             _currentTile = tile;
             StartCoroutine(MoveTo(new Vector3(tile.Coordinates.X, 0, tile.Coordinates.Y), 1f));

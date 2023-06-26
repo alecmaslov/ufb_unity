@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3222427153687044299}
+  - component: {fileID: 9116426352296945182}
   m_Layer: 0
   m_Name: Player__Kirin
   m_TagString: Player
@@ -32,6 +33,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9116426352296945182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316463308933975789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f05a32c872ec1e428106b8de3a45878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4212362656078261228
 GameObject:
   m_ObjectHideFlags: 0

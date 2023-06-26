@@ -17,5 +17,4 @@ namespace UFB.Player {
             _players.Add(playerEntity);
         }
     }
-
 }

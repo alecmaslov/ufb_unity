@@ -15,6 +15,7 @@ namespace UFB.Gameplay {
 
         public static GameController Instance { get; private set; }
         public ServerConnection ServerConnection { get; private set; }
+        public GameBoard GameBoard { get { return _gameBoard; } }
 
         [SerializeField] private string _mapName = "kraken";
         [SerializeField] private GameBoard _gameBoard;

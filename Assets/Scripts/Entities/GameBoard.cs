@@ -11,6 +11,7 @@ namespace UFB.Entities {
     {
         public string MapName { get; set; }
         private List<TileEntity> _tiles = new List<TileEntity>();
+
         
         public void SpawnBoard(string mapName)
         {
@@ -35,13 +36,16 @@ namespace UFB.Entities {
             // rotate tileObject by 270 degrees on y axis
             tileObject.transform.Rotate(0, 270, 0, Space.Self);
             TileEntity tileEntity = tileObject.GetComponent<TileEntity>();
-            Debug.Log("TILE ENTITY: " + tileEntity + " tile.gettexture " + tile.GetTexture(MapName) + " tile.getcolor " + tile.GetColor());
             tileEntity.Initialize(tile, tile.GetTexture(MapName), tile.GetColor());
             return tileEntity;
         }
 
         public TileEntity GetTileById(string id) {
             return _tiles.Find(tile => tile.GameTile.Id == id);
+        }
+
+        public TileEntity GetTileByCoordinates(Coordinates coordinates) {
+            return _tiles.Find(tile => tile.GameTile.Coordinates.Equals(coordinates));
         }
 
         /// <summary>
@@ -61,6 +65,5 @@ namespace UFB.Entities {
                 action(_tiles[i], i/_tiles.Count);
             }
         }
-
     }
 }

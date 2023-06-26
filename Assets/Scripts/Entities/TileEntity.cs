@@ -14,6 +14,7 @@ namespace UFB.Entities {
         private void OnEnable()
         {
             _coroutineManager = new TransformCoroutineManager(this);
+            _coroutineManager.AddReferenceSnapshot("initial");
         }
 
         public void Initialize(GameTile tile, Texture texture, Color color)
@@ -30,7 +31,7 @@ namespace UFB.Entities {
             SetVisibility(true, 5f, Random.Range(0f, 6f));
         }
 
-        private void SetVisibility(bool isVisible, float duration = 0.5f, float delay = 0)
+        public void SetVisibility(bool isVisible, float duration = 0.5f, float delay = 0)
         {
             if (duration == 0)
             {
@@ -53,6 +54,23 @@ namespace UFB.Entities {
                 },
                 duration: duration,
                 delay: delay);
+        }
+
+        public void Stretch(float heightScalar, float duration = 0.5f)
+        {
+            var initScale = _coroutineManager.GetReferenceScale("initial");
+            initScale.y = initScale.y * (1 + heightScalar);
+            _coroutineManager.ScaleTo(initScale, duration);
+        }
+
+        public void OnTraverse()
+        {
+            // when the player traverses over the tile
+        }
+
+        public void OnLand()
+        {
+            // when the player lands on the tile
         }
 
         
