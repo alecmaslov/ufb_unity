@@ -3,6 +3,7 @@ using UnityEngine;
 using UFB.Map;
 using UFB.Player;
 using UFB.Entities;
+using System;
 
 namespace UFB.Gameplay {
 
@@ -16,6 +17,8 @@ namespace UFB.Gameplay {
         public static GameController Instance { get; private set; }
         public ServerConnection ServerConnection { get; private set; }
         public GameBoard GameBoard { get { return _gameBoard; } }
+
+        public Action OnBoardSpawned;
 
         [SerializeField] private string _mapName = "kraken";
         [SerializeField] private GameBoard _gameBoard;
@@ -44,6 +47,7 @@ namespace UFB.Gameplay {
             _playerManager = GameObjectExtensions.GetOrAddComponent<PlayerManager>(playerManagerObject);
 
             _gameBoard.SpawnBoard(_mapName);
+            OnBoardSpawned?.Invoke();
         }
 
         public void InitializeGame()

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GameBoard
   - PlayerManager
+  - Wall
+  - Tile
   layers:
   - Default
   - TransparentFX

@@ -29,7 +29,7 @@ namespace UFB.Player
 
         public PlayerEntity Entity { get; set; }
 
-        public Coordinate Position { get; set; }
+        public Coordinates Position { get; set; }
 
         // public IInventoryItem[] Items { get; set; }
         public PlayerInventory Inventory { get; set; }
