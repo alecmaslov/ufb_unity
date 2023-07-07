@@ -13,12 +13,27 @@ namespace UFB.Entities {
         private Color _color;
         private TransformCoroutineManager _tileTransformManager;
         public Coordinates Coordinates => GameTile.Coordinates;
-        private Wall[] _walls;
+        private Dictionary<TileSide, Wall> _walls;
 
         [SerializeField] private Transform _tileTransform;
         [SerializeField] private Transform _tileMesh;
 
         private MeshRenderer _meshRenderer;
+
+        private void Start()
+        {
+
+        }
+
+
+        private void InitializeWalls()
+        {
+            _walls = new Dictionary<TileSide, Wall>();
+            foreach (var wall in GetComponentsInChildren<Wall>())
+            {
+                _walls.Add(wall.Side, wall);
+            }
+        }
 
 
         private void OnEnable()
@@ -40,6 +55,14 @@ namespace UFB.Entities {
             
             _spriteRenderer.enabled = false;
             _meshRenderer.material.SetTexture("_BaseMap", texture);
+
+            InitializeWalls();
+            tile.Edges.ForEach(edge =>
+            {
+                Debug.Log($"Activating wall {edge.Side}");
+                var wall = _walls[edge.Side];
+                wall.Activate();
+            });
 
 
             SetVisibility(false, 0, 0);
@@ -119,19 +142,7 @@ namespace UFB.Entities {
                 throw new System.Exception("Trying to check a non-adjacent tile for a wall.");
             }
 
-            if (target.Coordinates.X > this.Coordinates.X && target.Coordinates.Y > this.Coordinates.Y) {
-                return this.HasWall(TileSide.Top) || this.HasWall(TileSide.Right) ||
-                    target.HasWall(TileSide.Bottom) || target.HasWall(TileSide.Left);
-            } else if (target.Coordinates.X < this.Coordinates.X && target.Coordinates.Y < this.Coordinates.Y) {
-                return this.HasWall(TileSide.Bottom) || this.HasWall(TileSide.Left) ||
-                    target.HasWall(TileSide.Top) || target.HasWall(TileSide.Right);
-            } else if (target.Coordinates.X > this.Coordinates.X && target.Coordinates.Y < this.Coordinates.Y) {
-                return this.HasWall(TileSide.Bottom) || this.HasWall(TileSide.Right) ||
-                    target.HasWall(TileSide.Top) || target.HasWall(TileSide.Left);
-            } else if (target.Coordinates.X < this.Coordinates.X && target.Coordinates.Y > this.Coordinates.Y) {
-                return this.HasWall(TileSide.Top) || this.HasWall(TileSide.Left) ||
-                    target.HasWall(TileSide.Bottom) || target.HasWall(TileSide.Right);
-            } else if (target.Coordinates.X > this.Coordinates.X) {
+            if (target.Coordinates.X > this.Coordinates.X) {
                 return this.HasWall(TileSide.Right) || target.HasWall(TileSide.Left);
             } else if (target.Coordinates.X < this.Coordinates.X) {
                 return this.HasWall(TileSide.Left) || target.HasWall(TileSide.Right);
@@ -140,24 +151,7 @@ namespace UFB.Entities {
             } else if (target.Coordinates.Y < this.Coordinates.Y) {
                 return this.HasWall(TileSide.Bottom) || target.HasWall(TileSide.Top);
             }
-
             return false;
         }
-
     }
-
 }
-
-
-
-// if (target.Coordinates.X > this.Coordinates.X) {
-//     return this.HasWall(TileSide.Right) || target.HasWall(TileSide.Left);
-// } else if (target.Coordinates.X < this.Coordinates.X) {
-//     return this.HasWall(TileSide.Left) || target.HasWall(TileSide.Right);
-// } else if (target.Coordinates.Y > this.Coordinates.Y) {
-//     return this.HasWall(TileSide.Top) || target.HasWall(TileSide.Bottom);
-// } else if (target.Coordinates.Y < this.Coordinates.Y) {
-//     return this.HasWall(TileSide.Bottom) || target.HasWall(TileSide.Top);
-// } else {
-//     return false;
-// }

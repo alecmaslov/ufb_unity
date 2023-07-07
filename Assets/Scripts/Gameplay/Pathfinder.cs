@@ -16,7 +16,7 @@ public static class Pathfinder
 
         while (openSet.Count > 0)
         {
-            var current = openSet.OrderBy(t => fScore.ContainsKey(t) ? fScore[t] : float.MaxValue).First();
+            TileEntity current = openSet.OrderBy(t => fScore.ContainsKey(t) ? fScore[t] : float.MaxValue).First();
 
             if (current == endTile)
             {
@@ -49,6 +49,7 @@ public static class Pathfinder
             }
         }
 
+        Debug.Log("No path found");
         return null; // Return null if no path is found
     }
 

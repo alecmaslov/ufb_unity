@@ -76,8 +76,8 @@ namespace UFB.Entities {
         public TileEntity[] GetAdjacentTiles(TileEntity tile, bool ignoreWalls = false) {
             var adjacent = tile.Coordinates.Adjacent(0, _map.Dimensions - 1, 0, _map.Dimensions - 1);
             var tiles = adjacent.Select(coords => GetTileByCoordinates(coords));
-            if (ignoreWalls) {
-                tiles = tiles.Where(t => !tile.BlockedByWall(t));
+            if (!ignoreWalls) {
+                tiles = tiles.Where(t => !t.BlockedByWall(tile));
             }
             return tiles.ToArray();
         }

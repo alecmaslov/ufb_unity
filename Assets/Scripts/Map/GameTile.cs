@@ -33,7 +33,8 @@ namespace UFB.Map {
         Left,
         Right,
         Top,
-        Bottom
+        Bottom,
+        None
     }
 
     public enum EdgeProperty

@@ -10,6 +10,7 @@ public class CameraOrbitSimple : MonoBehaviour
     [SerializeField] private float focusLerpSpeed = 0.1f; // The speed of lerp when focusing on a new target
     [SerializeField] private float azimuth = 0f; // Azimuth angle
     [SerializeField] private float elevation = 0f; // Elevation angle
+    [SerializeField] private float yOffset = 1f;
 
     // Update is called once per frame
     void Update()
@@ -17,7 +18,7 @@ public class CameraOrbitSimple : MonoBehaviour
         azimuth += azimuthSpeed * Time.deltaTime;
         Vector3 newPosition = new Vector3(
             target.position.x + radius * Mathf.Cos(elevation) * Mathf.Sin(azimuth),
-            target.position.y + elevation,
+            target.position.y + elevation + yOffset,
             target.position.z + radius * Mathf.Cos(elevation) * Mathf.Cos(azimuth)
         );
 

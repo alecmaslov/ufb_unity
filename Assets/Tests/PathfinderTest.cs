@@ -7,9 +7,6 @@ namespace UFB.Development {
     
     public class PathfinderTest : MonoBehaviour
     {
-        // [SerializeField] private int targetX;
-        // [SerializeField] private int targetY;
-
         public float duration = 1f;
         public float durationIncrement = 0.1f;
 
@@ -21,8 +18,7 @@ namespace UFB.Development {
 
             Debug.Log("Pathfinding between " + start + " and " + end);
             var path = GameController.Instance.GameBoard.Pathfind(start, end);
-            if (path.Count == 0)
-            {
+            if (path == null || path.Count == 0) {
                 Debug.Log("No path found");
                 return;
             }
