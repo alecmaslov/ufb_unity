@@ -1,0 +1,24 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System;
+
+namespace UFB.Core
+{
+    public interface IObjectAnimator<T>
+    {
+        public Interpolator<T> Executor { get; }
+
+        void AnimateTo(T target, float duration);
+        void AnimateToSnapshot(string key, float duration);
+        void SetSnapshot(T target, string key);
+        void SetSnapshot(T target, string key, float duration);
+
+        T GetSnapshot(string key);
+
+        void AddUpdateListener(Action<T> listener);
+        void RemoveUpdateListener(Action<T> listener);
+        void Stop();
+        void Resume();
+    }
+
+}

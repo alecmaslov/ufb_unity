@@ -16,22 +16,32 @@ namespace UFB.Effects {
             _gameBoard = GetComponent<GameBoard>();
         }
         
-        public void TileStretchEffect()
+        public void RandomTileStretch()
         {
-            // if (_gameBoard == null) {
-            //     _gameBoard = GetComponent<GameBoard>();
-            // }
             _gameBoard.IterateTiles((tile, normIndex) => {
                 var tileEntity = tile.GetComponent<TileEntity>();
-                tileEntity.Stretch(Random.Range(0f, 20f), Random.Range(10.5f, 40.5f));
+                tileEntity.Stretch(Random.Range(0f, 20f), Random.Range(0.5f, 1.5f));
             });
+        }
+
+        public void ResetTileStretch()
+        {
+            _gameBoard.IterateTiles((tile, normIndex) => {
+                var tileEntity = tile.GetComponent<TileEntity>();
+                tileEntity.Stretch(0f, 1f);
+            });
+        }
+
+        public void RadialBurst()
+        {
+
         }
 
 
         public void RunEffect(string effectName, float rate) {
             switch (effectName) {
-                case "tileStretch":
-                    TileStretchEffect();
+                case "randomTileStretch":
+                    RandomTileStretch();
                     break;
                 default:
                     Debug.Log($"Effect {effectName} not found");

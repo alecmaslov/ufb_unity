@@ -58,7 +58,9 @@ namespace UFB.Map {
 
         public float DistanceTo(Coordinates other)
         {
-            return Mathf.Sqrt(Mathf.Pow(X - other.X, 2) + Mathf.Pow(Y - other.Y, 2));
+            // use manhattan distance
+            return Mathf.Abs(X - other.X) + Mathf.Abs(Y - other.Y);
+            // return Mathf.Sqrt(Mathf.Pow(X - other.X, 2) + Mathf.Pow(Y - other.Y, 2));
         }
 
 
@@ -74,6 +76,11 @@ namespace UFB.Map {
         public override int GetHashCode()
         {
             return X * 17 + Y;
+        }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
         }
 
     }

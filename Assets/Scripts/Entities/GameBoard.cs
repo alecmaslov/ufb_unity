@@ -35,12 +35,19 @@ namespace UFB.Entities {
             transform.Translate(-_map.Dimensions / 2, 0, -_map.Dimensions / 2, Space.World);
         }
 
+        public Coordinates RandomCoordinates()
+        {
+            return new Coordinates(UnityEngine.Random.Range(0, _map.Dimensions), UnityEngine.Random.Range(0, _map.Dimensions));
+        }
+
+        public TileEntity RandomTile()
+        {
+            return GetTileByCoordinates(RandomCoordinates());
+        }
+
         public TileEntity SpawnTile(GameTile tile) {
             var tilePrefab = Resources.Load("Prefabs/Tile") as GameObject;
-            var tileObject = Instantiate(tilePrefab, new Vector3(tile.Coordinates.X, 0, tile.Coordinates.Y), Quaternion.identity);
-            tileObject.transform.parent = this.transform;
-            // rotate tileObject by 270 degrees on y axis
-            tileObject.transform.Rotate(0, 90, 0, Space.Self);
+            var tileObject = Instantiate(tilePrefab, this.transform);
             TileEntity tileEntity = tileObject.GetComponent<TileEntity>();
             tileEntity.Initialize(tile, tile.GetTexture(MapName), tile.GetColor());
             return tileEntity;
@@ -85,7 +92,7 @@ namespace UFB.Entities {
 
         public List<TileEntity> Pathfind(Coordinates start, Coordinates end)
         {
-            return Pathfinder.FindPath(GetTileByCoordinates(start), GetTileByCoordinates(end), this);
+            return Pathfinder.FindTilePath(GetTileByCoordinates(start), GetTileByCoordinates(end), this);
         }
 
     }

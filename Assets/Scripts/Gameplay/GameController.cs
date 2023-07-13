@@ -48,6 +48,10 @@ namespace UFB.Gameplay {
 
             _gameBoard.SpawnBoard(_mapName);
             OnBoardSpawned?.Invoke();
+
+
+            _playerManager.SpawnPlayer("Kirin", _gameBoard.RandomTile());
+            _playerManager.SpawnPlayer("Ophaia", _gameBoard.RandomTile());
         }
 
         public void InitializeGame()

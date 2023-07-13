@@ -7,8 +7,10 @@ using System.Linq;
 public static class Pathfinder
 {
 
-    public static List<TileEntity> FindPath(TileEntity startTile, TileEntity endTile, GameBoard gameBoard)
+    public static List<TileEntity> FindTilePath(TileEntity startTile, TileEntity endTile, GameBoard gameBoard)
     {
+        Debug.Log($"Finding path from {startTile} to {endTile}");
+
         var openSet = new List<TileEntity> { startTile };
         var cameFrom = new Dictionary<TileEntity, TileEntity>();
         var gScore = new Dictionary<TileEntity, float> { { startTile, 0 } };
@@ -17,6 +19,7 @@ public static class Pathfinder
         while (openSet.Count > 0)
         {
             TileEntity current = openSet.OrderBy(t => fScore.ContainsKey(t) ? fScore[t] : float.MaxValue).First();
+            Debug.Log($"Current tile: {current} with fScore: {fScore[current]}");
 
             if (current == endTile)
             {
@@ -27,6 +30,8 @@ public static class Pathfinder
             foreach (var neighbor in gameBoard.GetAdjacentTiles(current))
             {
                 var tentativeGScore = (gScore.ContainsKey(current) ? gScore[current] : float.MaxValue) + current.DistanceTo(neighbor);
+                Debug.Log($"Evaluating neighbor: {neighbor}. Tentative gScore: {tentativeGScore}. Is it new or a better path? {!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor]}");
+
                 if (!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor])
                 {
                     if (cameFrom.ContainsKey(neighbor))
@@ -62,6 +67,9 @@ public static class Pathfinder
             path.Add(current);
         }
         path.Reverse();
+
+        Debug.Log($"Path found: {string.Join(" => ", path.Select(t => t.ToString()))}");
+
         return path;
     }
 

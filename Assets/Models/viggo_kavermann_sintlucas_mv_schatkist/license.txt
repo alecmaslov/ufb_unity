@@ -1,0 +1,11 @@
+Model Information:
+* title:	Viggo Kavermann SiNTLUCAS MV Schatkist
+* source:	https://sketchfab.com/3d-models/viggo-kavermann-sintlucas-mv-schatkist-7784477b8a3f4bffb4c329687c8ab44b
+* author:	Viggo_K (https://sketchfab.com/Viggo_K)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Viggo Kavermann SiNTLUCAS MV Schatkist" (https://sketchfab.com/3d-models/viggo-kavermann-sintlucas-mv-schatkist-7784477b8a3f4bffb4c329687c8ab44b) by Viggo_K (https://sketchfab.com/Viggo_K) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

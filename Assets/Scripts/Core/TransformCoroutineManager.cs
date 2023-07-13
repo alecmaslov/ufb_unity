@@ -18,6 +18,7 @@ public class CoroutineDuration
     public TransformType TransformType { get; set; }
 }
 
+
 public class TransformCoroutineManager : CoroutineManager
 {
     public TransformSnapshot TargetSnapshot => _targetSnapshot;
@@ -48,6 +49,8 @@ public class TransformCoroutineManager : CoroutineManager
 
     private Transform _useTransform;
 
+    private Dictionary<TransformType, Action<float>> _updateActions = new Dictionary<TransformType, Action<float>>();
+
 
     public TransformCoroutineManager(
         MonoBehaviour owner, 
@@ -63,6 +66,20 @@ public class TransformCoroutineManager : CoroutineManager
         this._targetSnapshot = new TransformSnapshot(position, rotation, useTransform.localScale);
         this._onTransformStart = onTransformStart;
         this._onTransformComplete = onTransformComplete;
+    }
+
+    /// <summary>
+    /// Attach a listener to a given TransformType, such as postion, scale, or rotation
+    /// </summary> 
+    public void AddUpdateListener(TransformType type, Action<float> action)
+    {
+        if (!_updateActions.ContainsKey(type)) _updateActions[type] = null;
+        _updateActions[type] += action;
+    }
+
+    public void RemoveUpdateListener(TransformType type, Action<float> action)
+    {
+        _updateActions[type] -= action;
     }
 
     /// <summary>
@@ -349,6 +366,9 @@ public class TransformCoroutineManager : CoroutineManager
                 break;
             }
             onUpdate?.Invoke(time / _cachedDurations[transformType]);
+            if (_updateActions.ContainsKey(transformType)) {
+                _updateActions[transformType]?.Invoke(time / _cachedDurations[transformType]);
+            }
             time += Time.deltaTime;
             yield return null;
         }
@@ -356,4 +376,5 @@ public class TransformCoroutineManager : CoroutineManager
         if (!HasActiveCoroutines())
             _onTransformComplete?.Invoke();
     }
+
 }
