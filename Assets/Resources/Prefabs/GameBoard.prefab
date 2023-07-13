@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4380777222215098614}
   - component: {fileID: 4587334018098268258}
-  - component: {fileID: 7694851914113722162}
+  - component: {fileID: 6793925981675982268}
   m_Layer: 0
   m_Name: GameBoard
   m_TagString: GameBoard
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbea2b70b6b9f7e49b5dc7743b383eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7694851914113722162
+--- !u!114 &6793925981675982268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,6 +54,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7621842461787244988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57ef87eac9df29b41977f06209bae713, type: 3}
+  m_Script: {fileID: 11500000, guid: 07705f904ca792d45b052bc295743542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

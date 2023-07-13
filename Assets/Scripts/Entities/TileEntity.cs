@@ -42,6 +42,7 @@ namespace UFB.Entities
         private void OnEnable()
         {
             _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
+            _scaleAnimator.SetSnapshot("initial");
             _scaleAnimator.AddUpdateListener(OnScaleChanged);
             _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
         }

@@ -4,14 +4,24 @@ using UFB.Map;
 using UFB.Player;
 using System.Linq;
 using System;
+using UFB.Effects;
 
 namespace UFB.Entities {
 
     public class GameBoard : MonoBehaviour
     {
         public string MapName { get; set; }
+        public EffectsController Effects { get; private set; }
         private List<TileEntity> _tiles = new List<TileEntity>();
         private UFBMap _map;
+
+
+        private void Start()
+        {
+            Effects = GetComponent<EffectsController>();
+            Effects.RegisterEffect("RandomTileStretch", new RandomTileStretchEffect(this, 1.5f));
+            Effects.RegisterEffect("ResetTiles", new ResetTilesEffect(this, 0.5f));
+        }
 
         
         public void SpawnBoard(string mapName)
