@@ -5,9 +5,8 @@ using UFB.Gameplay;
 [CustomEditor(typeof(PlayerEntity))]
 public class PlayerEntityEditor : Editor
 {
+    Vector2Int _destination;
 
-    [SerializeField] private int _x = 0;
-    [SerializeField] private int _y = 0;
 
     public override void OnInspectorGUI()
     {
@@ -15,15 +14,33 @@ public class PlayerEntityEditor : Editor
 
         PlayerEntity playerEntity = (PlayerEntity)target;
 
-        _x = EditorGUILayout.IntField("X", _x);
-        _y = EditorGUILayout.IntField("Y", _y);
+        _destination = EditorGUILayout.Vector2IntField("Destination", _destination);
 
-        if (GUILayout.Button("Move To Tile")) {
-            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(new UFB.Map.Coordinates(_x, _y));
-            playerEntity.MoveToTile(tile);
-            // GameController.Instance.GameBoard.MoveEntityToTile(playerEntity, _x, _y);
-            // Debug.Log("Run Effect " + _effectName);
-            // effectsManager.RunEffect(_effectName);
+        if (GUILayout.Button("Force To Tile")) {
+            var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
+            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coords);
+            Debug.Log("Forcing to Tile: " + tile);
+            playerEntity.ForceMoveToTile(tile);
+        }
+
+        if (GUILayout.Button("Preview Pathfind"))
+        {
+            playerEntity.PreviewRoute(UFB.Map.Coordinates.FromVector2Int(_destination));
+        }
+
+        if (GUILayout.Button("Pathfind To Tile"))
+        {
+            var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
+            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coords);
+            playerEntity.TryMoveToTile(tile);
+        }
+
+        if (GUILayout.Button("Toggle Hop")) {
+            playerEntity.Hop();
+        }
+
+        if (GUILayout.Button("Focus Camera")) {
+            playerEntity.FocusCamera();
         }
     }
 

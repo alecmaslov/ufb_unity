@@ -85,3 +85,7 @@ RawFiles/
 
 Assets/Skyboxes/
 Artwork/
+Backups/
+
+Scripts/interactive.ipynb
+__pycache__/

@@ -24,8 +24,11 @@ namespace UFB.Core
                         this, 
                         Vector3.Lerp,
                         AnimationCallback,
-                        () => transform.position,
-                        curve == null ? new AnimationCurve() : curve 
+                        () => {
+                            Debug.Log($"[PositionAnimator] Getting position: {transform.position}");
+                            return transform.position;
+                        },
+                        curve
                     );
                 }
                 return _executor;
@@ -33,7 +36,7 @@ namespace UFB.Core
         }
 
         public Action<Vector3> OnAnimationUpdate;
-        public AnimationCurve curve;
+        public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
 
         private void AnimationCallback(Vector3 newPos)         
         {
@@ -44,8 +47,9 @@ namespace UFB.Core
             }
         }
 
-        public void AnimateTo(Vector3 position, float duration) => Executor.LerpTo(position, duration);
-        public void AnimateToSnapshot(string key, float duration) => Executor.LerpToSnapshot(key, duration);
+        public void AnimateTo(Vector3 position, float duration, Action onRequestComplete = null) => Executor.LerpTo(position, duration, onRequestComplete);
+
+        public void AnimateToSnapshot(string key, float duration, Action onRequestComplete = null) => Executor.LerpToSnapshot(key, duration, onRequestComplete);
 
 
         public void SetSnapshot(string key) => Executor.SetSnapshot(transform.position, key);

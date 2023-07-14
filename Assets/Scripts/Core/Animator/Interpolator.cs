@@ -39,6 +39,8 @@ public class Interpolator<T>
     private Coroutine _coroutine;
     private MonoBehaviour _monoBehaviour;
 
+    private Action _onRequestComplete; // single use onComplete that occurs when a new request is made | WARNING - might perform in unexpected ways
+
     public Interpolator(
         MonoBehaviour monoBehaviour,
         Func<T, T, float, T> lerpFunction,
@@ -75,17 +77,17 @@ public class Interpolator<T>
         return default(T);
     }
 
-    public void LerpToSnapshot(string key, float duration)
+    public void LerpToSnapshot(string key, float duration, Action onRequestComplete = null)
     {
         if (_snapshots.ContainsKey(key))
         {
-            LerpTo(_snapshots[key], duration);
+            LerpTo(_snapshots[key], duration, onRequestComplete);
             return;
         }
         Debug.LogError($"[Lerp Executor] Snapshot {key} doesn't exist!");
     }
 
-    public void LerpTo(T value, float duration)
+    public void LerpTo(T value, float duration, Action onRequestComplete = null)
     {
         _currentValue = GetCurrent();
 
@@ -93,6 +95,10 @@ public class Interpolator<T>
         _endTime = _startTime + duration;
         _startValue = _currentValue;
         _endValue = value;
+        if (onRequestComplete != null)
+            _onRequestComplete = onRequestComplete; // this admittedly will act very strangely if you're not expecting it, since
+            // coroutines get delayed and continue to call if double called, rather than re-instantiated. Not sure how to resolve this
+            // madness other than just accept it
         if (_coroutine == null) // if it's expired, start it 
         {
             _coroutine = _monoBehaviour.StartCoroutine(Lerp());
@@ -132,6 +138,8 @@ public class Interpolator<T>
         }
         // Callback(_endValue, 1f);
         OnComplete?.Invoke(_endValue);
+        _onRequestComplete?.Invoke();
+        _onRequestComplete = null;
         _coroutine = null;
         yield return null;
     }

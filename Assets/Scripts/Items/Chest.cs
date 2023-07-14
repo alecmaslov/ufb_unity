@@ -1,13 +1,11 @@
+using UnityEngine;
 
 namespace UFB.Items {
     
-    public class Chest {
+    public class Chest : MonoBehaviour {
 
         
         
-        public Chest() {
-
-        }
 
     }
 

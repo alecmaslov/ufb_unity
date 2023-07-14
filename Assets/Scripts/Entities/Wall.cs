@@ -12,7 +12,9 @@ namespace UFB.Entities {
         // private TransformCoroutineManager _transformManager;
         private ScaleAnimator _scaleAnimator;
         private float _transitionDuration = 1.5f;
-        private readonly float _wallHeight = 0.5f;
+        private float _wallHeight = 0.5f;
+
+        private bool _isActivated = false;
 
         void Awake()
         {
@@ -36,11 +38,23 @@ namespace UFB.Entities {
         public void Activate()
         {
             _scaleAnimator.AnimateToSnapshot("activated", _transitionDuration);
+            _isActivated = true;
         }
 
         public void Deactivate()
         {
             _scaleAnimator.AnimateToSnapshot("deactivated", _transitionDuration);
+            _isActivated = false;
+        }
+
+        public void SetHeight(float height)
+        {
+            Vector3 activatedHeight = _scaleAnimator.GetSnapshot("activated");
+            activatedHeight.y = height;
+            _scaleAnimator.SetSnapshot(activatedHeight, "activated");
+            if (_isActivated) {
+                _scaleAnimator.AnimateToSnapshot("activated", _transitionDuration);
+            }
         }
 
         private TileSide ParseSide() {

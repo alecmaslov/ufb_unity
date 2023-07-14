@@ -4,9 +4,15 @@ using UFB.Map;
 using System.Collections.Generic;
 using System.Linq;
 using UFB.Core;
+using TMPro;
 
 namespace UFB.Entities
 {
+
+    interface ITilePlaceable {
+        void PlaceOnTile(TileEntity tile);
+        void RemoveFromTile();
+    }
 
     public class TileEntity : MonoBehaviour
     {
@@ -14,19 +20,29 @@ namespace UFB.Entities
         [SerializeField] private SpriteRenderer _spriteRenderer;
         private bool _isVisible = true;
         private Color _color;
-        // private TransformCoroutineManager _tileTransformManager;
         public Coordinates Coordinates => GameTile.Coordinates;
+        
+        public Transform wallContainer;
         private Dictionary<TileSide, Wall> _walls;
 
         [SerializeField] private Transform _tileTransform;
         [SerializeField] private Transform _tileMesh;
+        [SerializeField] private TextMeshProUGUI _coordinatesText;
+
         private MeshRenderer _meshRenderer;
 
         private List<GameObject> _attachedEntities = new List<GameObject>();
-
         private ScaleAnimator _scaleAnimator;
 
-
+        private CoroutineManager _coroutineManager;
+        public CoroutineManager CoroutineManager {
+            get {
+                if (_coroutineManager == null) {
+                    _coroutineManager = new CoroutineManager(this);
+                }
+                return _coroutineManager;
+            }
+        }
 
         // position on top of the tile
         public Vector3 EntityPosition
@@ -52,14 +68,20 @@ namespace UFB.Entities
             _scaleAnimator.RemoveUpdateListener(OnScaleChanged);
         }
 
-        public void Initialize(GameTile tile, Texture texture, Color color)
+        public void Initialize(GameTile tile, GameBoard board)
         {
             GameTile = tile;
-            this.name = tile.Id;
-            transform.Rotate(0, 90, 0, Space.Self); // TODO - figure out why tiles are rotated wrong way initially
-            transform.position = new Vector3(tile.Coordinates.X, 0f, tile.Coordinates.Y);
+            this.name = tile.Coordinates.GameId;
+            _coordinatesText.text = $"{tile.Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
+
+            // transform.position = new Vector3(board.Dimensions - tile.Coordinates.Y, 0f, tile.Coordinates.X);
+            transform.position = new Vector3(board.Dimensions - tile.Coordinates.X, 0f, tile.Coordinates.Y);
+
+            var color = tile.GetColor();
             _spriteRenderer.color = color;
             _color = color;
+
+            var texture = tile.GetTexture(board.MapName);
             if (texture != null)
                 _spriteRenderer.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
@@ -67,10 +89,7 @@ namespace UFB.Entities
             _meshRenderer.material.SetTexture("_BaseMap", texture);
 
             InitializeWalls();
-            tile.Edges.ForEach(edge => {
-                var wall = _walls[edge.Side];
-                CoroutineHelpers.DelayedAction(() => wall.Activate(), Random.Range(0.1f, 3f), this);
-            });
+
         }
 
         private void InitializeWalls()
@@ -80,7 +99,12 @@ namespace UFB.Entities
             {
                 _walls.Add(wall.Side, wall);
             }
+            GameTile.Edges.ForEach(edge => {
+                var wall = _walls[edge.Side];
+                CoroutineHelpers.DelayedAction(() => wall.Activate(), Random.Range(0.1f, 3f), this);
+            });
         }
+
 
         private void OnScaleChanged(Vector3 newScale)
         {
@@ -91,6 +115,7 @@ namespace UFB.Entities
                 if (entity == null)
                 {
                     needsCleanup = true; // bad - this means we forgot to DetachEntity()
+                    Debug.LogError($"[TileEntity.OnScaleChanged] Attached entity is null");
                     continue;
                 }
                 entity.transform.position = EntityPosition;
@@ -124,9 +149,34 @@ namespace UFB.Entities
             //     delay: delay);
         }
 
+        public void SetWallHeight(float height)
+        {
+            foreach (var wall in _walls.Values) 
+                wall.SetHeight(height);
+        }
+
+
         public void ResetAppearance()
         {
             _spriteRenderer.color = _color;
+        }
+
+        public void Glow(float amount, float duration = 0.5f)
+        {
+            CoroutineManager.TimedAction(
+                id: "glow",
+                onUpdate: (float value) =>
+                {
+                    var currentColor = _meshRenderer.material.GetColor("_EmissionColor");
+                    var newColor = Color.Lerp(currentColor, Color.white * amount, value);
+                    _meshRenderer.material.SetColor("_EmissionColor", newColor);
+                },
+                onComplete: () =>
+                {
+                    _meshRenderer.material.SetColor("_EmissionColor", Color.white * amount);
+                },
+                duration: duration
+            );
         }
 
         public void Stretch(float heightScalar, float duration = 0.5f)
@@ -137,6 +187,7 @@ namespace UFB.Entities
 
         /// <summary>
         /// Attach a gameObject to this tile, and it will move with it
+        /// CHANGE THIS to using ITilePlaceable
         /// </summary>
         public void AttachEntity(GameObject entity)
         {
@@ -147,12 +198,12 @@ namespace UFB.Entities
         public void DetachEntity(GameObject entity) => _attachedEntities.Remove(entity);
 
 
-        public void OnTraverse()
+        public void OnPassThrough(PlayerEntity player)
         {
             // when the player traverses over the tile
         }
 
-        public void OnLand()
+        public void OnEnter(PlayerEntity player)
         {
             // when the player lands on the tile
         }
@@ -191,5 +242,7 @@ namespace UFB.Entities
             }
             return false;
         }
+
+        public override string ToString() => $"TileEntity({this.name}) at {this.Coordinates}";
     }
 }

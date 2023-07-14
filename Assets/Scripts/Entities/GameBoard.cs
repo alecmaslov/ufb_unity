@@ -12,6 +12,8 @@ namespace UFB.Entities {
     {
         public string MapName { get; set; }
         public EffectsController Effects { get; private set; }
+        public int Dimensions { get => _map.Dimensions; }
+
         private List<TileEntity> _tiles = new List<TileEntity>();
         private UFBMap _map;
 
@@ -59,7 +61,7 @@ namespace UFB.Entities {
             var tilePrefab = Resources.Load("Prefabs/Tile") as GameObject;
             var tileObject = Instantiate(tilePrefab, this.transform);
             TileEntity tileEntity = tileObject.GetComponent<TileEntity>();
-            tileEntity.Initialize(tile, tile.GetTexture(MapName), tile.GetColor());
+            tileEntity.Initialize(tile, this);
             return tileEntity;
         }
 

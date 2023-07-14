@@ -7,6 +7,9 @@ public class ManagedCoroutine {
     public float Duration { get; private set; }
     private MonoBehaviour _owner;
     private Coroutine _coroutine;
+
+    // consider adding a static global
+
     public ManagedCoroutine(MonoBehaviour owner, IEnumerator task, float duration, float delay = 0f) {
         this._owner = owner;
         this.Duration = duration;

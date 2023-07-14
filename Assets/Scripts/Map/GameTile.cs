@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 using UFB.Entities;
+using System.Linq;
 
 namespace UFB.Map {
 
@@ -50,6 +51,8 @@ namespace UFB.Map {
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public EdgeProperty EdgeProperty { get; set; }
 
+        public override string ToString() => $"[{EdgeProperty}: {Side}]";
+
     }
 
     public class GameTile
@@ -97,6 +100,13 @@ namespace UFB.Map {
             if (other.Y < this.Coordinates.Y)
                 return TileSide.Top;
             throw new System.Exception("Coordinates are not adjacent");
+        }
+
+        public override string ToString()
+        {
+            // return JsonConvert.SerializeObject(this);
+            var edges = this.Edges.Select(edge => edge.ToString()).Aggregate((a, b) => a + ", " + b);
+            return $"Tile: {Id} | Walls {edges} | Coordinates: {Coordinates}";
         }
 
         // public GameObject SpawnTile()

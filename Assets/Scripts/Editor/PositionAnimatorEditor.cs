@@ -7,8 +7,8 @@ using UFB.Core;
 public class PositionAnimatorEditor : Editor
 {
 
-    private Vector3 _targetPosition;
-    private Vector3 _randomRange;
+    private Vector3 _targetPosition = Vector3.zero;
+    private Vector3 _randomRange = Vector3.one;
     private float _duration = 1.5f;
 
     public override void OnInspectorGUI()
@@ -22,7 +22,9 @@ public class PositionAnimatorEditor : Editor
         _duration = EditorGUILayout.FloatField("Duration", _duration);
 
         if (GUILayout.Button("MoveTo")) {
-            animatorTest.AnimateTo(_targetPosition, _duration);
+            animatorTest.AnimateTo(_targetPosition, _duration, () => {
+                Debug.Log("[EDITOR] Animation Complete");
+            });
         }
 
         if (GUILayout.Button("Random Position")) {
@@ -30,16 +32,10 @@ public class PositionAnimatorEditor : Editor
                 Random.Range(-_randomRange.x, _randomRange.x), 
                 Random.Range(-_randomRange.y, _randomRange.y), 
                 Random.Range(-_randomRange.z, _randomRange.z));
-            animatorTest.AnimateTo(_targetPosition, _duration);
+            animatorTest.AnimateTo(_targetPosition, _duration, () => {
+                Debug.Log("[EDITOR] Animation Complete");
+            });
         }
-
-        // if (GUILayout.Button("Activate")) {
-        //     animatorTest.Activate();
-        // }
-
-        // if (GUILayout.Button("Deactivate")) {
-        //     wall.Deactivate();
-        // }
     }
 
 }

@@ -8,8 +8,8 @@ namespace UFB.Core
     {
         public Interpolator<T> Executor { get; }
 
-        void AnimateTo(T target, float duration);
-        void AnimateToSnapshot(string key, float duration);
+        void AnimateTo(T target, float duration, Action onComplete = null);
+        void AnimateToSnapshot(string key, float duration, Action onComplete = null);
         void SetSnapshot(T target, string key);
         void SetSnapshot(T target, string key, float duration);
 

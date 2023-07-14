@@ -20,7 +20,7 @@ namespace UFB.Core
                         Vector3.Lerp,
                         AnimationCallback,
                         () => transform.localScale,
-                        curve == null ? new AnimationCurve() : curve 
+                        curve 
                     );
                 }
                 return _executor;
@@ -29,7 +29,7 @@ namespace UFB.Core
 
         public Action<Vector3> OnAnimationUpdate;
 
-        public AnimationCurve curve;
+        public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
 
         private void AnimationCallback(Vector3 newScale)
         {
@@ -40,8 +40,8 @@ namespace UFB.Core
             }
         }
 
-        public void AnimateTo(Vector3 scale, float duration) => Executor.LerpTo(scale, duration);
-        public void AnimateToSnapshot(string key, float duration) => Executor.LerpToSnapshot(key, duration);
+        public void AnimateTo(Vector3 scale, float duration, Action onRequestComplete = null) => Executor.LerpTo(scale, duration, onRequestComplete);
+        public void AnimateToSnapshot(string key, float duration, Action onRequestComplete = null) => Executor.LerpToSnapshot(key, duration, onRequestComplete );
 
         public void SetSnapshot(string key) => Executor.SetSnapshot(transform.localScale, key);
         public void SetSnapshot(Vector3 scale, string key) => Executor.SetSnapshot(scale, key);

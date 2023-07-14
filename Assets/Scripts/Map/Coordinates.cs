@@ -7,22 +7,26 @@ namespace UFB.Map {
         public int X { get; set; }
         public int Y { get; set; }
 
-
-        public Vector2 Vector => new Vector2(X, Y);
-
+        public Vector2Int Vector => new Vector2Int(X, Y);
 
         private readonly string[] _tileColumns =  { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
                                                 "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
                                                 "V", "W", "X", "Y", "Z" };
 
-        public string ColumnName => _tileColumns[X];
-        public string RowName => Y.ToString();
+        public string ColumnName => _tileColumns[Y];
+        public string RowName => X.ToString();
         public string Id { get => $"tile_{ColumnName}_{RowName}"; }
+        public string GameId { get => $"tile_{ColumnName}_{X+1}"; }
         
         public Coordinates(int x, int y)
         {
             X = x;
             Y = y;
+        }
+
+        public static Coordinates FromVector2Int(Vector2Int vector)
+        {
+            return new Coordinates(vector.x, vector.y);
         }
 
         public Coordinates[] Adjacent(int minX, int maxX, int minY, int maxY)

@@ -3,55 +3,39 @@ using UnityEngine;
 using UFB.Entities;
 using UFB.Core;
 
-[CustomEditor(typeof(RotationAnimator))]
-public class RotationAnimatorEditor : Editor
+[CustomEditor(typeof(ScaleAnimator))]
+public class ScaleAnimatorEditor : Editor
 {
 
-    private Quaternion _targetRotation = Quaternion.identity;
-    private Vector4 _randomRange = Vector4.one;
+    private Vector3 _tagetScale = Vector3.one;
+    private Vector3 _randomRange = Vector3.one;
     private float _duration = 1.5f;
-    private string _key = "test";
 
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        RotationAnimator animatorTest = (RotationAnimator)target;
+        ScaleAnimator animatorTest = (ScaleAnimator)target;
 
-        Vector4 rotationVec = EditorGUILayout.Vector4Field("Target Scale", new Vector4(_targetRotation.x, _targetRotation.y, _targetRotation.z, _targetRotation.w));
-        _randomRange = EditorGUILayout.Vector4Field("Random Rotation", _randomRange);
+        _tagetScale = EditorGUILayout.Vector3Field("Target Scale", _tagetScale);
+        _randomRange = EditorGUILayout.Vector3Field("Random Scale", _randomRange);
         _duration = EditorGUILayout.FloatField("Duration", _duration);
-        _key = EditorGUILayout.TextField("Key", _key);
 
-        if (GUILayout.Button("Rotate To")) {
-            animatorTest.AnimateTo(new Quaternion(rotationVec.x, rotationVec.y, rotationVec.z, rotationVec.w), _duration);
+        if (GUILayout.Button("Scale To")) {
+            animatorTest.AnimateTo(_tagetScale, _duration, () => {
+                Debug.Log("[EDITOR] Animation Complete");
+            });
         }
 
-        if (GUILayout.Button("Random Rotation")) {
-            _targetRotation = new Quaternion(
-                Random.Range(-_randomRange.x, _randomRange.x), 
-                Random.Range(-_randomRange.y, _randomRange.y), 
-                Random.Range(-_randomRange.z, _randomRange.z),
-                Random.Range(-_randomRange.w, _randomRange.w)  
-            );
-            animatorTest.AnimateTo(_targetRotation, _duration);
+        if (GUILayout.Button("Random Scale")) {
+            _tagetScale = new Vector3(
+                Random.Range(0, _randomRange.x), 
+                Random.Range(0, _randomRange.y), 
+                Random.Range(0, _randomRange.z));
+            animatorTest.AnimateTo(_tagetScale, _duration, () => {
+                Debug.Log("[EDITOR] Animation Complete");
+            });
         }
-
-        if (GUILayout.Button("Set Snapshot")) {
-            animatorTest.SetSnapshot(_targetRotation, _key);
-        }
-
-        if (GUILayout.Button("Rotate To Snapshot")) {
-            animatorTest.AnimateToSnapshot(_key, _duration);
-        }
-
-        // if (GUILayout.Button("Activate")) {
-        //     animatorTest.Activate();
-        // }
-
-        // if (GUILayout.Button("Deactivate")) {
-        //     wall.Deactivate();
-        // }
     }
 
 }

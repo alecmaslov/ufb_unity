@@ -1,44 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
-public class OrbitCamera : MonoBehaviour
+public class OrbitCamera : MonoBehaviour, ICameraController
 {
-    private float _rotateEase = 1f;
-    private Transform _focusedTransform;
-    private float _elevation;
-    private float _azimuth;
-    private float _radius;
+    public Transform target; // The target point around which the camera will rotate
+    public float radius = 10f; // The distance from the camera to the target
+    public float azimuthSpeed = 0.01f; // The speed of rotation along the azimuth (horizontal plane)
+    public float elevationSpeed = 0.01f; // The speed of rotation along the elevation (vertical plane)
+    [SerializeField] private float focusLerpSpeed = 0.1f; // The speed of lerp when focusing on a new target
+    [SerializeField] private float azimuth = 0f; // Azimuth angle
+    [SerializeField] private float elevation = 0f; // Elevation angle
+    [SerializeField] private float yOffset = 1f;
+    // [SerializeField] private float yFocusOffset = 1f;
 
-    private Vector3 _targetPosition;
-    private Vector3 _targetNorm;
-    private Quaternion _targetRotation;
-    
 
-    private Vector2 _currentAxis = new Vector2(0f,0f);
-    
+    // Update is called once per frame
     void Update()
     {
-        _targetPosition = _focusedTransform.forward * -_radius;
+        azimuth += azimuthSpeed * Time.deltaTime;
+        Vector3 newPosition = new Vector3(
+            target.position.x + radius * Mathf.Cos(elevation) * Mathf.Sin(azimuth),
+            target.position.y + elevation,
+            target.position.z + radius * Mathf.Cos(elevation) * Mathf.Cos(azimuth)
+        );
 
-        // 2 * Mathf.PI * _distanc
+        transform.position = Vector3.Lerp(transform.position, newPosition, 0.1f);
+        transform.LookAt(new Vector3(target.position.x, target.position.y + yOffset, target.position.z));
     }
 
-
-
-
-    // private IEnumerator Mo
-
-    public void FocusOnTransform(Transform t) {
-        _focusedTransform = t;
+    public void FocusOn(Transform t)
+    {
+        target = t;
+        // StartCoroutine(FocusOnRoutine(t));
     }
 
-    public void ApplyAxis(Vector2 axis) {
-        // Vector2 normalizedAxis
-
-        // apply a given control axis to the orbit camera
-        // _targetNorm = VectorUtils.NormalizedSphericalPosition()
+    private IEnumerator FocusOnRoutine(Transform t)
+    {
+        while (Vector3.Distance(target.position, t.position) > 0.01f)
+        {
+            target.position = Vector3.Lerp(target.position, t.position, focusLerpSpeed * Time.deltaTime);
+            yield return null;
+        }
+        target.position = t.position;
     }
-
-    
 }

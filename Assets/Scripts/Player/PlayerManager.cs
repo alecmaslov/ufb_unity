@@ -25,7 +25,7 @@ namespace UFB.Player {
         }
 
         public void MovePlayerToTile(PlayerEntity player, TileEntity tile) {
-            player.MoveToTile(tile);
+            player.TryMoveToTile(tile);
         }
     }
 }

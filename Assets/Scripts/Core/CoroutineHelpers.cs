@@ -15,9 +15,9 @@ public static class CoroutineHelpers
         monoBehaviour.StartCoroutine(DelayedAction(action, delay));
     }
 
-    public static void LerpAction(Action<float> action, Action onComplete, float duration, MonoBehaviour monoBehaviour)
+    public static Coroutine LerpAction(Action<float> action, Action onComplete, float duration, MonoBehaviour monoBehaviour)
     {
-        monoBehaviour.StartCoroutine(LerpAction(action, duration));
+        return monoBehaviour.StartCoroutine(LerpAction(action, duration));
     }
 
 

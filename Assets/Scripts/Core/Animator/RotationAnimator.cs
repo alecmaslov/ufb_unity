@@ -19,7 +19,7 @@ namespace UFB.Core
                         Quaternion.Slerp,
                         AnimationCallback,
                         () => transform.rotation,
-                        curve == null ? new AnimationCurve() : curve 
+                        curve
                     );
                 }
                 return _executor;
@@ -28,7 +28,7 @@ namespace UFB.Core
 
         public Action<Quaternion> OnAnimationUpdate;
         
-        public AnimationCurve curve;
+        public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
 
         private void AnimationCallback(Quaternion newRotation)
         {
@@ -39,8 +39,8 @@ namespace UFB.Core
             }
         }
 
-        public void AnimateTo(Quaternion rotation, float duration) => Executor.LerpTo(rotation, duration);
-        public void AnimateToSnapshot(string key, float duration) => Executor.LerpToSnapshot(key, duration);
+        public void AnimateTo(Quaternion rotation, float duration, Action onRequestComplete = null) => Executor.LerpTo(rotation, duration, onRequestComplete);
+        public void AnimateToSnapshot(string key, float duration, Action onRequestComplete = null) => Executor.LerpToSnapshot(key, duration, onRequestComplete);
 
 
         public void SetSnapshot(string key) => Executor.SetSnapshot(transform.rotation, key);

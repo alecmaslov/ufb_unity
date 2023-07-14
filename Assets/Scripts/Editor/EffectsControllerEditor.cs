@@ -6,7 +6,7 @@ using UFB.Effects;
 public class EffectsControllerEditor : Editor
 {
 
-    private string _effectName = "tileStretch";
+    private int _effectChoice = 0;
 
     public override void OnInspectorGUI()
     {
@@ -14,13 +14,12 @@ public class EffectsControllerEditor : Editor
 
         EffectsController effectsController = (EffectsController)target;
 
-        _effectName = GUILayout.TextField(_effectName);
-
-        // idea - enumerate all the effects to make a drop down list to run any of them
-
-        if (GUILayout.Button("Run Effect")) {
-            Debug.Log("Run Effect " + _effectName);
-            effectsController.RunEffect(_effectName);
+        string[] effectNames = effectsController.GetEffectsNames();
+        if (effectNames != null) {
+            _effectChoice = EditorGUILayout.Popup("Effect", _effectChoice, effectNames);
+            if (GUILayout.Button($"Run {effectNames[_effectChoice]}")) {
+                effectsController.RunEffect(effectNames[_effectChoice]);
+            }
         }
     }
 

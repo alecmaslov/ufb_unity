@@ -29,6 +29,12 @@ namespace UFB.Effects
                 Debug.Log($"Effect {effectName} not found");
             }
         }
+
+        public string[] GetEffectsNames()
+        {  
+            if (_effects == null) return null;
+            return new List<string>(_effects.Keys).ToArray();
+        }
     }
 
 }
