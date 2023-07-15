@@ -19,6 +19,7 @@ public static class Pathfinder
         while (openSet.Count > 0)
         {
             TileEntity current = openSet.OrderBy(t => fScore.ContainsKey(t) ? fScore[t] : float.MaxValue).First();
+
             Debug.Log($"Current tile: {current} with fScore: {fScore[current]}");
 
             if (current == endTile)
@@ -29,6 +30,12 @@ public static class Pathfinder
             openSet.Remove(current);
             foreach (var neighbor in gameBoard.GetAdjacentTiles(current))
             {
+
+
+                if (current.BlockedByWall(neighbor)) {
+                    continue;
+                }
+
                 var tentativeGScore = (gScore.ContainsKey(current) ? gScore[current] : float.MaxValue) + current.DistanceTo(neighbor);
                 Debug.Log($"Evaluating neighbor: {neighbor}. Tentative gScore: {tentativeGScore}. Is it new or a better path? {!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor]}");
 

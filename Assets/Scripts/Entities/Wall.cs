@@ -8,7 +8,8 @@ namespace UFB.Entities {
     
     public class Wall : MonoBehaviour
     {
-        public TileSide Side { get; private set; }
+        [SerializeField] TileSide _side;
+        public TileSide Side { get => _side; }
         // private TransformCoroutineManager _transformManager;
         private ScaleAnimator _scaleAnimator;
         private float _transitionDuration = 1.5f;
@@ -18,8 +19,11 @@ namespace UFB.Entities {
 
         void Awake()
         {
-            Side = ParseSide();
+            Initialize();
+        }
 
+        public void Initialize()
+        {
             Vector3 deactivatedScale;
             Vector3 activatedScale;
 
@@ -33,10 +37,12 @@ namespace UFB.Entities {
             _scaleAnimator = GetComponent<ScaleAnimator>();
             _scaleAnimator.SetSnapshot(deactivatedScale, "deactivated");
             _scaleAnimator.SetSnapshot(activatedScale, "activated");
+
         }
 
         public void Activate()
         {
+
             _scaleAnimator.AnimateToSnapshot("activated", _transitionDuration);
             _isActivated = true;
         }
@@ -57,28 +63,6 @@ namespace UFB.Entities {
             }
         }
 
-        private TileSide ParseSide() {
-            var tileSide = gameObject.name.Split("__");
-            if (tileSide.Length < 2) throw new System.Exception("Wall name must be in the format of TileName__Side");
-            var side = tileSide[1];
-
-            switch(side)
-            {
-                case "Left":
-                    Side = TileSide.Left;
-                    break;
-                case "Right":
-                    Side = TileSide.Right;
-                    break;
-                case "Top":
-                    Side = TileSide.Top;
-                    break;
-                case "Bottom":
-                    Side = TileSide.Bottom;
-                    break;
-            }
-            return Side;
-        }
 
 }
 }

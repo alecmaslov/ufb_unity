@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UFB.Entities;
 using UFB.Gameplay;
+using UFB.Map;
 
 [CustomEditor(typeof(GameBoard))]
 public class GameBoardEditor : Editor
@@ -9,6 +10,11 @@ public class GameBoardEditor : Editor
     private float _wallHeight = 0.5f;
     private float _stretchAmount = 0.5f;
     private bool _isGlowing = false;
+
+    private string _mapName = "kraken";
+    private string _entityName = "chest";
+    private int _numSpawns = 10;
+    private Vector2Int _tileCoords = new Vector2Int(0, 0);
 
     public override void OnInspectorGUI()
     {
@@ -28,26 +34,33 @@ public class GameBoardEditor : Editor
             });
         }
 
-        // if (GUILayout.Button("Toggle Glow"))
-        // {
-        //     if (_isGlowing) {
-        //         gameBoard.Glow(0, 0.5f);
-        //     } else {
-        //         gameBoard.Glow(1, 0.5f); 
-        //     }
-        //     _isGlowing = !_isGlowing;
-        // }
 
-        // if (GUILayout.Button("Print Info"))
-        // {
-        //     Debug.Log(gameBoard.GameTile.ToString());
-        // }
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        EditorGUILayout.TextField("Map Name", _mapName);
+        
+        if (GUILayout.Button("Spawn Board"))
+        {
+            gameBoard.ClearBoard();
+            gameBoard.SpawnBoard(_mapName);
+        }
 
-        // if (GUILayout.Button("Rotate"))
-        // {
-        //     gameBoard.gameObject.transform.Rotate(0, 90, 0);
-        // }
+        
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        EditorGUILayout.LabelField("Spawn Entities", EditorStyles.boldLabel);
 
+        _entityName = EditorGUILayout.TextField("Entity Name", _entityName);
+        _tileCoords = EditorGUILayout.Vector2IntField("Spawn Coords", _tileCoords);
+        _numSpawns = EditorGUILayout.IntField("Num Spawns", _numSpawns);
+        
+        if (GUILayout.Button("Spawn Entity"))
+        {
+            // gameBoard.SpawnEntity(_entityName, Coordinates.FromVector2Int(_tileCoords));
+            gameBoard.SpawnEntitiesRandom(_entityName, _numSpawns);
+        }
+
+
+        // think about making a class called EntitySpawner, that can randomly spawn entities
+        // throughout the map
     }
 
 }

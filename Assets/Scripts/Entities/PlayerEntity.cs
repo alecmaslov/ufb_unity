@@ -8,41 +8,37 @@ using UFB.Core;
 namespace UFB.Entities {
 
     [RequireComponent(typeof(PositionAnimator))]
+    [RequireComponent(typeof(TileAttachable))]
     public class PlayerEntity : MonoBehaviour
     {
         public string CharacterName { get; set; }
 
-        public Action OnMoveComplete;
-        public TileEntity CurrentTile => _currentTile;
-        public Coordinates Coordinates => _currentTile.Coordinates;
-
-        private TileEntity _currentTile;
+        // public Action OnMoveComplete;
+        // public TileEntity CurrentTile => _currentTile;
+        // public Coordinates Coordinates => _currentTile.Coordinates;
+        // private TileEntity _currentTile;
+    
         private GameBoard _gameBoard;
         private Animator _animator;
         private bool _isMoving = false;
         private PositionAnimator _positionAnimator;
+        private TileAttachable _tileAttachable;
 
         // idea - add in player ability to face in the most optimal direction
 
         public void Initialize(string characterName, GameBoard gameBoard, TileEntity startingTile) {
             _animator = GetComponentInChildren<Animator>();
             _gameBoard = gameBoard;
-            CharacterName = characterName;
+            // CharacterName = characterName;
+            CharacterName = name.Split("__")[1];
             ForceMoveToTile(startingTile, 0.1f);
+            _tileAttachable.AttachToTile(startingTile);
         }
 
 
         private void OnEnable() {
             _positionAnimator = GetComponent<PositionAnimator>();
-        }
-
-        /// <summary>
-        /// Sets the player's current tile as the given tile
-        /// </summary>
-        private void SetTile(TileEntity tile) {
-            _currentTile = tile;
-            tile.AttachEntity(this.gameObject);
-            OnMoveComplete?.Invoke();
+            _tileAttachable = GetComponent<TileAttachable>();
         }
 
         public void TraverseRoute() {
@@ -50,22 +46,18 @@ namespace UFB.Entities {
             // tiles can be triggered
         }
 
-        // public void MoveToTile(GameTile tile) {
-        //     var tileEntity = _gameBoard.GetTileByCoordinates(tile.Coordinates);
-        //     MoveToTile(tileEntity);
-        // }
-
 
         // THIS SHOULD BE IN GAMEBOARD
         public void PreviewRoute(Coordinates destination)
         {
-            var path = _gameBoard.Pathfind(_currentTile.Coordinates, destination);
+            var path = _gameBoard.Pathfind(_tileAttachable.CurrentTile.Coordinates, destination);
             if (path == null) {
-                Debug.LogError("No path found from " + _currentTile.Coordinates.ToString() + " to " + destination.ToString());
+                Debug.LogError("No path found from " + _tileAttachable.CurrentTile.Coordinates.ToString() + " to " + destination.ToString());
                 return;
             }
             foreach (TileEntity tile in path) {
                 tile.Stretch(1.1f, 1.5f);
+                tile.ChangeColor(Color.red, 0.5f);
                 // tile.Glow(1.5f);
             }
         }
@@ -96,9 +88,8 @@ namespace UFB.Entities {
         /// </summary>
         public void ForceMoveToTile(TileEntity tile, float duration = 0.5f, Action onComplete = null)
         {
-            _positionAnimator.AnimateTo(tile.EntityPosition, duration, () => {
+            _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () => {
                 Debug.Log("Finished moving to tile " + tile.Coordinates.ToString());
-                SetTile(tile);
                 onComplete?.Invoke();
             });
         }
@@ -107,9 +98,9 @@ namespace UFB.Entities {
         /// Tries to use pathfinding algorithm to move to the tile
         /// </summary>
         public void TryMoveToTile(TileEntity tile) {
-            var path = _gameBoard.Pathfind(_currentTile.Coordinates, tile.Coordinates);
+            var path = _gameBoard.Pathfind(_tileAttachable.CurrentTile, tile);
             if (path == null) {
-                Debug.LogError("No path found from " + _currentTile.Coordinates.ToString() + " to " + tile.Coordinates.ToString());
+                Debug.LogError("No path found from " + _tileAttachable.CurrentTile.Coordinates.ToString() + " to " + tile.Coordinates.ToString());
                 return;
             }
             StartCoroutine(MoveAlongPath(path, 0.1f));
@@ -119,11 +110,13 @@ namespace UFB.Entities {
             // Hop();
             _animator.SetTrigger("HopStart");
             yield return new WaitForSeconds(2f);
+            _tileAttachable.DetachFromTile();
+
             _isMoving = true;
             foreach (TileEntity tile in path) {
                 Vector3 startingPos = transform.position;
                 float elapsedTime = 0;
-                Vector3 destination = tile.EntityPosition;
+                Vector3 destination = tile.AttachedPosition;
                 
                 while (elapsedTime < time) {
                     transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / time));
@@ -140,7 +133,8 @@ namespace UFB.Entities {
             }
 
             // path[path.Count - 1].AttachEntity(this.gameObject);
-            SetTile(path[path.Count - 1]);
+            // SetTile(path[path.Count - 1]);
+            _tileAttachable.AttachToTile(path[path.Count - 1]);
             _animator.SetTrigger("HopEnd");
             _isMoving = false;
         }

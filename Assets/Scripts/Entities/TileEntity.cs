@@ -9,9 +9,11 @@ using TMPro;
 namespace UFB.Entities
 {
 
-    interface ITilePlaceable {
-        void PlaceOnTile(TileEntity tile);
-        void RemoveFromTile();
+    interface ITileAttachable
+    {
+        void AttachToTile(TileEntity tile);
+        void DetachFromDile();        
+        void UpdateAttachedPosition(Vector3 newPosition);
     }
 
     public class TileEntity : MonoBehaviour
@@ -21,7 +23,7 @@ namespace UFB.Entities
         private bool _isVisible = true;
         private Color _color;
         public Coordinates Coordinates => GameTile.Coordinates;
-        
+
         public Transform wallContainer;
         private Dictionary<TileSide, Wall> _walls;
 
@@ -31,13 +33,16 @@ namespace UFB.Entities
 
         private MeshRenderer _meshRenderer;
 
-        private List<GameObject> _attachedEntities = new List<GameObject>();
+        private List<TileAttachable> _attachables = new List<TileAttachable>();
         private ScaleAnimator _scaleAnimator;
 
         private CoroutineManager _coroutineManager;
-        public CoroutineManager CoroutineManager {
-            get {
-                if (_coroutineManager == null) {
+        public CoroutineManager CoroutineManager
+        {
+            get
+            {
+                if (_coroutineManager == null)
+                {
                     _coroutineManager = new CoroutineManager(this);
                 }
                 return _coroutineManager;
@@ -45,7 +50,7 @@ namespace UFB.Entities
         }
 
         // position on top of the tile
-        public Vector3 EntityPosition
+        public Vector3 AttachedPosition
         {
             get
             {
@@ -57,10 +62,7 @@ namespace UFB.Entities
 
         private void OnEnable()
         {
-            _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
-            _scaleAnimator.SetSnapshot("initial");
-            _scaleAnimator.AddUpdateListener(OnScaleChanged);
-            _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
+
         }
 
         private void OnDisable()
@@ -72,6 +74,13 @@ namespace UFB.Entities
         {
             GameTile = tile;
             this.name = tile.Coordinates.GameId;
+
+            _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
+            _scaleAnimator.SetSnapshot("initial");
+            _scaleAnimator.AddUpdateListener(OnScaleChanged);
+            _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
+
+
             _coordinatesText.text = $"{tile.Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
 
             // transform.position = new Vector3(board.Dimensions - tile.Coordinates.Y, 0f, tile.Coordinates.X);
@@ -80,7 +89,6 @@ namespace UFB.Entities
             var color = tile.GetColor();
             _spriteRenderer.color = color;
             _color = color;
-
             var texture = tile.GetTexture(board.MapName);
             if (texture != null)
                 _spriteRenderer.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
@@ -89,17 +97,19 @@ namespace UFB.Entities
             _meshRenderer.material.SetTexture("_BaseMap", texture);
 
             InitializeWalls();
-
         }
 
         private void InitializeWalls()
         {
             _walls = new Dictionary<TileSide, Wall>();
+            var allWalls = GetComponentsInChildren<Wall>();       
             foreach (var wall in GetComponentsInChildren<Wall>())
             {
                 _walls.Add(wall.Side, wall);
+                if (Application.isEditor) wall.Initialize();
             }
-            GameTile.Edges.ForEach(edge => {
+            GameTile.Edges.ForEach(edge =>
+            {
                 var wall = _walls[edge.Side];
                 CoroutineHelpers.DelayedAction(() => wall.Activate(), Random.Range(0.1f, 3f), this);
             });
@@ -108,19 +118,19 @@ namespace UFB.Entities
 
         private void OnScaleChanged(Vector3 newScale)
         {
-            if (_attachedEntities.Count == 0) return;
+            if (_attachables.Count == 0) return;
             bool needsCleanup = false;
-            foreach (var entity in _attachedEntities)
+            foreach (var attachable in _attachables)
             {
-                if (entity == null)
+                if (attachable == null)
                 {
                     needsCleanup = true; // bad - this means we forgot to DetachEntity()
                     Debug.LogError($"[TileEntity.OnScaleChanged] Attached entity is null");
                     continue;
                 }
-                entity.transform.position = EntityPosition;
+                attachable.OnTilePositionUpdated(AttachedPosition);
             }
-            if (needsCleanup) _attachedEntities.RemoveAll(e => e == null);
+            if (needsCleanup) _attachables.RemoveAll(e => e == null);
         }
 
         public void SetVisibility(bool isVisible, float duration = 0.5f, float delay = 0)
@@ -151,7 +161,7 @@ namespace UFB.Entities
 
         public void SetWallHeight(float height)
         {
-            foreach (var wall in _walls.Values) 
+            foreach (var wall in _walls.Values)
                 wall.SetHeight(height);
         }
 
@@ -179,6 +189,24 @@ namespace UFB.Entities
             );
         }
 
+        public void ChangeColor(Color color, float duration = 0.5f)
+        {
+            CoroutineManager.TimedAction(
+                id: "color",
+                onUpdate: (float value) =>
+                {
+                    var currentColor = _meshRenderer.material.GetColor("_BaseColor");
+                    var newColor = Color.Lerp(currentColor, color, value);
+                    _meshRenderer.material.SetColor("_BaseColor", newColor);
+                },
+                onComplete: () =>
+                {
+                    _meshRenderer.material.SetColor("_BaseColor", color);
+                },
+                duration: duration
+            );
+        }
+
         public void Stretch(float heightScalar, float duration = 0.5f)
         {
             var newScale = Vector3.Scale(_scaleAnimator.GetSnapshot("initial"), new Vector3(1, 1 + heightScalar, 1));
@@ -189,14 +217,13 @@ namespace UFB.Entities
         /// Attach a gameObject to this tile, and it will move with it
         /// CHANGE THIS to using ITilePlaceable
         /// </summary>
-        public void AttachEntity(GameObject entity)
+        public void AttachEntity(TileAttachable attachable)
         {
-            entity.transform.position = EntityPosition;
-            _attachedEntities.Add(entity);
+            attachable.transform.position = AttachedPosition;
+            _attachables.Add(attachable);
         }
 
-        public void DetachEntity(GameObject entity) => _attachedEntities.Remove(entity);
-
+        public void DetachEntity(TileAttachable attachable) => _attachables.Remove(attachable);
 
         public void OnPassThrough(PlayerEntity player)
         {
