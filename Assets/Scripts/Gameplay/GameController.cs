@@ -4,10 +4,13 @@ using UFB.Map;
 using UFB.Player;
 using UFB.Entities;
 using System;
+using UFB.Effects;
 
-namespace UFB.Gameplay {
+namespace UFB.Gameplay
+{
 
-    public class GameController : MonoBehaviour {
+    public class GameController : MonoBehaviour
+    {
         // uses a server connection (or an internal state manager)
         // to determine the state of the game. GameController is the 
         // main API through which either a game manager or a server 
@@ -18,14 +21,17 @@ namespace UFB.Gameplay {
         public ServerConnection ServerConnection { get; private set; }
         public GameBoard GameBoard { get { return _gameBoard; } }
 
+
         public Action OnBoardSpawned;
 
         [SerializeField] private string _mapName = "kraken";
         [SerializeField] private GameBoard _gameBoard;
         private PlayerManager _playerManager;
 
-        private void Awake() {
-            if (Instance != null) {
+        private void Awake()
+        {
+            if (Instance != null)
+            {
                 Destroy(gameObject);
                 return;
             }
@@ -34,9 +40,11 @@ namespace UFB.Gameplay {
             DontDestroyOnLoad(gameObject);
         }
 
+
         private void Start()
         {
-            if (_gameBoard == null) {
+            if (_gameBoard == null)
+            {
                 var gameBoardPrefab = Resources.Load("Prefabs/GameBoard") as GameObject;
                 var gameBoardObject = Instantiate(gameBoardPrefab, Vector3.zero, Quaternion.identity);
                 _gameBoard = GameObjectExtensions.GetOrAddComponent<GameBoard>(gameBoardObject);
@@ -47,11 +55,13 @@ namespace UFB.Gameplay {
             _playerManager = GameObjectExtensions.GetOrAddComponent<PlayerManager>(playerManagerObject);
 
             _gameBoard.SpawnBoard(_mapName);
-            OnBoardSpawned?.Invoke();
+            _gameBoard.SpawnEntitiesRandom("chest", 20);
 
+            OnBoardSpawned?.Invoke();
 
             _playerManager.SpawnPlayer("Kirin", _gameBoard.RandomTile());
             _playerManager.SpawnPlayer("Ophaia", _gameBoard.RandomTile());
+            _playerManager.SpawnPlayer("Mevisto", _gameBoard.RandomTile());
         }
 
         public void InitializeGame()

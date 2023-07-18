@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 public static class CoroutineHelpers
-{
+{    
     private static IEnumerator DelayedAction(Action action, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -20,7 +20,6 @@ public static class CoroutineHelpers
         return monoBehaviour.StartCoroutine(LerpAction(action, duration));
     }
 
-
     private static IEnumerator LerpAction(Action<float> action, float duration)
     {
         float startTime = Time.time;
@@ -32,6 +31,7 @@ public static class CoroutineHelpers
             yield return null;
         }
     }
+
 
     private static IEnumerator ChangeColor(object obj, Color startColor, Color endColor, float duration)
     {

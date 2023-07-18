@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UFB.Core;
 using TMPro;
+using System;
+using UFB.Gameplay;
 
 namespace UFB.Entities
 {
@@ -12,13 +14,14 @@ namespace UFB.Entities
     interface ITileAttachable
     {
         void AttachToTile(TileEntity tile);
-        void DetachFromDile();        
+        void DetachFromDile();
         void UpdateAttachedPosition(Vector3 newPosition);
     }
 
-    public class TileEntity : MonoBehaviour
+    public class TileEntity : MonoBehaviour, IRaycastSelectable
     {
         public GameTile GameTile { get; private set; }
+        public bool IsStretched { get; private set; }
         [SerializeField] private SpriteRenderer _spriteRenderer;
         private bool _isVisible = true;
         private Color _color;
@@ -102,7 +105,7 @@ namespace UFB.Entities
         private void InitializeWalls()
         {
             _walls = new Dictionary<TileSide, Wall>();
-            var allWalls = GetComponentsInChildren<Wall>();       
+            var allWalls = GetComponentsInChildren<Wall>();
             foreach (var wall in GetComponentsInChildren<Wall>())
             {
                 _walls.Add(wall.Side, wall);
@@ -111,7 +114,7 @@ namespace UFB.Entities
             GameTile.Edges.ForEach(edge =>
             {
                 var wall = _walls[edge.Side];
-                CoroutineHelpers.DelayedAction(() => wall.Activate(), Random.Range(0.1f, 3f), this);
+                CoroutineHelpers.DelayedAction(() => wall.Activate(), UnityEngine.Random.Range(0.1f, 3f), this);
             });
         }
 
@@ -131,6 +134,12 @@ namespace UFB.Entities
                 attachable.OnTilePositionUpdated(AttachedPosition);
             }
             if (needsCleanup) _attachables.RemoveAll(e => e == null);
+        }
+
+
+        public void OnRaycastSelect()
+        {
+            Debug.Log($"[TileEntity.OnRaycastSelect] {name}");
         }
 
         public void SetVisibility(bool isVisible, float duration = 0.5f, float delay = 0)
@@ -157,6 +166,11 @@ namespace UFB.Entities
             //     },
             //     duration: duration,
             //     delay: delay);
+        }
+
+        public void ToggleCoordinateText()
+        {
+            _coordinatesText.gameObject.SetActive(!_coordinatesText.gameObject.activeSelf);
         }
 
         public void SetWallHeight(float height)
@@ -207,11 +221,35 @@ namespace UFB.Entities
             );
         }
 
-        public void Stretch(float heightScalar, float duration = 0.5f)
+        public void Stretch(float heightScalar, float duration = 0.5f, Action onComplete = null)
         {
             var newScale = Vector3.Scale(_scaleAnimator.GetSnapshot("initial"), new Vector3(1, 1 + heightScalar, 1));
-            _scaleAnimator.AnimateTo(newScale, duration);
+            _scaleAnimator.AnimateTo(newScale, duration, onComplete);
+            if (heightScalar > 0.01) {
+                IsStretched = true;
+            } else {
+                IsStretched = false;
+            }
         }
+
+        public void ResetStretch(float duration = 0.5f, Action onComplete = null)
+        {
+            _scaleAnimator.AnimateTo(_scaleAnimator.GetSnapshot("initial"), duration, onComplete);
+            IsStretched = false;
+        }
+
+        public void SlamDown()
+        {
+            _scaleAnimator.AnimateTo(_scaleAnimator.GetSnapshot("initial"), 0.2f);
+            GameController.Instance.GameBoard.RunRippleEffect(this);
+            IsStretched = false;
+        }
+
+        // public void RippleEffect() 
+        // {
+        //     GameController.Instance.GameBoard.RunRippleEffect(this);
+        // }
+
 
         /// <summary>
         /// Attach a gameObject to this tile, and it will move with it

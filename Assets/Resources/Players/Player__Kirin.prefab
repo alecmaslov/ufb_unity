@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3222427153687044299}
   - component: {fileID: 3394297906512579141}
+  - component: {fileID: 2221262866857573663}
   - component: {fileID: 4487752071688825497}
   m_Layer: 0
   m_Name: Player__Kirin
@@ -70,6 +71,18 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2221262866857573663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316463308933975789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4932a372671215049a0be1c0b4491112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4487752071688825497
 MonoBehaviour:
   m_ObjectHideFlags: 0

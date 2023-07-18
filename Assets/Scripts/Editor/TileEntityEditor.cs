@@ -7,7 +7,8 @@ using UFB.Gameplay;
 public class TileEntityEditor : Editor
 {
     private float _wallHeight = 0.5f;
-    private float _stretchAmount = 0.5f;
+    private float _stretchAmount = 10f;
+    private float _stretchDuration = 1.0f;
     private bool _isGlowing = false;
 
     public override void OnInspectorGUI()
@@ -44,6 +45,27 @@ public class TileEntityEditor : Editor
         if (GUILayout.Button("Rotate"))
         {
             tileEntity.gameObject.transform.Rotate(0, 90, 0);
+        }
+
+
+        _stretchAmount = EditorGUILayout.FloatField("Stretch Amount", _stretchAmount);
+        _stretchDuration = EditorGUILayout.FloatField("Stretch Duration", _stretchDuration);
+        
+        if (GUILayout.Button("Stretch")) {
+            tileEntity.Stretch(_stretchAmount, _stretchDuration);
+        }
+
+
+        if (GUILayout.Button("Toggle Coordinates")) {
+            tileEntity.ToggleCoordinateText();
+        }
+
+        if (GUILayout.Button("Ripple Effect")) {
+            GameController.Instance.GameBoard.RunRippleEffect(tileEntity);
+        }
+
+        if (GUILayout.Button("Slam!")) {
+            tileEntity.SlamDown();
         }
 
     }

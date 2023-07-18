@@ -58,6 +58,12 @@ public class GameBoardEditor : Editor
             gameBoard.SpawnEntitiesRandom(_entityName, _numSpawns);
         }
 
+        if (GUILayout.Button("Toggle Coordinates")) {
+            gameBoard.IterateTiles((tile) => {
+                tile.ToggleCoordinateText();
+            });
+        }
+
 
         // think about making a class called EntitySpawner, that can randomly spawn entities
         // throughout the map

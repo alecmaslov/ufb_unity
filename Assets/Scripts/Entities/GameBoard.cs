@@ -18,12 +18,21 @@ namespace UFB.Entities
         private List<TileEntity> _tiles = new List<TileEntity>();
         private UFBMap _map;
 
+        public RippleTilesEffect RippleTilesEffect;
 
         private void Start()
+        {
+            RegisterEffects();
+        }
+
+        private void RegisterEffects()
         {
             Effects = GetComponent<EffectsController>();
             Effects.RegisterEffect("RandomTileStretch", new RandomTileStretchEffect(this, 1.5f));
             Effects.RegisterEffect("ResetTiles", new ResetTilesEffect(this, 0.5f));
+            TileEntity centerTile = GetTileByCoordinates(new Coordinates(_map.Dimensions / 2, _map.Dimensions / 2));
+            RippleTilesEffect = new RippleTilesEffect(this, centerTile, 10f);
+            Effects.RegisterEffect("RippleTiles", RippleTilesEffect);
         }
 
         public void ClearBoard()
@@ -61,7 +70,7 @@ namespace UFB.Entities
                 return;
             }
 
-            
+
             foreach (GameTile tile in _map.Tiles)
             {
                 _tiles.Add(SpawnTile(tile));
@@ -71,6 +80,8 @@ namespace UFB.Entities
             // Vector3 center = _tiles.Aggregate(Vector3.zero, (acc, tile) => acc + tile.transform.position) / _tiles.Count;
             // transform.Translate(-center, Space.World);
             transform.Translate(-_map.Dimensions / 2, 0, -_map.Dimensions / 2, Space.World);
+
+
             // transform.position = -center;
         }
 
@@ -170,6 +181,14 @@ namespace UFB.Entities
         public List<TileEntity> Pathfind(TileEntity start, TileEntity end)
         {
             return Pathfinder.FindTilePath(start, end, this);
+        }
+
+        /// <summary>
+        /// Runs a ripple effect around a specific tile
+        /// <summary>
+        public void RunRippleEffect(TileEntity tile)
+        {
+            RippleTilesEffect.ExecuteOnTile(tile);
         }
 
     }

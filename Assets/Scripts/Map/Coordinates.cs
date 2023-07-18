@@ -29,6 +29,11 @@ namespace UFB.Map {
             return new Coordinates(vector.x, vector.y);
         }
 
+        public Vector2Int ToVector2Int()
+        {
+            return new Vector2Int(X, Y);
+        }
+
         public Coordinates[] Adjacent(int minX, int maxX, int minY, int maxY)
         {
             List<Coordinates> adjacent = new List<Coordinates>();
