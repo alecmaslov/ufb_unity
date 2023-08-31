@@ -18,7 +18,7 @@ namespace UFB.Gameplay
 
 
         public static GameController Instance { get; private set; }
-        public ServerConnection ServerConnection { get; private set; }
+        public ServerWebsocket ServerConnection { get; private set; }
         public GameBoard GameBoard { get { return _gameBoard; } }
 
 

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="CardElement.uss" />
+        <ui:VisualElement name="image" />
+        <ui:VisualElement name="stats">
+            <ui:Label name="attack-badge" class="badge" />
+            <ui:Label name="health-badge" class="badge" />
+        </ui:VisualElement>
+</ui:UXML>
