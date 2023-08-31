@@ -7,16 +7,30 @@ namespace UFB.Network
 {
     public class APIClient
     {
-        public string APIUrl { get { return apiBase + ":" + port; } }
+        public string APIUrl { get { return _protocol + _baseUrl + ":" + _port; } }
+        public bool IsSecure { get { return _protocol == "https://"; } }
 
-        private string apiBase;
-        private int port;
+        private string _protocol;
+        private string _baseUrl;
+        private int _port;
 
 
-        public APIClient(string apiBase, int port)
+        public APIClient(string apiBase, int port, bool useHttps = true)
         {
-            this.apiBase = apiBase;
-            this.port = port;
+            this._baseUrl = apiBase;
+            this._port = port;
+            if (useHttps)
+                this._protocol = "https://";
+            else
+                this._protocol = "http://";
+        }
+
+        /// <summary>
+        /// Gets the url but with a different protocol (useful for ws/wss)
+        /// </summary>
+        public string GetUrlWithProtocol(string protocol)
+        {
+            return protocol + _baseUrl + ":" + _port;
         }
 
 

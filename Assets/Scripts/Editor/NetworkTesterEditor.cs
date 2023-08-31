@@ -19,6 +19,16 @@ public class NetworkTesterEditor : Editor
         {
             networkTester.RegisterClient();
         }
+
+        if (GUILayout.Button("Create Websocket Connection"))
+        {
+            networkTester.CreateWebsocketConnection();
+        }
+
+        if (GUILayout.Button("Send Websocket Hello"))
+        {
+            networkTester.SendWebsocketHello();
+        }
     }
 
 }

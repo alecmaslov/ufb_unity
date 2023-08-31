@@ -17,6 +17,11 @@ namespace UFB.Network
 
     public class UFBApiClient : APIClient
     {
+        public bool IsRegistered { get { return _clientId != null; } }
+        public string ClientId { get { return _clientId; } }
+        public ServerWebsocket Websocket { get { return _websocket; } }
+
+        private ServerWebsocket _websocket;
         private string _clientId;
         private string _token;
 
@@ -24,8 +29,13 @@ namespace UFB.Network
         {
         }
 
-        public async Task RegisterClient(Action callback = null)
+        public async Task RegisterClient()
         {
+            if (IsRegistered)
+            {
+                UnityEngine.Debug.Log("Already registered!");
+                return;
+            }
             try
             {
                 var platformType = GetPlatformType();
@@ -74,6 +84,58 @@ namespace UFB.Network
 
             UnityEngine.Debug.Log("Platform type: " + type);
             return type;
+        }
+
+
+        public async Task CreateWebsocketConnection()
+        {
+            if (!IsRegistered)
+            {
+                throw new Exception("Client not registered!");
+            }
+
+            UnityEngine.Debug.Log("Current websocket" + this._websocket);
+            if (this._websocket != null)
+            {
+                UnityEngine.Debug.Log("Websocket already connected!");
+                return;
+            }
+
+            var tcs = new TaskCompletionSource<ServerWebsocket>();
+            _websocket = new ServerWebsocket(this);
+            tcs.SetResult(_websocket);
+
+            _websocket.OnOpenEvent += () =>
+            {
+                UnityEngine.Debug.Log("[API] Websocket opened!");
+            };
+
+            _websocket.OnMessageEvent += (message) =>
+            {
+                UnityEngine.Debug.Log("[API] Websocket message: " + message);   
+            };
+
+            _websocket.OnCloseEvent += (code) =>
+            {
+                UnityEngine.Debug.Log("[API] Websocket closed: " + code);
+                _websocket = null;
+            };
+
+            _websocket.OnErrorEvent += (error) =>
+            {
+                UnityEngine.Debug.Log("[API] Websocket error: " + error);
+            };
+
+
+            try
+            {
+                await _websocket.Connect("?token=" + _token);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log("Exception: " + e);
+                tcs.SetException(e);
+            }
         }
 
 
