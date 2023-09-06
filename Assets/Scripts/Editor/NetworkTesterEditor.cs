@@ -29,6 +29,11 @@ public class NetworkTesterEditor : Editor
         {
             networkTester.SendWebsocketHello();
         }
+
+        if (GUILayout.Button("Create new room"))
+        {
+            networkTester.CreateNewRoom();
+        }
     }
 
 }

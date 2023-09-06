@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.endel.nativewebsocket": {
-      "version": "https://github.com/endel/NativeWebSocket.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "c5101c07762251edc82caad9e8a39d51b1229c31"
-    },
     "com.unity.burst": {
       "version": "1.8.4",
       "depth": 1,
@@ -220,6 +213,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "io.colyseus.sdk": {
+      "version": "https://github.com/colyseus/colyseus-unity3d.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "802bd87577a783b1559a2c5552cb5e7d62eec396"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

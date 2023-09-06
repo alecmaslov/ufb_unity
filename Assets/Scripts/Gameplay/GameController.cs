@@ -20,6 +20,7 @@ namespace UFB.Gameplay
         public static GameController Instance { get; private set; }
         public ServerWebsocket ServerConnection { get; private set; }
         public GameBoard GameBoard { get { return _gameBoard; } }
+        public PlayerManager PlayerManager { get { return _playerManager; } }
 
 
         public Action OnBoardSpawned;
@@ -59,9 +60,9 @@ namespace UFB.Gameplay
 
             OnBoardSpawned?.Invoke();
 
-            _playerManager.SpawnPlayer("Kirin", _gameBoard.RandomTile());
-            _playerManager.SpawnPlayer("Ophaia", _gameBoard.RandomTile());
-            _playerManager.SpawnPlayer("Mevisto", _gameBoard.RandomTile());
+            // _playerManager.SpawnPlayer("Kirin", _gameBoard.RandomTile());
+            // _playerManager.SpawnPlayer("Ophaia", _gameBoard.RandomTile());
+            // _playerManager.SpawnPlayer("Mevisto", _gameBoard.RandomTile());
         }
 
         public void InitializeGame()

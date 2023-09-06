@@ -37,13 +37,13 @@ namespace UFB.Network
         {
             if (IsConnected)
             {
-                UnityEngine.Debug.Log("Already connected!");
+                UnityEngine.Debug.Log("Already conncted!");
                 return;
             }
             _websocket = new WebSocket(_client.GetUrlWithProtocol(_protocol) + connectionEndpoint);
             _websocket.OnOpen += OnOpen;
             _websocket.OnError += OnError;
-            _websocket.OnClose += OnClose;
+            // _websocket.OnClose += OnClose;
             _websocket.OnMessage += OnMessage;
             // _websocket.OnMessage += OnStringMessage;
             await _websocket.Connect();

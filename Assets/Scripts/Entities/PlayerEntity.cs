@@ -12,6 +12,8 @@ namespace UFB.Entities
     [RequireComponent(typeof(TileAttachable))]
     public class PlayerEntity : MonoBehaviour
     {
+
+        public string PlayerId { get; set; }
         public string CharacterName { get; set; }
         public TileAttachable TileAttachable { get; private set; }
         public TileEntity CurrentTile => TileAttachable.CurrentTile;
@@ -30,8 +32,9 @@ namespace UFB.Entities
 
         // idea - add in player ability to face in the most optimal direction
 
-        public void Initialize(string characterName, GameBoard gameBoard, TileEntity startingTile)
+        public void Initialize(string characterName, GameBoard gameBoard, TileEntity startingTile, string playerId)
         {
+            PlayerId = playerId;
             // _animator = GetComponentInChildren<Animator>();
             _modelTransform = transform.Find("Container");
             _animator = _modelTransform.GetComponent<Animator>();

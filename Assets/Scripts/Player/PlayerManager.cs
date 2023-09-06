@@ -26,7 +26,37 @@ namespace UFB.Player
             RegisterEffects();
         }
 
-        public void SpawnPlayer(string characterName, TileEntity tile)
+
+        public PlayerEntity GetPlayerById(string playerId)
+        {
+            return _players.FirstOrDefault(p => p.PlayerId == playerId);
+        }
+
+
+        // spawns player randomly
+        public void SpawnRandomPlayer(string playerId, Coordinates coordinates)
+        {
+            var allPrefabs = Resources.LoadAll("Players", typeof(GameObject));
+            var playerPrefabs = allPrefabs.Where(p => p.name.StartsWith(_playerPrefix)).ToList();
+            // randomly select a player prefab
+            var playerPrefab = playerPrefabs[UnityEngine.Random.Range(0, playerPrefabs.Count)] as GameObject;
+
+            if (playerPrefab == null)
+            {
+                Debug.LogError("Player prefab not found");
+                return;
+            }
+            var playerObject = Instantiate(playerPrefab, this.transform);
+            PlayerEntity playerEntity = playerObject.GetComponent<PlayerEntity>();
+
+            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coordinates);
+
+            playerEntity.Initialize("Player", GameController.Instance.GameBoard, tile, playerId);
+            _players.Add(playerEntity);
+            Debug.Log("Player spawned");
+        }
+
+        public void SpawnPlayer(string characterName, TileEntity tile, string playerId = null)
         {
             var playerPrefab = Resources.Load($"Players/{_playerPrefix}{characterName}") as GameObject;
             if (playerPrefab == null)
@@ -36,7 +66,7 @@ namespace UFB.Player
             }
             var playerObject = Instantiate(playerPrefab, this.transform);
             PlayerEntity playerEntity = playerObject.GetComponent<PlayerEntity>();
-            playerEntity.Initialize(characterName, GameController.Instance.GameBoard, tile);
+            playerEntity.Initialize(characterName, GameController.Instance.GameBoard, tile, playerId);
             _players.Add(playerEntity);
             Debug.Log("Player " + playerEntity.CharacterName + " spawned");
         }
