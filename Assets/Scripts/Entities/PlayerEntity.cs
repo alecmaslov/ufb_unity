@@ -41,7 +41,7 @@ namespace UFB.Entities
             _gameBoard = gameBoard;
             // CharacterName = characterName;
             CharacterName = name.Split("__")[1].Replace("(Clone)", "");
-            ForceMoveToTile(startingTile, 0.1f);
+            ForceMoveToTile(startingTile, 0);
         }
 
 

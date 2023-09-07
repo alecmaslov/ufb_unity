@@ -19,16 +19,16 @@ namespace UFB.Network
 
     public class NetworkTester : MonoBehaviour
     {
-        public UFBApiClient Client
+        public UfbApiClient Client
         {
             get
             {
-                _client ??= new UFBApiClient("api.thig.io", 8080);
+                _client ??= new UfbApiClient("api.thig.io", 8080);
                 return _client;
             }
         }
 
-        private UFBApiClient _client;
+        private UfbApiClient _client;
 
         private ColyseusClient _colyseusClient;
         private ColyseusRoom<FooMessage> _room;

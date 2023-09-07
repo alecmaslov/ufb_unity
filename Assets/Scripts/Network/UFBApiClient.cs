@@ -15,32 +15,75 @@ namespace UFB.Network
 
 
 
-    public class UFBApiClient : APIClient
+    public class UfbApiClient : APIClient
     {
         public bool IsRegistered { get { return _clientId != null; } }
         public string ClientId { get { return _clientId; } }
         public ServerWebsocket Websocket { get { return _websocket; } }
+        public string Token
+        {
+            get { return _token; }
+            set
+            {
+                // store in the local storage
+                UnityEngine.PlayerPrefs.SetString("token", value);
+                _token = value;
+            }
+        }
+
 
         private ServerWebsocket _websocket;
         private string _clientId;
         private string _token;
 
-        public UFBApiClient(string apiBase, int port) : base(apiBase, port)
+        public UfbApiClient(string apiBase, int port) : base(apiBase, port)
         {
         }
 
-        public async Task RegisterClient()
+        public async Task<bool> ValidateToken()
         {
+            var token = UnityEngine.PlayerPrefs.GetString("token");
+            if (token == null || token == "")
+            {
+                UnityEngine.Debug.Log("No token found!");
+                return false;
+            }
+
+            // if we do have a token, see if the server validates it
+            // if it is valid, the server will reply with the clientId
+            try
+            {
+                var response = await Post<ValidTokenResponse>("/auth/validate-token", JsonConvert.SerializeObject(new { token }));
+                _clientId = response.clientId;
+                Token = token;
+                return true;
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log("Exception: " + e);
+                return false;
+            }
+        }
+
+        public async Task RegisterClient()
+        {       
             if (IsRegistered)
             {
                 UnityEngine.Debug.Log("Already registered!");
                 return;
             }
+            bool isValid = await ValidateToken();
+            if (isValid)
+            {
+                UnityEngine.Debug.Log("Token is valid, client registered!");
+                return;
+            }
+
             try
             {
                 var platformType = GetPlatformType();
                 var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString() });
-                var clientResponse = await Post<RegisterClientResponse>("/register-client", jsonData);
+                var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
                 _clientId = clientResponse.clientId;
                 await GenerateToken(_clientId);
             }
@@ -55,9 +98,8 @@ namespace UFB.Network
             try
             {
                 var jsonData = JsonConvert.SerializeObject(new { clientId });
-                var response = await Post<TokenResponse>("/token", jsonData);
-                _token = response.token;
-                UnityEngine.Debug.Log("token: " + _token);
+                var response = await Post<TokenResponse>("/auth/token", jsonData);
+                Token = response.token;
             }
             catch (Exception e)
             {
@@ -112,7 +154,7 @@ namespace UFB.Network
 
             _websocket.OnMessageEvent += (message) =>
             {
-                UnityEngine.Debug.Log("[API] Websocket message: " + message);   
+                UnityEngine.Debug.Log("[API] Websocket message: " + message);
             };
 
             _websocket.OnCloseEvent += (code) =>
@@ -129,7 +171,7 @@ namespace UFB.Network
 
             try
             {
-                await _websocket.Connect("?token=" + _token);
+                await _websocket.Connect("?token=" + Token);
             }
             catch (Exception e)
             {
@@ -144,6 +186,11 @@ namespace UFB.Network
             public string token;
         }
         public struct RegisterClientResponse
+        {
+            public string clientId;
+        }
+
+        public struct ValidTokenResponse
         {
             public string clientId;
         }

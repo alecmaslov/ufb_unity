@@ -23,7 +23,6 @@ namespace UFB.Entities {
         public Action<TileEntity> OnDetach;
 
         public void AttachToTile(TileEntity tile) {
-            Debug.Log("Attaching to tile " + tile.name);
             if (CurrentTile != null) {
                 Debug.LogError("TileAttachable already attached to tile " + CurrentTile.name + " Make sure to detach first to avoid unwanted side-effects");
                 CurrentTile.DetachEntity(this);

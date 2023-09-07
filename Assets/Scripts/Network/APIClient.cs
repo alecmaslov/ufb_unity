@@ -63,7 +63,7 @@ namespace UFB.Network
         {
             var tcs = new TaskCompletionSource<T>();
 
-            UnityEngine.Debug.Log("POSTING TO: " + APIUrl + endpoint + " BODY: " + body);
+            UnityEngine.Debug.Log("=> APIClient [POST]: " + APIUrl + endpoint + " | " + body);
 
             UnityWebRequest webRequest = UnityWebRequest.Post(APIUrl + endpoint, body, "application/json");
 

@@ -110,7 +110,7 @@ namespace UFB.Entities
             var entityObject = Instantiate(prefab, this.transform);
             TileAttachable entity = entityObject.GetComponent<TileAttachable>();
             entity.AttachToTile(GetTileById(tile.Id));
-            Debug.Log($"Spawned {prefabName} on tile {tile.Id}");
+            // Debug.Log($"Spawned {prefabName} on tile {tile.Id}");
         }
 
         public void SpawnEntity(string prefabName, Coordinates coordinates)

@@ -25,11 +25,10 @@ public class ClickObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                // If we hit something, we log the name of the GameObject that was hit
-                Debug.Log("Raycast Hit: " + hit.transform.name);
-                
+                // Debug.Log("Raycast Hit: " + hit.transform.name);
+
                 IRaycastSelectable selectable = hit.transform.GetComponent<IRaycastSelectable>();
-                
+
                 if (selectable != null)
                 {
                     selectable.OnRaycastSelect();
