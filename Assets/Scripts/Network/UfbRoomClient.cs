@@ -11,29 +11,6 @@ using UFB.Entities;
 
 namespace UFB.Network
 {
-
-
-    public class PlayerMoved : Schema
-    {
-        [Colyseus.Schema.Type(0, "string")]
-        public string playerId;
-
-        [Colyseus.Schema.Type(1, "number")]
-        public float x;
-
-        [Colyseus.Schema.Type(2, "number")]
-        public float y;
-
-        public Coordinates NewCoords => new Coordinates((int)x, (int)y);
-    }
-
-    public class FooSchema : Schema
-    {
-        [Colyseus.Schema.Type(0, "string")]
-        public string foo;
-    }
-
-
     public class UfbRoomClient : MonoBehaviour
     {
         public GameController gameController;
@@ -41,11 +18,13 @@ namespace UFB.Network
         public delegate void OnClientInitializedHander();
         public delegate void OnRoomJoinedHandler(string roomId);
         public delegate void OnRoomLeftHandler();
+        public delegate void OnPlayerJoinedHandler(string playerId);
 
 
         public event OnClientInitializedHander OnClientInitialized;
         public event OnRoomJoinedHandler OnRoomJoined;
         public event OnRoomLeftHandler OnRoomLeft;
+        public event OnPlayerJoinedHandler OnPlayerJoined;
 
 
         private ColyseusClient _coleseusClient;
@@ -55,10 +34,7 @@ namespace UFB.Network
         private readonly string _roomType = "ufbRoom";
 
 
-        void Start()
-        {
-            InitializeClient();
-        }
+        void Start() => InitializeClient();
 
         public async void InitializeClient()
         {
@@ -105,7 +81,6 @@ namespace UFB.Network
                 return;
             }
 
-
             Dictionary<string, object> roomOptions = new Dictionary<string, object>
             {
                 { "token", _apiClient.Token },
@@ -122,8 +97,6 @@ namespace UFB.Network
                 Debug.Log("Error creating room: " + e);
                 return;
             }
-
-
         }
 
         public void LeaveRoom()
@@ -163,6 +136,8 @@ namespace UFB.Network
             gameController.PlayerManager.SpawnRandomPlayer(message.clientId, message.Coordinates);
             var player = gameController.PlayerManager.GetPlayerById(message.clientId);
             player.FocusCamera();
+
+            OnPlayerJoined?.Invoke(message.clientId);
         }
 
         private void OnPlayerMovedMessage(PlayerMoved message)

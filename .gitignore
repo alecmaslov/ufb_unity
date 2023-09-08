@@ -93,3 +93,7 @@ Notes/
 Networking/
 Builds/
 Assets/Samples/
+.env
+Scripts/Build/.env
+Scripts/Build/node_modules/
+Scripts/Build/out/

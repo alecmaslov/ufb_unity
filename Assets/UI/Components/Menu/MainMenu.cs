@@ -10,7 +10,7 @@ namespace UFB.UI
 {
 
     [RequireComponent(typeof(UIDocument))]
-    public class MainMenu : MonoBehaviour
+    public class MainMenuComponent : MonoBehaviour
     {
         public void Start()
         {

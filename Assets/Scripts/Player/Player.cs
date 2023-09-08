@@ -19,11 +19,6 @@ namespace UFB.Player
 
     }
 
-    public class PlayerStatus : Schema
-    {
-
-    }
-
 
     public class PlayerStats : Schema 
     {

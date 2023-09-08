@@ -1,0 +1,19 @@
+{
+  "name": "build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc -w",
+    "dist:webgl": "node ./out/dist-webgl.js"
+  },
+  "author": "Carl Moore",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.5.9",
+    "aws-sdk": "^2.1453.0",
+    "dotenv": "^16.3.1"
+  }
+}
