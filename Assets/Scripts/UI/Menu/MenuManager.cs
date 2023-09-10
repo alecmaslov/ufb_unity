@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UFB.UI
 {
@@ -20,6 +21,19 @@ namespace UFB.UI
                 }
                 OpenMenu(initialMenu);
             }
+        }
+
+        public void OpenMenu(string menuName)
+        {
+            Menu menuToOpen = Menus.FirstOrDefault(menu => menu.gameObject.name == menuName);
+            
+            if (menuToOpen == null)
+            {
+                Debug.LogError($"Menu {menuName} not found", gameObject);
+                return;
+            }
+
+            OpenMenu(menuToOpen);
         }
         
 

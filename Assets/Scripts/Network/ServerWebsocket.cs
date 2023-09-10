@@ -23,11 +23,11 @@ namespace UFB.Network
         public event Action<WebSocketCloseCode> OnCloseEvent;
         public event Action<byte[]> OnMessageEvent;
 
-        private APIClient _client;
+        private ApiClient _client;
         private WebSocket _websocket;
         private string _protocol;
 
-        public ServerWebsocket(APIClient client)
+        public ServerWebsocket(ApiClient client)
         {
             _client = client;
             _protocol = client.IsSecure ? "wss://" : "ws://";
@@ -48,8 +48,6 @@ namespace UFB.Network
             // _websocket.OnMessage += OnStringMessage;
             await _websocket.Connect();
         }
-
-
 
         public async Task SendBytes(byte[] bytes)
         {

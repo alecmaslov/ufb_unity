@@ -15,8 +15,12 @@ namespace UFB.Network
 
 
 
-    public class UfbApiClient : APIClient
+    public class UfbApiClient : ApiClient
     {
+        // public delegate void OnClientConnectedHander();
+        // public event OnClientConnectedHander OnClientConnected;
+
+
         public bool IsRegistered { get { return _clientId != null; } }
         public string ClientId { get { return _clientId; } }
         public ServerWebsocket Websocket { get { return _websocket; } }
@@ -40,7 +44,7 @@ namespace UFB.Network
         {
         }
 
-        public async Task<bool> ValidateToken()
+        private async Task<bool> ValidateToken()
         {
             var token = UnityEngine.PlayerPrefs.GetString("token");
             if (token == null || token == "")
@@ -65,18 +69,18 @@ namespace UFB.Network
             }
         }
 
-        public async Task RegisterClient()
+        public async Task<bool> RegisterClient()
         {       
             if (IsRegistered)
             {
                 UnityEngine.Debug.Log("Already registered!");
-                return;
+                return true;
             }
             bool isValid = await ValidateToken();
             if (isValid)
             {
                 UnityEngine.Debug.Log("Token is valid, client registered!");
-                return;
+                return true;
             }
 
             try
@@ -86,10 +90,12 @@ namespace UFB.Network
                 var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
                 _clientId = clientResponse.clientId;
                 await GenerateToken(_clientId);
+                return true;
             }
             catch (Exception e)
             {
                 UnityEngine.Debug.Log("Exception: " + e);
+                return false;
             }
         }
 
@@ -127,59 +133,6 @@ namespace UFB.Network
             UnityEngine.Debug.Log("Platform type: " + type);
             return type;
         }
-
-
-        public async Task CreateWebsocketConnection()
-        {
-            if (!IsRegistered)
-            {
-                throw new Exception("Client not registered!");
-            }
-
-            UnityEngine.Debug.Log("Current websocket" + this._websocket);
-            if (this._websocket != null)
-            {
-                UnityEngine.Debug.Log("Websocket already connected!");
-                return;
-            }
-
-            var tcs = new TaskCompletionSource<ServerWebsocket>();
-            _websocket = new ServerWebsocket(this);
-            tcs.SetResult(_websocket);
-
-            _websocket.OnOpenEvent += () =>
-            {
-                UnityEngine.Debug.Log("[API] Websocket opened!");
-            };
-
-            _websocket.OnMessageEvent += (message) =>
-            {
-                UnityEngine.Debug.Log("[API] Websocket message: " + message);
-            };
-
-            _websocket.OnCloseEvent += (code) =>
-            {
-                UnityEngine.Debug.Log("[API] Websocket closed: " + code);
-                _websocket = null;
-            };
-
-            _websocket.OnErrorEvent += (error) =>
-            {
-                UnityEngine.Debug.Log("[API] Websocket error: " + error);
-            };
-
-
-            try
-            {
-                await _websocket.Connect("?token=" + Token);
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.Log("Exception: " + e);
-                tcs.SetException(e);
-            }
-        }
-
 
         public struct TokenResponse
         {

@@ -8,18 +8,47 @@ using UFB.Player;
 using UFB.Map;
 using UFB.Gameplay;
 using UFB.Entities;
+using System.Threading.Tasks;
+using UFB.StateSchema;
 
 namespace UFB.Network
 {
-    public class UfbRoomClient : MonoBehaviour
+
+    public struct UfbRoomRules
+    {
+        public int maxPlayers;
+        public int initHealth;
+        public int initEnergy;
+        public float turnTime;
+    }
+
+    public struct UfbRoomOptions
+    {
+        public string mapName;
+        public UfbRoomRules rules;
+
+
+        public Dictionary<string, object> ToDictionary()
+        {
+            return new Dictionary<string, object> {
+                { "mapName", mapName },
+                { "rules", rules }
+            };
+        }
+    }
+
+
+    /// Look into using ColyseusManager
+    public class UfbRoomClient
     {
         public GameController gameController;
 
         public delegate void OnClientInitializedHander();
-        public delegate void OnRoomJoinedHandler(string roomId);
+        public delegate void OnRoomJoinedHandler(UfbRoomState roomState);
         public delegate void OnRoomLeftHandler();
         public delegate void OnPlayerJoinedHandler(string playerId);
 
+        public ColyseusRoom<UfbRoomState> Room { get { return _room; } }
 
         public event OnClientInitializedHander OnClientInitialized;
         public event OnRoomJoinedHandler OnRoomJoined;
@@ -30,26 +59,21 @@ namespace UFB.Network
         private ColyseusClient _coleseusClient;
         private ColyseusRoom<UfbRoomState> _room;
         private UfbApiClient _apiClient;
-        private string _currentPlayerId;
         private readonly string _roomType = "ufbRoom";
 
 
-        void Start() => InitializeClient();
-
-        public async void InitializeClient()
+        public UfbRoomClient(UfbApiClient apiClient)
         {
-            _apiClient = new UfbApiClient("api.thig.io", 8080);
+            if (!apiClient.IsRegistered)
+            {
+                throw new Exception("Client is not registered. Client must be authenticated before creating or joining a game room.");
+            }
+            _apiClient = apiClient;
             var wsURL = _apiClient.GetUrlWithProtocol("wss://");
             _coleseusClient = new ColyseusClient(wsURL);
-            await _apiClient.RegisterClient();
-            if (_apiClient.IsRegistered)
-            {
-                OnClientInitialized?.Invoke();
-                Debug.Log("Client initialized");
-            }
         }
 
-        public async void JoinRoom(string roomId)
+        public async Task JoinRoom(string roomId)
         {
             if (!_apiClient.IsRegistered) throw new Exception("Client is not registered!");
 
@@ -61,7 +85,7 @@ namespace UFB.Network
             {
                 _room = await _coleseusClient.JoinById<UfbRoomState>(roomId, roomOptions);
                 RegisterRoomHandlers(_room);
-                OnRoomJoined?.Invoke(roomId);
+                OnRoomJoined?.Invoke(_room.State);
             }
             catch (Exception e)
             {
@@ -71,7 +95,7 @@ namespace UFB.Network
 
         }
 
-        public async void CreateRoom()
+        public async Task CreateRoom(UfbRoomOptions ufbRoomOptions)
         {
             if (!_apiClient.IsRegistered) throw new Exception("Client is not registered!");
 
@@ -81,16 +105,15 @@ namespace UFB.Network
                 return;
             }
 
-            Dictionary<string, object> roomOptions = new Dictionary<string, object>
-            {
-                { "token", _apiClient.Token },
-            };
+            var roomOptionsDict = ufbRoomOptions.ToDictionary();
+            roomOptionsDict.Add("token", _apiClient.Token);
 
             try
             {
-                _room = await _coleseusClient.Create<UfbRoomState>(_roomType, roomOptions);
+                _room = await _coleseusClient.Create<UfbRoomState>(_roomType, roomOptionsDict);
                 RegisterRoomHandlers(_room);
-                OnRoomJoined?.Invoke(_room.RoomId);
+                // Debug.Log("Created room! " + _room.State.map.name);
+                OnRoomJoined?.Invoke(_room.State);
             }
             catch (Exception e)
             {
@@ -109,35 +132,66 @@ namespace UFB.Network
             }
         }
 
+        
+
         private void RegisterRoomHandlers(ColyseusRoom<UfbRoomState> room)
         {
+            Debug.Log(room.State.AsDictionary().Keys);
+
+            room.State.map.OnNameChange((string currentValue, string previousValue) =>
+            {
+                Debug.Log($"Map name changed from {previousValue} to {currentValue}");
+            });
+
+
+
             room.OnLeave += OnRoomLeave;
             room.OnError += OnRoomError;
 
-            _room.OnLeave += OnRoomLeave;
-            _room.OnError += OnRoomError;
+            room.OnLeave += OnRoomLeave;
+            room.OnError += OnRoomError;
 
-            _room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
-            _room.OnMessage<PlayerMoved>("playerMoved", OnPlayerMovedMessage);
+            room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
+            room.OnMessage<PlayerMoved>("playerMoved", OnPlayerMovedMessage);
+            room.OnMessage<object>("mapChanged", (object value) => {
+                Debug.Log("Map changed: " + value);
+                Debug.Log("MAP NAME!!! " + room.State.map.name);
+            });
 
-            _room.OnStateChange += OnStateChangedMessage;
+            
+            
+
+            room.OnStateChange += OnStateChangedMessage;
+
+            room.State.players.OnAdd((player, key) =>
+            {
+                Debug.Log("Player added: " + player);
+            });
+
+            // _room.State.
+                // OnPlayerJoined?.Invoke(player.clientId);
         }
 
         private void OnStateChangedMessage(UfbRoomState state, bool isFirstState)
         {
-            Debug.Log($"Received state changed message: {state.mySynchronizedProperty}");
+            Debug.Log("Received state change message: " + state);
+        }
+
+
+        private void OnNotification()
+        {
+
         }
 
         private void OnPlayerJoinedMessage(PlayerJoined message)
         {
             Debug.Log($"Received player joined message: {message.clientId}");
             if (!message.isMe) return;
-            _currentPlayerId = message.clientId;
-            gameController.PlayerManager.SpawnRandomPlayer(message.clientId, message.Coordinates);
-            var player = gameController.PlayerManager.GetPlayerById(message.clientId);
-            player.FocusCamera();
+            // gameController.PlayerManager.SpawnRandomPlayer(message.clientId, message.Coordinates);
+            // var player = gameController.PlayerManager.GetPlayerById(message.clientId);
+            // player.FocusCamera();
 
-            OnPlayerJoined?.Invoke(message.clientId);
+            // OnPlayerJoined?.Invoke(message.clientId);
         }
 
         private void OnPlayerMovedMessage(PlayerMoved message)

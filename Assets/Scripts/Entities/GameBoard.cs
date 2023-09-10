@@ -61,7 +61,11 @@ namespace UFB.Entities
         {
             gameObject.name = $"GameBoard__{mapName}";
             MapName = mapName;
+            
+            // @streamingassets
             var mapInfo = Resources.Load($"Maps/{mapName}/map") as TextAsset;
+
+
             _map = MapParser.Parse(mapInfo);
 
             if (_map == null)

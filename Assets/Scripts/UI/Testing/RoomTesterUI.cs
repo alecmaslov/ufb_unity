@@ -3,10 +3,10 @@ using UnityEngine.UI;
 using UFB.Network;
 using TMPro;
 using UFB.UI;
+using UFB.Gameplay;
 
 namespace UFB.UITesting
 {
-    [RequireComponent(typeof(UfbRoomClient))]
     public class RoomTesterUI : MonoBehaviour
     {
         public GameObject inputDialogPrefab;
@@ -22,9 +22,11 @@ namespace UFB.UITesting
         private UfbRoomClient _roomClient;
 
 
-        void Start()
+        void OnEnable()
         {
-            _roomClient = GetComponent<UfbRoomClient>();
+            // _roomClient = GetComponent<UfbRoomClient>();
+            _roomClient = GameController.Instance.RoomClient;
+
 
             createRoomButton.onClick.AddListener(CreateRoom);
             joinRoomButton.onClick.AddListener(JoinRoom);
@@ -38,6 +40,8 @@ namespace UFB.UITesting
             connectionStatusText.color = Color.red;
 
 
+            // GameController.
+
             _roomClient.OnClientInitialized += () =>
             {
                 connectionStatusText.text = "Connected";
@@ -49,9 +53,15 @@ namespace UFB.UITesting
 
             roomNameText.text = "None";
 
-            _roomClient.OnRoomJoined += (roomId) =>
+            _roomClient.OnRoomJoined += (roomState) =>
             {
-                roomNameText.text = roomId;
+                // roomNameText.text = roomId;
+                roomNameText.text = _roomClient.Room.RoomId;
+
+                // here we can add info about how many players are in the room
+
+
+                
                 createRoomButton.interactable = false;
                 joinRoomButton.interactable = false;
                 leaveRoomButton.interactable = true;
@@ -69,7 +79,7 @@ namespace UFB.UITesting
 
         void CreateRoom()
         {
-            _roomClient.CreateRoom();
+            // _roomClient.CreateRoom();
         }
 
         void JoinRoom()

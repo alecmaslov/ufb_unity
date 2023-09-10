@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using UFB.Gameplay;
 
 namespace UFB.UI
 {
@@ -10,55 +11,29 @@ namespace UFB.UI
         public Menu newGameMenu;
         public Menu joinGameMenu;
 
+
+        public override async void Start()
+        {
+            base.Start();
+            GameController.Instance.OnConnect += () => 
+                ToggleButtonInteractability(true);
+            await GameController.Instance.Initialize();
+        }
+
+        private void ToggleButtonInteractability(bool interactable)
+        {
+            var buttons = GetComponentsInChildren<Button>();
+            foreach (var button in buttons)
+            {
+                button.interactable = interactable;
+            }
+        }
+
         public void OnNewGameButton() => _menuManager.OpenMenu(newGameMenu);
         public void OnJoinGameButton() => _menuManager.OpenMenu(joinGameMenu);
-        public void OnSettingsButton() => Debug.Log("Settings not implemented yet");
+        public void OnSettingsButton()
+        {
+            Debug.Log("Settings not implemented yet");
+        }
     }
 }
-
-
-
-
-
-
-// public class MainMenuManager : MonoBehaviour
-// {
-//     public RectTransform basePanel;
-//     public RectTransform createGamePanel;
-//     public RectTransform joinGamePanel;
-//     public RectTransform gameSettingsPanel;
-
-//     public void Start()
-//     {
-//         basePanel.gameObject.SetActive(true);
-//         createGamePanel.gameObject.SetActive(false);
-//         joinGamePanel.gameObject.SetActive(false);
-//         gameSettingsPanel.gameObject.SetActive(false);
-//     }
-
-//     public void OnButtonClick(string buttonId)
-//     {
-//         switch (buttonId)
-//         {
-//             case "newGame":
-//                 basePanel.gameObject.SetActive(false);
-//                 createGamePanel.gameObject.SetActive(true);
-//                 break;
-//             case "joinGame":
-//                 basePanel.gameObject.SetActive(false);
-//                 joinGamePanel.gameObject.SetActive(true);
-//                 break;
-//             case "settings":
-//                 basePanel.gameObject.SetActive(false);
-//                 gameSettingsPanel.gameObject.SetActive(true);
-//                 break;
-//             case "back":
-//                 basePanel.gameObject.SetActive(true);
-//                 createGamePanel.gameObject.SetActive(false);
-//                 joinGamePanel.gameObject.SetActive(false);
-//                 gameSettingsPanel.gameObject.SetActive(false);
-//                 break;
-//         }
-//     }
-// }
-

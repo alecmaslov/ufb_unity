@@ -13,7 +13,7 @@ namespace UFB.UI
             _menuManager = GetComponentInParent<MenuManager>();
             if (_menuManager == null)
             {
-                Debug.LogError("MenuManager not found in parent");
+                Debug.LogError("MenuManager not found in parent", gameObject);
             }
         }
 

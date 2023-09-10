@@ -5,7 +5,7 @@ using System.Threading.Tasks; // Don't forget to import this at the top of your 
 
 namespace UFB.Network
 {
-    public class APIClient
+    public class ApiClient
     {
         public string APIUrl { get { return _protocol + _baseUrl + ":" + _port; } }
         public bool IsSecure { get { return _protocol == "https://"; } }
@@ -15,7 +15,7 @@ namespace UFB.Network
         private int _port;
 
 
-        public APIClient(string apiBase, int port, bool useHttps = true)
+        public ApiClient(string apiBase, int port, bool useHttps = true)
         {
             this._baseUrl = apiBase;
             this._port = port;
