@@ -15,7 +15,7 @@ namespace UFB.Network
         public float energy;
     }
 
-    public class PlayerState : Schema
+    public class _PlayerState : Schema
     {
         // public readonly string Name;
         [Type(0, "string")]

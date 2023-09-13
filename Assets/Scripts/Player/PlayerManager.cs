@@ -11,6 +11,8 @@ using UFB.Core;
 using UFB.StateSchema;
 using Colyseus.Schema;
 using Colyseus;
+using UFB.Network;
+using Unity.VisualScripting;
 
 namespace UFB.Player
 {
@@ -43,6 +45,11 @@ namespace UFB.Player
             {
                 return GetPlayerById(_myId);
             }
+        }
+
+        private void Start()
+        {
+            EventBus.Subscribe(OnBusEvent);
         }
 
         public void Initialize(ColyseusRoom<UfbRoomState> room, string myId)
@@ -81,10 +88,7 @@ namespace UFB.Player
                 CoroutineHelpers.DelayedAction(() =>
                 {
                     MyPlayer.FocusCamera(); // focus back on the current player
-                }, 3000, this);
-
-
-
+                }, 3000, this); 
             });
 
             _playerStateMap.OnRemove((string key, PlayerState playerState) =>
@@ -97,6 +101,30 @@ namespace UFB.Player
                 }
                 _players.Remove(player);
                 Destroy(player.gameObject);
+            });
+
+            room.OnMessage<PlayerMovedMessage>("playerMoved", (message) => {
+                var player = GetPlayerById(message.playerId);
+
+                Debug.Log($"Received playerMove message! {message.Serialize()}");
+
+                if (player == null)
+                {
+                    Debug.LogError($"Player with id {message.playerId} not found");
+                    return;
+                }
+
+                // eventually use the PathStep to get the tileId, rather than doing all the coord nonsense
+
+                var coordinates = message.path.Select(p => p.coord.ToCoordinates()).ToList();
+                // reverse coords
+                coordinates.Reverse();
+
+                player.MoveAlongPathCoords(coordinates, 0.3f);
+
+
+                // var destination = new Coordinates((int)message.destination.x, (int)message.destination.y);
+                // player.ForceMoveToTile(GameManager.Instance.GameBoard.GetTileByCoordinates(destination));
             });
         }
 
@@ -212,13 +240,30 @@ namespace UFB.Player
         }
 
 
+        private void OnBusEvent(string eventName, object eventArgs)
+        {
+            switch (eventName)
+            {
+                case "requestMove":
+                    var moveArgs = (Coordinates)eventArgs;
+                    var player = GetPlayerById(_myId);
+                    RequestMove(moveArgs);
+                    break;
+            }
+        }
+
+
         /// <summary>
         /// Requests that the player move to the given destination.
         /// </summary>
         /// <param name="destination"></param>
-        public void RequestMove(Coordinates destination)
+        public async void RequestMove(Coordinates destination)
         {
-            // _room.Send("move")
+            Debug.Log($"[PlayerManager] Requesting move to {destination.ToString()}");
+            await _room.Send("move", new Dictionary<string, object>() {
+                { "destination", destination.ToDictionary() }
+            });
+
         }
     }
 }

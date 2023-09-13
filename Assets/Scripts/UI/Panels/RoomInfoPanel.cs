@@ -16,7 +16,7 @@ namespace UFB.UI
             // ask, don't tell
             GameManager.Instance.OnGameLoaded += () =>
             {
-                // roomIdText.text = GameManager.Instance.RoomClient.Room.RoomId;
+                roomIdText.text = GameManager.Instance.NetworkManager.Room.RoomId;
             };
         }
 

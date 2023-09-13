@@ -19,6 +19,7 @@ public class OrbitCamera : MonoBehaviour, ICameraController
     [SerializeField] private float minRadius = 1f;
     [SerializeField] private float maxRadius = 20f;
     [SerializeField] private float zoomSpeed = 5f;
+    [SerializeField] private float arrowSpeed = 5f;
 
     private Camera _camera;
 
@@ -88,5 +89,12 @@ public class OrbitCamera : MonoBehaviour, ICameraController
             radius += (scrollInput * -1) * zoomSpeed; // Adjust the zoom speed as needed
             radius = Mathf.Clamp(radius, minRadius, maxRadius); // Optional: Clamp the zoom distance
         }
+
+
+        float lrInput = Input.GetKey(KeyCode.LeftArrow) ? -1 : (Input.GetKey(KeyCode.RightArrow) ? 1 : 0);
+        if (Mathf.Abs(lrInput) > 0.01f)
+        {
+            azimuth += lrInput * arrowSpeed;
+        }        
     }
 }

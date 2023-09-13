@@ -145,6 +145,7 @@ namespace UFB.Entities
             HopStart();
 
             CoroutineHelpers.DelayedAction(() => {
+                Debug.Log("Moving to tile " + tile.Coordinates.ToString());
                 _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () =>
                 {
                     Debug.Log("Finished moving to tile " + tile.Coordinates.ToString());
@@ -183,6 +184,17 @@ namespace UFB.Entities
                 return;
             }
             StartCoroutine(MoveAlongPath(path, 0.1f));
+        }
+
+
+        public void MoveAlongPathCoords(List<Coordinates> coords, float time)
+        {
+            var path = new List<TileEntity>();
+            foreach (Coordinates coord in coords)
+            {
+                path.Add(_gameBoard.GetTileByCoordinates(coord));
+            }
+            StartCoroutine(MoveAlongPath(path, time));
         }
 
         private IEnumerator MoveAlongPath(List<TileEntity> path, float time)

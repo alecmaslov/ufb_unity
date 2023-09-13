@@ -142,7 +142,9 @@ namespace UFB.Entities
         public void OnClick()
         {
             Debug.Log($"[TileEntity.OnClick] {name}");
-            GameManager.Instance.TileClicked(this);
+            // GameManager.Instance.TileClicked(this);
+            EventBus.Publish("requestMove", Coordinates);
+
             ChangeColor(Color.red, 0.5f);
         }
 

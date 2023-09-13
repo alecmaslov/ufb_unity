@@ -15,7 +15,7 @@ import path from "path";
 import { getBucketManager } from "./AWSBucket";
 import { copyDirSync, checkMakeDir } from "./files";
 
-const buildDir = "../../Builds/WebGL";
+const buildDir = "../../Builds/Build";
 const tempDir = "../../Builds/WebGL_Temp";
 const outDir = "E:/UFB/ufb-web";
 

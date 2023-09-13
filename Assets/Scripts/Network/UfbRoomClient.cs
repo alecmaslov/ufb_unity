@@ -61,7 +61,7 @@ namespace UFB.Network
         public UfbRoomJoinOptions joinOptions;
     }
 
-    public struct ServerCoordinates
+    public class ServerCoordinates
     {
         public int x;
         public int y;
@@ -72,10 +72,15 @@ namespace UFB.Network
         }
     }
 
-    public struct PlayerMovedMessage
+    public class PathStep {
+        public string tileId;
+        public ServerCoordinates coord;
+    }
+
+    public class PlayerMovedMessage
     {
         public string playerId;
-        public ServerCoordinates destination;
+        public PathStep[] path;
     }
 
     public class NotificationMessage
@@ -213,10 +218,10 @@ namespace UFB.Network
 
         private void OnPlayerMovedMessage(PlayerMovedMessage message)
         {
-            Debug.Log($"Received player moved message: {message.playerId} to {message.destination}");
-            var tile = gameController.GameBoard.GetTileByCoordinates(message.destination.ToCoordinates());
-            var player = gameController.PlayerManager.GetPlayerById(message.playerId);
-            player.ForceMoveToTile(tile);
+            // Debug.Log($"Received player moved message: {message.playerId} to {message.destination}");
+            // var tile = gameController.GameBoard.GetTileByCoordinates(message.destination.ToCoordinates());
+            // var player = gameController.PlayerManager.GetPlayerById(message.playerId);
+            // player.ForceMoveToTile(tile);
             // gameController.PlayerManager.IteratePlayers((player) =>
             // {
             //     player.ForceMoveToTile(tile);
