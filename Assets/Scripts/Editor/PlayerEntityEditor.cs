@@ -28,7 +28,7 @@ public class PlayerEntityEditor : Editor
         if (GUILayout.Button("Force To Tile"))
         {
             var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
-            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coords);
+            var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
             Debug.Log("Forcing to Tile: " + tile);
             playerEntity.ForceMoveToTile(tile);
         }
@@ -36,7 +36,7 @@ public class PlayerEntityEditor : Editor
         if (GUILayout.Button("Force To Tile With Animation"))
         {
             var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
-            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coords);
+            var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
             Debug.Log("Forcing to Tile: " + tile);
             playerEntity.ForceMoveToTileAnimate(tile, 1.0f);
         }
@@ -49,7 +49,7 @@ public class PlayerEntityEditor : Editor
         if (GUILayout.Button("Pathfind To Tile"))
         {
             var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
-            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coords);
+            var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
             playerEntity.TryMoveToTile(tile);
         }
 

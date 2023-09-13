@@ -83,6 +83,7 @@ namespace UFB.Entities
 
         public void FocusCamera()
         {
+            Debug.Log($"Focusing on {_modelTransform.name} | {_modelTransform.position} | {CameraController.Controller}");
             CameraController.Controller.FocusOn(_modelTransform);
             // CameraController.Instance.FocusOnTile(_currentTile);
             // eventually have a static camera script that implements an ICameraController,
@@ -161,6 +162,7 @@ namespace UFB.Entities
         public void ForceMoveToTile(TileEntity tile, float duration = 0.5f, Action onComplete = null)
         {
             TileAttachable.DetachFromTile();
+            Debug.Log("Moving to tile " + tile.Coordinates.ToString());
             _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () =>
             {
                 Debug.Log("Finished moving to tile " + tile.Coordinates.ToString());

@@ -25,7 +25,7 @@ namespace UFB.UITesting
         void OnEnable()
         {
             // _roomClient = GetComponent<UfbRoomClient>();
-            _roomClient = GameController.Instance.RoomClient;
+            // _roomClient = GameManager.Instance.RoomClient;
 
 
             createRoomButton.onClick.AddListener(CreateRoom);
@@ -87,9 +87,15 @@ namespace UFB.UITesting
             // pop up something here to get user input
             var dialog = Instantiate(inputDialogPrefab, uiContainer).GetComponent<TextInputDialog>();
             dialog.Initialize("Enter Room ID");
+
+            var joinOptions = new UfbRoomJoinOptions {
+                displayName = "Player",
+                characterId = "kirin"
+            };
+
             dialog.OnSubmit += (input) =>
             {
-                _roomClient.JoinRoom(input);
+                _roomClient.JoinRoom(input, joinOptions);
             };
         }
 

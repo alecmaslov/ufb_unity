@@ -750,7 +750,7 @@ GameObject:
   - component: {fileID: 392878604}
   - component: {fileID: 392878603}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -768,7 +768,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0825127d8191f784982d89870d7fc65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapName: kraken
+  gameBoardPrefab:
+    m_AssetGUID: 71fc3e4920a97104e83de236646f8dd0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  playerManagerPrefab:
+    m_AssetGUID: d2c4db48550145140aad44e20d74f14f
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
 --- !u!4 &392878604
 Transform:
   m_ObjectHideFlags: 0

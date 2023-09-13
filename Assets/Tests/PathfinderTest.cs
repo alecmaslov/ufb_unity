@@ -14,10 +14,10 @@ namespace UFB.Development {
 
         public void PathfindBetween(Coordinates start, Coordinates end)
         {
-            GameController.Instance.GameBoard.IterateTiles(t => t.ResetAppearance());
+            GameManager.Instance.GameBoard.IterateTiles(t => t.ResetAppearance());
 
             Debug.Log("Pathfinding between " + start + " and " + end);
-            var path = GameController.Instance.GameBoard.Pathfind(start, end);
+            var path = GameManager.Instance.GameBoard.Pathfind(start, end);
             if (path == null || path.Count == 0) {
                 Debug.Log("No path found");
                 return;

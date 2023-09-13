@@ -20,6 +20,8 @@ namespace UFB.Entities
 
     public class TileEntity : MonoBehaviour, IRaycastSelectable
     {
+
+
         public GameTile GameTile { get; private set; }
         public bool IsStretched { get; private set; }
         [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -137,9 +139,11 @@ namespace UFB.Entities
         }
 
 
-        public void OnRaycastSelect()
+        public void OnClick()
         {
-            Debug.Log($"[TileEntity.OnRaycastSelect] {name}");
+            Debug.Log($"[TileEntity.OnClick] {name}");
+            GameManager.Instance.TileClicked(this);
+            ChangeColor(Color.red, 0.5f);
         }
 
         public void SetVisibility(bool isVisible, float duration = 0.5f, float delay = 0)
@@ -241,7 +245,7 @@ namespace UFB.Entities
         public void SlamDown()
         {
             _scaleAnimator.AnimateTo(_scaleAnimator.GetSnapshot("initial"), 0.2f);
-            GameController.Instance.GameBoard.RunRippleEffect(this);
+            GameManager.Instance.GameBoard.RunRippleEffect(this);
             IsStretched = false;
         }
 

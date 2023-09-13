@@ -5,34 +5,40 @@ using UFB.Player;
 using System.Linq;
 using System;
 using UFB.Effects;
+using UFB.StateSchema;
 
 namespace UFB.Entities
 {
-
+    [RequireComponent(typeof(EffectsController))]
     public class GameBoard : MonoBehaviour
     {
+        public static GameBoard Instance { get; private set; }
+
         public string MapName { get; set; }
         public EffectsController Effects { get; private set; }
         public int Dimensions { get => _map.Dimensions; }
+        public RippleTilesEffect RippleTilesEffect;
 
         private List<TileEntity> _tiles = new List<TileEntity>();
         private UFBMap _map;
 
-        public RippleTilesEffect RippleTilesEffect;
+        private MapState _mapState; // THIS WILL REPLACE _map
 
-        private void Start()
+
+        public void Initialize(MapState mapState)
         {
+            ClearBoard();
+            Debug.Log($"Initializing GameBoard with map {mapState.name}");
+            SpawnBoard(mapState.name);
             RegisterEffects();
-        }
+            _mapState = mapState;
 
-        private void RegisterEffects()
-        {
-            Effects = GetComponent<EffectsController>();
-            Effects.RegisterEffect("RandomTileStretch", new RandomTileStretchEffect(this, 1.5f));
-            Effects.RegisterEffect("ResetTiles", new ResetTilesEffect(this, 0.5f));
-            TileEntity centerTile = GetTileByCoordinates(new Coordinates(_map.Dimensions / 2, _map.Dimensions / 2));
-            RippleTilesEffect = new RippleTilesEffect(this, centerTile, 10f);
-            Effects.RegisterEffect("RippleTiles", RippleTilesEffect);
+            if (Instance != null)
+            {
+                Debug.LogWarning($"GameBoard already exists, destroying {gameObject.name}");
+                Destroy(gameObject);
+            }
+            Instance = this;
         }
 
         public void ClearBoard()
@@ -57,11 +63,12 @@ namespace UFB.Entities
         }
 
 
+
         public void SpawnBoard(string mapName)
         {
             gameObject.name = $"GameBoard__{mapName}";
             MapName = mapName;
-            
+
             // @streamingassets
             var mapInfo = Resources.Load($"Maps/{mapName}/map") as TextAsset;
 
@@ -194,6 +201,18 @@ namespace UFB.Entities
         {
             RippleTilesEffect.ExecuteOnTile(tile);
         }
+
+
+        private void RegisterEffects()
+        {
+            Effects = GetComponent<EffectsController>();
+            Effects.RegisterEffect("RandomTileStretch", new RandomTileStretchEffect(this, 1.5f));
+            Effects.RegisterEffect("ResetTiles", new ResetTilesEffect(this, 0.5f));
+            TileEntity centerTile = GetTileByCoordinates(new Coordinates(_map.Dimensions / 2, _map.Dimensions / 2));
+            RippleTilesEffect = new RippleTilesEffect(this, centerTile, 10f);
+            Effects.RegisterEffect("RippleTiles", RippleTilesEffect);
+        }
+
 
     }
 }

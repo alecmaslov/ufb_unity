@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
 using UFB.Gameplay;
+using UFB.Network;
 
 namespace UFB.UI
 {
@@ -20,7 +21,11 @@ namespace UFB.UI
 
         public async void OnJoinButton() {
             _menuManager.OpenMenu(loadingMenu);
-            await GameController.Instance.JoinGame(idInputField.text);
+            var joinOptions = new UfbRoomJoinOptions {
+                displayName = "Player",
+                characterId = "kirin"
+            };
+            await GameManager.Instance.JoinGame(idInputField.text, joinOptions);
         }
 
         public void OnBackButton() => _menuManager.OpenMenu(mainMenu);

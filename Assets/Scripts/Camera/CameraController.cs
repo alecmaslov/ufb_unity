@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     public static ZoomController ZoomController;
 
 
-    private void Start()
+    private void Awake()
     {
         Controller = GetComponent<OrbitCamera>();
         ZoomController = GetComponent<ZoomController>();

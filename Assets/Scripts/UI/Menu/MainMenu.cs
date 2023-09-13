@@ -12,13 +12,25 @@ namespace UFB.UI
         public Menu joinGameMenu;
 
 
-        public override async void Start()
+        // public override async void Start()
+        // {
+        //     base.Start();
+        //     await GameController.Instance.Initialize();
+        // }
+
+        private void OnEnable()
         {
-            base.Start();
-            GameController.Instance.OnConnect += () => 
-                ToggleButtonInteractability(true);
-            await GameController.Instance.Initialize();
+            // ToggleButtonInteractability(false);
+            // GameManager.Instance.OnConnect += OnConnect;
         }
+
+        private void OnDisable()
+        {
+            // GameManager.Instance.OnConnect -= OnConnect;
+        }
+
+        private void OnConnect() => ToggleButtonInteractability(true);
+
 
         private void ToggleButtonInteractability(bool interactable)
         {

@@ -18,10 +18,10 @@ namespace UFB.UI
             statusImage.color = Color.red;
             text.text = "Not Connected";
 
-            GameController.Instance.OnConnect += () => {
-                statusImage.color = Color.green;
-                text.text = "Connected";
-            };
+            // GameManager.Instance.OnConnect += () => {
+            //     statusImage.color = Color.green;
+            //     text.text = "Connected";
+            // };
         }
     }
 

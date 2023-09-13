@@ -57,7 +57,10 @@ namespace UFB.Network
             // if it is valid, the server will reply with the clientId
             try
             {
-                var response = await Post<ValidTokenResponse>("/auth/validate-token", JsonConvert.SerializeObject(new { token }));
+                var response = await Post<ValidTokenResponse>(
+                    "/auth/validate-token",
+                    JsonConvert.SerializeObject(new { token })
+                );
                 _clientId = response.clientId;
                 Token = token;
                 return true;
@@ -69,34 +72,25 @@ namespace UFB.Network
             }
         }
 
-        public async Task<bool> RegisterClient()
-        {       
+        public async Task RegisterClient()
+        {
             if (IsRegistered)
             {
                 UnityEngine.Debug.Log("Already registered!");
-                return true;
+                return;
             }
             bool isValid = await ValidateToken();
             if (isValid)
             {
                 UnityEngine.Debug.Log("Token is valid, client registered!");
-                return true;
+                return;
             }
 
-            try
-            {
-                var platformType = GetPlatformType();
-                var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString() });
-                var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
-                _clientId = clientResponse.clientId;
-                await GenerateToken(_clientId);
-                return true;
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.Log("Exception: " + e);
-                return false;
-            }
+            var platformType = GetPlatformType();
+            var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString() });
+            var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
+            _clientId = clientResponse.clientId;
+            await GenerateToken(_clientId);
         }
 
         public async Task GenerateToken(string clientId)

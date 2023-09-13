@@ -73,7 +73,6 @@ namespace UFB.Network
             {
                 if (webRequest.result != UnityWebRequest.Result.Success)
                 {
-                    UnityEngine.Debug.Log("ERROR: " + webRequest.error);
                     tcs.SetException(new Exception(webRequest.error));
                 }
                 else

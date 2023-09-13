@@ -15,7 +15,7 @@ namespace UFB.Entities {
             private set {
                 LastTile = _currentTile;
                 _currentTile = value;
-            } 
+            }
         }
 
         public TileEntity LastTile { get; private set; }

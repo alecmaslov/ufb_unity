@@ -23,18 +23,23 @@ namespace UFB.UI
 
         public async void OnStartButton()
         {
-            var roomOptions = new UfbRoomOptions {
+            var createOptions = new UfbRoomCreateOptions {
                 mapName = "kraken",
                 rules = new UfbRoomRules {
                     maxPlayers = 2,
                     initHealth = 100,
                     initEnergy = 100,
                     turnTime = 60f,
-                }
+                },
+            };
+
+            var joinOptions = new UfbRoomJoinOptions {
+                displayName = "Player",
+                characterId = "kirin"
             };
         
             _menuManager.OpenMenu(loadingMenu);
-            await GameController.Instance.CreateNewGame(roomOptions);
+            await GameManager.Instance.CreateNewGame(createOptions, joinOptions);
         }
     }
 }

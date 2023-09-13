@@ -31,7 +31,7 @@ namespace UFB.Player
     // IPlayer could be a real player or an NPC
     // so this uses an interface, which has properties
     // and methods that all players will have
-    public class PlayerState : Schema
+    public class _PlayerState : Schema
     {
         // public readonly string Name;
         [Colyseus.Schema.Type(0, "string")]

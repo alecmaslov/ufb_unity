@@ -61,7 +61,7 @@ public class TileEntityEditor : Editor
         }
 
         if (GUILayout.Button("Ripple Effect")) {
-            GameController.Instance.GameBoard.RunRippleEffect(tileEntity);
+            GameManager.Instance.GameBoard.RunRippleEffect(tileEntity);
         }
 
         if (GUILayout.Button("Slam!")) {

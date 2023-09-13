@@ -8,6 +8,9 @@ using System;
 using UFB.Effects;
 using Newtonsoft.Json;
 using UFB.Core;
+using UFB.StateSchema;
+using Colyseus.Schema;
+using Colyseus;
 
 namespace UFB.Player
 {
@@ -21,9 +24,80 @@ namespace UFB.Player
 
         private readonly string _playerPrefix = "Player__";
 
-        private void Start()
+        private string _myId;
+
+        private ColyseusRoom<UfbRoomState> _room;
+        private MapSchema<PlayerState> _playerStateMap;
+
+        public PlayerState MyPlayerState
         {
+            get
+            {
+                return _playerStateMap[_myId];
+            }
+        }
+
+        public PlayerEntity MyPlayer
+        {
+            get
+            {
+                return GetPlayerById(_myId);
+            }
+        }
+
+        public void Initialize(ColyseusRoom<UfbRoomState> room, string myId)
+        {
+            _room = room;
+            _playerStateMap = room.State.players;
+            _myId = myId;
             RegisterEffects();
+            // iterate playerStateMap to spawn players
+            foreach (PlayerState playerState in room.State.players.Values)
+            {
+                SpawnPlayer(playerState);
+            }
+
+            // listen for changes to the player state map
+            _playerStateMap.OnAdd((string key, PlayerState playerState) =>
+            {
+                // check if the player is already spawned
+                if (GetPlayerById(playerState.id) != null)
+                {
+                    Debug.LogError($"Player with id {playerState.id} already spawned");
+                    return;
+                }
+
+                Debug.Log($"Player {playerState.id} joined the game | Spawning character {playerState.characterId}");
+                SpawnPlayer(playerState);
+
+                // here we can choose how to animate it - show the camera for a little 
+                // bit as the new player joins
+
+
+                var playerEntity = GetPlayerById(playerState.id);
+
+                playerEntity.FocusCamera();
+                playerEntity.TileAttachable.CurrentTile.SlamDown();
+                CoroutineHelpers.DelayedAction(() =>
+                {
+                    MyPlayer.FocusCamera(); // focus back on the current player
+                }, 3000, this);
+
+
+
+            });
+
+            _playerStateMap.OnRemove((string key, PlayerState playerState) =>
+            {
+                var player = GetPlayerById(playerState.id);
+                if (player == null)
+                {
+                    Debug.LogError($"Player with id {playerState.id} not found");
+                    return;
+                }
+                _players.Remove(player);
+                Destroy(player.gameObject);
+            });
         }
 
 
@@ -49,11 +123,18 @@ namespace UFB.Player
             var playerObject = Instantiate(playerPrefab, this.transform);
             PlayerEntity playerEntity = playerObject.GetComponent<PlayerEntity>();
 
-            var tile = GameController.Instance.GameBoard.GetTileByCoordinates(coordinates);
+            var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coordinates);
 
-            playerEntity.Initialize("Player", GameController.Instance.GameBoard, tile, playerId);
+            playerEntity.Initialize("Player", GameManager.Instance.GameBoard, tile, playerId);
             _players.Add(playerEntity);
             Debug.Log("Player spawned");
+        }
+
+        public void SpawnPlayer(PlayerState playerState)
+        {
+            var coordinates = new Coordinates((int)playerState.x, (int)playerState.y);
+            var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coordinates);
+            SpawnPlayer(playerState.characterId, tile, playerState.id);
         }
 
         public void SpawnPlayer(string characterName, TileEntity tile, string playerId = null)
@@ -66,7 +147,7 @@ namespace UFB.Player
             }
             var playerObject = Instantiate(playerPrefab, this.transform);
             PlayerEntity playerEntity = playerObject.GetComponent<PlayerEntity>();
-            playerEntity.Initialize(characterName, GameController.Instance.GameBoard, tile, playerId);
+            playerEntity.Initialize(characterName, GameManager.Instance.GameBoard, tile, playerId);
             _players.Add(playerEntity);
             Debug.Log("Player " + playerEntity.CharacterName + " spawned");
         }
@@ -120,7 +201,7 @@ namespace UFB.Player
                     Debug.LogError($"Player with character name {playerConfiguration.CharacterName} not found");
                     continue;
                 }
-                var tile = GameController.Instance.GameBoard.GetTileByCoordinates(playerConfiguration.TileCoordinates);
+                var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(playerConfiguration.TileCoordinates);
                 if (tile == null)
                 {
                     Debug.LogError($"Tile with coordinates {playerConfiguration.TileCoordinates} not found");
@@ -128,6 +209,16 @@ namespace UFB.Player
                 }
                 player.ForceMoveToTile(tile);
             }
+        }
+
+
+        /// <summary>
+        /// Requests that the player move to the given destination.
+        /// </summary>
+        /// <param name="destination"></param>
+        public void RequestMove(Coordinates destination)
+        {
+            // _room.Send("move")
         }
     }
 }

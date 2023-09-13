@@ -70,6 +70,7 @@ namespace UFB.Network
     }
 
 
+
     public class PlayerMoved : Schema
     {
         [Type(0, "string")]

@@ -92,5 +92,13 @@ namespace UFB.Map {
             return $"({X}, {Y})";
         }
 
+
+        public Dictionary<string, object> ToDictionary()
+        {
+            return new Dictionary<string, object> {
+                { "x", X },
+                { "y", Y }
+            };
+        }
     }
 }

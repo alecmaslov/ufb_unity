@@ -1,4 +1,4 @@
 public interface IRaycastSelectable
 {
-    void OnRaycastSelect();
+    void OnClick();
 }

@@ -10,10 +10,10 @@ using UFB.Gameplay;
 using UFB.Entities;
 using System.Threading.Tasks;
 using UFB.StateSchema;
+using Unity.VisualScripting;
 
 namespace UFB.Network
 {
-
     public struct UfbRoomRules
     {
         public int maxPlayers;
@@ -22,11 +22,11 @@ namespace UFB.Network
         public float turnTime;
     }
 
-    public struct UfbRoomOptions
+
+    public struct UfbRoomCreateOptions
     {
         public string mapName;
         public UfbRoomRules rules;
-
 
         public Dictionary<string, object> ToDictionary()
         {
@@ -37,23 +37,74 @@ namespace UFB.Network
         }
     }
 
+    public struct UfbRoomJoinOptions
+    {
+        public string token;
+        public string playerId;
+        public string displayName;
+        public string characterId;
+
+        public Dictionary<string, object> ToDictionary()
+        {
+            return new Dictionary<string, object> {
+                { "token", token },
+                { "playerId", playerId },
+                { "displayName", displayName },
+                { "characterId", characterId }
+            };
+        }
+    }
+
+    public struct UfbRoomOptions
+    {
+        public UfbRoomCreateOptions createOptions;
+        public UfbRoomJoinOptions joinOptions;
+    }
+
+    public struct ServerCoordinates
+    {
+        public int x;
+        public int y;
+
+        public Coordinates ToCoordinates()
+        {
+            return new Coordinates(x, y);
+        }
+    }
+
+    public struct PlayerMovedMessage
+    {
+        public string playerId;
+        public ServerCoordinates destination;
+    }
+
+    public class NotificationMessage
+    {
+        public string type;
+        public string message;
+    }
+
 
     /// Look into using ColyseusManager
     public class UfbRoomClient
     {
-        public GameController gameController;
+        public GameManager gameController;
 
         public delegate void OnClientInitializedHander();
         public delegate void OnRoomJoinedHandler(UfbRoomState roomState);
         public delegate void OnRoomLeftHandler();
         public delegate void OnPlayerJoinedHandler(string playerId);
-
-        public ColyseusRoom<UfbRoomState> Room { get { return _room; } }
+        public delegate void OnNotificationMessageHandler(NotificationMessage message);
 
         public event OnClientInitializedHander OnClientInitialized;
         public event OnRoomJoinedHandler OnRoomJoined;
         public event OnRoomLeftHandler OnRoomLeft;
         public event OnPlayerJoinedHandler OnPlayerJoined;
+        public event OnNotificationMessageHandler OnNotificationMessage;
+
+        public ColyseusRoom<UfbRoomState> Room { get { return _room; } }
+        public UfbRoomState State { get { return _room.State; } }
+
 
 
         private ColyseusClient _coleseusClient;
@@ -64,62 +115,46 @@ namespace UFB.Network
 
         public UfbRoomClient(UfbApiClient apiClient)
         {
-            if (!apiClient.IsRegistered)
-            {
-                throw new Exception("Client is not registered. Client must be authenticated before creating or joining a game room.");
-            }
+            if (!_apiClient.IsRegistered) throw new Exception("Client is not registered!");
             _apiClient = apiClient;
             var wsURL = _apiClient.GetUrlWithProtocol("wss://");
             _coleseusClient = new ColyseusClient(wsURL);
         }
 
-        public async Task JoinRoom(string roomId)
+        public async Task JoinRoom(string roomId, UfbRoomJoinOptions joinRoomOptions)
         {
-            if (!_apiClient.IsRegistered) throw new Exception("Client is not registered!");
-
-            Dictionary<string, object> roomOptions = new Dictionary<string, object> {
-                { "token", _apiClient.Token },
+            joinRoomOptions.token = _apiClient.Token;
+            joinRoomOptions.playerId = _apiClient.ClientId;
+            var optionsDict = new Dictionary<string, object>() {
+                { "joinOptions", joinRoomOptions.ToDictionary() }
             };
 
-            try
-            {
-                _room = await _coleseusClient.JoinById<UfbRoomState>(roomId, roomOptions);
-                RegisterRoomHandlers(_room);
-                OnRoomJoined?.Invoke(_room.State);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Error joining room: " + e);
-                return;
-            }
-
+            _room = await _coleseusClient.JoinById<UfbRoomState>(roomId, optionsDict);
+            RegisterRoomHandlers(_room);
         }
 
-        public async Task CreateRoom(UfbRoomOptions ufbRoomOptions)
+        public async Task CreateRoom(UfbRoomCreateOptions createOptions, UfbRoomJoinOptions joinOptions)
         {
-            if (!_apiClient.IsRegistered) throw new Exception("Client is not registered!");
-
             if (_room != null)
             {
                 Debug.LogWarning("Already in a room!");
                 return;
             }
 
-            var roomOptionsDict = ufbRoomOptions.ToDictionary();
-            roomOptionsDict.Add("token", _apiClient.Token);
 
-            try
-            {
-                _room = await _coleseusClient.Create<UfbRoomState>(_roomType, roomOptionsDict);
-                RegisterRoomHandlers(_room);
-                // Debug.Log("Created room! " + _room.State.map.name);
-                OnRoomJoined?.Invoke(_room.State);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Error creating room: " + e);
-                return;
-            }
+            joinOptions.token = _apiClient.Token;
+            joinOptions.playerId = _apiClient.ClientId;
+
+            var roomOptionsDict = createOptions.ToDictionary();
+            var joinOptionsDict = joinOptions.ToDictionary();
+
+            var optionsDict = new Dictionary<string, object>() {
+                { "createOptions", roomOptionsDict },
+                { "joinOptions", joinOptionsDict }
+            };
+
+            _room = await _coleseusClient.Create<UfbRoomState>(_roomType, optionsDict);
+            RegisterRoomHandlers(_room);
         }
 
         public void LeaveRoom()
@@ -132,18 +167,14 @@ namespace UFB.Network
             }
         }
 
-        
+
 
         private void RegisterRoomHandlers(ColyseusRoom<UfbRoomState> room)
         {
-            Debug.Log(room.State.AsDictionary().Keys);
-
             room.State.map.OnNameChange((string currentValue, string previousValue) =>
             {
                 Debug.Log($"Map name changed from {previousValue} to {currentValue}");
             });
-
-
 
             room.OnLeave += OnRoomLeave;
             room.OnError += OnRoomError;
@@ -152,52 +183,38 @@ namespace UFB.Network
             room.OnError += OnRoomError;
 
             room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
-            room.OnMessage<PlayerMoved>("playerMoved", OnPlayerMovedMessage);
-            room.OnMessage<object>("mapChanged", (object value) => {
-                Debug.Log("Map changed: " + value);
-                Debug.Log("MAP NAME!!! " + room.State.map.name);
-            });
-
-            
-            
+            room.OnMessage<PlayerMovedMessage>("playerMoved", OnPlayerMovedMessage);
+            room.OnMessage<NotificationMessage>("notification", OnNotification);
 
             room.OnStateChange += OnStateChangedMessage;
-
-            room.State.players.OnAdd((player, key) =>
-            {
-                Debug.Log("Player added: " + player);
-            });
-
-            // _room.State.
-                // OnPlayerJoined?.Invoke(player.clientId);
         }
 
         private void OnStateChangedMessage(UfbRoomState state, bool isFirstState)
         {
-            Debug.Log("Received state change message: " + state);
+            Debug.Log($"STATE CHANGE | first? {isFirstState} | Received state change message: {state.Serialize()}");
+
+            if (isFirstState)
+            {
+                OnRoomJoined?.Invoke(_room.State);
+            }
         }
 
 
-        private void OnNotification()
+        private void OnNotification(NotificationMessage message)
         {
-
+            Debug.Log($"Received notification message: {message.type} - {message.message}");
+            OnNotificationMessage?.Invoke(message);
         }
 
         private void OnPlayerJoinedMessage(PlayerJoined message)
         {
             Debug.Log($"Received player joined message: {message.clientId}");
-            if (!message.isMe) return;
-            // gameController.PlayerManager.SpawnRandomPlayer(message.clientId, message.Coordinates);
-            // var player = gameController.PlayerManager.GetPlayerById(message.clientId);
-            // player.FocusCamera();
-
-            // OnPlayerJoined?.Invoke(message.clientId);
         }
 
-        private void OnPlayerMovedMessage(PlayerMoved message)
+        private void OnPlayerMovedMessage(PlayerMovedMessage message)
         {
-            Debug.Log($"Received player moved message: {message.playerId} to {message.NewCoords}");
-            var tile = gameController.GameBoard.GetTileByCoordinates(message.NewCoords);
+            Debug.Log($"Received player moved message: {message.playerId} to {message.destination}");
+            var tile = gameController.GameBoard.GetTileByCoordinates(message.destination.ToCoordinates());
             var player = gameController.PlayerManager.GetPlayerById(message.playerId);
             player.ForceMoveToTile(tile);
             // gameController.PlayerManager.IteratePlayers((player) =>
@@ -219,26 +236,25 @@ namespace UFB.Network
             Debug.Log("Left room: " + code);
         }
 
-        public void MoveCurrentPlayer(Coordinates coords)
-        {
-            _room.Send("move", new
-            {
-                x = coords.X,
-                y = coords.Y
-            });
-        }
 
-        public void MoveCurrentPlayer(int x, int y)
-        {
-            MoveCurrentPlayer(new Coordinates(x, y));
-        }
+        // public void MoveMyPlayer(Coordinates coords)
+        // {
+        //     _room.Send("move", new Dictionary<string, object>() {
+        //         { "destination", coords.ToDictionary() }
+        //     });
+        // }
 
-        public void MovePlayerToRandomCoords()
-        {
-            var random = new System.Random();
-            var coords = new Coordinates(random.Next(0, 10), random.Next(0, 10));
-            MoveCurrentPlayer(coords);
-        }
+        // public void MoveMyPlayer(int x, int y)
+        // {
+        //     MoveMyPlayer(new Coordinates(x, y));
+        // }
+
+        // public void MovePlayerToRandomCoords()
+        // {
+        //     var random = new System.Random();
+        //     var coords = new Coordinates(random.Next(0, 10), random.Next(0, 10));
+        //     MoveMyPlayer(coords);
+        // }
     }
 
 }

@@ -15,4 +15,5 @@ namespace UFB.StateSchema {
 		public const string Enemy = "Enemy";
 		public const string Portal = "Portal";
 	}
+
 }

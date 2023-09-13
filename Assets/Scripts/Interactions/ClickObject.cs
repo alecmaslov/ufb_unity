@@ -31,7 +31,7 @@ public class ClickObject : MonoBehaviour
 
                 if (selectable != null)
                 {
-                    selectable.OnRaycastSelect();
+                    selectable.OnClick();
                 }
 
                 // Or if you want to do something with the game object
