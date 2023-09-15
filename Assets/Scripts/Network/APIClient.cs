@@ -71,14 +71,22 @@ namespace UFB.Network
 
             asyncOperation.completed += (operation) =>
             {
-                if (webRequest.result != UnityWebRequest.Result.Success)
+                try
                 {
-                    tcs.SetException(new Exception(webRequest.error));
+                    if (webRequest.result != UnityWebRequest.Result.Success)
+                    {
+                        tcs.SetException(new Exception(webRequest.error));
+                    }
+                    else
+                    {
+                        T result = JsonConvert.DeserializeObject<T>(webRequest.downloadHandler.text);
+                        tcs.SetResult(result);
+                    }
+
                 }
-                else
+                catch (Exception e)
                 {
-                    T result = JsonConvert.DeserializeObject<T>(webRequest.downloadHandler.text);
-                    tcs.SetResult(result);
+                    tcs.SetException(e);
                 }
             };
 

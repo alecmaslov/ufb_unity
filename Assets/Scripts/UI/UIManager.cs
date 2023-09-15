@@ -1,33 +1,99 @@
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
+using UFB.Events;
+
 
 namespace UFB.UI
-{   
-
-    public interface IUIPanel
+{
+    public class UIManager : MonoBehaviour
     {
-        void Show();
-        void Hide();
-    }
+        public static UIManager Instance { get; private set; }
+        public AssetReference toastPrefab;
+        [SerializeField] private Canvas _rootCanvas;
 
-    public class UIManager
-    {
-        public static UIToast Toast { get; private set; }
-
-        private Canvas _uiRoot;
-        private MonoBehaviour _monobehaviour;
+        [SerializeField] private RectTransform _topSlot;
+        [SerializeField] private RectTransform _middleSlot;
+        [SerializeField] private RectTransform _bottomSlot;
 
 
-        public UIManager(MonoBehaviour monobehaviour)
+        private void OnEnable()
         {
-            // here we can get or create the uiRoot
+            if (_rootCanvas == null)
+            {
+                _rootCanvas = GetComponentInChildren<Canvas>();
+                if (_rootCanvas == null)
+                {
+                    throw new System.Exception("UIManager requires a Canvas component");
+                }
+            }
 
-            _monobehaviour = monobehaviour;
-            Toast = new UIToast();
+            Debug.Log($"UIManager enabled");
+            Instance = this;
+            var currentScene = SceneManager.GetActiveScene();
+            Debug.Log($"Current scene: {currentScene.name}");
+
+            // subscribe to anything here
+            EventBus.Subscribe<ToastMessageEvent>(ShowToast);
         }
 
+        private void OnDisable()
+        {
+            // unsubscribe to anything here
+            EventBus.Unsubscribe<ToastMessageEvent>(ShowToast);
+        }
 
-        // public void 
+        private void InstantiatePanel(AssetReference asset, System.Action<GameObject> callback)
+        {
+            Addressables.InstantiateAsync(asset, _rootCanvas.transform).Completed += (obj) =>
+            {
+                if (obj.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                {
+                    callback(obj.Result);
+                } else {
+                    throw new System.Exception($"Failed to instantiate {asset}");
+                }
+            };
+        }
 
+        public void ShowToast(string message)
+        {
+
+            Debug.Log($"[UIManager] Showing toast: {message}");
+            InstantiatePanel(toastPrefab, (obj) =>
+            {
+                obj.GetComponent<UIToastItem>().Initialize(message);
+            });
+        }
+
+        private void ShowToast(ToastMessageEvent e) => ShowToast(e.Message);
     }
 }
+
+
+// private void Awake()
+// {
+//     Debug.Log($"UIManager awake");
+//     if (Instance != null)
+//     {
+//         Destroy(gameObject);
+//     }
+//     Instance = this;
+//     DontDestroyOnLoad(gameObject);
+//     _rootCanvas = GetComponent<Canvas>();
+//     var currentScene = SceneManager.GetActiveScene();
+//     Debug.Log($"Current scene: {currentScene.name}");
+// }
+
+// [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+// private static void Initialize()
+// {
+//     if (Instance != null)
+//     {
+//         return;
+//     }
+//     var uiManagerGameObject = new GameObject("UIManager");
+//     Instance = uiManagerGameObject.AddComponent<UIManager>();   
+//     DontDestroyOnLoad(uiManagerGameObject);
+// }

@@ -162,6 +162,7 @@ namespace UFB.Entities
         /// </summary>
         public void ForceMoveToTile(TileEntity tile, float duration = 0.5f, Action onComplete = null)
         {
+            // @test - We need to test why sometimes, this tile is invalid - probably server coords vs client
             TileAttachable.DetachFromTile();
             Debug.Log("Moving to tile " + tile.Coordinates.ToString());
             _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () =>

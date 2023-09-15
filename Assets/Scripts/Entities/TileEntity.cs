@@ -7,6 +7,7 @@ using UFB.Core;
 using TMPro;
 using System;
 using UFB.Gameplay;
+using UFB.Events;
 
 namespace UFB.Entities
 {
@@ -142,9 +143,7 @@ namespace UFB.Entities
         public void OnClick()
         {
             Debug.Log($"[TileEntity.OnClick] {name}");
-            // GameManager.Instance.TileClicked(this);
-            EventBus.Publish("requestMove", Coordinates);
-
+            EventBus.Publish(new RequestPlayerMoveEvent(Coordinates));
             ChangeColor(Color.red, 0.5f);
         }
 

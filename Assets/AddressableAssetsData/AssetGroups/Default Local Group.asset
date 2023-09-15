@@ -17,15 +17,17 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9dd9f1ececacd594a81851fe172e8076
   m_SerializeEntries:
-  - m_GUID: d2c4db48550145140aad44e20d74f14f
-    m_Address: Assets/Prefabs/PlayerManager.prefab
+  - m_GUID: e113b890cb8992f478d17df66e0cb12d
+    m_Address: Assets/Prefabs/UI
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - UIPrefabs
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 71fc3e4920a97104e83de236646f8dd0
-    m_Address: Assets/Prefabs/GameBoard.prefab
+  - m_GUID: f8ec32127c39f5844ab7ccff8e019699
+    m_Address: Assets/Prefabs/Core
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - CorePrefabs
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}

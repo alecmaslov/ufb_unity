@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UFB.Gameplay;
+using UFB.Events;
 
 
 namespace UFB.UI
@@ -13,16 +14,33 @@ namespace UFB.UI
         public TextMeshProUGUI text;
         public Image statusImage;
 
+
+        private void Awake()
+        {
+            statusImage.color = Color.red;
+            text.text = "Not Connected";
+        }
+
+        private void OnEnable()  // Subscribing on enabling instead of Start for better symmetry
+        {
+            EventBus.Subscribe<ApiClientRegisteredEvent>(OnApiClientRegistered);
+        }
+
+        private void OnDisable()  // Unsubscribing on disabling the object
+        {
+            EventBus.Unsubscribe<ApiClientRegisteredEvent>(OnApiClientRegistered);
+        }
+
+        private void OnApiClientRegistered(ApiClientRegisteredEvent e)
+        {
+            statusImage.color = Color.green;
+            text.text = "Connected";
+        }
+
         void Start()
         {
             statusImage.color = Color.red;
             text.text = "Not Connected";
-
-            // GameManager.Instance.OnConnect += () => {
-            //     statusImage.color = Color.green;
-            //     text.text = "Connected";
-            // };
         }
     }
-
 }

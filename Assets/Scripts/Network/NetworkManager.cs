@@ -5,13 +5,64 @@ using System.Threading.Tasks;
 using Colyseus;
 using UFB.StateSchema;
 using System;
+using UFB.Events;
+
+namespace UFB.Events
+{
+    public class RoomJoinedEvent
+    {
+        public UfbRoomState RoomState { get; private set; }
+
+        public RoomJoinedEvent(UfbRoomState roomState)
+        {
+            RoomState = roomState;
+        }
+    }
+
+    public class NetworkManagerReadyEvent
+    {
+        public UFB.Network.NetworkManager NetworkManager { get; private set; }
+
+        public NetworkManagerReadyEvent(UFB.Network.NetworkManager networkManager)
+        {
+            NetworkManager = networkManager;
+        }
+    }
+
+    public class RoomLeftEvent
+    {
+        public int Code { get; private set; }
+
+        public RoomLeftEvent(int code)
+        {
+            Code = code;
+        }
+    }
+
+
+    public class RoomErrorEvent
+    {
+        public int Code { get; private set; }
+        public string Message { get; private set; }
+
+        public RoomErrorEvent(int code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
+    }
+
+    public class RoomNotificationEvent
+    {
+        
+    }
+}
 
 namespace UFB.Network
 {
     public class NetworkManager
     {
 
-        private static NetworkManager _instance = null;
         public static NetworkManager Instance;
 
         public UfbApiClient ApiClient { get; private set; }
@@ -20,14 +71,7 @@ namespace UFB.Network
 
         private ColyseusClient _colyseusClient;
 
-        public delegate void OnConnectHandler();
-        public event OnConnectHandler OnConnect;
-
         private readonly string _roomType = "ufbRoom";
-
-
-        public delegate void OnRoomJoinedHandler(UfbRoomState roomState);
-        public static event OnRoomJoinedHandler OnRoomJoined;
 
 
         public NetworkManager(UfbApiClient apiClient)
@@ -40,6 +84,7 @@ namespace UFB.Network
             var wsURL = ApiClient.GetUrlWithProtocol("wss://");
             _colyseusClient = new ColyseusClient(wsURL);
             Instance = this;
+            EventBus.Publish(new NetworkManagerReadyEvent(this));
         }
 
         public static async Task<NetworkManager> CreateWithConnection()
@@ -72,7 +117,6 @@ namespace UFB.Network
                 }
             );
             RegisterHandlers(Room, onFirstStateChange);
-            OnRoomJoined?.Invoke(Room.State);
         }
 
 
@@ -98,7 +142,6 @@ namespace UFB.Network
                 }
             );
             RegisterHandlers(Room, onFirstStateChange);
-            OnRoomJoined?.Invoke(Room.State);
         }
 
 
@@ -148,6 +191,8 @@ namespace UFB.Network
             // switch the codes here to determine whether to delete the Room or not
             // in some cases, if the user locks their phone or something, we don't want
             // to trigger things that ultimately would unload the scene and stuff 
+
+            EventBus.Publish(new RoomLeftEvent(code));
         }
 
         private void OnRoomError(int code, string message)

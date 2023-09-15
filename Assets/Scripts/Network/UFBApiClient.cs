@@ -1,6 +1,24 @@
 using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using UFB.Events;
+using UnityEngine;
+
+
+namespace UFB.Events
+{
+    public class ApiClientRegisteredEvent
+    {
+        public string ClientId { get; private set; }
+        public bool AlreadyRegistered { get; private set; }
+
+        public ApiClientRegisteredEvent(string clientId, bool alreadyRegistered = false)
+        {
+            ClientId = clientId;
+            AlreadyRegistered = alreadyRegistered;
+        }
+    }
+}
 
 namespace UFB.Network
 {
@@ -17,13 +35,8 @@ namespace UFB.Network
 
     public class UfbApiClient : ApiClient
     {
-        // public delegate void OnClientConnectedHander();
-        // public event OnClientConnectedHander OnClientConnected;
-
-
         public bool IsRegistered { get { return _clientId != null; } }
         public string ClientId { get { return _clientId; } }
-        public ServerWebsocket Websocket { get { return _websocket; } }
         public string Token
         {
             get { return _token; }
@@ -34,9 +47,6 @@ namespace UFB.Network
                 _token = value;
             }
         }
-
-
-        private ServerWebsocket _websocket;
         private string _clientId;
         private string _token;
 
@@ -46,10 +56,10 @@ namespace UFB.Network
 
         private async Task<bool> ValidateToken()
         {
-            var token = UnityEngine.PlayerPrefs.GetString("token");
+            var token = PlayerPrefs.GetString("token");
             if (token == null || token == "")
             {
-                UnityEngine.Debug.Log("No token found!");
+                Debug.Log("No token found!");
                 return false;
             }
 
@@ -67,7 +77,7 @@ namespace UFB.Network
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log("Exception: " + e);
+                Debug.Log("Exception: " + e);
                 return false;
             }
         }
@@ -76,13 +86,15 @@ namespace UFB.Network
         {
             if (IsRegistered)
             {
-                UnityEngine.Debug.Log("Already registered!");
+                Debug.Log("Already registered!");
+                EventBus.Publish(new ApiClientRegisteredEvent(_clientId, true));
                 return;
             }
             bool isValid = await ValidateToken();
             if (isValid)
             {
-                UnityEngine.Debug.Log("Token is valid, client registered!");
+                Debug.Log("Token is valid, client registered!");
+                EventBus.Publish(new ApiClientRegisteredEvent(_clientId, true));
                 return;
             }
 
@@ -91,6 +103,7 @@ namespace UFB.Network
             var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
             _clientId = clientResponse.clientId;
             await GenerateToken(_clientId);
+            EventBus.Publish(new ApiClientRegisteredEvent(_clientId, false));
         }
 
         public async Task GenerateToken(string clientId)
@@ -103,7 +116,7 @@ namespace UFB.Network
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log("Exception: " + e);
+                Debug.Log("Exception: " + e);
             }
         }
 
@@ -121,10 +134,9 @@ namespace UFB.Network
     type = PlatformType.IOS;
 #elif UNITY_EDITOR
             type = PlatformType.UNITY_EDITOR;
-            UnityEngine.Debug.Log("Running in Unity Editor");
+            Debug.Log("Running in Unity Editor");
 #endif
-
-            UnityEngine.Debug.Log("Platform type: " + type);
+            Debug.Log("Platform type: " + type);
             return type;
         }
 

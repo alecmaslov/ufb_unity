@@ -12,11 +12,23 @@ using UFB.StateSchema;
 using Colyseus.Schema;
 using Colyseus;
 using UFB.Network;
-using Unity.VisualScripting;
+using UFB.Events;
+
+namespace UFB.Events
+{
+    public class RequestPlayerMoveEvent
+    {
+        public Coordinates Destination { get; private set; }
+
+        public RequestPlayerMoveEvent(Coordinates destination)
+        {
+            Destination = destination;
+        }
+    }
+}
 
 namespace UFB.Player
 {
-
     [RequireComponent(typeof(EffectsController))]
     public class PlayerManager : MonoBehaviour
     {
@@ -47,9 +59,14 @@ namespace UFB.Player
             }
         }
 
-        private void Start()
+        private void OnEnable()
         {
-            EventBus.Subscribe(OnBusEvent);
+            EventBus.Subscribe<RequestPlayerMoveEvent>(OnRequestPlayerMove);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<RequestPlayerMoveEvent>(OnRequestPlayerMove);
         }
 
         public void Initialize(ColyseusRoom<UfbRoomState> room, string myId)
@@ -106,7 +123,7 @@ namespace UFB.Player
             room.OnMessage<PlayerMovedMessage>("playerMoved", (message) => {
                 var player = GetPlayerById(message.playerId);
 
-                Debug.Log($"Received playerMove message! {message.Serialize()}");
+                // Debug.Log($"Received playerMove message! {message.Serialize()}");
 
                 if (player == null)
                 {
@@ -240,28 +257,15 @@ namespace UFB.Player
         }
 
 
-        private void OnBusEvent(string eventName, object eventArgs)
-        {
-            switch (eventName)
-            {
-                case "requestMove":
-                    var moveArgs = (Coordinates)eventArgs;
-                    var player = GetPlayerById(_myId);
-                    RequestMove(moveArgs);
-                    break;
-            }
-        }
-
-
         /// <summary>
         /// Requests that the player move to the given destination.
         /// </summary>
         /// <param name="destination"></param>
-        public async void RequestMove(Coordinates destination)
+        private async void OnRequestPlayerMove(RequestPlayerMoveEvent e)
         {
-            Debug.Log($"[PlayerManager] Requesting move to {destination.ToString()}");
+            Debug.Log($"[PlayerManager] Requesting move to {e.Destination.ToString()}");
             await _room.Send("move", new Dictionary<string, object>() {
-                { "destination", destination.ToDictionary() }
+                { "destination", e.Destination.ToDictionary() }
             });
 
         }
