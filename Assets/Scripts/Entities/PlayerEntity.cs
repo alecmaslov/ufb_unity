@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 using UFB.Core;
+using UFB.Events;
+using UFB.Player;
+using System.Linq;
 
 namespace UFB.Entities
 {
@@ -12,6 +15,8 @@ namespace UFB.Entities
     [RequireComponent(typeof(TileAttachable))]
     public class PlayerEntity : MonoBehaviour
     {
+        // assigned as a scriptable object reference
+        public UfbCharacter Character;
 
         public string PlayerId { get; set; }
         public string CharacterName { get; set; }
@@ -81,10 +86,15 @@ namespace UFB.Entities
         }
 
 
+        // instead of this, the caller should create a FocusCameraEvent, set to the position 
+        // of this playerEntity. Possibly create an ICameraFocusable that generates one of
+        // these events
         public void FocusCamera()
         {
-            Debug.Log($"Focusing on {_modelTransform.name} | {_modelTransform.position} | {CameraController.Controller}");
-            CameraController.Controller.FocusOn(_modelTransform);
+            Debug.Log($"Focusing on {_modelTransform.name} | {_modelTransform.position}");
+            // EventBus.Publish(new CameraFocusEvent(_modelTransform));
+            EventBus.Publish(new CameraOrbitAroundEvent(_modelTransform, 1f));
+
             // CameraController.Instance.FocusOnTile(_currentTile);
             // eventually have a static camera script that implements an ICameraController,
             // which has a single instance of an ICameraController that we can call Focus() on
@@ -173,32 +183,13 @@ namespace UFB.Entities
             });
         }
 
-        /// <summary>
-        /// Tries to use pathfinding algorithm to move to the tile
-        /// </summary>
-        public void TryMoveToTile(TileEntity tile)
-        {
-            var path = _gameBoard.Pathfind(TileAttachable.CurrentTile, tile);
-            if (path == null)
-            {
-                Debug.LogError("No path found from " + TileAttachable.CurrentTile.Coordinates.ToString() + " to " + tile.Coordinates.ToString());
-                return;
-            }
-            StartCoroutine(MoveAlongPath(path, 0.1f));
-        }
-
-
         public void MoveAlongPathCoords(List<Coordinates> coords, float time)
         {
-            var path = new List<TileEntity>();
-            foreach (Coordinates coord in coords)
-            {
-                path.Add(_gameBoard.GetTileByCoordinates(coord));
-            }
+            var path = _gameBoard.GetPathFromCoordinates(coords);
             StartCoroutine(MoveAlongPath(path, time));
         }
 
-        private IEnumerator MoveAlongPath(List<TileEntity> path, float time)
+        private IEnumerator MoveAlongPath(IEnumerable<TileEntity> path, float time)
         {
             // Hop();
             _animator.SetTrigger("HopStart");
@@ -219,7 +210,7 @@ namespace UFB.Entities
                     yield return null;
                 }
 
-                if (tile != path[path.Count - 1])
+                if (tile != path.Last())
                 {
                     tile.OnPassThrough(this);
                 }
@@ -230,22 +221,11 @@ namespace UFB.Entities
 
             // path[path.Count - 1].AttachEntity(this.gameObject);
             // SetTile(path[path.Count - 1]);
-            TileAttachable.AttachToTile(path[path.Count - 1]);
             _animator.SetTrigger("HopEnd");
+            TileAttachable.AttachToTile(path.Last());
             _isMoving = false;
 
         }
-
-        // private IEnumerator MoveTo(Vector3 destination, float time) {
-        //     float elapsedTime = 0;
-        //     Vector3 startingPos = transform.position;
-        //     while (elapsedTime < time) {
-        //         transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / time));
-        //         elapsedTime += Time.deltaTime;
-        //         yield return null;
-        //     }
-        //     transform.position = destination;
-        // }
     }
 
 }

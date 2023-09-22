@@ -10,6 +10,23 @@ namespace UFB.UI
         public Stack<Menu> menuStack = new Stack<Menu>();
         public Menu initialMenu;
 
+        private Dictionary<string, object> _menuData = new Dictionary<string, object>();
+
+        // public void
+        public void SetMenuData(string key, object value)
+        {
+            _menuData[key] = value;
+        }
+
+        public object GetMenuData(string key)
+        {
+            if (_menuData.ContainsKey(key))
+            {
+                return _menuData[key];
+            }
+            return null;
+        }
+
         public void OnEnable()
         {
             if (initialMenu != null)

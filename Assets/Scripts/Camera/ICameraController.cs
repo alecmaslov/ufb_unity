@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public interface ICameraController {
-    static ICameraController Controller { get; }
+public interface ICameraPositioner {
+    static ICameraPositioner Controller { get; }
+    void ApplyTransform(Transform t);
     void FocusOn(Transform transform);
-    float DistanceFromTarget();
 }
+    // void MoveTo(Vector3 position, Quaternion rotation, float duration);
+    // float DistanceFromTarget();

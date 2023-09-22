@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class OrbitCamera : MonoBehaviour, ICameraController
+public class OrbitCamera : MonoBehaviour, ICameraPositioner
 {
     public Transform target;
     public float radius = 10f;
@@ -21,35 +21,35 @@ public class OrbitCamera : MonoBehaviour, ICameraController
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private float arrowSpeed = 5f;
 
-    private Camera _camera;
 
     private void Start()
     {
-        _camera = GetComponent<Camera>();
-        Vector3 angles = transform.eulerAngles;
         if (target != null)
             radius = Vector3.Distance(transform.position, target.position);
     }
 
-    void Update()
+    public void ApplyTransform(Transform t)
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            Debug.LogWarning("No target set for OrbitCamera");
+            return;
+        }
 
         azimuth += azimuthSpeed * Time.deltaTime;
-        // azimuth += Input.GetAxis("Horizontal") * azimuthSpeed * Time.deltaTime; 
-        // elevation += Input.GetAxis("Vertical") * elevationSpeed * Time.deltaTime; 
-        // Check for mouse scroll input
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         PcControls();
-        #endif
+#endif
 
         var rotation = Quaternion.Euler(elevation, azimuth, 0);
         var position = rotation * new Vector3(0.0f, 0.0f, -radius) + target.position;
 
         transform.position = Vector3.Lerp(transform.position, position, lerpSpeed);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, lerpSpeed);
-        transform.LookAt(new Vector3(target.position.x, target.position.y + yOffset, target.position.z));
+
+        // t.SetPositionAndRotation(position, rotation);
+        t.LookAt(new Vector3(target.position.x, target.position.y + yOffset, target.position.z));
     }
 
 
@@ -65,22 +65,38 @@ public class OrbitCamera : MonoBehaviour, ICameraController
         azimuth = initAzimuth;
     }
 
+    public void LookAtTarget(Transform t)
+    {
+        t.LookAt(target);
+    }
+
+    /// <summary>
+    /// Solves for the azimuth and elevation of the camera based on a new position
+    /// </summary>
+    /// <param name="pos"></param>
+    public void SolvePosition(Vector3 pos)
+    {
+
+        Debug.Log($"[OrbitCamera] Solving position: {pos} | Current => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}");
+        // Calculate relative position to the target
+        Vector3 relativePos = pos - target.position;
+        // Calculate the radius
+        radius = Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.y * relativePos.y + relativePos.z * relativePos.z);
+        // Calculate the azimuth (in degrees)
+        azimuth = Mathf.Atan2(relativePos.z, relativePos.x) * Mathf.Rad2Deg;
+        // Calculate the elevation (in degrees)
+        elevation = Mathf.Atan2(relativePos.y, Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.z * relativePos.z)) * Mathf.Rad2Deg;
+
+        Debug.Log($"[OrbitCamera] Solved position: {pos} | New => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}");
+    }
+
+
     public float DistanceFromTarget()
     {
         return Vector3.Distance(transform.position, target.position);
     }
 
-    private IEnumerator FocusOnRoutine(Transform t)
-    {
-        while (Vector3.Distance(target.position, t.position) > 0.01f)
-        {
-            target.position = Vector3.Lerp(target.position, t.position, focusLerpSpeed * Time.deltaTime);
-            yield return null;
-        }
-        target.position = t.position;
-    }
 
-    
     private void PcControls()
     {
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
@@ -95,6 +111,17 @@ public class OrbitCamera : MonoBehaviour, ICameraController
         if (Mathf.Abs(lrInput) > 0.01f)
         {
             azimuth += lrInput * arrowSpeed;
-        }        
+        }
     }
 }
+
+
+    // private IEnumerator FocusOnRoutine(Transform t)
+    // {
+    //     while (Vector3.Distance(target.position, t.position) > 0.01f)
+    //     {
+    //         target.position = Vector3.Lerp(target.position, t.position, focusLerpSpeed * Time.deltaTime);
+    //         yield return null;
+    //     }
+    //     target.position = t.position;
+    // }

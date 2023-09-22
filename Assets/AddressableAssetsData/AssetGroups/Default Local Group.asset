@@ -29,6 +29,43 @@ MonoBehaviour:
     m_SerializedLabels:
     - CorePrefabs
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df0a795ae30500440838c8c2a4f4b85a
+    m_Address: Assets/Prefabs/Objects
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ObjectPefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c4112c382e25bb47a38173a090cd2a1
+    m_Address: Assets/Images/Avatars
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Image
+    - Avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13e9273d177ba2445a79ce74186596f8
+    m_Address: Assets/Images/Avatars/OphaiaAvatar.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Image
+    - Avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c129205f9e90ad4ebec903e231c4998
+    m_Address: Assets/Images/UI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Image
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f71743b003596440989e4644db43e41
+    m_Address: Assets/Images/CharacterCards
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Image
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5615bba5ed5455f409e9d23f8533e305
+    m_Address: Assets/Prefabs/Character.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}
   m_SchemaSet:

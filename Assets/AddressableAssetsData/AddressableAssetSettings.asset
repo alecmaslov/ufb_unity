@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 9dd9f1ececacd594a81851fe172e8076
   m_currentHash:
     serializedVersion: 2
-    Hash: 55cccf0d0fa294daeb5c0a3f592a2d94
+    Hash: 89a7063db80665799f07bf3581900dcc
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: e92f4e51b2293a34586c6d9615cd1fa2, type: 2}
   - {fileID: 11400000, guid: 7029178ea54d49746b75216c6ea259b9, type: 2}
+  - {fileID: 11400000, guid: bb4c5eaa6bb7e714fac6936fe870bc4b, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -89,6 +90,11 @@ MonoBehaviour:
     - default
     - CorePrefabs
     - UIPrefabs
+    - ObjectPefabs
+    - Image
+    - Avatar
+    - Player
+    - Model
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb7164b9162175247a0b28b98580f5b1, type: 2}

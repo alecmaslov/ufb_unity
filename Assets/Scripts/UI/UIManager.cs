@@ -51,7 +51,9 @@ namespace UFB.UI
                 if (obj.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                 {
                     callback(obj.Result);
-                } else {
+                }
+                else
+                {
                     throw new System.Exception($"Failed to instantiate {asset}");
                 }
             };
@@ -59,15 +61,19 @@ namespace UFB.UI
 
         public void ShowToast(string message)
         {
-
-            Debug.Log($"[UIManager] Showing toast: {message}");
             InstantiatePanel(toastPrefab, (obj) =>
             {
-                obj.GetComponent<UIToastItem>().Initialize(message);
+                obj.GetComponent<UIToast>().Initialize(message);
             });
         }
 
-        private void ShowToast(ToastMessageEvent e) => ShowToast(e.Message);
+        private void ShowToast(ToastMessageEvent messageEvent)
+        {
+            InstantiatePanel(toastPrefab, (obj) =>
+            {
+                obj.GetComponent<UIToast>().Initialize(messageEvent);
+            });
+        }
     }
 }
 

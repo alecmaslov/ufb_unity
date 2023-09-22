@@ -52,24 +52,6 @@ namespace UFB.Network
         public Quest[] Quests { get; set; }
     }
 
-    public class PlayerJoined : Schema
-    {
-        [Type(0, "string")]
-        public string clientId;
-
-        [Type(1, "boolean")]
-        public bool isMe = false;
-
-        [Type(2, "number")]
-        public float x;
-
-        [Type(3, "number")]
-        public float y;
-
-        public Coordinates Coordinates => new Coordinates((int)x, (int)y);
-    }
-
-
 
     public class PlayerMoved : Schema
     {

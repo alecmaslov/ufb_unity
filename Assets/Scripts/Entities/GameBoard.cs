@@ -150,6 +150,11 @@ namespace UFB.Entities
             return _tiles.Find(tile => tile.GameTile.Coordinates.Equals(coordinates));
         }
 
+        public IEnumerable<TileEntity> GetPathFromCoordinates(IEnumerable<Coordinates> coordinates)
+        {
+            return coordinates.Select(coord => GetTileByCoordinates(coord));
+        }
+
         /// <summary>
         /// Iterates over tiles
         /// </summary>

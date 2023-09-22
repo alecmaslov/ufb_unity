@@ -20,7 +20,7 @@ public class ZoomControllerEditor : Editor
 
         if (GUILayout.Button("Zoom"))
         {
-            CameraController.ZoomController.Zoom(_zoomAmount, _zoomSpeed);
+            zoomController.ZoomTo(_zoomAmount, _zoomSpeed);
         }
     }
 }

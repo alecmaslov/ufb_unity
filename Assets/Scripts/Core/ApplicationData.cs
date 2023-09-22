@@ -20,6 +20,7 @@ namespace UFB.Core
                 Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, folder));
             }
             var path = Path.Combine(Application.persistentDataPath, folder, filename);
+            Debug.Log($"[ApplicationData] Saving to {path}");
             File.WriteAllText(path, json);
         }
 

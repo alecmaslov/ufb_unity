@@ -17,4 +17,9 @@ namespace UFB.Network
         public string type;
         public string message;
     }
+
+    public class BecomeZombieMessage
+    {
+        public string playerId; // the playerId the zombie will takeover
+    }
 }

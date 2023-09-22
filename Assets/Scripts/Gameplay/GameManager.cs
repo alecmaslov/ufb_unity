@@ -30,7 +30,7 @@ namespace UFB.Gameplay
         {
             // if the current scene is not the main menu, then we need to load it
             var currentScene = SceneManager.GetActiveScene();
-            if (currentScene.name != "MainMenu")
+            if (currentScene.name == "Game")
             {
                 SceneManager.LoadSceneAsync("MainMenu");
             }
@@ -83,7 +83,7 @@ namespace UFB.Gameplay
                     GameBoard = GameObjectExtensions.GetOrAddComponent<GameBoard>(obj.Result);
                     GameBoard.Initialize(room.State.map);
                     // GameBoard.SpawnEntitiesRandom("chest", 20); // this will happen inside gameBoard
-                
+
                     // we have to wait for the gameboard first, then we can create the PlayerManager
                     Addressables.InstantiateAsync(playerManagerPrefab).Completed += (obj) =>
                     {
@@ -109,14 +109,6 @@ namespace UFB.Gameplay
                 EventBus.Publish(new ToastMessageEvent("You have been left the room."));
                 LeaveGame();
             };
-        }
-
-
-
-        public void TileClicked(TileEntity tile)
-        {
-            Debug.Log($"Tile clicked: {tile.Coordinates}");
-            PlayerManager.MyPlayer.ForceMoveToTileAnimate(tile);
         }
     }
 

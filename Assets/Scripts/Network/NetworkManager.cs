@@ -11,9 +11,9 @@ namespace UFB.Events
 {
     public class RoomJoinedEvent
     {
-        public UfbRoomState RoomState { get; private set; }
+        public ColyseusRoom<UfbRoomState> RoomState { get; private set; }
 
-        public RoomJoinedEvent(UfbRoomState roomState)
+        public RoomJoinedEvent(ColyseusRoom<UfbRoomState> roomState)
         {
             RoomState = roomState;
         }
@@ -54,7 +54,19 @@ namespace UFB.Events
 
     public class RoomNotificationEvent
     {
-        
+
+    }
+
+    public class NetworkManagerDisconnectedEvent
+    {
+        public int Code { get; private set; }
+        public string Message { get; private set; }
+
+        public NetworkManagerDisconnectedEvent(int code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
     }
 }
 
@@ -90,10 +102,14 @@ namespace UFB.Network
         public static async Task<NetworkManager> CreateWithConnection()
         {
             var ApiClient = new UfbApiClient("api.thig.io", 8080);
-            try {
+            try
+            {
                 await ApiClient.RegisterClient();
                 return new NetworkManager(ApiClient);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
+                EventBus.Publish(new NetworkManagerDisconnectedEvent(-1, "Failed to connect to host"));
                 throw e;
             }
         }
@@ -117,6 +133,7 @@ namespace UFB.Network
                 }
             );
             RegisterHandlers(Room, onFirstStateChange);
+            EventBus.Publish(new RoomJoinedEvent(Room));
         }
 
 
@@ -142,6 +159,7 @@ namespace UFB.Network
                 }
             );
             RegisterHandlers(Room, onFirstStateChange);
+            EventBus.Publish(new RoomJoinedEvent(Room));
         }
 
 

@@ -25,6 +25,18 @@ namespace UFB.Events
             Destination = destination;
         }
     }
+
+    // public class PlayerStateChangedEvent
+    // {
+    //     public PlayerState PlayerState { get; private set; }
+    //     public bool IsMe { get; private set; }
+
+    //     public PlayerStateChangedEvent(PlayerState playerState, bool isMe = false)
+    //     {
+    //         PlayerState = playerState;
+    //         IsMe = isMe;
+    //     }
+    // }
 }
 
 namespace UFB.Player
@@ -36,20 +48,14 @@ namespace UFB.Player
         public EffectsController Effects { get; private set; }
         public PlayerPillarsEffect playerPillarsEffect;
 
-        private readonly string _playerPrefix = "Player__";
 
+        [SerializeField] private float _playerMoveDuration = 0.1f;
+        private readonly string _playerPrefix = "Player__";
         private string _myId;
 
         private ColyseusRoom<UfbRoomState> _room;
         private MapSchema<PlayerState> _playerStateMap;
 
-        public PlayerState MyPlayerState
-        {
-            get
-            {
-                return _playerStateMap[_myId];
-            }
-        }
 
         public PlayerEntity MyPlayer
         {
@@ -76,75 +82,81 @@ namespace UFB.Player
             _myId = myId;
             RegisterEffects();
             // iterate playerStateMap to spawn players
-            foreach (PlayerState playerState in room.State.players.Values)
-            {
-                SpawnPlayer(playerState);
-            }
+            // foreach (PlayerState playerState in room.State.players.Values)
+            // {
+            //     SpawnPlayer(playerState);
+            // }
 
             // listen for changes to the player state map
-            _playerStateMap.OnAdd((string key, PlayerState playerState) =>
-            {
-                // check if the player is already spawned
-                if (GetPlayerById(playerState.id) != null)
-                {
-                    Debug.LogError($"Player with id {playerState.id} already spawned");
-                    return;
-                }
+            _playerStateMap.OnAdd(OnPlayerAdd);
+            _playerStateMap.OnRemove(OnPlayerRemove);
+            room.OnMessage<PlayerMovedMessage>("playerMoved", OnPlayerMovedMessage);
 
-                Debug.Log($"Player {playerState.id} joined the game | Spawning character {playerState.characterId}");
-                SpawnPlayer(playerState);
-
-                // here we can choose how to animate it - show the camera for a little 
-                // bit as the new player joins
-
-
-                var playerEntity = GetPlayerById(playerState.id);
-
-                playerEntity.FocusCamera();
-                playerEntity.TileAttachable.CurrentTile.SlamDown();
-                CoroutineHelpers.DelayedAction(() =>
-                {
-                    MyPlayer.FocusCamera(); // focus back on the current player
-                }, 3000, this); 
-            });
-
-            _playerStateMap.OnRemove((string key, PlayerState playerState) =>
-            {
-                var player = GetPlayerById(playerState.id);
-                if (player == null)
-                {
-                    Debug.LogError($"Player with id {playerState.id} not found");
-                    return;
-                }
-                _players.Remove(player);
-                Destroy(player.gameObject);
-            });
-
-            room.OnMessage<PlayerMovedMessage>("playerMoved", (message) => {
-                var player = GetPlayerById(message.playerId);
-
-                // Debug.Log($"Received playerMove message! {message.Serialize()}");
-
-                if (player == null)
-                {
-                    Debug.LogError($"Player with id {message.playerId} not found");
-                    return;
-                }
-
-                // eventually use the PathStep to get the tileId, rather than doing all the coord nonsense
-
-                var coordinates = message.path.Select(p => p.coord.ToCoordinates()).ToList();
-                // reverse coords
-                coordinates.Reverse();
-
-                player.MoveAlongPathCoords(coordinates, 0.3f);
-
-
-                // var destination = new Coordinates((int)message.destination.x, (int)message.destination.y);
-                // player.ForceMoveToTile(GameManager.Instance.GameBoard.GetTileByCoordinates(destination));
-            });
+            // _playerStateMap.OnChange((string key, PlayerState playerState) =>
+            // {
+            //     Debug.Log($"Player {playerState.id} changed | Sending Event");
+            //     EventBus.Publish(new PlayerStateChangedEvent(playerState, playerState.id == _myId));
+            // });
         }
 
+        private void OnPlayerMovedMessage(PlayerMovedMessage message)
+        {
+            var player = GetPlayerById(message.playerId);
+            if (player == null)
+            {
+                EventBus.Publish(new ToastMessageEvent($"Tried to move null player {message.playerId}", UI.UIToast.ToastType.Error));
+                Debug.LogError($"Player with id {message.playerId} not found");
+                return;
+            }
+
+            // @TODO - eventually use the PathStep to get the tileId, rather than doing all the coord nonsense
+            var coordinates = message.path.Select(p => p.coord.ToCoordinates()).ToList();
+            coordinates.Reverse();
+            player.MoveAlongPathCoords(coordinates, _playerMoveDuration);
+        }
+
+        private void OnPlayerAdd(string key, PlayerState playerState)
+        {
+            // Here we should create a Character prefab which has a CharacterController
+            // on it. We initialize the CharacterController with the UfbCharacter matched with
+            // the playerState.characterId. The UfbCharacter will be loaded from the asset bundle
+            
+            // check if the player is already spawned
+            if (GetPlayerById(playerState.id) != null)
+            {
+                Debug.LogError($"Player with id {playerState.id} already spawned");
+                return;
+            }
+            EventBus.Publish(new ToastMessageEvent($"Player {playerState.id} joined the game with character {playerState.characterId}"));
+            SpawnPlayer(playerState);
+
+            // here we can choose how to animate it - show the camera for a little 
+            // bit as the new player joins
+            var playerEntity = GetPlayerById(playerState.id);
+
+            playerEntity.FocusCamera();
+            playerEntity.CurrentTile.Stretch(4f, 0.3f);
+            // playerEntity.TileAttachable.CurrentTile.SlamDown();
+            Debug.Log("Waiting 3 seconds");
+            CoroutineHelpers.DelayedAction(() =>
+            {
+                Debug.Log("Focusing back on my player");
+                playerEntity.CurrentTile.SlamDown();
+                MyPlayer.FocusCamera(); // focus back on the current player
+            }, 3, this);
+        }
+
+        private void OnPlayerRemove(string key, PlayerState playerState)
+        {
+            var player = GetPlayerById(playerState.id);
+            if (player == null)
+            {
+                Debug.LogError($"Player with id {playerState.id} not found");
+                return;
+            }
+            _players.Remove(player);
+            Destroy(player.gameObject);
+        }
 
         public PlayerEntity GetPlayerById(string playerId)
         {
@@ -195,11 +207,6 @@ namespace UFB.Player
             playerEntity.Initialize(characterName, GameManager.Instance.GameBoard, tile, playerId);
             _players.Add(playerEntity);
             Debug.Log("Player " + playerEntity.CharacterName + " spawned");
-        }
-
-        public void MovePlayerToTile(PlayerEntity player, TileEntity tile)
-        {
-            player.TryMoveToTile(tile);
         }
 
         private void RegisterEffects()

@@ -24,11 +24,19 @@ namespace UFB.UI
         private void OnEnable()  // Subscribing on enabling instead of Start for better symmetry
         {
             EventBus.Subscribe<ApiClientRegisteredEvent>(OnApiClientRegistered);
+            EventBus.Subscribe<NetworkManagerDisconnectedEvent>(OnNetworkManagerDisconnected);
         }
 
         private void OnDisable()  // Unsubscribing on disabling the object
         {
             EventBus.Unsubscribe<ApiClientRegisteredEvent>(OnApiClientRegistered);
+            EventBus.Unsubscribe<NetworkManagerDisconnectedEvent>(OnNetworkManagerDisconnected);
+        }
+
+        private void OnNetworkManagerDisconnected(NetworkManagerDisconnectedEvent e)
+        {
+            statusImage.color = Color.red;
+            text.text = "Not Connected";
         }
 
         private void OnApiClientRegistered(ApiClientRegisteredEvent e)

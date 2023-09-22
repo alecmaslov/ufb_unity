@@ -8,7 +8,7 @@ namespace UFB.UI
 
         protected MenuManager _menuManager;
 
-        public virtual void Start()
+        public virtual void Awake()
         {
             _menuManager = GetComponentInParent<MenuManager>();
             if (_menuManager == null)

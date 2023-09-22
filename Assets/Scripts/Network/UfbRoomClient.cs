@@ -14,19 +14,19 @@ using Unity.VisualScripting;
 
 namespace UFB.Network
 {
-    public struct UfbRoomRules
+    public class UfbRoomRules
     {
-        public int maxPlayers;
-        public int initHealth;
-        public int initEnergy;
-        public float turnTime;
+        public int maxPlayers = 4;
+        public int initHealth = 100;
+        public int initEnergy = 100;
+        public float turnTime = 60f*3f;
     }
 
 
-    public struct UfbRoomCreateOptions
+    public class UfbRoomCreateOptions
     {
-        public string mapName;
-        public UfbRoomRules rules;
+        public string mapName = "kraken";
+        public UfbRoomRules rules = new UfbRoomRules();
 
         public Dictionary<string, object> ToDictionary()
         {
@@ -37,7 +37,7 @@ namespace UFB.Network
         }
     }
 
-    public struct UfbRoomJoinOptions
+    public class UfbRoomJoinOptions
     {
         public string token;
         public string playerId;
@@ -55,7 +55,7 @@ namespace UFB.Network
         }
     }
 
-    public struct UfbRoomOptions
+    public class UfbRoomOptions
     {
         public UfbRoomCreateOptions createOptions;
         public UfbRoomJoinOptions joinOptions;
@@ -172,7 +172,7 @@ namespace UFB.Network
             room.OnLeave += OnRoomLeave;
             room.OnError += OnRoomError;
 
-            room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
+            // room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
             room.OnMessage<PlayerMovedMessage>("playerMoved", OnPlayerMovedMessage);
             room.OnMessage<NotificationMessage>("notification", OnNotification);
 
@@ -196,10 +196,10 @@ namespace UFB.Network
             OnNotificationMessage?.Invoke(message);
         }
 
-        private void OnPlayerJoinedMessage(PlayerJoined message)
-        {
-            Debug.Log($"Received player joined message: {message.clientId}");
-        }
+        // private void OnPlayerJoinedMessage(PlayerJoined message)
+        // {
+        //     Debug.Log($"Received player joined message: {message.clientId}");
+        // }
 
         private void OnPlayerMovedMessage(PlayerMovedMessage message)
         {

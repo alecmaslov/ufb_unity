@@ -5,18 +5,39 @@ using UnityEngine.UI;
 using TMPro;
 using UFB.Network;
 using UFB.Events;
+using UFB.UI;
 
 namespace UFB.Events
 {
     public class ToastMessageEvent
     {
         public string Message { get; private set; }
-        public Color Color { get; private set; }
+        public ToastColorScheme ColorScheme { get; private set; }
+        public float Duration { get; private set; }
+        public float AnimationDuration { get; private set; }
 
-        public ToastMessageEvent(string message, Color color = default(Color))
+        public ToastMessageEvent(
+            string message,
+            ToastColorScheme? colorScheme = null,
+            float duration = 5f,
+            float animationDuration = 0.5f)
         {
             Message = message;
-            Color = color;
+            ColorScheme = colorScheme ?? new ToastColorScheme(Color.black, Color.white); // Default scheme
+            Duration = duration;
+            AnimationDuration = animationDuration;
+        }
+
+        public ToastMessageEvent(
+            string message,
+            UIToast.ToastType type,
+            float duration = 5f,
+            float animationDuration = 0.5f)
+        {
+            Message = message;
+            ColorScheme = UIToast.GetColorScheme(type);
+            Duration = duration;
+            AnimationDuration = animationDuration;
         }
     }
 }
@@ -39,7 +60,7 @@ namespace UFB.UI
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(Image))]
-    public class UIToastItem : MonoBehaviour
+    public class UIToast : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _toastText;
         [SerializeField] private Image _backgroundImage;
@@ -64,7 +85,15 @@ namespace UFB.UI
             StartCoroutine(ShowToast(duration, animationDuration));
         }
 
-        private ToastColorScheme GetColorScheme(ToastType type)
+        public void Initialize(ToastMessageEvent messageEvent)
+        {
+            _toastText.text = messageEvent.Message;
+            SetColorScheme(messageEvent.ColorScheme);
+            StartCoroutine(ShowToast(messageEvent.Duration, messageEvent.AnimationDuration));
+        }
+
+
+        public static ToastColorScheme GetColorScheme(ToastType type)
         {
             switch (type)
             {
