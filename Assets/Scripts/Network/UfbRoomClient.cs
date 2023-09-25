@@ -11,66 +11,59 @@ using UFB.Entities;
 using System.Threading.Tasks;
 using UFB.StateSchema;
 using Unity.VisualScripting;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.Network
 {
-    public class UfbRoomRules
-    {
-        public int maxPlayers = 4;
-        public int initHealth = 100;
-        public int initEnergy = 100;
-        public float turnTime = 60f*3f;
-    }
+    // public class UfbRoomRules
+    // {
+    //     public int maxPlayers = 4;
+    //     public int initHealth = 100;
+    //     public int initEnergy = 100;
+    //     public float turnTime = 60f*3f;
+    // }
 
 
-    public class UfbRoomCreateOptions
-    {
-        public string mapName = "kraken";
-        public UfbRoomRules rules = new UfbRoomRules();
+    // public class UfbRoomCreateOptions
+    // {
+    //     public string mapName = "kraken";
+    //     public UfbRoomRules rules = new UfbRoomRules();
 
-        public Dictionary<string, object> ToDictionary()
-        {
-            return new Dictionary<string, object> {
-                { "mapName", mapName },
-                { "rules", rules }
-            };
-        }
-    }
+    //     public Dictionary<string, object> ToDictionary()
+    //     {
+    //         return new Dictionary<string, object> {
+    //             { "mapName", mapName },
+    //             { "rules", rules }
+    //         };
+    //     }
+    // }
 
-    public class UfbRoomJoinOptions
-    {
-        public string token;
-        public string playerId;
-        public string displayName;
-        public string characterId;
+    // public class UfbRoomJoinOptions
+    // {
+    //     public string token;
+    //     public string playerId;
+    //     public string displayName;
+    //     public string characterId;
+    //     public string characterClass;
 
-        public Dictionary<string, object> ToDictionary()
-        {
-            return new Dictionary<string, object> {
-                { "token", token },
-                { "playerId", playerId },
-                { "displayName", displayName },
-                { "characterId", characterId }
-            };
-        }
-    }
+    //     public Dictionary<string, object> ToDictionary()
+    //     {
+    //         return new Dictionary<string, object> {
+    //             { "token", token },
+    //             { "playerId", playerId },
+    //             { "displayName", displayName },
+    //             { "characterId", characterId },
+    //             { "characterClass", characterClass }
+    //         };
+    //     }
+    // }
 
-    public class UfbRoomOptions
-    {
-        public UfbRoomCreateOptions createOptions;
-        public UfbRoomJoinOptions joinOptions;
-    }
+    // public class UfbRoomOptions
+    // {
+    //     public UfbRoomCreateOptions createOptions;
+    //     public UfbRoomJoinOptions joinOptions;
+    // }
 
-    public class ServerCoordinates
-    {
-        public int x;
-        public int y;
-
-        public Coordinates ToCoordinates()
-        {
-            return new Coordinates(x, y);
-        }
-    }
 
 
 
@@ -173,7 +166,7 @@ namespace UFB.Network
             room.OnError += OnRoomError;
 
             // room.OnMessage<PlayerJoined>("playerJoined", OnPlayerJoinedMessage);
-            room.OnMessage<PlayerMovedMessage>("playerMoved", OnPlayerMovedMessage);
+            room.OnMessage<CharacterMovedMessage>("playerMoved", OnPlayerMovedMessage);
             room.OnMessage<NotificationMessage>("notification", OnNotification);
 
             room.OnStateChange += OnStateChangedMessage;
@@ -201,7 +194,7 @@ namespace UFB.Network
         //     Debug.Log($"Received player joined message: {message.clientId}");
         // }
 
-        private void OnPlayerMovedMessage(PlayerMovedMessage message)
+        private void OnPlayerMovedMessage(CharacterMovedMessage message)
         {
             // Debug.Log($"Received player moved message: {message.playerId} to {message.destination}");
             // var tile = gameController.GameBoard.GetTileByCoordinates(message.destination.ToCoordinates());

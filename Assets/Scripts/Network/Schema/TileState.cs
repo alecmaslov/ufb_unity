@@ -16,11 +16,8 @@ namespace UFB.StateSchema {
 		[Type(1, "string")]
 		public string type = default(string);
 
-		[Type(2, "number")]
-		public float x = default(float);
-
-		[Type(3, "number")]
-		public float y = default(float);
+		[Type(2, "ref", typeof(CoordinatesState))]
+		public CoordinatesState coordinates = new CoordinatesState();
 
 		/*
 		 * Support for individual property change callbacks below...
@@ -50,27 +47,15 @@ namespace UFB.StateSchema {
 			};
 		}
 
-		protected event PropertyChangeHandler<float> __xChange;
-		public Action OnXChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<CoordinatesState> __coordinatesChange;
+		public Action OnCoordinatesChange(PropertyChangeHandler<CoordinatesState> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
-			__callbacks.AddPropertyCallback(nameof(this.x));
-			__xChange += __handler;
-			if (__immediate && this.x != default(float)) { __handler(this.x, default(float)); }
+			__callbacks.AddPropertyCallback(nameof(this.coordinates));
+			__coordinatesChange += __handler;
+			if (__immediate && this.coordinates != null) { __handler(this.coordinates, null); }
 			return () => {
-				__callbacks.RemovePropertyCallback(nameof(x));
-				__xChange -= __handler;
-			};
-		}
-
-		protected event PropertyChangeHandler<float> __yChange;
-		public Action OnYChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
-			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
-			__callbacks.AddPropertyCallback(nameof(this.y));
-			__yChange += __handler;
-			if (__immediate && this.y != default(float)) { __handler(this.y, default(float)); }
-			return () => {
-				__callbacks.RemovePropertyCallback(nameof(y));
-				__yChange -= __handler;
+				__callbacks.RemovePropertyCallback(nameof(coordinates));
+				__coordinatesChange -= __handler;
 			};
 		}
 
@@ -78,8 +63,7 @@ namespace UFB.StateSchema {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(type): __typeChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
-				case nameof(x): __xChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
-				case nameof(y): __yChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
+				case nameof(coordinates): __coordinatesChange?.Invoke((CoordinatesState) change.Value, (CoordinatesState) change.PreviousValue); break;
 				default: break;
 			}
 		}

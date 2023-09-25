@@ -28,21 +28,21 @@ public class GameBoardEditor : Editor
         // _wallHeight = EditorGUILayout.FloatField("Wall Height", _wallHeight);
 
 
-        if (GUILayout.Button("Rotate Tiles")) {
-            gameBoard.IterateTiles((tile) => {
-                tile.wallContainer.Rotate(0, 90, 0);
-            });
-        }
+        // if (GUILayout.Button("Rotate Tiles")) {
+        //     gameBoard.IterateTiles((tile) => {
+        //         tile.wallContainer.Rotate(0, 90, 0);
+        //     });
+        // }
 
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         EditorGUILayout.TextField("Map Name", _mapName);
         
-        if (GUILayout.Button("Spawn Board"))
-        {
-            gameBoard.ClearBoard();
-            gameBoard.SpawnBoard(_mapName);
-        }
+        // if (GUILayout.Button("Spawn Board"))
+        // {
+        //     gameBoard.ClearBoard();
+        //     gameBoard.SpawnBoard(_mapName);
+        // }
 
         
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -60,7 +60,7 @@ public class GameBoardEditor : Editor
 
         if (GUILayout.Button("Toggle Coordinates")) {
             gameBoard.IterateTiles((tile) => {
-                tile.ToggleCoordinateText();
+                // tile.ToggleCoordinateText();
             });
         }
 

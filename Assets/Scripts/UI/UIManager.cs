@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UFB.Events;
+using UFB.Network.RoomMessageTypes;
 
 
 namespace UFB.UI
@@ -36,12 +37,14 @@ namespace UFB.UI
 
             // subscribe to anything here
             EventBus.Subscribe<ToastMessageEvent>(ShowToast);
+            EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(ShowToast);
         }
 
         private void OnDisable()
         {
             // unsubscribe to anything here
             EventBus.Unsubscribe<ToastMessageEvent>(ShowToast);
+            EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(ShowToast);
         }
 
         private void InstantiatePanel(AssetReference asset, System.Action<GameObject> callback)
@@ -72,6 +75,14 @@ namespace UFB.UI
             InstantiatePanel(toastPrefab, (obj) =>
             {
                 obj.GetComponent<UIToast>().Initialize(messageEvent);
+            });
+        }
+
+        private void ShowToast(RoomReceieveMessageEvent<NotificationMessage> messageEvent)
+        {
+            InstantiatePanel(toastPrefab, (obj) =>
+            {
+                obj.GetComponent<UIToast>().Initialize(messageEvent.Message.message);
             });
         }
     }

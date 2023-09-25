@@ -55,6 +55,15 @@ namespace UFB.Map {
                 (other.Y == this.Y && Mathf.Abs(other.X - this.X) == 1);
         }
 
+
+        public static Coordinates Random(int maxX, int maxY)
+        {
+            return new Coordinates(
+                UnityEngine.Random.Range(0, maxX),
+                UnityEngine.Random.Range(0, maxY)
+            );
+        }
+
         public Coordinates[] Adjacent() 
         {
             return new Coordinates[] {

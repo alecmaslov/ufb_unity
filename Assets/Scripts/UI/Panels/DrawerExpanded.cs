@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Core;
 using UFB.Gameplay;
 using UnityEngine;
 
@@ -11,8 +12,7 @@ namespace UFB.UI
         {
             // pop-up "are you sure"
             Debug.Log("Leave Game button clicked");
-
-            GameManager.Instance.LeaveGame();
+            ServiceLocator.Current.Get<GameService>().LeaveGame();
         }
 
         public void OnSettingsButtonClicked()

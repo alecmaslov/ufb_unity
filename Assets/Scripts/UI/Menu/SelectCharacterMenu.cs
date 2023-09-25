@@ -7,13 +7,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UFB.Player;
 using TMPro;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.UI
 {
     public class SelectCharacterMenu : Menu
     {
-        public Menu mainMenu;
-
         [SerializeField] private Image _characterCard;
         [SerializeField] private TextMeshProUGUI _characterName;
 
@@ -32,7 +31,7 @@ namespace UFB.UI
         public void OnConfirmButton()
         {           
             var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
-            joinOptions.characterId = _characters[_characterIndex].id;
+            joinOptions.characterClass = _characters[_characterIndex].id;
             // _menuManager.SetMenuData("joinOptions", joinOptions);
             _menuManager.CloseMenu();
 

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _charactersLabel:
-    m_LabelString: 
+    m_LabelString: Character
   _characterPrefab:
     m_AssetGUID: 5615bba5ed5455f409e9d23f8533e305
     m_SubObjectName: 

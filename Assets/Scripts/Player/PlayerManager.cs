@@ -13,6 +13,7 @@ using Colyseus.Schema;
 using Colyseus;
 using UFB.Network;
 using UFB.Events;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.Events
 {
@@ -44,6 +45,8 @@ namespace UFB.Player
     [RequireComponent(typeof(EffectsController))]
     public class PlayerManager : MonoBehaviour
     {
+        /**
+
         private List<PlayerEntity> _players = new List<PlayerEntity>();
         public EffectsController Effects { get; private set; }
         public PlayerPillarsEffect playerPillarsEffect;
@@ -78,7 +81,7 @@ namespace UFB.Player
         public void Initialize(ColyseusRoom<UfbRoomState> room, string myId)
         {
             _room = room;
-            _playerStateMap = room.State.players;
+            // _playerStateMap = room.State.players;
             _myId = myId;
             RegisterEffects();
             // iterate playerStateMap to spawn players
@@ -90,7 +93,7 @@ namespace UFB.Player
             // listen for changes to the player state map
             _playerStateMap.OnAdd(OnPlayerAdd);
             _playerStateMap.OnRemove(OnPlayerRemove);
-            room.OnMessage<PlayerMovedMessage>("playerMoved", OnPlayerMovedMessage);
+            room.OnMessage<CharacterMovedMessage>("playerMoved", OnPlayerMovedMessage);
 
             // _playerStateMap.OnChange((string key, PlayerState playerState) =>
             // {
@@ -99,7 +102,7 @@ namespace UFB.Player
             // });
         }
 
-        private void OnPlayerMovedMessage(PlayerMovedMessage message)
+        private void OnPlayerMovedMessage(CharacterMovedMessage message)
         {
             var player = GetPlayerById(message.playerId);
             if (player == null)
@@ -276,5 +279,7 @@ namespace UFB.Player
             });
 
         }
+
+        */
     }
 }

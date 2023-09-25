@@ -8,33 +8,35 @@ using UFB.StateSchema;
 using Colyseus;
 using UnityEngine.AddressableAssets;
 using UFB.Events;
+using UFB.Character;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.Gameplay
 {
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
-        public PlayerManager PlayerManager { get; private set; }
-        public NetworkManager NetworkManager { get; private set; }
+        public CharacterManager CharacterManager;
+        // public PlayerManager PlayerManager { get; private set; }
+        public NetworkService NetworkManager { get; private set; }
         public GameBoard GameBoard { get; private set; }
 
         public delegate void OnGameLoadedHandler();
         public event OnGameLoadedHandler OnGameLoaded;
 
         public AssetReference gameBoardPrefab;
-        public AssetReference playerManagerPrefab;
 
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Initialize()
-        {
-            // if the current scene is not the main menu, then we need to load it
-            var currentScene = SceneManager.GetActiveScene();
-            if (currentScene.name == "Game")
-            {
-                SceneManager.LoadSceneAsync("MainMenu");
-            }
-        }
+        // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        // private static void Initialize()
+        // {
+        //     // if the current scene is not the main menu, then we need to load it
+        //     var currentScene = SceneManager.GetActiveScene();
+        //     if (currentScene.name == "Game")
+        //     {
+        //         SceneManager.LoadSceneAsync("MainMenu");
+        //     }
+        // }
 
         private void Awake()
         {
@@ -47,15 +49,16 @@ namespace UFB.Gameplay
             DontDestroyOnLoad(gameObject);
         }
 
-        private async void Start()
-        {
-            NetworkManager = await NetworkManager.CreateWithConnection();
-        }
+        // private async void Start()
+        // {
+        //     NetworkManager = await NetworkService.CreateWithConnection();
+        // }
 
-        public async Task CreateNewGame(UfbRoomCreateOptions createOptions, UfbRoomJoinOptions joinOptions)
-        {
-            await NetworkManager.CreateRoom(createOptions, joinOptions, LoadGame);
-        }
+        // public async Task CreateNewGame(UfbRoomCreateOptions createOptions, UfbRoomJoinOptions joinOptions)
+        // {
+        //     Debug.Log($"CREATE OPTIONS: {createOptions.mapName} | JOIN OPTIONS: {joinOptions.displayName}");
+        //     await NetworkManager.CreateRoom(createOptions, joinOptions, LoadGame);
+        // }
 
         public async Task JoinGame(string roomId, UfbRoomJoinOptions joinOptions)
         {
@@ -65,7 +68,7 @@ namespace UFB.Gameplay
         public void LeaveGame()
         {
             Debug.Log($"[GameManager] Leaving current game for MainMenu");
-            NetworkManager.LeaveRoom();
+            // NetworkManager.LeaveRoom();
             SceneManager.LoadSceneAsync("MainMenu");
         }
 
@@ -80,17 +83,19 @@ namespace UFB.Gameplay
 
                 Addressables.InstantiateAsync(gameBoardPrefab).Completed += (obj) =>
                 {
-                    GameBoard = GameObjectExtensions.GetOrAddComponent<GameBoard>(obj.Result);
-                    GameBoard.Initialize(room.State.map);
+                    GameBoard = obj.Result.GetComponent<GameBoard>();
+                    // GameBoard.Initialize(room.State.map);
+                    // CharacterManager.Initialize(room, NetworkManager.ClientId);
+
                     // GameBoard.SpawnEntitiesRandom("chest", 20); // this will happen inside gameBoard
 
                     // we have to wait for the gameboard first, then we can create the PlayerManager
-                    Addressables.InstantiateAsync(playerManagerPrefab).Completed += (obj) =>
-                    {
-                        PlayerManager = GameObjectExtensions.GetOrAddComponent<PlayerManager>(obj.Result);
-                        PlayerManager.Initialize(room, NetworkManager.ClientId);
-                        PlayerManager.MyPlayer.FocusCamera();
-                    };
+                    // Addressables.InstantiateAsync(playerManagerPrefab).Completed += (obj) =>
+                    // {
+                    // PlayerManager = GameObjectExtensions.GetOrAddComponent<PlayerManager>(obj.Result);
+                    // PlayerManager.Initialize(room, NetworkManager.ClientId);
+                    // PlayerManager.MyPlayer.FocusCamera();
+                    // };
                 };
 
 
@@ -106,7 +111,7 @@ namespace UFB.Gameplay
 
             room.OnLeave += (code) =>
             {
-                EventBus.Publish(new ToastMessageEvent("You have been left the room."));
+                EventBus.Publish(new ToastMessageEvent("You have left the room."));
                 LeaveGame();
             };
         }

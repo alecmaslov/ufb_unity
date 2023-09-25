@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UFB.Gameplay;
+using UFB.Core;
+using UFB.Network;
 
 namespace UFB.UI
 {
@@ -13,11 +15,12 @@ namespace UFB.UI
 
         public void Awake()
         {
-            // ask, don't tell
-            GameManager.Instance.OnGameLoaded += () =>
-            {
-                roomIdText.text = GameManager.Instance.NetworkManager.Room.RoomId;
-            };
+            // roomIdText.text = GameManager.Instance.NetworkManager.Room.RoomId;
+            roomIdText.text = ServiceLocator.Current.Get<GameService>().Room.RoomId;
+
+            // GameManager.Instance.OnGameLoaded += () =>
+            // {
+            // };
         }
 
 

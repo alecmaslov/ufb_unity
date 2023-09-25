@@ -33,16 +33,16 @@ public class PlayerEntityEditor : Editor
                 var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
                 var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
                 Debug.Log("Forcing to Tile: " + tile);
-                playerEntity.ForceMoveToTile(tile);
+                // playerEntity.ForceMoveToTile(tile);
             }
 
-            if (GUILayout.Button("Force To Tile With Animation"))
-            {
-                var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
-                var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
-                Debug.Log("Forcing to Tile: " + tile);
-                playerEntity.ForceMoveToTileAnimate(tile, 1.0f);
-            }
+            // if (GUILayout.Button("Force To Tile With Animation"))
+            // {
+            //     var coords = UFB.Map.Coordinates.FromVector2Int(_destination);
+            //     var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(coords);
+            //     Debug.Log("Forcing to Tile: " + tile);
+            //     playerEntity.ForceMoveToTileAnimate(tile, 1.0f);
+            // }
 
             if (GUILayout.Button("Preview Pathfind"))
             {

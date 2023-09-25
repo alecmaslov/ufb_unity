@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UIElements;
-using TMPro;
 using UFB.Gameplay;
-using UFB.Network;
+using UFB.Network.RoomMessageTypes;
+using TMPro;
+using UFB.Core;
 
 namespace UFB.UI
 {
     public class JoinGameMenu : Menu
     {
-        public Menu mainMenu;
         public Menu loadingMenu;
         public TMP_InputField idInputField;
 
@@ -19,15 +15,15 @@ namespace UFB.UI
             idInputField.text = "";
         }
 
-        public async void OnJoinButton() {
+        public void OnJoinButton() {
             _menuManager.OpenMenu(loadingMenu);
             var joinOptions = new UfbRoomJoinOptions {
                 displayName = "Player",
                 characterId = "kirin"
             };
-            await GameManager.Instance.JoinGame(idInputField.text, joinOptions);
+            ServiceLocator.Current.Get<GameService>().JoinGame(idInputField.text, joinOptions);
         }
 
-        public void OnBackButton() => _menuManager.OpenMenu(mainMenu);
+        public void OnBackButton() => _menuManager.CloseMenu();
     }
 }

@@ -19,22 +19,25 @@ public class PlayerManagerEditor : Editor
 
         _saveConfigName = EditorGUILayout.TextField("Save State Name", _saveConfigName);
 
-        if (GUILayout.Button("Save Player Configuration")) {
-            playerManager.SavePlayerConfiguration(_saveConfigName);
-        }
-
-        if (GUILayout.Button("Load Player Configuration")) {
-            playerManager.LoadPlayerConfiguration(_saveConfigName);
-        }
-
-        string[] configNames = ApplicationData.GetFiles("gamestate/player-config", true);
-        if (configNames != null) {
-            _loadConfigIndex = EditorGUILayout.Popup("Player Configurations", _loadConfigIndex, configNames);
-
-            if (GUILayout.Button($"Load {configNames[_loadConfigIndex]}")) {
-                playerManager.LoadPlayerConfiguration(configNames[_loadConfigIndex]);
+        /**
+            if (GUILayout.Button("Save Player Configuration")) {
+                playerManager.SavePlayerConfiguration(_saveConfigName);
             }
-        }
+
+            if (GUILayout.Button("Load Player Configuration")) {
+                playerManager.LoadPlayerConfiguration(_saveConfigName);
+            }
+
+            string[] configNames = ApplicationData.GetFiles("gamestate/player-config", true);
+            if (configNames != null) {
+                _loadConfigIndex = EditorGUILayout.Popup("Player Configurations", _loadConfigIndex, configNames);
+
+                if (GUILayout.Button($"Load {configNames[_loadConfigIndex]}")) {
+                    playerManager.LoadPlayerConfiguration(configNames[_loadConfigIndex]);
+                }
+            }
+
+            */
 
     }
 

@@ -8,6 +8,7 @@ namespace UFB.Effects
     [System.Serializable]
     public class PlayerPillarsEffect : IEffect
     {
+        /**
         private readonly PlayerManager _playerManager;
         private bool _isRising = false;
 
@@ -51,6 +52,12 @@ namespace UFB.Effects
                 });
             }
             _isRising = !_isRising;
+        }
+
+        */
+        public void Execute()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

@@ -60,9 +60,9 @@ public class TileEntityEditor : Editor
             tileEntity.ToggleCoordinateText();
         }
 
-        if (GUILayout.Button("Ripple Effect")) {
-            GameManager.Instance.GameBoard.RunRippleEffect(tileEntity);
-        }
+        // if (GUILayout.Button("Ripple Effect")) {
+        //     GameManager.Instance.GameBoard.RunRippleEffect(tileEntity);
+        // }
 
         if (GUILayout.Button("Slam!")) {
             tileEntity.SlamDown();

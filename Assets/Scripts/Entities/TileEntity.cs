@@ -8,6 +8,19 @@ using TMPro;
 using System;
 using UFB.Gameplay;
 using UFB.Events;
+using UFB.StateSchema;
+
+namespace UFB.Events
+{
+    public class TileClickedEvent
+    {
+        public UFB.Entities.TileEntity tile;
+        public TileClickedEvent(UFB.Entities.TileEntity tile)
+        {
+            this.tile = tile;
+        }
+    }
+}
 
 namespace UFB.Entities
 {
@@ -21,14 +34,14 @@ namespace UFB.Entities
 
     public class TileEntity : MonoBehaviour, IRaycastSelectable
     {
-
+        public TileState State { get; private set; }
 
         public GameTile GameTile { get; private set; }
         public bool IsStretched { get; private set; }
         [SerializeField] private SpriteRenderer _spriteRenderer;
         private bool _isVisible = true;
         private Color _color;
-        public Coordinates Coordinates => GameTile.Coordinates;
+        public Coordinates Coordinates => State.coordinates.ToCoordinates();
 
         public Transform wallContainer;
         private Dictionary<TileSide, Wall> _walls;
@@ -66,6 +79,15 @@ namespace UFB.Entities
             }
         }
 
+        private void Awake()
+        {
+            _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
+            _scaleAnimator.AddUpdateListener(OnScaleChanged);
+            _scaleAnimator.SetSnapshot("initial");
+            _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
+
+        }
+
         private void OnEnable()
         {
 
@@ -76,18 +98,25 @@ namespace UFB.Entities
             _scaleAnimator.RemoveUpdateListener(OnScaleChanged);
         }
 
+        public void Initialize(TileState state, Vector3 position, string assetPath)
+        {
+            State = state;
+            name = state.id;
+            _coordinatesText.text = $"{Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
+            transform.position = position;
+        }
+
         public void Initialize(GameTile tile, GameBoard board)
         {
-            GameTile = tile;
-            this.name = tile.Coordinates.GameId;
+            // GameTile = tile;
+            // this.name = tile.Coordinates.GameId;
+            // _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
+            // _scaleAnimator.AddUpdateListener(OnScaleChanged);
+            // _scaleAnimator.SetSnapshot("initial");
+            // _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
 
-            _scaleAnimator = _tileTransform.GetComponent<ScaleAnimator>();
-            _scaleAnimator.SetSnapshot("initial");
-            _scaleAnimator.AddUpdateListener(OnScaleChanged);
-            _meshRenderer = _tileMesh.GetComponent<MeshRenderer>();
 
-
-            _coordinatesText.text = $"{tile.Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
+            // _coordinatesText.text = $"{tile.Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
 
             // transform.position = new Vector3(board.Dimensions - tile.Coordinates.Y, 0f, tile.Coordinates.X);
             transform.position = new Vector3(board.Dimensions - tile.Coordinates.X, 0f, tile.Coordinates.Y);
@@ -95,7 +124,11 @@ namespace UFB.Entities
             var color = tile.GetColor();
             _spriteRenderer.color = color;
             _color = color;
-            var texture = tile.GetTexture(board.MapName);
+
+
+            var texture = tile.GetTexture(board.State.name);
+            
+            
             if (texture != null)
                 _spriteRenderer.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
@@ -143,7 +176,8 @@ namespace UFB.Entities
         public void OnClick()
         {
             Debug.Log($"[TileEntity.OnClick] {name}");
-            EventBus.Publish(new RequestPlayerMoveEvent(Coordinates));
+            // EventBus.Publish(new RequestPlayerMoveEvent(Coordinates));
+            EventBus.Publish(new TileClickedEvent(this));
             ChangeColor(Color.red, 0.5f);
         }
 
@@ -230,9 +264,12 @@ namespace UFB.Entities
         {
             var newScale = Vector3.Scale(_scaleAnimator.GetSnapshot("initial"), new Vector3(1, 1 + heightScalar, 1));
             _scaleAnimator.AnimateTo(newScale, duration, onComplete);
-            if (heightScalar > 0.01) {
+            if (heightScalar > 0.01)
+            {
                 IsStretched = true;
-            } else {
+            }
+            else
+            {
                 IsStretched = false;
             }
         }
@@ -246,7 +283,7 @@ namespace UFB.Entities
         public void SlamDown()
         {
             _scaleAnimator.AnimateTo(_scaleAnimator.GetSnapshot("initial"), 0.2f);
-            GameManager.Instance.GameBoard.RunRippleEffect(this);
+            // GameManager.Instance.GameBoard.RunRippleEffect(this);
             IsStretched = false;
         }
 
@@ -315,4 +352,5 @@ namespace UFB.Entities
 
         public override string ToString() => $"TileEntity({this.name}) at {this.Coordinates}";
     }
+
 }

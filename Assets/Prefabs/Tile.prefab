@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4426611412238526577}
   - component: {fileID: 7087372031857456007}
   - component: {fileID: 5327463327402607925}
+  - component: {fileID: 9064190197303607335}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -114,12 +115,52 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2918895339870640758}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a692f2dd2179b6d44ab35a9733616e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 7719225192699405569}
+  wallContainer: {fileID: 0}
+  _tileTransform: {fileID: 0}
+  _tileMesh: {fileID: 0}
+  _coordinatesText: {fileID: 0}
+--- !u!114 &9064190197303607335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2918895339870640758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bbebb1d5433650469e3423543ad2862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4444386034947213814
 GameObject:
   m_ObjectHideFlags: 0

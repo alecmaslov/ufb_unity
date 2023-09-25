@@ -1,6 +1,7 @@
 using UnityEngine;
 using UFB.Entities;
 using System.Collections.Generic;
+using UFB.Map;
 
 namespace UFB.Effects
 {
@@ -8,7 +9,7 @@ namespace UFB.Effects
     public class RippleTilesEffect : IEffect
     {
         private readonly GameBoard _gameBoard;
-        public TileEntity CurrentTile;
+        public Tile CurrentTile;
         public float Rate = 10f;
         public float Intensity = 5f;
         public float StretchDuration = 0.2f;
@@ -16,7 +17,7 @@ namespace UFB.Effects
 
         public RippleTilesEffect(
             GameBoard gameBoard,
-            TileEntity centerTile,
+            Tile centerTile,
             float rate = 10f,
             float intensity = 5f,
             float stretchDuration = 0.2f,
@@ -30,7 +31,7 @@ namespace UFB.Effects
             CurrentTile = centerTile;
         }
 
-        public void ExecuteOnTile(TileEntity tile)
+        public void ExecuteOnTile(Tile tile)
         {
             _gameBoard.IterateTiles(t => TileCallback(t, tile));
         }
@@ -41,10 +42,10 @@ namespace UFB.Effects
         }
 
 
-        private void TileCallback(TileEntity tile, TileEntity currentTile)
+        private void TileCallback(Tile tile, Tile currentTile)
         {
             if (tile == currentTile) return; // skip center tile
-            float distance = currentTile.DistanceTo(tile);
+            float distance = currentTile.Coordinates.DistanceTo(tile.Coordinates);
             float intensity = Intensity * Mathf.Exp(-Decay * distance);
             CoroutineHelpers.DelayedAction(() =>
             {

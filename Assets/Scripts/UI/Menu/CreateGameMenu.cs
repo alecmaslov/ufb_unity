@@ -1,6 +1,8 @@
 using UFB.Gameplay;
 using UFB.Network;
 using UnityEngine;
+using UFB.Network.RoomMessageTypes;
+using UFB.Core;
 
 namespace UFB.UI
 {
@@ -34,13 +36,19 @@ namespace UFB.UI
 
         public void OnRulesButton() => Debug.Log("Rules button hit!");
 
-        public async void OnStartButton()
+        public void OnStartButton()
         {
             _menuManager.OpenMenu(loadingMenu);
-            await GameManager.Instance.CreateNewGame(
+            
+            ServiceLocator.Current.Get<GameService>().CreateGame(
                 _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
                 _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
             );
+
+            // await GameManager.Instance.CreateNewGame(
+            //     _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
+            //     _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
+            // );
         }
     }
 }

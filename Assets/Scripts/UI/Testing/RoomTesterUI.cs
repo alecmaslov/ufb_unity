@@ -4,6 +4,7 @@ using UFB.Network;
 using TMPro;
 using UFB.UI;
 using UFB.Gameplay;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.UITesting
 {

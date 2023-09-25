@@ -71,18 +71,18 @@ namespace UFB.Entities
         // THIS SHOULD BE IN GAMEBOARD
         public void PreviewRoute(Coordinates destination)
         {
-            var path = _gameBoard.Pathfind(TileAttachable.CurrentTile.Coordinates, destination);
-            if (path == null)
-            {
-                Debug.LogError("No path found from " + TileAttachable.CurrentTile.Coordinates.ToString() + " to " + destination.ToString());
-                return;
-            }
-            foreach (TileEntity tile in path)
-            {
-                tile.Stretch(1.1f, 1.5f);
-                tile.ChangeColor(Color.red, 0.5f);
-                // tile.Glow(1.5f);
-            }
+            // var path = _gameBoard.Pathfind(TileAttachable.CurrentTile.Coordinates, destination);
+            // if (path == null)
+            // {
+            //     Debug.LogError("No path found from " + TileAttachable.CurrentTile.Coordinates.ToString() + " to " + destination.ToString());
+            //     return;
+            // }
+            // foreach (TileEntity tile in path)
+            // {
+            //     tile.Stretch(1.1f, 1.5f);
+            //     tile.ChangeColor(Color.red, 0.5f);
+            //     // tile.Glow(1.5f);
+            // }
         }
 
 
@@ -147,25 +147,25 @@ namespace UFB.Entities
         public void OnHopEndAnimationExit()
         {
             _isMoving = false;
-            _gameBoard.RunRippleEffect(TileAttachable.CurrentTile);
+            // _gameBoard.RunRippleEffect(TileAttachable.CurrentTile);
         }
 
-        public void ForceMoveToTileAnimate(TileEntity tile, float duration = 0.5f, Action onComplete = null)
-        {
-            HopStart();
+        // public void ForceMoveToTileAnimate(TileEntity tile, float duration = 0.5f, Action onComplete = null)
+        // {
+        //     HopStart();
 
-            CoroutineHelpers.DelayedAction(() => {
-                Debug.Log("Moving to tile " + tile.Coordinates.ToString());
-                _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () =>
-                {
-                    Debug.Log("Finished moving to tile " + tile.Coordinates.ToString());
-                    HopEnd(tile);
-                    // TileAttachable.AttachToTile(tile);
-                    onComplete?.Invoke();
-                });
-            }, duration, this);
+        //     CoroutineHelpers.DelayedAction(() => {
+        //         Debug.Log("Moving to tile " + tile.Coordinates.ToString());
+        //         _positionAnimator.AnimateTo(tile.AttachedPosition, duration, () =>
+        //         {
+        //             Debug.Log("Finished moving to tile " + tile.Coordinates.ToString());
+        //             HopEnd(tile);
+        //             // TileAttachable.AttachToTile(tile);
+        //             onComplete?.Invoke();
+        //         });
+        //     }, duration, this);
 
-        }
+        // }
 
         /// <summary>
         /// Forcefully moves entity to tile
@@ -186,7 +186,7 @@ namespace UFB.Entities
         public void MoveAlongPathCoords(List<Coordinates> coords, float time)
         {
             var path = _gameBoard.GetPathFromCoordinates(coords);
-            StartCoroutine(MoveAlongPath(path, time));
+            // StartCoroutine(MoveAlongPath(path, time));
         }
 
         private IEnumerator MoveAlongPath(IEnumerable<TileEntity> path, float time)
