@@ -10,65 +10,26 @@ namespace UFB.Events
 {
     public class CameraOrbitAroundEvent
     {
+        // this should also contain a CameraState 
+        // so the camera can move to that location
         public Transform target;
         public float duration;
+
         public CameraOrbitAroundEvent(Transform target, float duration)
         {
             this.target = target;
             this.duration = duration;
         }
     }
-}
 
-[System.Serializable]
-public struct CameraState
-{
-    // Individual float components for position and rotation
-    public float posX, posY, posZ;
-    public float rotX, rotY, rotZ, rotW;
-    public float zoom;
-    public float transitionDuration;
-
-    // Constructor using Vector3 and Quaternion
-    public CameraState(Vector3 position, Quaternion rotation, float zoom, float transitionDuration = 1f)
+    public class SetCameraStateEvent
     {
-        this.posX = position.x;
-        this.posY = position.y;
-        this.posZ = position.z;
-        this.rotX = rotation.x;
-        this.rotY = rotation.y;
-        this.rotZ = rotation.z;
-        this.rotW = rotation.w;
-        this.zoom = zoom;
-        this.transitionDuration = transitionDuration;
-    }
+        public CameraState cameraState;
 
-    // Constructor using CameraController
-    public CameraState(CameraController cameraController, float transitionDuration = 1f)
-    {
-        Vector3 position = cameraController.transform.position;
-        Quaternion rotation = cameraController.transform.rotation;
-
-        this.posX = position.x;
-        this.posY = position.y;
-        this.posZ = position.z;
-        this.rotX = rotation.x;
-        this.rotY = rotation.y;
-        this.rotZ = rotation.z;
-        this.rotW = rotation.w;
-        this.zoom = cameraController.Zoom.CurrentZoom;
-        this.transitionDuration = transitionDuration;
-    }
-
-    // Convenience methods for getting the Vector3 position and Quaternion rotation
-    public Vector3 GetPosition()
-    {
-        return new Vector3(posX, posY, posZ);
-    }
-
-    public Quaternion GetRotation()
-    {
-        return new Quaternion(rotX, rotY, rotZ, rotW);
+        public SetCameraStateEvent(CameraState cameraState)
+        {
+            this.cameraState = cameraState;
+        }
     }
 }
 
@@ -80,16 +41,14 @@ public class CameraController : MonoBehaviour
 {
     public ZoomController Zoom { get; private set; }
     public OrbitCamera Orbit { get; private set; }
+    public CameraState topDownState;
 
     private PositionAnimator _positionAnimator;
     private RotationAnimator _rotationAnimator;
 
     public bool UseOrbit
     {
-        get
-        {
-            return _useOrbit;
-        }
+        get { return _useOrbit; }
         set
         {
             if (value && _positionableMoving)
@@ -102,7 +61,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private bool _useOrbit = true;
+    private bool _useOrbit = false;
     private bool _positionableMoving = false;
 
     private void Awake()
@@ -123,14 +82,15 @@ public class CameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<CameraOrbitAroundEvent>(OrbitAround);
+        EventBus.Subscribe<CameraOrbitAroundEvent>(OnOrbitAroundEvent);
+        EventBus.Subscribe<SetCameraStateEvent>(OnSetCameraStateEvent);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<CameraOrbitAroundEvent>(OrbitAround);
+        EventBus.Unsubscribe<CameraOrbitAroundEvent>(OnOrbitAroundEvent);
+        EventBus.Unsubscribe<SetCameraStateEvent>(OnSetCameraStateEvent);
     }
-
 
     private void Update()
     {
@@ -161,27 +121,36 @@ public class CameraController : MonoBehaviour
         Orbit.FocusOn(t);
     }
 
-    public void OrbitAround(CameraOrbitAroundEvent orbitAroundEvent)
+    public void OnOrbitAroundEvent(CameraOrbitAroundEvent orbitAroundEvent)
     {
         OrbitAround(orbitAroundEvent.target);
     }
 
-    public void SaveCameraState(string fileName)
-    {
-        var json = JsonConvert.SerializeObject(new CameraState(this));
-        ApplicationData.SaveJSON(json, "presets/camera", fileName + ".json");
-    }
+    public void OnSetCameraStateEvent(SetCameraStateEvent e) => LoadCameraState(e.cameraState);
 
     public void LoadCameraState(CameraState cameraState)
     {
-        TransformTo(cameraState.GetPosition(), cameraState.GetRotation(), cameraState.transitionDuration);
+        TransformTo(
+            cameraState.GetPosition(),
+            cameraState.GetRotation(),
+            cameraState.transitionDuration
+        );
         Debug.Log($"Restoring zoom: {cameraState.zoom} | {cameraState.transitionDuration}s");
         Zoom.ZoomTo(cameraState.zoom, cameraState.transitionDuration);
     }
 
     public void LoadCameraState(string fileName)
     {
-        var cameraState = ApplicationData.LoadJSON<CameraState>("presets/camera", fileName + ".json");
+        var cameraState = ApplicationData.LoadJSON<CameraState>(
+            "presets/camera",
+            fileName + ".json"
+        );
         LoadCameraState(cameraState);
+    }
+
+    public void SaveCameraState(string fileName)
+    {
+        var json = JsonConvert.SerializeObject(new CameraState(this));
+        ApplicationData.SaveJSON(json, "presets/camera", fileName + ".json");
     }
 }

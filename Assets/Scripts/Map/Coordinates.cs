@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UFB.Core;
 
 namespace UFB.Map {
-    public class Coordinates
+    public class Coordinates : IDictionaryConvertable
     {
         public int X { get; set; }
         public int Y { get; set; }

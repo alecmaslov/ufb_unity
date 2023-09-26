@@ -20,8 +20,8 @@ public class OnHopEnd : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerEntity player = animator.gameObject.GetComponentInParent<PlayerEntity>();
-        player.OnHopEndAnimationExit();
+        // PlayerEntity player = animator.gameObject.GetComponentInParent<PlayerEntity>();
+        // player.OnHopEndAnimationExit();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

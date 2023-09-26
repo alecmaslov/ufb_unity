@@ -20,7 +20,7 @@ namespace UFB.Map
         {
             Addressables.LoadAssetAsync<Sprite>("maps/kraken").Completed += (obj) =>
             {
-                SpawnMeshMap(obj.Result);
+                SpawnTiles(obj.Result);
             };
         }
 
@@ -29,16 +29,21 @@ namespace UFB.Map
             DestroyImmediate(_mesh);
         }
 
-        public MeshMapTile[] SpawnMeshMap(Sprite boardSprite, int gridHeight = 26, int gridWidth = 26)
+        public MeshMapTile[] SpawnTiles(
+            Sprite boardSprite,
+            int gridWidth = 26,
+            int gridHeight = 26,
+            Vector3? tileScalar = null
+        )
         {
             MeshMapTile[] tiles = new MeshMapTile[gridHeight * gridWidth];
             boardMaterial.mainTexture = boardSprite.texture;
             List<CombineInstance> combineInstances = new List<CombineInstance>();
 
             int index = 0;
-            for (int x = 0; x < gridWidth; x++)
+            for (int y = 0; y < gridHeight; y++)
             {
-                for (int y = 0; y < gridHeight; y++)
+                for (int x = 0; x < gridWidth; x++)
                 {
                     GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     cube.transform.parent = transform;
@@ -47,6 +52,8 @@ namespace UFB.Map
                         0,
                         y - (gridHeight / 2)
                     );
+                    cube.transform.localScale = tileScalar ?? Vector3.one;
+
                     MeshFilter cubeMeshFilter = cube.GetComponent<MeshFilter>();
 
                     // Adjust the UVs of the mesh to map to the correct location in the board texture
@@ -66,13 +73,11 @@ namespace UFB.Map
                     };
                     combineInstances.Add(instance);
 
-                    // Destroy the cube GameObject, as we no longer need it
-                    // DestroyImmediate(cube);
-
                     Destroy(cube.GetComponent<MeshRenderer>());
                     Destroy(cube.GetComponent<MeshFilter>());
 
-                    tiles[index] = new MeshMapTile(x, y, 1f, cube, this);
+                    float height = tileScalar != null ? tileScalar.Value.y : 1f;
+                    tiles[index] = new MeshMapTile(x, y, height, cube, this);
                     index++;
                 }
             }
@@ -87,7 +92,7 @@ namespace UFB.Map
 
         public void SetTileHeight(Coordinates coordinates, float newHeight, Vector3? posOffset)
         {
-            SetTileHeight(coordinates.Y, coordinates.X, newHeight, posOffset);
+            SetTileHeight(coordinates.X, coordinates.Y, newHeight, posOffset);
         }
 
         public void SetTileHeight(int x, int y, float newHeight, Vector3? posOffset)
@@ -140,7 +145,6 @@ namespace UFB.Map
         // public int Y { get; set; }
         public Coordinates Coordinates { get; private set; }
         public float Height { get; set; }
-
 
         public GameObject GameObject { get; private set; }
         private MeshMap _meshMap;

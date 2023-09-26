@@ -12,7 +12,7 @@ namespace UFB.Network.RoomMessageTypes
 
     public class CharacterMovedMessage : IReceiveMessage
     {
-        public string playerId;
+        public string characterId;
         public PathStep[] path;
     }
 

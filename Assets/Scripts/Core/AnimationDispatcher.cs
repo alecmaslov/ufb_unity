@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace UFB.Core
 {
-
     public class AnimationDispatcher
     {
         public readonly Animator animator;
@@ -18,7 +17,11 @@ namespace UFB.Core
             this.animator = animator ?? throw new ArgumentNullException(nameof(animator));
         }
 
-        public async Task PlayAnimationAsync(string triggerName, string targetStateName, Action onComplete = null)
+        public async Task PlayAnimationAsync(
+            string triggerName,
+            string targetStateName,
+            Action onComplete = null
+        )
         {
             if (_isAnimating)
             {
@@ -29,11 +32,10 @@ namespace UFB.Core
             _currentTriggerName = triggerName;
             _cts = new CancellationTokenSource();
 
-            animator.ResetTrigger(triggerName); // Reset any existing trigger
-            animator.SetTrigger(triggerName);
-
             try
             {
+                animator.ResetTrigger(triggerName); // Reset any existing trigger
+                animator.SetTrigger(triggerName);
                 await MonitorAnimationAsync(targetStateName, _cts.Token);
                 onComplete?.Invoke();
             }
@@ -48,11 +50,22 @@ namespace UFB.Core
             }
         }
 
-        private async Task MonitorAnimationAsync(string targetStateName, CancellationToken cancellationToken)
+        private async Task MonitorAnimationAsync(
+            string targetStateName,
+            CancellationToken cancellationToken
+        )
         {
-            while (animator != null && (!animator.GetCurrentAnimatorStateInfo(0).IsName(targetStateName) ||
-                   animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f))
+            while (
+                animator != null
+                && (
+                    !animator.GetCurrentAnimatorStateInfo(0).IsName(targetStateName)
+                    || animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f
+                )
+            )
             {
+                // Debug.Log(
+                //     $"Animation is still playing: {animator.GetCurrentAnimatorStateInfo(0).normalizedTime}"
+                // );
                 cancellationToken.ThrowIfCancellationRequested();
                 await Task.Yield();
             }
@@ -60,7 +73,8 @@ namespace UFB.Core
 
         public void CancelAnimation(float? finishDuration, Action onComplete = null)
         {
-            if (!_isAnimating || animator == null) return;
+            if (!_isAnimating || animator == null)
+                return;
 
             animator.ResetTrigger(_currentTriggerName);
 
@@ -89,6 +103,5 @@ namespace UFB.Core
                 onComplete?.Invoke();
             }
         }
-
     }
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using UFB.StateSchema;
 using Unity.VisualScripting;
 using UFB.Network.RoomMessageTypes;
+using UFB.Core;
 
 namespace UFB.Network
 {
@@ -109,7 +110,7 @@ namespace UFB.Network
             joinRoomOptions.token = _apiClient.Token;
             joinRoomOptions.playerId = _apiClient.ClientId;
             var optionsDict = new Dictionary<string, object>() {
-                { "joinOptions", joinRoomOptions.ToDictionary() }
+                { "joinOptions", joinRoomOptions.ConvertToDictionary() }
             };
 
             _room = await _coleseusClient.JoinById<UfbRoomState>(roomId, optionsDict);
@@ -128,8 +129,8 @@ namespace UFB.Network
             joinOptions.token = _apiClient.Token;
             joinOptions.playerId = _apiClient.ClientId;
 
-            var roomOptionsDict = createOptions.ToDictionary();
-            var joinOptionsDict = joinOptions.ToDictionary();
+            var roomOptionsDict = createOptions.ConvertToDictionary();
+            var joinOptionsDict = joinOptions.ConvertToDictionary();
 
             var optionsDict = new Dictionary<string, object>() {
                 { "createOptions", roomOptionsDict },

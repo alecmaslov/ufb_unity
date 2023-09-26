@@ -2,10 +2,23 @@ using UFB.StateSchema;
 using UnityEngine;
 using System;
 using SchemaTest.InstanceSharingTypes;
+using UFB.Events;
+
+namespace UFB.Events
+{
+    public class TileClickedEvent
+    {
+        public UFB.Map.Tile tile;
+        public TileClickedEvent(UFB.Map.Tile tile)
+        {
+            this.tile = tile;
+        }
+    }
+}
 
 namespace UFB.Map
 {
-    public class Tile : MonoBehaviour
+    public class Tile : MonoBehaviour, IRaycastSelectable
     {
         public string Id => _tileState.id;
         public Coordinates Coordinates => _tileState.coordinates.ToCoordinates();
@@ -16,21 +29,29 @@ namespace UFB.Map
         private MeshMapTile _meshMapTile;
         private TileState _tileState;
         private Interpolator<float> _heightInterpolator;
+        private Vector3 _initialPosition;
 
         private void Awake()
         {
+            _initialPosition = transform.position;
             _heightInterpolator = new Interpolator<float>(
                 this,
                 Mathf.Lerp,
                 (newHeight) =>
                 {
                     _meshMapTile.SetHeight(newHeight);
+
+                    // here it can call _meshMapTile set height, then we will MOVE the actual gameObject
+                    // up. This allows us to take advantage of parenting the gameobject to the tile,
+                    // making attachment so much easier
+                    transform.position = _initialPosition + new Vector3(0, newHeight, 0);
                     IsMoving = true;
                 },
                 () => _meshMapTile.Height,
                 curve,
                 (newHeight) =>
                 {
+                    _meshMapTile.SetHeight(newHeight);
                     IsMoving = false;
                 }
             );
@@ -45,19 +66,14 @@ namespace UFB.Map
             name = Coordinates.Id;
         }
 
-        public void Stretch(float heightScalar, float duration = 0.5f, Action onComplete = null)
+        public void Stretch(float height, float duration = 0.5f, Action onComplete = null)
         {
-            // _meshMapTile.Stretch(intensity, duration, callback);
-            // here it can call _meshMapTile set height, then we will MOVE the actual gameObject
-            // up. This allows us to take advantage of parenting the gameobject to the tile,
-            // making attachment so much easier
-
-
-            _heightInterpolator.LerpTo(heightScalar, duration, onComplete);
+            _heightInterpolator.LerpTo(height, duration, onComplete);
         }
 
         public void ResetStretch(float duration)
         {
+            // _heightInterpolator.LerpTo(0f, duration);
             _heightInterpolator.LerpToSnapshot("init", duration);
         }
 
@@ -66,6 +82,12 @@ namespace UFB.Map
             gameObject.transform.SetParent(transform);
             if (zeroLocalPosition)
                 gameObject.transform.localPosition = Vector3.zero;
+        }
+
+        public void OnClick()
+        {
+            Debug.Log($"Clicked on tile {Coordinates.Id}");
+            EventBus.Publish(new TileClickedEvent(this));
         }
     }
 }

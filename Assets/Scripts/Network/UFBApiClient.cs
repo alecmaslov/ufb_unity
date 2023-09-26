@@ -4,22 +4,6 @@ using Newtonsoft.Json;
 using UFB.Events;
 using UnityEngine;
 
-
-namespace UFB.Events
-{
-    public class ApiClientRegisteredEvent
-    {
-        public string ClientId { get; private set; }
-        public bool AlreadyRegistered { get; private set; }
-
-        public ApiClientRegisteredEvent(string clientId, bool alreadyRegistered = false)
-        {
-            ClientId = clientId;
-            AlreadyRegistered = alreadyRegistered;
-        }
-    }
-}
-
 namespace UFB.Network
 {
     public enum PlatformType
@@ -87,14 +71,12 @@ namespace UFB.Network
             if (IsRegistered)
             {
                 Debug.Log("Already registered!");
-                EventBus.Publish(new ApiClientRegisteredEvent(_clientId, true));
                 return;
             }
             bool isValid = await ValidateToken();
             if (isValid)
             {
                 Debug.Log("Token is valid, client registered!");
-                EventBus.Publish(new ApiClientRegisteredEvent(_clientId, true));
                 return;
             }
 
@@ -103,7 +85,6 @@ namespace UFB.Network
             var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
             _clientId = clientResponse.clientId;
             await GenerateToken(_clientId);
-            EventBus.Publish(new ApiClientRegisteredEvent(_clientId, false));
         }
 
         public async Task GenerateToken(string clientId)

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using UFB.Map;
+using UnityEditor.PackageManager.Requests;
 
 namespace UFB.Network.RoomMessageTypes
 {
@@ -12,19 +14,10 @@ namespace UFB.Network.RoomMessageTypes
         public float turnTime = 60f * 3f;
     }
 
-
     public class UfbRoomCreateOptions : ISendMessage
     {
         public string mapName = "kraken";
         public UfbRoomRules rules = new UfbRoomRules();
-
-        public Dictionary<string, object> ToDictionary()
-        {
-            return new Dictionary<string, object> {
-                { "mapName", mapName },
-                { "rules", rules }
-            };
-        }
     }
 
     public class UfbRoomJoinOptions : ISendMessage
@@ -34,17 +27,11 @@ namespace UFB.Network.RoomMessageTypes
         public string displayName;
         public string characterId;
         public string characterClass;
-
-        public Dictionary<string, object> ToDictionary()
-        {
-            return new Dictionary<string, object> {
-                { "token", token },
-                { "playerId", playerId },
-                { "displayName", displayName },
-                { "characterId", characterId },
-                { "characterClass", characterClass }
-            };
-        }
     }
 
+    public class RequestMoveMessage : ISendMessage
+    {
+        public Coordinates destination;
+        public string tileId;
+    }
 }

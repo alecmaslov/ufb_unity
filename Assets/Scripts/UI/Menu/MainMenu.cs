@@ -22,27 +22,25 @@ namespace UFB.UI
 
         private void OnEnable()
         {
-            if (!ServiceLocator.Current.Get<NetworkService>().ApiClient.IsRegistered)
+            if (
+                ServiceLocator.Current.Get<NetworkService>().Status
+                != NetworkService.NetworkServiceStatus.Ready
+            )
             {
                 ToggleButtonInteractability(false);
             }
-            EventBus.Subscribe<NetworkManagerReadyEvent>(OnNetworkManagerReady);
+            EventBus.Subscribe<NetworkServiceStatusEvent>(OnNetworkManagerReady);
         }
 
         private void OnDisable()
         {
-            EventBus.Unsubscribe<NetworkManagerReadyEvent>(OnNetworkManagerReady);
+            EventBus.Unsubscribe<NetworkServiceStatusEvent>(OnNetworkManagerReady);
         }
 
-        private void OnNetworkManagerReady(NetworkManagerReadyEvent e)
+        private void OnNetworkManagerReady(NetworkServiceStatusEvent e)
         {
             ToggleButtonInteractability(true);
-            // EventBus.Subscribe<RoomJoinedEvent>(OnRoomJoined);
-            // EventBus.Subscribe<RoomLeftEvent>(OnRoomLeft);
-            // EventBus.Subscribe<RoomErrorEvent>(OnRoomError);
         }
-
-        private void OnConnect() => ToggleButtonInteractability(true);
 
         private void ToggleButtonInteractability(bool interactable)
         {

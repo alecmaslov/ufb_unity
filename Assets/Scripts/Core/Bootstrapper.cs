@@ -7,18 +7,12 @@ namespace UFB.Core
 {
     public static class Bootstrapper
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static async void Initiailze()
-        {   
-            var currentScene = SceneManager.GetActiveScene();
-// #if UNITY_EDITOR
-//             if (currentScene.name != "Game" || currentScene.name != "MainMenu")
-//                 return;
-// #endif
-
+        {
             ServiceLocator.Initiailze();
 
-            var networkService = await NetworkService.CreateWithConnection();
+            var networkService = new NetworkService(new UfbApiClient("api.thig.io", 8080));
             var spawnerService = SpawnerService.Instance;
             var gameService = new GameService();
 
@@ -26,12 +20,15 @@ namespace UFB.Core
             ServiceLocator.Current.Register(spawnerService);
             ServiceLocator.Current.Register(gameService);
 
-            // Application is ready to start, load your main scene.
-            // SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+
+            // we must wait until we are connected to try and perform any other actions
+            await networkService.Connect();
+
+            var currentScene = SceneManager.GetActiveScene();
+
 #if UNITY_EDITOR
             if (currentScene.name == "Game")
             {
-                // this will cause the game to load with a new created game
                 var joinOptions = new UfbRoomJoinOptions();
                 joinOptions.characterClass = "ophaia";
                 gameService.CreateGame(new UfbRoomCreateOptions(), joinOptions);

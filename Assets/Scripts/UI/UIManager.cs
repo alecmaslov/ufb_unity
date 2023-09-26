@@ -5,19 +5,39 @@ using UnityEngine.SceneManagement;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 
-
 namespace UFB.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public static UIManager Instance { get; private set; }
         public AssetReference toastPrefab;
-        [SerializeField] private Canvas _rootCanvas;
 
-        [SerializeField] private RectTransform _topSlot;
-        [SerializeField] private RectTransform _middleSlot;
-        [SerializeField] private RectTransform _bottomSlot;
+        public Canvas RootCanvas
+        {
+            get
+            {
+                if (_rootCanvas == null)
+                {
+                    _rootCanvas = GetComponentInChildren<Canvas>();
+                    if (_rootCanvas == null)
+                    {
+                        throw new System.Exception("UIManager requires a Canvas component");
+                    }
+                }
+                return _rootCanvas;
+            }
+        }
 
+        [SerializeField]
+        private Canvas _rootCanvas;
+
+        [SerializeField]
+        private RectTransform _topSlot;
+
+        [SerializeField]
+        private RectTransform _middleSlot;
+
+        [SerializeField]
+        private RectTransform _bottomSlot;
 
         private void OnEnable()
         {
@@ -31,7 +51,6 @@ namespace UFB.UI
             }
 
             Debug.Log($"UIManager enabled");
-            Instance = this;
             var currentScene = SceneManager.GetActiveScene();
             Debug.Log($"Current scene: {currentScene.name}");
 
@@ -49,9 +68,12 @@ namespace UFB.UI
 
         private void InstantiatePanel(AssetReference asset, System.Action<GameObject> callback)
         {
-            Addressables.InstantiateAsync(asset, _rootCanvas.transform).Completed += (obj) =>
+            Addressables.InstantiateAsync(asset, RootCanvas.transform).Completed += (obj) =>
             {
-                if (obj.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                if (
+                    obj.Status
+                    == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+                )
                 {
                     callback(obj.Result);
                 }
@@ -64,26 +86,35 @@ namespace UFB.UI
 
         public void ShowToast(string message)
         {
-            InstantiatePanel(toastPrefab, (obj) =>
-            {
-                obj.GetComponent<UIToast>().Initialize(message);
-            });
+            InstantiatePanel(
+                toastPrefab,
+                (obj) =>
+                {
+                    obj.GetComponent<UIToast>().Initialize(message);
+                }
+            );
         }
 
         private void ShowToast(ToastMessageEvent messageEvent)
         {
-            InstantiatePanel(toastPrefab, (obj) =>
-            {
-                obj.GetComponent<UIToast>().Initialize(messageEvent);
-            });
+            InstantiatePanel(
+                toastPrefab,
+                (obj) =>
+                {
+                    obj.GetComponent<UIToast>().Initialize(messageEvent);
+                }
+            );
         }
 
         private void ShowToast(RoomReceieveMessageEvent<NotificationMessage> messageEvent)
         {
-            InstantiatePanel(toastPrefab, (obj) =>
-            {
-                obj.GetComponent<UIToast>().Initialize(messageEvent.Message.message);
-            });
+            InstantiatePanel(
+                toastPrefab,
+                (obj) =>
+                {
+                    obj.GetComponent<UIToast>().Initialize(messageEvent.Message.message);
+                }
+            );
         }
     }
 }
@@ -111,6 +142,6 @@ namespace UFB.UI
 //         return;
 //     }
 //     var uiManagerGameObject = new GameObject("UIManager");
-//     Instance = uiManagerGameObject.AddComponent<UIManager>();   
+//     Instance = uiManagerGameObject.AddComponent<UIManager>();
 //     DontDestroyOnLoad(uiManagerGameObject);
 // }

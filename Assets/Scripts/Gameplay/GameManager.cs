@@ -60,10 +60,10 @@ namespace UFB.Gameplay
         //     await NetworkManager.CreateRoom(createOptions, joinOptions, LoadGame);
         // }
 
-        public async Task JoinGame(string roomId, UfbRoomJoinOptions joinOptions)
-        {
-            await NetworkManager.JoinRoom(roomId, joinOptions, LoadGame);
-        }
+        // public async Task JoinGame(string roomId, UfbRoomJoinOptions joinOptions)
+        // {
+        //     await NetworkManager.JoinRoom(roomId, joinOptions, LoadGame);
+        // }
 
         public void LeaveGame()
         {

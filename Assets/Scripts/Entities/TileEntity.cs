@@ -10,17 +10,6 @@ using UFB.Gameplay;
 using UFB.Events;
 using UFB.StateSchema;
 
-namespace UFB.Events
-{
-    public class TileClickedEvent
-    {
-        public UFB.Entities.TileEntity tile;
-        public TileClickedEvent(UFB.Entities.TileEntity tile)
-        {
-            this.tile = tile;
-        }
-    }
-}
 
 namespace UFB.Entities
 {
@@ -119,7 +108,7 @@ namespace UFB.Entities
             // _coordinatesText.text = $"{tile.Coordinates.GameId.Replace("tile_", "").Replace("_", " ")}";
 
             // transform.position = new Vector3(board.Dimensions - tile.Coordinates.Y, 0f, tile.Coordinates.X);
-            transform.position = new Vector3(board.Dimensions - tile.Coordinates.X, 0f, tile.Coordinates.Y);
+            // transform.position = new Vector3(board.Dimensions - tile.Coordinates.X, 0f, tile.Coordinates.Y);
 
             var color = tile.GetColor();
             _spriteRenderer.color = color;
@@ -177,7 +166,7 @@ namespace UFB.Entities
         {
             Debug.Log($"[TileEntity.OnClick] {name}");
             // EventBus.Publish(new RequestPlayerMoveEvent(Coordinates));
-            EventBus.Publish(new TileClickedEvent(this));
+            // EventBus.Publish(new TileClickedEvent(this));
             ChangeColor(Color.red, 0.5f);
         }
 

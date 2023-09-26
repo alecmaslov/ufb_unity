@@ -21,13 +21,13 @@ namespace UFB.Events
         }
     }
 
-    public class NetworkManagerReadyEvent
+    public class NetworkServiceStatusEvent
     {
-        public UFB.Network.NetworkService NetworkManager { get; private set; }
+        public Network.NetworkService.NetworkServiceStatus Status { get; private set; }
 
-        public NetworkManagerReadyEvent(UFB.Network.NetworkService networkManager)
+        public NetworkServiceStatusEvent(Network.NetworkService.NetworkServiceStatus status)
         {
-            NetworkManager = networkManager;
+            Status = status;
         }
     }
 
@@ -41,7 +41,6 @@ namespace UFB.Events
         }
     }
 
-
     public class RoomErrorEvent
     {
         public int Code { get; private set; }
@@ -53,62 +52,50 @@ namespace UFB.Events
             Message = message;
         }
     }
-
-    public class RoomNotificationEvent
-    {
-
-    }
-
-    public class NetworkManagerDisconnectedEvent
-    {
-        public int Code { get; private set; }
-        public string Message { get; private set; }
-
-        public NetworkManagerDisconnectedEvent(int code, string message)
-        {
-            Code = code;
-            Message = message;
-        }
-    }
 }
 
 namespace UFB.Network
 {
     public class NetworkService : IService
     {
+        public enum NetworkServiceStatus
+        {
+            Initializing,
+            Ready,
+            Failed
+        }
+
+        public NetworkServiceStatus Status { get; private set; } =
+            NetworkServiceStatus.Initializing;
 
         public UfbApiClient ApiClient { get; private set; }
-        public string ClientId { get { return ApiClient.ClientId; } }
+        public string ClientId
+        {
+            get { return ApiClient.ClientId; }
+        }
 
         private ColyseusClient _colyseusClient;
 
         private readonly string _roomType = "ufbRoom";
 
-
         public NetworkService(UfbApiClient apiClient)
         {
             ApiClient = apiClient;
-            if (!ApiClient.IsRegistered)
-            {
-                throw new Exception("ApiClient is not registered!");
-            }
-            var wsURL = ApiClient.GetUrlWithProtocol("wss://");
-            _colyseusClient = new ColyseusClient(wsURL);
-            EventBus.Publish(new NetworkManagerReadyEvent(this));
+            _colyseusClient = new ColyseusClient(ApiClient.GetUrlWithProtocol("wss://"));
         }
 
-        public static async Task<NetworkService> CreateWithConnection()
+        public async Task Connect()
         {
-            var ApiClient = new UfbApiClient("api.thig.io", 8080);
             try
             {
                 await ApiClient.RegisterClient();
-                return new NetworkService(ApiClient);
+                Status = NetworkServiceStatus.Ready;
+                EventBus.Publish(new NetworkServiceStatusEvent(Status));
             }
-            catch (Exception e)
+            catch
             {
-                EventBus.Publish(new NetworkManagerDisconnectedEvent(-1, "Failed to connect to host"));
-                throw e;
+                Status = NetworkServiceStatus.Failed;
+                EventBus.Publish(new NetworkServiceStatusEvent(Status));
             }
         }
 
@@ -122,42 +109,47 @@ namespace UFB.Network
             joinRoomOptions.playerId = ApiClient.ClientId;
             var room = await _colyseusClient.JoinById<UfbRoomState>(
                 roomId,
-                new Dictionary<string, object>() {
-                    { "joinOptions", joinRoomOptions.ToDictionary() }
+                new Dictionary<string, object>()
+                {
+                    { "joinOptions", joinRoomOptions.ConvertToDictionary() }
                 }
             );
             RegisterHandlers(room, onFirstStateChange);
             EventBus.Publish(new RoomJoinedEvent(room));
         }
 
-
-
         public async Task CreateRoom(
             UfbRoomCreateOptions createOptions,
             UfbRoomJoinOptions joinOptions,
-            Action<ColyseusRoom<UfbRoomState>> onFirstStateChange)
+            Action<ColyseusRoom<UfbRoomState>> onFirstStateChange
+        )
         {
             joinOptions.token = ApiClient.Token;
             joinOptions.playerId = ApiClient.ClientId;
 
             var room = await _colyseusClient.Create<UfbRoomState>(
                 _roomType,
-                new Dictionary<string, object>() {
-                    { "createOptions", createOptions.ToDictionary() },
-                    { "joinOptions", joinOptions.ToDictionary() }
+                new Dictionary<string, object>()
+                {
+                    { "createOptions", createOptions.ConvertToDictionary() },
+                    { "joinOptions", joinOptions.ConvertToDictionary() }
                 }
             );
 
-            Debug.Log($"[NetworkManager] Created room {room.RoomId} with {room.State.characters.Count} characters");
+            Debug.Log(
+                $"[NetworkManager] Created room {room.RoomId} with {room.State.characters.Count} characters"
+            );
             RegisterHandlers(room, onFirstStateChange);
             EventBus.Publish(new RoomJoinedEvent(room));
         }
 
         private void RegisterHandlers(
             ColyseusRoom<UfbRoomState> room,
-            Action<ColyseusRoom<UfbRoomState>> onFirstStateChange)
+            Action<ColyseusRoom<UfbRoomState>> onFirstStateChange
+        )
         {
-            ColyseusRoom<UfbRoomState>.RoomOnStateChangeEventHandler onFirstStateChangeWrapper = null;
+            ColyseusRoom<UfbRoomState>.RoomOnStateChangeEventHandler onFirstStateChangeWrapper =
+                null;
             onFirstStateChangeWrapper = (UfbRoomState state, bool isFirstState) =>
             {
                 if (isFirstState)
