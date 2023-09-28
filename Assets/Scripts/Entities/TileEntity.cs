@@ -6,7 +6,6 @@ using System.Linq;
 using UFB.Core;
 using TMPro;
 using System;
-using UFB.Gameplay;
 using UFB.Events;
 using UFB.StateSchema;
 
@@ -115,14 +114,14 @@ namespace UFB.Entities
             _color = color;
 
 
-            var texture = tile.GetTexture(board.State.name);
+            // var texture = tile.GetTexture(board.State.name);
             
             
-            if (texture != null)
-                _spriteRenderer.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            // if (texture != null)
+            //     _spriteRenderer.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 
-            _spriteRenderer.enabled = false;
-            _meshRenderer.material.SetTexture("_BaseMap", texture);
+            // _spriteRenderer.enabled = false;
+            // _meshRenderer.material.SetTexture("_BaseMap", texture);
 
             InitializeWalls();
         }

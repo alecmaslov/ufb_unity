@@ -1,32 +1,54 @@
 using UnityEditor;
 using UnityEngine;
 using UFB.Entities;
-using UFB.Gameplay;
-[CustomEditor(typeof(CharacterController))]
+using UFB.Character;
+using Unity.VisualScripting;
+using UFB.Core;
+using UFB.Map;
+
+[CustomEditor(typeof(UFB.Character.CharacterController))]
 public class CharacterControllerEditor : Editor
 {
     Vector2Int _destination;
 
     float _raiseTileHeight = 10f;
     float _raiseTileSpeed = 0.5f;
+
     // bool _isRaised;
 
     public override void OnInspectorGUI()
     {
-
         DrawDefaultInspector();
 
-
-        CharacterController characterController = (CharacterController)target;
+        UFB.Character.CharacterController characterController =
+            (UFB.Character.CharacterController)target;
 
         if (EditorApplication.isPlaying)
         {
+            _destination = EditorGUILayout.Vector2IntField("Destination", _destination);
+
+            if (GUILayout.Button("Print State"))
+            {
+                Debug.Log(characterController.State.Serialize());
+            }
+
+            if (GUILayout.Button("Play Entrance Animation"))
+            {
+                characterController.PlayEntranceAnimation();
+            }
+
+            if (GUILayout.Button("Force Move to Tile"))
+            {
+                var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+                characterController.ForceMoveToTile(
+                    gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination))
+                );
+            }
 
             // if (playerEntity.TileAttachable != null && playerEntity.TileAttachable.CurrentTile != null)
             // {
             //     EditorGUILayout.Vector2IntField("Current Position", playerEntity.TileAttachable.CurrentTile.Coordinates.ToVector2Int());
             // }
-            // _destination = EditorGUILayout.Vector2IntField("Destination", _destination);
 
             // if (GUILayout.Button("Force To Tile"))
             // {
@@ -89,7 +111,5 @@ public class CharacterControllerEditor : Editor
             //     }
             // }
         }
-
     }
-
 }

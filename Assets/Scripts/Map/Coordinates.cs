@@ -14,10 +14,10 @@ namespace UFB.Map {
                                                 "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
                                                 "V", "W", "X", "Y", "Z" };
 
-        public string ColumnName => _tileColumns[Y];
-        public string RowName => X.ToString();
+        public string ColumnName => _tileColumns[X];
+        public string RowName => Y.ToString();
         public string Id { get => $"tile_{ColumnName}_{RowName}"; }
-        public string GameId { get => $"tile_{ColumnName}_{X+1}"; }
+        public string GameId { get => $"tile_{ColumnName}_{Y+1}"; }
         
         public Coordinates(int x, int y)
         {

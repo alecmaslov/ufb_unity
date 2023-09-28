@@ -12,6 +12,8 @@ using System;
 using UFB.Map;
 using System.Linq;
 using UFB.Events;
+using UFB.Network.RoomMessageTypes;
+using UFB.Effects;
 
 namespace UFB.Character
 {
@@ -25,13 +27,6 @@ namespace UFB.Character
         public AnimationDispatcher AnimationDispatcher { get; private set; }
         public bool IsMoving { get; private set; }
         public Tile CurrentTile { get; private set; }
-
-        // TODO: Implement ID based tile lookup instead!
-        // public Tile CurrentTile =>
-        //     ServiceLocator.Current.Get<GameBoard>().Tiles[State.currentTileId];
-
-
-        // .GetTileByCoordinates(State.coordinates.ToCoordinates());
 
         private GameObject _model;
         private PositionAnimator _positionAnimator;
@@ -72,75 +67,32 @@ namespace UFB.Character
 
         public async void PlayEntranceAnimation()
         {
-            try
-            {
-                Debug.Log("Playing entrance animation!");
-                // set to high above the map for dramatic entrance
-                // transform.position += new Vector3(0, 10f);
-
-                // EventBus.Publish
-                EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
-
-                // await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving");
-                // await AnimationDispatcher.PlayAnimationAsync("Entrance", "CharacterIdle");
-
-                Debug.Log("Entrance animation complete!");
-
-                // GetComponent<PositionAnimator>()
-                //     .AnimateTo(
-                //         CurrentTile.Position,
-                //         0.75f,
-                //         () =>
-                //         {
-                //             transform.position = CurrentTile.Position;
-                //         }
-                //     );
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
+            await AnimationDispatcher.PlayAnimationAsync("Entrance", "CharacterIdle");
+            new RippleTilesEffect(CurrentTile, 20, 1f).Execute();
         }
 
         public async Task MoveAlongPath(IEnumerable<Tile> path, float speed = 0.1f)
         {
             IsMoving = true;
-
             // detach from current tile
             transform.parent = null;
-
             // wait for it to hop up
-            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving");
+            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 2f);
 
             foreach (Tile tile in path.Skip(0))
             {
                 var thisTile = tile;
                 var destination = thisTile.Position;
-                thisTile.Stretch(1.5f, speed * 0.5f);
+                thisTile.Stretch(1.2f, speed * 0.5f);
                 _positionAnimator.AnimateTo(destination, speed);
                 await Task.Delay((int)(speed * 1000));
-                thisTile.ResetStretch(3f);
+                thisTile.ResetStretch(2f);
             }
-            await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle");
+            await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 2f);
             path.Last().AttachGameObject(gameObject, true);
             IsMoving = false;
-        }
-
-        private async Task MoveToTileAsync(Tile tile)
-        {
-            var tcs = new TaskCompletionSource<bool>();
-            Debug.Log($"Moving to tile {tile.Id}");
-            _positionAnimator.AnimateTo(
-                tile.Position,
-                0.5f,
-                () =>
-                {
-                    Debug.Log("Hop To Tile Complete");
-                    tcs.SetResult(true);
-                }
-            );
-
-            await tcs.Task;
+            new RippleTilesEffect(CurrentTile, 20, 1f).Execute();
         }
 
         public void ForceMoveToTile(
@@ -149,15 +101,17 @@ namespace UFB.Character
             Action onComplete = null
         )
         {
-            // _tileAttachable.DetachFromTile();
-            _positionAnimator.AnimateTo(
-                destination.Position,
-                duration,
-                () =>
-                {
-                    // _tileAttachable.AttachToTile(destination);
-                    onComplete?.Invoke();
-                }
+            EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
+
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    "forceMove",
+                    new RequestMoveMessage
+                    {
+                        tileId = destination.Id,
+                        destination = destination.Coordinates
+                    }
+                )
             );
         }
     }

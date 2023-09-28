@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UFB.Map;
+using Unity.VisualScripting;
 
 [CustomEditor(typeof(Tile))]
 public class TileEditor : Editor
@@ -15,19 +16,18 @@ public class TileEditor : Editor
         DrawDefaultInspector();
 
         Tile tile = (Tile)target;
-        
+
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         EditorGUILayout.LabelField("Editor Properties", EditorStyles.boldLabel);
 
         _wallHeight = EditorGUILayout.FloatField("Wall Height", _wallHeight);
-
 
         // if (GUILayout.Button("Toggle Glow"))
         // {
         //     if (_isGlowing) {
         //         tileEntity.Glow(0, 0.5f);
         //     } else {
-        //         tileEntity.Glow(1, 0.5f); 
+        //         tileEntity.Glow(1, 0.5f);
         //     }
         //     _isGlowing = !_isGlowing;
         // }
@@ -37,14 +37,17 @@ public class TileEditor : Editor
             Debug.Log(tile.ToString());
         }
 
-
         _stretchAmount = EditorGUILayout.FloatField("Stretch Amount", _stretchAmount);
         _stretchDuration = EditorGUILayout.FloatField("Stretch Duration", _stretchDuration);
-        
-        if (GUILayout.Button("Stretch")) {
+
+        if (GUILayout.Button("Stretch"))
+        {
             tile.Stretch(_stretchAmount, _stretchDuration);
         }
 
+        if (GUILayout.Button("Print State")) { 
+            tile.PrintState();
+        }
 
         // if (GUILayout.Button("Toggle Coordinates")) {
         //     tile.ToggleCoordinateText();
@@ -57,7 +60,5 @@ public class TileEditor : Editor
         // if (GUILayout.Button("Slam!")) {
         //     tile.SlamDown();
         // }
-
     }
-
 }

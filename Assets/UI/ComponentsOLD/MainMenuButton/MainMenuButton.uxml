@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <Style src="MainMenuButton.uss"/>
-    <MainMenuButton>
-        <ui:Label name="button-label" class="button-label"/>
-    </MainMenuButton>
-</ui:UXML>

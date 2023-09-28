@@ -15,12 +15,16 @@ namespace UFB.Network
         UNITY_EDITOR
     }
 
-
-
     public class UfbApiClient : ApiClient
     {
-        public bool IsRegistered { get { return _clientId != null; } }
-        public string ClientId { get { return _clientId; } }
+        public bool IsRegistered
+        {
+            get { return _clientId != null; }
+        }
+        public string ClientId
+        {
+            get { return _clientId; }
+        }
         public string Token
         {
             get { return _token; }
@@ -34,9 +38,8 @@ namespace UFB.Network
         private string _clientId;
         private string _token;
 
-        public UfbApiClient(string apiBase, int port) : base(apiBase, port)
-        {
-        }
+        public UfbApiClient(string apiBase, int port)
+            : base(apiBase, port) { }
 
         private async Task<bool> ValidateToken()
         {
@@ -82,7 +85,10 @@ namespace UFB.Network
 
             var platformType = GetPlatformType();
             var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString() });
-            var clientResponse = await Post<RegisterClientResponse>("/auth/register-client", jsonData);
+            var clientResponse = await Post<RegisterClientResponse>(
+                "/auth/register-client",
+                jsonData
+            );
             _clientId = clientResponse.clientId;
             await GenerateToken(_clientId);
         }
@@ -106,13 +112,12 @@ namespace UFB.Network
         public PlatformType GetPlatformType()
         {
             PlatformType type = PlatformType.WEB; // Default value
-
 #if UNITY_WEBGL && !UNITY_EDITOR
-    type = PlatformType.WEB;
+            type = PlatformType.WEB;
 #elif UNITY_ANDROID && !UNITY_EDITOR
-    type = PlatformType.ANDROID;
+            type = PlatformType.ANDROID;
 #elif UNITY_IOS && !UNITY_EDITOR
-    type = PlatformType.IOS;
+            type = PlatformType.IOS;
 #elif UNITY_EDITOR
             type = PlatformType.UNITY_EDITOR;
             Debug.Log("Running in Unity Editor");
@@ -121,10 +126,19 @@ namespace UFB.Network
             return type;
         }
 
+        private async Task<ApiTypes.MapTile[]> GetMapTiles(string mapId)
+        {
+            var mapTiles = await Get<ApiTypes.MapTile[]>(
+                $"/maps/tiles?mapId={mapId}"
+            );
+            return mapTiles;
+        }
+
         public struct TokenResponse
         {
             public string token;
         }
+
         public struct RegisterClientResponse
         {
             public string clientId;
@@ -134,7 +148,5 @@ namespace UFB.Network
         {
             public string clientId;
         }
-
     }
-
 }

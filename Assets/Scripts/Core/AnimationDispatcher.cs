@@ -20,6 +20,7 @@ namespace UFB.Core
         public async Task PlayAnimationAsync(
             string triggerName,
             string targetStateName,
+            float speed = 1.0f, // Default to normal speed
             Action onComplete = null
         )
         {
@@ -34,6 +35,7 @@ namespace UFB.Core
 
             try
             {
+                animator.speed = speed; // Set the animation speed
                 animator.ResetTrigger(triggerName); // Reset any existing trigger
                 animator.SetTrigger(triggerName);
                 await MonitorAnimationAsync(targetStateName, _cts.Token);
@@ -45,6 +47,7 @@ namespace UFB.Core
             }
             finally
             {
+                animator.speed = 1.0f; // Reset the animation speed to default
                 _isAnimating = false;
                 _currentTriggerName = null;
             }

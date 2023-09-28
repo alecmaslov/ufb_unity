@@ -66,6 +66,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef4c678b22b08924ba4e5d2524ad55c2
+    m_Address: Prefabs/Walls
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ObjectPefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab43e83e151fa8a4f81ab2eef964dfb2
+    m_Address: Prefabs/Wall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ObjectPefabs
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}
   m_SchemaSet:

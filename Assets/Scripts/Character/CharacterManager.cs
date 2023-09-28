@@ -8,7 +8,6 @@ using Colyseus;
 using UFB.Network;
 using UnityEngine;
 using System.Linq;
-using UFB.Gameplay;
 using UFB.Player;
 using System;
 using UFB.Map;
@@ -37,6 +36,13 @@ namespace UFB.Events
         {
             this.character = character;
         }
+    }
+
+    public class SelectedCharacterEvent
+    {
+        public UfbCharacter character;
+        public CharacterState state;
+        public bool isPlayerControlled; // lets us set zombie
     }
 }
 
@@ -89,7 +95,6 @@ namespace UFB.Character
                     _playerId = message.playerId;
                 }
             );
-
 
             _characters = new Dictionary<string, CharacterController>();
 
@@ -185,6 +190,46 @@ namespace UFB.Character
         //         "move",
         //         new Dictionary<string, object>() { { "destination", e.Destination.ToDictionary() } }
         //     );
+        // }
+
+        // public void SavePlayerConfiguration(string fileName)
+        // {
+
+        //     // this will eventually be handled by the Player object, which PlayerEntity has a reference
+        //     // to. It will handle loading/unloading the JSON into the player state. For now, quick solution
+        //     var json = JsonConvert.SerializeObject(_players.Select(p => new PlayerConfiguration
+        //     {
+        //         CharacterName = p.CharacterName,
+        //         TileCoordinates = p.CurrentTile.Coordinates
+        //     }).ToList());
+
+        //     // save the json
+        //     ApplicationData.SaveJSON(json, "gamestate/player-config", fileName + ".json");
+        // }
+
+
+        //         public void LoadPlayerConfiguration(string fileName)
+        // {
+        //     // load the json
+        //     var playerConfigurations = ApplicationData.LoadJSON<List<PlayerConfiguration>>("gamestate/player-config", fileName + ".json");
+
+        //     // iterate through the players and set their tile coordinates
+        //     foreach (var playerConfiguration in playerConfigurations)
+        //     {
+        //         var player = _players.FirstOrDefault(p => p.CharacterName == playerConfiguration.CharacterName);
+        //         if (player == null)
+        //         {
+        //             Debug.LogError($"Player with character name {playerConfiguration.CharacterName} not found");
+        //             continue;
+        //         }
+        //         var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(playerConfiguration.TileCoordinates);
+        //         if (tile == null)
+        //         {
+        //             Debug.LogError($"Tile with coordinates {playerConfiguration.TileCoordinates} not found");
+        //             continue;
+        //         }
+        //         player.ForceMoveToTile(tile);
+        //     }
         // }
     }
 }

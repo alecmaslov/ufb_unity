@@ -1,7 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using UFB.Entities;
-using UFB.Gameplay;
 
 [CustomEditor(typeof(ZoomController))]
 public class ZoomControllerEditor : Editor

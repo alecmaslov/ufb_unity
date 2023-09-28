@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
 using UFB.Entities;
-using UFB.Gameplay;
 
 [CustomEditor(typeof(TileEntity))]
 public class TileEntityEditor : Editor

@@ -14,9 +14,15 @@ namespace UFB.StateSchema {
 		public string id = default(string);
 
 		[Type(1, "string")]
+		public string tileCode = default(string);
+
+		[Type(2, "string")]
 		public string type = default(string);
 
-		[Type(2, "ref", typeof(CoordinatesState))]
+		[Type(3, "array", typeof(ArraySchema<byte>), "uint8")]
+		public ArraySchema<byte> walls = new ArraySchema<byte>();
+
+		[Type(4, "ref", typeof(CoordinatesState))]
 		public CoordinatesState coordinates = new CoordinatesState();
 
 		/*
@@ -35,6 +41,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<string> __tileCodeChange;
+		public Action OnTileCodeChange(PropertyChangeHandler<string> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.tileCode));
+			__tileCodeChange += __handler;
+			if (__immediate && this.tileCode != default(string)) { __handler(this.tileCode, default(string)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(tileCode));
+				__tileCodeChange -= __handler;
+			};
+		}
+
 		protected event PropertyChangeHandler<string> __typeChange;
 		public Action OnTypeChange(PropertyChangeHandler<string> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
@@ -44,6 +62,18 @@ namespace UFB.StateSchema {
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(type));
 				__typeChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<ArraySchema<byte>> __wallsChange;
+		public Action OnWallsChange(PropertyChangeHandler<ArraySchema<byte>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.walls));
+			__wallsChange += __handler;
+			if (__immediate && this.walls != null) { __handler(this.walls, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(walls));
+				__wallsChange -= __handler;
 			};
 		}
 
@@ -62,7 +92,9 @@ namespace UFB.StateSchema {
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+				case nameof(tileCode): __tileCodeChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(type): __typeChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+				case nameof(walls): __wallsChange?.Invoke((ArraySchema<byte>) change.Value, (ArraySchema<byte>) change.PreviousValue); break;
 				case nameof(coordinates): __coordinatesChange?.Invoke((CoordinatesState) change.Value, (CoordinatesState) change.PreviousValue); break;
 				default: break;
 			}

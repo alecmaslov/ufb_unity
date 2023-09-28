@@ -1,6 +1,7 @@
 using UFB.Map;
 using UFB.Network.RoomMessageTypes;
 using System;
+using Colyseus.Schema;
 
 namespace UFB.StateSchema
 {
@@ -35,5 +36,6 @@ namespace UFB.StateSchema
             }
             return null;
         }
+
     }
 }

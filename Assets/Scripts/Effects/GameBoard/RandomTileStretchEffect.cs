@@ -1,5 +1,5 @@
 using UnityEngine;
-using UFB.Entities;
+using UFB.Map;
 
 namespace UFB.Effects
 {
@@ -18,8 +18,7 @@ namespace UFB.Effects
         {
             _gameBoard.IterateTiles((tile, normIndex) =>
             {
-                var tileEntity = tile.GetComponent<TileEntity>();
-                tileEntity.Stretch(Random.Range(0f, 20f), _rate);
+                tile.Stretch(Random.Range(0f, 20f), _rate);
             });
         }
     }

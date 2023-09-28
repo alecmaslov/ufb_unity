@@ -289,12 +289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0825127d8191f784982d89870d7fc65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterManager: {fileID: 1571776137}
-  gameBoardPrefab:
-    m_AssetGUID: 71fc3e4920a97104e83de236646f8dd0
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
 --- !u!4 &392878604
 Transform:
   m_ObjectHideFlags: 0

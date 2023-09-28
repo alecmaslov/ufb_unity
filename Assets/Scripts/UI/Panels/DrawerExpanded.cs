@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UFB.Core;
-using UFB.Gameplay;
 using UnityEngine;
 
 namespace UFB.UI

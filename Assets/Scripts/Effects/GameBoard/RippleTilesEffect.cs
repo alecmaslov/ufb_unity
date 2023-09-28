@@ -1,41 +1,34 @@
 using UnityEngine;
-using UFB.Entities;
-using System.Collections.Generic;
 using UFB.Map;
+using UFB.Core;
 
 namespace UFB.Effects
 {
     [System.Serializable]
     public class RippleTilesEffect : IEffect
     {
-        private readonly GameBoard _gameBoard;
         public Tile CurrentTile;
         public float Rate = 10f;
         public float Intensity = 5f;
         public float StretchDuration = 0.2f;
         public float Decay = 0.3f;
+        private GameBoard _gameBoard;
 
         public RippleTilesEffect(
-            GameBoard gameBoard,
             Tile centerTile,
             float rate = 10f,
             float intensity = 5f,
             float stretchDuration = 0.2f,
             float decay = 0.3f)
         {
-            _gameBoard = gameBoard;
             Rate = rate;
             Intensity = intensity;
             StretchDuration = stretchDuration;
             Decay = decay;
             CurrentTile = centerTile;
+            _gameBoard = ServiceLocator.Current.Get<GameBoard>();
         }
-
-        public void ExecuteOnTile(Tile tile)
-        {
-            _gameBoard.IterateTiles(t => TileCallback(t, tile));
-        }
-
+        
         public void Execute()
         {
             _gameBoard.IterateTiles(t => TileCallback(t, CurrentTile));

@@ -1,5 +1,6 @@
 using UnityEngine;
-using UFB.Entities;
+using UFB.Map;
+using UFB.Core;
 
 namespace UFB.Effects
 {
@@ -8,9 +9,9 @@ namespace UFB.Effects
         private readonly GameBoard _gameBoard;
         private readonly float _rate;
 
-        public ResetTilesEffect(GameBoard gameBoard, float rate)
+        public ResetTilesEffect(float rate)
         {
-            _gameBoard = gameBoard;
+            _gameBoard = ServiceLocator.Current.Get<GameBoard>();
             _rate = rate;
         }
 
@@ -18,8 +19,7 @@ namespace UFB.Effects
         {
             _gameBoard.IterateTiles((tile, normIndex) =>
             {
-                var tileEntity = tile.GetComponent<TileEntity>();
-                tileEntity.Stretch(0.1f, _rate);
+                tile.Stretch(0.1f, _rate);
             });
         }
     }

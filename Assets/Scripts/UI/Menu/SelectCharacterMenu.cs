@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using UFB.Gameplay;
-using UFB.Network;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UFB.Player;
 using TMPro;
@@ -13,11 +9,15 @@ namespace UFB.UI
 {
     public class SelectCharacterMenu : Menu
     {
-        [SerializeField] private Image _characterCard;
-        [SerializeField] private TextMeshProUGUI _characterName;
+        [SerializeField]
+        private Image _characterCard;
+
+        [SerializeField]
+        private TextMeshProUGUI _characterName;
 
         // [SerializeField] private Dictionary<string, Sprite> _characterSprites = new Dictionary<string, Sprite>();
-        [SerializeField] private List<UfbCharacter> _characters;
+        [SerializeField]
+        private List<UfbCharacter> _characters;
 
         private int _characterIndex = 0;
 
@@ -29,14 +29,12 @@ namespace UFB.UI
         }
 
         public void OnConfirmButton()
-        {           
+        {
             var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
             joinOptions.characterClass = _characters[_characterIndex].id;
             // _menuManager.SetMenuData("joinOptions", joinOptions);
             _menuManager.CloseMenu();
-
         }
-
 
         private void SetCharacter(int index)
         {

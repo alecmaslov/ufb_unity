@@ -35,6 +35,12 @@ namespace UFB.Events
             MessageType = messageType;
             Message = message;
         }
+
+        public static RoomSendMessageEvent Create<T>(string messageType, T message)
+            where T : ISendMessage
+        {
+            return new RoomSendMessageEvent(messageType, message);
+        }
     }
 }
 

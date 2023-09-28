@@ -108,37 +108,6 @@ namespace UFB.Map {
             var edges = this.Edges.Select(edge => edge.ToString()).Aggregate((a, b) => a + ", " + b);
             return $"Tile: {Id} | Walls {edges} | Coordinates: {Coordinates}";
         }
-
-        // public GameObject SpawnTile()
-        // {
-        //     GameObject tile = null;
-        //     switch (Type)
-        //     {
-        //         case TileType.Floor:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
-        //             break;
-        //         case TileType.Bridge:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Bridge")) as GameObject;
-        //             break;
-        //         case TileType.Chest:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Chest")) as GameObject;
-        //             break;
-        //         case TileType.Enemy:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Enemy")) as GameObject;
-        //             break;
-        //         case TileType.Portal:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Portal")) as GameObject;
-        //             break;
-        //         case TileType.Void:
-        //             tile = GameObject.Instantiate(Resources.Load("Prefabs/Void")) as GameObject;
-        //             break;
-        //     }
-
-        //     tile.name = Id;
-        //     tile.transform.position = new Vector3(Coordinates.X, 0, Coordinates.Y);
-        //     tile.GetComponent<SpriteRenderer>().color = HexToColor(Color.Color);
-        //     return tile;
-        // }
     }
 }
 
