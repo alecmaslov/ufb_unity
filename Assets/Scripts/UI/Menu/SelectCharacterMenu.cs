@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UFB.Player;
+using UFB.Character;
 using TMPro;
 using UFB.Network.RoomMessageTypes;
 

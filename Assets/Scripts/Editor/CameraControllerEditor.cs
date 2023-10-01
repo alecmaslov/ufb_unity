@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UFB.Core;
+using UFB.Camera;
 
 [CustomEditor(typeof(CameraController))]
 public class CameraControllerEditor : Editor

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 
 // global raycast to any object with RaycastSelectable
@@ -18,7 +18,7 @@ public class ClickObject : MonoBehaviour
     void Update()
     {
         // If left mouse button is clicked
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             // Convert mouse position to ray
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);

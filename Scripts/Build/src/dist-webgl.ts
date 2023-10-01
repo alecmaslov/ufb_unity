@@ -9,19 +9,35 @@ import {
     statSync,
     readFileSync,
     writeFileSync,
-    rmdirSync
+    rmdirSync,
+    rmSync,
 } from "fs";
 import path from "path";
 import { getBucketManager } from "./AWSBucket";
 import { copyDirSync, checkMakeDir } from "./files";
 
-const buildDir = "../../Builds/Build";
+const buildDir = "../../BUILD";
 const tempDir = "../../Builds/WebGL_Temp";
 const outDir = "E:/UFB/ufb-web";
 
 // Before your existing code starts
 checkMakeDir(tempDir);
+
+// clear temp dir
+// rmdirSync(path.join(tempDir, "public"));
+try {
+    rmdirSync(path.join(tempDir, "StreamingAssets"), { recursive: true });
+    rmSync(path.join(tempDir, "index.html"));
+
+} catch (error) {
+    console.log(error)
+}
+
+// rmdirSync(path.join(tempDir, "Build"), { recursive: true });
+
 copyDirSync(buildDir, tempDir);
+copyDirSync(path.join(buildDir, "StreamingAssets"), tempDir);
+
 
 interface BuildFile {
     filename: string;
@@ -47,6 +63,7 @@ async function processBuild() {
         }
         return path.join(tempDir, filename);
     }
+
 
     const targetBuildFiles: BuildFile[] = [
         {
@@ -99,15 +116,9 @@ async function processBuild() {
     let bundleSize = 0;
 
     for (const file of targetBuildFiles) {
-        // const oldPath = getFileInBuildDir(file.filename, true, true);
         file.filepath = getFileInBuildDir(file.filename, true, true);
         const stat = statSync(file.filepath!);
         bundleSize += stat.size;
-
-        // const newPath = getFileInBuildDir(file.filename, true, false);
-        // file.filepath = newPath;
-        // renameSync(oldPath, newPath);
-        // console.log(`${oldPath} -> ${file.filepath} | ${stat.size} bytes`);
 
         if (file.uploadParams) {
             const fileContent = readFileSync(file.filepath!);
@@ -124,8 +135,6 @@ async function processBuild() {
                 }
             );
 
-            // const regex = new RegExp(`Build/${prefix}${file.filename}`, "g");
-            // const s3Url = data.Location;
             file.filepath = data.Location;
         }
 
@@ -136,10 +145,6 @@ async function processBuild() {
             );
             file.filepath = publicFolder + file.filename;
         }
-
-        // else {
-        //     indexHtml = indexHtml.replace(regex, "Build/" + file.filename);
-        // }
 
         const regex = new RegExp(`Build/${prefix}${file.filename}`, "g");
         indexHtml = indexHtml.replace(regex, file.filepath);
@@ -154,6 +159,9 @@ async function processBuild() {
     rmdirSync(path.join(tempDir, "Build"), { recursive: true });
 
     checkMakeDir(outDir);
+    console.log(`Saving to ${outDir} | Bundle size: ${bundleSize / 1024} KB`)
+
+    rmdirSync(path.join(outDir, "StreamingAssets"), { recursive: true });
     copyDirSync(tempDir, outDir);
 }
 

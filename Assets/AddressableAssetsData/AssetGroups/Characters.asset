@@ -16,49 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: c7d6f59ba9a053945814c502cf1e8608
-  m_SerializeEntries:
-  - m_GUID: d35a625dd5e0ff54d8ccff384fd5c06f
-    m_Address: CharacterPrefab/Ophaia.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Model
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 09ff1ce6f0b306446ae1ba612f4cb796
-    m_Address: CharacterPrefab/Mevisto.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Model
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3e41033880f2aab438f831306af276b0
-    m_Address: CharacterPrefab/Kirin.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Model
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a2943fe5020f8334ba61c569bf1e3cae
-    m_Address: UfbCharacter/kirin
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Character
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d04d4dbe303e2214d96f22d89e76fb81
-    m_Address: UfbCharacter/mevisto
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Character
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 14447a12c26c1f1408b39601d1ac0dd2
-    m_Address: UfbCharacter/ophaia
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Player
-    - Character
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}
   m_SchemaSet:

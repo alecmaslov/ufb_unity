@@ -20,10 +20,12 @@ public class MapPlane : MonoBehaviour
     {
         GetComponent<MeshFilter>().mesh = GeneratePlane(subdivisions, size);
         // save the mesh as an asset
+#if UNITY_EDITOR
         AssetDatabase.CreateAsset(
             GetComponent<MeshFilter>().mesh,
             "Assets/Meshes/GeneratedMesh.asset"
         );
+#endif
     }
 
     Mesh GeneratePlane(int subdivisions, float size)

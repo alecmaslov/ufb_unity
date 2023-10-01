@@ -5,7 +5,7 @@ using System.Collections;
 using System;
 using UFB.Core;
 using UFB.Events;
-using UFB.Player;
+using UFB.Character;
 using System.Linq;
 
 namespace UFB.Entities

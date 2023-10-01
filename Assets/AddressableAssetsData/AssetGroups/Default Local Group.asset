@@ -17,36 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9dd9f1ececacd594a81851fe172e8076
   m_SerializeEntries:
-  - m_GUID: e113b890cb8992f478d17df66e0cb12d
-    m_Address: Assets/Prefabs/UI
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UIPrefabs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f8ec32127c39f5844ab7ccff8e019699
-    m_Address: Assets/Prefabs/Core
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - CorePrefabs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: df0a795ae30500440838c8c2a4f4b85a
-    m_Address: Assets/Prefabs/Objects
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ObjectPefabs
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c4112c382e25bb47a38173a090cd2a1
     m_Address: Assets/Images/Avatars
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Image
     - Avatar
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 13e9273d177ba2445a79ce74186596f8
     m_Address: Assets/Images/Avatars/OphaiaAvatar.png
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Image
     - Avatar
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7c129205f9e90ad4ebec903e231c4998
@@ -61,11 +41,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Image
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5615bba5ed5455f409e9d23f8533e305
-    m_Address: Assets/Prefabs/Character.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef4c678b22b08924ba4e5d2524ad55c2
     m_Address: Prefabs/Walls
     m_ReadOnly: 0
@@ -77,6 +52,60 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ObjectPefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2943fe5020f8334ba61c569bf1e3cae
+    m_Address: UfbCharacter/kirin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d04d4dbe303e2214d96f22d89e76fb81
+    m_Address: UfbCharacter/mevisto
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14447a12c26c1f1408b39601d1ac0dd2
+    m_Address: UfbCharacter/ophaia
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c2ba26af9000bd44a1cce883e32df19
+    m_Address: maps/kaiju
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ea8b139d6b26f84f822e34d6bb3b310
+    m_Address: maps/kraken
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Map
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4432dd93f9b2fbd4ebbd266052c82785
+    m_Address: Assets/Materials/WallURP.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17bc4a06fb20d6347955a5336cb8fbd9
+    m_Address: CharacterPrefabs/Kirin_LowPoly
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 917f5ce5769de4b49870196b61fbc8a6
+    m_Address: CharacterPrefabs/Mevisto_LowPoly
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15d13f7079cc18f4da5d329db0a0861d
+    m_Address: CharacterPrefabs/Ophaia_LowPoly
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}

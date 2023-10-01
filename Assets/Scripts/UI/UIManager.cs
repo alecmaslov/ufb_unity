@@ -9,7 +9,8 @@ namespace UFB.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public AssetReference toastPrefab;
+        // public AssetReference toastPrefab;
+        public GameObject toastPrefab;
 
         public Canvas RootCanvas
         {
@@ -38,6 +39,7 @@ namespace UFB.UI
 
         [SerializeField]
         private RectTransform _bottomSlot;
+        private Character.CharacterController _characterController;
 
         private void OnEnable()
         {
@@ -50,21 +52,24 @@ namespace UFB.UI
                 }
             }
 
-            Debug.Log($"UIManager enabled");
-            var currentScene = SceneManager.GetActiveScene();
-            Debug.Log($"Current scene: {currentScene.name}");
-
-            // subscribe to anything here
-            EventBus.Subscribe<ToastMessageEvent>(ShowToast);
-            EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(ShowToast);
+            EventBus.Subscribe<ToastMessageEvent>(OnToastMessageEvent);
+            EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(
+                OnRoomNotificationMessage
+            );
+            EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
         private void OnDisable()
         {
-            // unsubscribe to anything here
-            EventBus.Unsubscribe<ToastMessageEvent>(ShowToast);
-            EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(ShowToast);
+            EventBus.Unsubscribe<ToastMessageEvent>(OnToastMessageEvent);
+            EventBus.Unsubscribe<RoomReceieveMessageEvent<NotificationMessage>>(
+                OnRoomNotificationMessage
+            );
+            EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
+
+        private void OnSelectedCharacterEvent(SelectedCharacterEvent e) =>
+            _characterController = e.controller;
 
         private void InstantiatePanel(AssetReference asset, System.Action<GameObject> callback)
         {
@@ -86,62 +91,15 @@ namespace UFB.UI
 
         public void ShowToast(string message)
         {
-            InstantiatePanel(
-                toastPrefab,
-                (obj) =>
-                {
-                    obj.GetComponent<UIToast>().Initialize(message);
-                }
-            );
+            var toast = Instantiate(toastPrefab, RootCanvas.transform);
+            toast.GetComponent<UIToast>().Initialize(message);
         }
 
-        private void ShowToast(ToastMessageEvent messageEvent)
-        {
-            InstantiatePanel(
-                toastPrefab,
-                (obj) =>
-                {
-                    obj.GetComponent<UIToast>().Initialize(messageEvent);
-                }
-            );
-        }
+        private void OnToastMessageEvent(ToastMessageEvent messageEvent) =>
+            ShowToast(messageEvent.Message);
 
-        private void ShowToast(RoomReceieveMessageEvent<NotificationMessage> messageEvent)
-        {
-            InstantiatePanel(
-                toastPrefab,
-                (obj) =>
-                {
-                    obj.GetComponent<UIToast>().Initialize(messageEvent.Message.message);
-                }
-            );
-        }
+        private void OnRoomNotificationMessage(
+            RoomReceieveMessageEvent<NotificationMessage> messageEvent
+        ) => ShowToast(messageEvent.Message.message);
     }
 }
-
-
-// private void Awake()
-// {
-//     Debug.Log($"UIManager awake");
-//     if (Instance != null)
-//     {
-//         Destroy(gameObject);
-//     }
-//     Instance = this;
-//     DontDestroyOnLoad(gameObject);
-//     _rootCanvas = GetComponent<Canvas>();
-//     var currentScene = SceneManager.GetActiveScene();
-//     Debug.Log($"Current scene: {currentScene.name}");
-// }
-
-// [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-// private static void Initialize()
-// {
-//     if (Instance != null)
-//     {
-//         return;
-//     }
-//     var uiManagerGameObject = new GameObject("UIManager");
-//     Instance = uiManagerGameObject.AddComponent<UIManager>();
-//     DontDestroyOnLoad(uiManagerGameObject);
-// }

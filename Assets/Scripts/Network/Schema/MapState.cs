@@ -31,6 +31,9 @@ namespace UFB.StateSchema {
 		[Type(6, "map", typeof(MapSchema<AdjacencyListItemState>))]
 		public MapSchema<AdjacencyListItemState> adjacencyList = new MapSchema<AdjacencyListItemState>();
 
+		[Type(7, "array", typeof(ArraySchema<SpawnEntity>))]
+		public ArraySchema<SpawnEntity> spawnEntities = new ArraySchema<SpawnEntity>();
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -119,6 +122,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<ArraySchema<SpawnEntity>> __spawnEntitiesChange;
+		public Action OnSpawnEntitiesChange(PropertyChangeHandler<ArraySchema<SpawnEntity>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.spawnEntities));
+			__spawnEntitiesChange += __handler;
+			if (__immediate && this.spawnEntities != null) { __handler(this.spawnEntities, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(spawnEntities));
+				__spawnEntitiesChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
@@ -128,6 +143,7 @@ namespace UFB.StateSchema {
 				case nameof(gridHeight): __gridHeightChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
 				case nameof(tiles): __tilesChange?.Invoke((MapSchema<TileState>) change.Value, (MapSchema<TileState>) change.PreviousValue); break;
 				case nameof(adjacencyList): __adjacencyListChange?.Invoke((MapSchema<AdjacencyListItemState>) change.Value, (MapSchema<AdjacencyListItemState>) change.PreviousValue); break;
+				case nameof(spawnEntities): __spawnEntitiesChange?.Invoke((ArraySchema<SpawnEntity>) change.Value, (ArraySchema<SpawnEntity>) change.PreviousValue); break;
 				default: break;
 			}
 		}

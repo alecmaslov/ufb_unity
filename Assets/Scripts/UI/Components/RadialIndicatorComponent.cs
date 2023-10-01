@@ -5,39 +5,46 @@ using TMPro;
 using UnityEngine.UI;
 using UFB.Core;
 using System;
+using UFB.StateSchema;
 
 namespace UFB.UI
 {
     public class RadialIndicatorComponent : MonoBehaviour
     {
-        [SerializeField] private RectTransform _container;
-        [SerializeField] private Image _radialDisplay;
-        [SerializeField] private Image _icon;
-        [SerializeField] private TextMeshProUGUI _valueText;
-        [SerializeField] private TextMeshProUGUI _maxValueText;
-        [SerializeField] private RectTransform _valueIndicatorContainer;
+        [SerializeField]
+        private RectTransform _container;
 
-        public RangedValue Value { get; private set; }
+        [SerializeField]
+        private Image _radialDisplay;
 
-        public void Initialize(RangedValue value)
+        [SerializeField]
+        private Image _icon;
+
+        [SerializeField]
+        private TextMeshProUGUI _valueText;
+
+        [SerializeField]
+        private TextMeshProUGUI _maxValueText;
+
+        [SerializeField]
+        private RectTransform _valueIndicatorContainer;
+
+        public void SetRangedValueState(RangedValueState state)
         {
-            Value = value;
-            Value.OnValueChanged += OnValueChanged;
-            OnValueChanged(Value.value);
+            SetFromState(state);
+            state.OnChange(() => SetFromState(state));
+        }
+
+        private void SetFromState(RangedValueState state)
+        {
+            _radialDisplay.fillAmount = state.Percent();
+            _valueText.text = state.current.ToString();
+            _maxValueText.text = state.max.ToString();
         }
 
         public void ToggleValueIndicator(bool show)
         {
             _valueIndicatorContainer.gameObject.SetActive(show);
         }
-
-        private void OnValueChanged(float newValue)
-        {
-            _radialDisplay.fillAmount = newValue / Value.maxValue;
-            _valueText.text = newValue.ToString();
-            _maxValueText.text = Value.maxValue.ToString();
-        }
-
     }
-
 }

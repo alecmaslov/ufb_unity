@@ -15,12 +15,12 @@ public static class CoroutineHelpers
         monoBehaviour.StartCoroutine(DelayedAction(action, delay));
     }
 
-    public static Coroutine LerpAction(Action<float> action, Action onComplete, float duration, MonoBehaviour monoBehaviour)
+    public static Coroutine LerpAction(this MonoBehaviour monoBehaviour, Action<float> action, float duration, Action onComplete)
     {
-        return monoBehaviour.StartCoroutine(LerpAction(action, duration));
+        return monoBehaviour.StartCoroutine(LerpAction(action, duration, onComplete));
     }
 
-    private static IEnumerator LerpAction(Action<float> action, float duration)
+    private static IEnumerator LerpAction(Action<float> action, float duration, Action onComplete = null)
     {
         float startTime = Time.time;
         float endTime = startTime + duration;
@@ -30,6 +30,7 @@ public static class CoroutineHelpers
             action(t);
             yield return null;
         }
+        onComplete?.Invoke();
     }
 
 

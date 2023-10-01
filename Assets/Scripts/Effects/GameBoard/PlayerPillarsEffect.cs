@@ -1,7 +1,6 @@
 using UnityEngine;
 using UFB.Entities;
 using System.Collections.Generic;
-using UFB.Player;
 
 namespace UFB.Effects
 {

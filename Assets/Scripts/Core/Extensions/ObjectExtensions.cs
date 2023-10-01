@@ -2,57 +2,70 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
-namespace UFB.Core
+public static class ObjectExtensions
 {
-    public interface IDictionaryConvertable
-    {
-        Dictionary<string, object> ToDictionary();
-    }
+    private const int MaxListItems = 3; // Maximum number of list or array items to print
+    private const int MaxDepth = 5; // Maximum depth of recursion
 
-    public static class SendMessageExtensions
+    public static string ToDetailedString(this object obj, int currentDepth = 0)
     {
-        public static Dictionary<string, object> ConvertToDictionary(this object obj)
+        if (currentDepth > MaxDepth)
+            return "...";
+
+        if (obj == null)
+            return "null";
+
+        Type objType = obj.GetType();
+
+        // Handle basic types
+        if (objType.IsPrimitive || objType == typeof(string))
+            return obj.ToString();
+
+        // Handle lists or arrays
+        if (obj is IEnumerable enumerable)
         {
-            var dictionary = new Dictionary<string, object>();
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
 
-            // For fields:
-            foreach (
-                var field in obj.GetType()
-                    .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-            )
+            int count = 0;
+            foreach (var item in enumerable)
             {
-                var value = field.GetValue(obj);
-                if (value is IDictionaryConvertable)
+                if (count++ >= MaxListItems)
                 {
-                    dictionary[field.Name] = ((IDictionaryConvertable)value).ToDictionary();
+                    sb.Append(", ...");
+                    break;
                 }
-                else
-                {
-                    dictionary[field.Name] = value;
-                }
+
+                sb.Append(item.ToDetailedString(currentDepth + 1));
+                sb.Append(", ");
             }
 
-            // For properties:
-            foreach (
-                var prop in obj.GetType()
-                    .GetProperties(
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
-                    )
-            )
-            {
-                var value = prop.GetValue(obj, null);
-                if (value is IDictionaryConvertable)
-                {
-                    dictionary[prop.Name] = ((IDictionaryConvertable)value).ToDictionary();
-                }
-                else
-                {
-                    dictionary[prop.Name] = value;
-                }
-            }
+            if (count > 0)
+                sb.Length -= 2; // Remove the last comma and space
 
-            return dictionary;
+            sb.Append("]");
+            return sb.ToString();
         }
+
+        // Handle objects
+        StringBuilder objSb = new StringBuilder();
+        objSb.Append(objType.Name + " { ");
+
+        foreach (var field in objType.GetFields())
+        {
+            if (field.IsStatic)
+                continue; // Skip static fields
+
+            var value = field.GetValue(obj);
+            objSb.Append($"{field.Name}: {value.ToDetailedString(currentDepth + 1)}, ");
+        }
+
+        if (objType.GetFields().Length > 0)
+            objSb.Length -= 2; // Remove the last comma and space
+
+        objSb.Append(" }");
+        return objSb.ToString();
     }
 }

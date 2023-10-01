@@ -1,4 +1,3 @@
-using UFB.Player;
 using UnityEngine;
 using UFB.Items;
 

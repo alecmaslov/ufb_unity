@@ -15,9 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: 9dd9f1ececacd594a81851fe172e8076
   m_currentHash:
     serializedVersion: 2
-    Hash: 43e8276f150ed3a117193e63c2ba6357
+    Hash: 8793083c8b129b4a29aca7ec2d7d2424
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 0
+  m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
@@ -35,9 +35,9 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 64f8a2b3ff48b574d875aa0b556d8a25
   m_RemoteCatalogLoadPath:
-    m_Id: 
+    m_Id: 6b621a1ab8fe36c499a62e2554d73e60
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
@@ -58,6 +58,20 @@ MonoBehaviour:
     - m_InheritedParent: 
       m_Id: a0387dec16d0e274ca6034f2c6193a6a
       m_ProfileName: Default
+      m_Values:
+      - m_Id: 8f180adacc8dae34da59ea41af6b2f2c
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 01d7c26be5066ea42a51d51c607a5c8c
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 493f0b665afb9b9489989d1b3f897c95
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 64f8a2b3ff48b574d875aa0b556d8a25
+        m_Value: ServerData/[BuildTarget]
+      - m_Id: 6b621a1ab8fe36c499a62e2554d73e60
+        m_Value: https://ufb-assets.s3.us-west-2.amazonaws.com/WebGL
+    - m_InheritedParent: 
+      m_Id: 814303c192840f749a9dc14d662422ee
+      m_ProfileName: S3
       m_Values:
       - m_Id: 8f180adacc8dae34da59ea41af6b2f2c
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
@@ -97,6 +111,7 @@ MonoBehaviour:
     - Player
     - Model
     - Character
+    - Map
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb7164b9162175247a0b28b98580f5b1, type: 2}

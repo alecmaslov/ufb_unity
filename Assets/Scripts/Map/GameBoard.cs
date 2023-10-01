@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UFB.Map;
-using UFB.Player;
 using System.Linq;
 using System;
 using UFB.Effects;
@@ -11,6 +10,7 @@ using Colyseus;
 using UnityEngine.AddressableAssets;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace UFB.Map
 {
@@ -58,8 +58,12 @@ namespace UFB.Map
 
             ClearBoard();
 
+            var task = Addressables.LoadAssetAsync<Sprite>(state.resourceAddress);
+
+            EventBus.Publish(new DownloadProgressEvent(task, $"Map {state.name}"));
+
             // load the image of the map and spawn it
-            Addressables.LoadAssetAsync<Sprite>(state.resourceAddress).Completed += (obj) =>
+            task.Completed += (obj) =>
             {
                 var meshImage = obj.Result;
                 if (meshImage == null)
@@ -89,6 +93,10 @@ namespace UFB.Map
 
             _state = state;
         }
+
+        // private void OnMapSpriteLoaded(AsyncOperationHandle<Sprite> handle)
+        // {
+        // }
 
         public void ClearBoard()
         {

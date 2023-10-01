@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UFB.Camera;
 
 [CustomEditor(typeof(ZoomController))]
 public class ZoomControllerEditor : Editor

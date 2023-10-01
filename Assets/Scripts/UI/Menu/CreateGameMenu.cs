@@ -1,6 +1,7 @@
 using UnityEngine;
 using UFB.Network.RoomMessageTypes;
 using UFB.Core;
+using UFB.Character;
 
 namespace UFB.UI
 {
@@ -9,6 +10,7 @@ namespace UFB.UI
         public Menu mainMenu;
         public Menu loadingMenu;
         public Menu selectCharacterMenu;
+        public CharacterSelector characterSelector;
 
         private void OnEnable()
         {
@@ -21,6 +23,20 @@ namespace UFB.UI
             {
                 _menuManager.SetMenuData("createOptions", new UfbRoomCreateOptions());
             }
+
+            characterSelector.OnSelectionChanged += OnCharacterSelectionChanged;
+        }
+
+        private void OnDisable()
+        {
+            characterSelector.OnSelectionChanged -= OnCharacterSelectionChanged;
+        }
+
+        private void OnCharacterSelectionChanged(UfbCharacter character)
+        {
+            var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
+            joinOptions.characterClass = character.characterClass;
+            _menuManager.SetMenuData("joinOptions", joinOptions);
         }
 
         public void OnBackButton() => _menuManager.CloseMenu();
@@ -42,29 +58,6 @@ namespace UFB.UI
                 _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
                 _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
             );
-
-            // await GameManager.Instance.CreateNewGame(
-            //     _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
-            //     _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
-            // );
         }
     }
 }
-
-// var createOptions = new UfbRoomCreateOptions
-// {
-//     mapName = "kraken",
-//     rules = new UfbRoomRules
-//     {
-//         maxPlayers = 2,
-//         initHealth = 100,
-//         initEnergy = 100,
-//         turnTime = 60f,
-//     },
-// };
-
-// var joinOptions = new UfbRoomJoinOptions
-// {
-//     displayName = "Player",
-//     characterId = "kirin"
-// };

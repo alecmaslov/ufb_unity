@@ -35,10 +35,52 @@
                 margin: 0;
                 border: 0;
             }
+            #pbar {
+                background-color: rgba(255, 255, 255, 0.205);
+                width: 100%;
+                max-width: 600px;
+                height: 24px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 8px;
+            }
+
+            #fill {
+                height: 24px;
+                width: 0%;
+                background-color: #3498db;
+            }
+
+            #load-screen {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #load-screen img {
+                width: 200px;
+                height: auto;
+                margin-bottom: 200px;
+            }
         </style>
     </head>
     <body>
-
+        <!-- <div id="load-screen">
+            <div id="pbar">
+                <div id="fill"></div>
+            </div>
+            <img
+                src="https://ufb-assets.s3.us-west-2.amazonaws.com/images/ufb-logo.png"
+            />
+        </div> -->
         <div id="container">
             <canvas id="unity-canvas" tabindex="-1"></canvas>
         </div>
@@ -74,6 +116,16 @@
 
                     document.body.style.textAlign = "left";
                   }
+
+                  var fill = document.getElementById("fill");
+                    const progressBarCallback = (progress) => {
+                        console.log(`Unity Loader Progress: ${progress} %`);
+                        fill.style.width = progress * 100 + "%";
+                        if (progress >= 1) {
+                            document.getElementById("load-screen").style.display =
+                                "none";
+                        }
+                    };
 
                   createUnityInstance(document.querySelector("#unity-canvas"), {
                     dataUrl: "Build/{{{ DATA_FILENAME }}}",

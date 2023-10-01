@@ -5,7 +5,6 @@ using System.Collections;
 using UFB.StateSchema;
 using UFB.Entities;
 using UnityEngine;
-using UFB.Player;
 using UFB.Core;
 using System.Threading.Tasks;
 using System;
@@ -30,6 +29,7 @@ namespace UFB.Character
 
         private GameObject _model;
         private PositionAnimator _positionAnimator;
+        private Coroutine _moveAlongPathCoroutine;
 
         private void Awake()
         {
@@ -46,8 +46,10 @@ namespace UFB.Character
             State = characterState;
             name = character.name + "_" + characterState.id;
 
-            // spawn the prefab
-            _model = await Addressables.InstantiateAsync(character.modelPrefab, transform).Task;
+            // spawn the character model prefab
+            var task = Addressables.InstantiateAsync(character.modelPrefab, transform);
+            EventBus.Publish(new DownloadProgressEvent(task, $"Character Model"));
+            _model = await task.Task;
             AnimationDispatcher = new AnimationDispatcher(_model.GetComponent<Animator>());
 
             CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[State.currentTileId];
@@ -80,19 +82,32 @@ namespace UFB.Character
             // wait for it to hop up
             await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 2f);
 
-            foreach (Tile tile in path.Skip(0))
-            {
-                var thisTile = tile;
-                var destination = thisTile.Position;
-                thisTile.Stretch(1.2f, speed * 0.5f);
-                _positionAnimator.AnimateTo(destination, speed);
-                await Task.Delay((int)(speed * 1000));
-                thisTile.ResetStretch(2f);
-            }
+            if (_moveAlongPathCoroutine != null)
+                StopCoroutine(_moveAlongPathCoroutine);
+            _moveAlongPathCoroutine = StartCoroutine(MoveAlongPathCoroutine(path, speed));
+
             await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 2f);
             path.Last().AttachGameObject(gameObject, true);
             IsMoving = false;
             new RippleTilesEffect(CurrentTile, 20, 1f).Execute();
+        }
+
+
+        private IEnumerator MoveAlongPathCoroutine(IEnumerable<Tile> path, float speed = 0.1f)
+        {
+            foreach (Tile tile in path.Skip(0))
+            {
+                var thisTile = tile;
+                var destination = thisTile.Position;
+                thisTile.Stretch(0.5f, speed * 0.5f);
+                bool isFinished = false;
+                _positionAnimator.AnimateTo(destination, speed, () => isFinished = true);
+                while (!isFinished)
+                {
+                    yield return null;
+                }
+                thisTile.ResetStretch(2f);
+            }
         }
 
         public void ForceMoveToTile(

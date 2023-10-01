@@ -1,8 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine;
+using UFB.StateSchema;
+using UFB.Core;
+using UFB.Events;
+using TMPro;
+using UFB.Character;
+using UnityEngine.UI;
 
 namespace UFB.UI
 {
@@ -17,12 +21,32 @@ namespace UFB.UI
         public RadialIndicatorComponent healthIndicator;
         public RadialIndicatorComponent energyIndicator;
 
-        [SerializeField] private RectTransform _container;
-        [SerializeField] private RectTransform _headerContainer;
-        [SerializeField] private float _headerOpenAnchoredY = 160;
-        [SerializeField] private float _containerOpenBottomY = 500;
-        [SerializeField] private float _headerOpenHeight = 200;
-        [SerializeField] private AssetReference _drawerExpandedPrefab;
+        [SerializeField]
+        private RectTransform _container;
+
+        [SerializeField]
+        private RectTransform _headerContainer;
+
+        [SerializeField]
+        private float _headerOpenAnchoredY = 160;
+
+        [SerializeField]
+        private float _containerOpenBottomY = 500;
+
+        [SerializeField]
+        private float _headerOpenHeight = 200;
+
+        // [SerializeField]
+        // private AssetReference _drawerExpandedPrefab;
+
+        [SerializeField]
+        private GameObject _drawerExpandedPrefab;
+
+        [SerializeField]
+        private TextMeshProUGUI _screenNameText;
+
+        [SerializeField]
+        private Image _characterAvatar;
 
         private GameObject _drawerExpanded;
 
@@ -40,6 +64,32 @@ namespace UFB.UI
             _headerClosedSizeDelta = _headerContainer.sizeDelta;
         }
 
+        private void OnEnable()
+        {
+            EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+        }
+
+        private void OnSelectedCharacterEvent(SelectedCharacterEvent e)
+        {
+            healthIndicator.SetRangedValueState(e.controller.State.stats.health);
+            energyIndicator.SetRangedValueState(e.controller.State.stats.energy);
+            _screenNameText.text = e.controller.State.displayName;
+            Addressables
+                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.controller.State.characterClass)
+                .Completed += (op) =>
+            {
+                if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                    _characterAvatar.sprite = op.Result.avatar;
+                else
+                    Debug.LogError("Failed to load character avatar: " + op.OperationException.Message);
+            };
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_isExpanded) // CLOSE
@@ -48,30 +98,40 @@ namespace UFB.UI
                 var currentContainerOffsetMin = _container.offsetMin;
                 var currentSizeDelta = _headerContainer.sizeDelta;
 
+                // if (_drawerExpanded != null)
+                //     Addressables.ReleaseInstance(_drawerExpanded);
 
-                if (_drawerExpanded != null)
-                    Addressables.ReleaseInstance(_drawerExpanded);
-                
+                Destroy(_drawerExpanded);
 
                 if (_animationCoroutine != null)
                     StopCoroutine(_animationCoroutine);
 
-
-                _animationCoroutine = CoroutineHelpers.LerpAction(
+                _animationCoroutine = this.LerpAction(
                     (t) =>
                     {
-                        _headerContainer.anchoredPosition = Vector2.Lerp(currentHeaderAnchoredPosition, _headerAnchoredPosition, t);
-                        _container.offsetMin = Vector2.Lerp(currentContainerOffsetMin, _containerOffsetMin, t);
-                        _headerContainer.sizeDelta = Vector2.Lerp(currentSizeDelta, _headerClosedSizeDelta, t);
+                        _headerContainer.anchoredPosition = Vector2.Lerp(
+                            currentHeaderAnchoredPosition,
+                            _headerAnchoredPosition,
+                            t
+                        );
+                        _container.offsetMin = Vector2.Lerp(
+                            currentContainerOffsetMin,
+                            _containerOffsetMin,
+                            t
+                        );
+                        _headerContainer.sizeDelta = Vector2.Lerp(
+                            currentSizeDelta,
+                            _headerClosedSizeDelta,
+                            t
+                        );
                     },
+                    animationDuration,
                     () =>
                     {
                         _headerContainer.anchoredPosition = _headerAnchoredPosition;
                         _container.offsetMin = _containerOffsetMin;
                         _headerContainer.sizeDelta = _headerClosedSizeDelta;
-                    },
-                    animationDuration,
-                    this
+                    }
                 );
 
                 _isExpanded = false;
@@ -82,44 +142,54 @@ namespace UFB.UI
                 var currentContainerOffsetMin = _container.offsetMin;
                 var currentSizeDelta = _headerContainer.sizeDelta;
 
-                _drawerExpandedPrefab.InstantiateAsync(transform).Completed += (op) =>
-                {
-                    _drawerExpanded = op.Result;
-                };
+                // _drawerExpandedPrefab.InstantiateAsync(transform).Completed += (op) =>
+                // {
+                //     _drawerExpanded = op.Result;
+                // };
+
+                _drawerExpanded = Instantiate(_drawerExpandedPrefab, transform);
 
                 if (_animationCoroutine != null)
                     StopCoroutine(_animationCoroutine);
 
-                _animationCoroutine = CoroutineHelpers.LerpAction(
+                _animationCoroutine = this.LerpAction(
                     (t) =>
                     {
-                        _headerContainer.anchoredPosition = Vector2.Lerp(currentHeaderAnchoredPosition, new Vector2(_headerAnchoredPosition.x, _headerOpenAnchoredY), t);
-                        _container.offsetMin = Vector2.Lerp(currentContainerOffsetMin, new Vector2(_containerOffsetMin.x, _containerOpenBottomY), t);
-                        _headerContainer.sizeDelta = new Vector2(_headerClosedSizeDelta.x, Mathf.Lerp(currentSizeDelta.y, _headerOpenHeight, t));
-                    },
-                    () =>
-                    {
-                        _headerContainer.anchoredPosition = new Vector2(_headerAnchoredPosition.x, _headerOpenAnchoredY);
-                        _container.offsetMin = new Vector2(_containerOffsetMin.x, _containerOpenBottomY);
-                        _headerContainer.sizeDelta = new Vector2(_headerClosedSizeDelta.x, _headerOpenHeight);
+                        _headerContainer.anchoredPosition = Vector2.Lerp(
+                            currentHeaderAnchoredPosition,
+                            new Vector2(_headerAnchoredPosition.x, _headerOpenAnchoredY),
+                            t
+                        );
+                        _container.offsetMin = Vector2.Lerp(
+                            currentContainerOffsetMin,
+                            new Vector2(_containerOffsetMin.x, _containerOpenBottomY),
+                            t
+                        );
+                        _headerContainer.sizeDelta = new Vector2(
+                            _headerClosedSizeDelta.x,
+                            Mathf.Lerp(currentSizeDelta.y, _headerOpenHeight, t)
+                        );
                     },
                     animationDuration,
-                    this
+                    () =>
+                    {
+                        _headerContainer.anchoredPosition = new Vector2(
+                            _headerAnchoredPosition.x,
+                            _headerOpenAnchoredY
+                        );
+                        _container.offsetMin = new Vector2(
+                            _containerOffsetMin.x,
+                            _containerOpenBottomY
+                        );
+                        _headerContainer.sizeDelta = new Vector2(
+                            _headerClosedSizeDelta.x,
+                            _headerOpenHeight
+                        );
+                    }
                 );
 
                 _isExpanded = true;
             }
         }
     }
-
 }
-
-// _headerContainer.anchoredPosition = Vector2.Lerp(_headerAnchoredPosition, new Vector2(_headerAnchoredPosition.x, _headerOpenAnchoredY), t);
-// _container.offsetMin = Vector2.Lerp(_containerOffsetMin, new Vector2(_containerOffsetMin.x, _containerOpenBottomY), t);
-// _headerContainer.sizeDelta = new Vector2(_headerClosedSizeDelta.x, Mathf.Lerp(_headerClosedSizeDelta.y, _headerOpenHeight, t));
-// // _headerContainer.sizeDelta = Vector2.Lerp(_headerClosedSizeDelta, _headerOpenSizeDelta, t);
-
-// _headerContainer.anchoredPosition = new Vector2(_headerAnchoredPosition.x, _headerOpenAnchoredY);
-// _container.offsetMin = new Vector2(_containerOffsetMin.x, _containerOpenBottomY);
-// _headerContainer.sizeDelta = new Vector2(_headerClosedSizeDelta.x, _headerOpenHeight);
-// // _headerContainer.sizeDelta = _headerOpenSizeDelta;

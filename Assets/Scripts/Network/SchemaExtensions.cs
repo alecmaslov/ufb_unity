@@ -37,5 +37,10 @@ namespace UFB.StateSchema
             return null;
         }
 
+        public static float Percent(this RangedValueState state)
+        {
+            return state.current / state.max;
+        }
+
     }
 }

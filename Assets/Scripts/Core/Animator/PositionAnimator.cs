@@ -24,10 +24,7 @@ namespace UFB.Core
                         this, 
                         Vector3.Lerp,
                         AnimationCallback,
-                        () => {
-                            Debug.Log($"[PositionAnimator] Getting position: {transform.position}");
-                            return transform.position;
-                        },
+                        () => transform.position,
                         curve
                     );
                 }

@@ -101,3 +101,7 @@ Scripts/Build/out/
 
 ufbserver/
 .config/
+BUILD/
+Assets/_Resources/
+Assets/_Resources.meta
+ServerData/
