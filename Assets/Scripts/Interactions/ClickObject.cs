@@ -3,41 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-// global raycast to any object with RaycastSelectable
-public class ClickObject : MonoBehaviour
+namespace UFB.Interactions
 {
-    private Camera mainCamera;
-
-    void Start()
+    public class ClickObject : MonoBehaviour
     {
-        // Get reference to the main camera
-        mainCamera = Camera.main;
-    }
+        private UnityEngine.Camera _mainCamera;
 
-    void Update()
-    {
-        // If left mouse button is clicked
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        void Start()
         {
-            // Convert mouse position to ray
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            // Get reference to the main camera
+            _mainCamera = UnityEngine.Camera.main;
+        }
 
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+        void Update()
+        {
+            // If left mouse button is clicked
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                // Debug.Log("Raycast Hit: " + hit.transform.name);
+                // Convert mouse position to ray
+                Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
-                IRaycastSelectable selectable = hit.transform.GetComponent<IRaycastSelectable>();
-
-                if (selectable != null)
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    selectable.OnClick();
-                }
+                    Debug.Log("Raycast Hit: " + hit.transform.name);
 
-                // Or if you want to do something with the game object
-                GameObject selectedObject = hit.transform.gameObject;
-                // Now you can do something with selectedObject...
+                    if (hit.transform.TryGetComponent<IRaycastSelectable>(out var selectable))
+                    {
+                        selectable.OnClick();
+                    }
+                }
             }
         }
     }

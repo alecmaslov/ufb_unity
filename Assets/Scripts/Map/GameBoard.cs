@@ -11,6 +11,7 @@ using UnityEngine.AddressableAssets;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UFB.Entities;
 
 namespace UFB.Map
 {
@@ -65,38 +66,79 @@ namespace UFB.Map
             // load the image of the map and spawn it
             task.Completed += (obj) =>
             {
-                var meshImage = obj.Result;
-                if (meshImage == null)
+                // catch handle load errors
+                if (obj.Status == AsyncOperationStatus.Failed)
                 {
                     Debug.LogError($"Failed to load map {state.name}");
                     return;
                 }
-
-                var meshMapTiles = GetComponent<MeshMap>()
-                    .SpawnTiles(
-                        obj.Result,
-                        (int)state.gridWidth,
-                        (int)state.gridHeight,
-                        new Vector3(1, 0.1f, 1)
-                    );
-
-                foreach (var meshMapTile in meshMapTiles)
-                {
-                    var tile = meshMapTile.GameObject.AddComponent<Tile>();
-                    tile.Initialize(
-                        meshMapTile,
-                        state.TileStateAtCoordinates(meshMapTile.Coordinates)
-                    );
-                    Tiles.Add(tile.Id, tile);
-                }
+                LoadBoardFromSprite(obj.Result, state);
+                SpawnEntities(state);
+                _state = state;
             };
-
-            _state = state;
         }
 
-        // private void OnMapSpriteLoaded(AsyncOperationHandle<Sprite> handle)
-        // {
-        // }
+        private void LoadBoardFromSprite(Sprite boardSprite, MapState state)
+        {
+            var meshMapTiles = GetComponent<MeshMap>()
+                .SpawnTiles(
+                    boardSprite,
+                    (int)state.gridWidth,
+                    (int)state.gridHeight,
+                    new Vector3(1, 0.1f, 1)
+                );
+
+            foreach (var meshMapTile in meshMapTiles)
+            {
+                var tile = meshMapTile.GameObject.AddComponent<Tile>();
+                tile.Initialize(meshMapTile, state.TileStateAtCoordinates(meshMapTile.Coordinates));
+                Tiles.Add(tile.Id, tile);
+            }
+        }
+
+        private void SpawnEntities(MapState state)
+        {
+            // Debug.Log($"Spawning entities for map {state.name} | {state.spawnEntities.ToDetailedString()}");
+            foreach (var entity in state.spawnEntities.items.Values)
+            {
+                // var tile = Tiles[entity.tileId];
+                Debug.Log(
+                    $"Spawning entity {entity.prefabAddress}"
+                );
+                // SpawnEntity(entity.prefabAddress, tile);
+                SpawnEntity(entity);
+            }
+        }
+
+        public async void SpawnEntity(StateSchema.SpawnEntity spawnEntity)
+        {
+            try
+            {
+                var tile = Tiles[spawnEntity.tileId];
+                var task = Addressables.InstantiateAsync(
+                    spawnEntity.prefabAddress,
+                    tile.transform,
+                    true
+                );
+                var go = await task.Task;
+                tile.AttachGameObject(go, true);
+                go.GetComponent<ISpawnableEntity>().Initialize(spawnEntity);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(
+                    $"Failed to spawn entity {spawnEntity.prefabAddress} at tile {spawnEntity.tileId}"
+                );
+                Debug.LogError(e);
+            }
+        }
+
+        public async void SpawnEntity(string prefabAddress, Tile tile)
+        {
+            var task = Addressables.InstantiateAsync(prefabAddress, tile.transform, true);
+            var go = await task.Task;
+            tile.AttachGameObject(go, true);
+        }
 
         public void ClearBoard()
         {
@@ -129,9 +171,6 @@ namespace UFB.Map
                 )
             );
         }
-
-        public void SpawnEntity(string prefabAddress, Tile tile) =>
-            Addressables.InstantiateAsync(prefabAddress, tile.transform);
 
         // think about making a class called EntitySpawner, that can randomly spawn entities
         // throughout the map

@@ -13,12 +13,13 @@ using System.Linq;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.Effects;
+using UFB.Camera;
 
 namespace UFB.Character
 {
     [RequireComponent(typeof(TileAttachable))]
     [RequireComponent(typeof(PositionAnimator))]
-    public class CharacterController : MonoBehaviour
+    public class CharacterController : MonoBehaviour, ICameraFocusable
     {
         public string Id => State.id;
         public UfbCharacter Character { get; private set; }
@@ -128,6 +129,17 @@ namespace UFB.Character
                     }
                 )
             );
+        }
+
+        public void OnFocus()
+        {
+            // EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
+            EventBus.Publish(new SelectedCharacterEvent { controller = this });
+        }
+
+        public void OnUnfocus()
+        {
+            return;
         }
     }
 }

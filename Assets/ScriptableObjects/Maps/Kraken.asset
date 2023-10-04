@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f795c3afa6849a14dac0feca47218e1d, type: 3}
+  m_Name: Kraken
+  m_EditorClassIdentifier: 
+  id: kraken
+  mapName: Kraken
+  mapThumbnail: {fileID: 21300000, guid: 727840fd77bd5c143b11f9c96ee9cec9, type: 3}
+  mapImage:
+    m_AssetGUID: 6ea8b139d6b26f84f822e34d6bb3b310
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

@@ -14,7 +14,7 @@ namespace UFB.Network.RoomMessageTypes
 
     public class UfbRoomCreateOptions : ISendMessage
     {
-        public string mapName = "kraken";
+        public string mapName = "kaiju";
         public UfbRoomRules rules = new UfbRoomRules();
     }
 
