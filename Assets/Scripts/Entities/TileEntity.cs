@@ -20,7 +20,7 @@ namespace UFB.Entities
         void UpdateAttachedPosition(Vector3 newPosition);
     }
 
-    public class TileEntity : MonoBehaviour, IRaycastSelectable
+    public class TileEntity : MonoBehaviour, IRaycastClickable
     {
         public TileState State { get; private set; }
 

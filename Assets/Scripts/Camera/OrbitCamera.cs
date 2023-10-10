@@ -56,9 +56,9 @@ namespace UFB.Camera
 
             azimuth += azimuthSpeed * Time.deltaTime;
 
-#if UNITY_EDITOR
-            PcControls();
-#endif
+            // #if UNITY_EDITOR
+            //             PcControls();
+            // #endif
 
             var rotation = Quaternion.Euler(elevation, azimuth, 0);
             var position = rotation * new Vector3(0.0f, 0.0f, -radius) + target.position;
@@ -127,16 +127,16 @@ namespace UFB.Camera
 
         private void PcControls()
         {
-            float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+            float scrollInput = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
             if (Mathf.Abs(scrollInput) > 0.01f)
             {
                 radius += (scrollInput * -1) * zoomSpeed; // Adjust the zoom speed as needed
                 radius = Mathf.Clamp(radius, minRadius, maxRadius); // Optional: Clamp the zoom distance
             }
 
-            float lrInput = Input.GetKey(KeyCode.LeftArrow)
+            float lrInput = UnityEngine.Input.GetKey(KeyCode.LeftArrow)
                 ? -1
-                : (Input.GetKey(KeyCode.RightArrow) ? 1 : 0);
+                : (UnityEngine.Input.GetKey(KeyCode.RightArrow) ? 1 : 0);
             if (Mathf.Abs(lrInput) > 0.01f)
             {
                 azimuth += lrInput * arrowSpeed;

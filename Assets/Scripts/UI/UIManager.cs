@@ -4,10 +4,12 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
+using SchemaTest.InheritedTypes;
+using UFB.Core;
 
 namespace UFB.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IService
     {
         // public AssetReference toastPrefab;
         public GameObject toastPrefab;
@@ -39,6 +41,12 @@ namespace UFB.UI
 
         [SerializeField]
         private RectTransform _bottomSlot;
+
+        [SerializeField]
+        private GameObject _entityPopupMenuPrefab;
+
+        private GameObject _entityPopupMenu;
+
         private Character.CharacterController _characterController;
 
         private void OnEnable()
@@ -57,6 +65,8 @@ namespace UFB.UI
                 OnRoomNotificationMessage
             );
             EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+
+            ServiceLocator.Current.Register(this);
         }
 
         private void OnDisable()
@@ -66,27 +76,28 @@ namespace UFB.UI
                 OnRoomNotificationMessage
             );
             EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+
+            ServiceLocator.Current.Unregister<UIManager>();
         }
 
         private void OnSelectedCharacterEvent(SelectedCharacterEvent e) =>
             _characterController = e.controller;
 
-        private void InstantiatePanel(AssetReference asset, System.Action<GameObject> callback)
+        public void ShowEntityPopupMenu(GameObject entity, Vector3 screenPosition)
         {
-            Addressables.InstantiateAsync(asset, RootCanvas.transform).Completed += (obj) =>
+            if (_entityPopupMenu != null)
             {
-                if (
-                    obj.Status
-                    == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
-                )
-                {
-                    callback(obj.Result);
-                }
-                else
-                {
-                    throw new System.Exception($"Failed to instantiate {asset}");
-                }
-            };
+                Destroy(_entityPopupMenu);
+            }
+            _entityPopupMenu = Instantiate(_entityPopupMenuPrefab, RootCanvas.transform);
+            _entityPopupMenu.transform.position = screenPosition;
+            var popupMenu = _entityPopupMenu.GetComponent<EntityPopupMenu>();
+            popupMenu.Initialize(entity);
+            // popupMenu.CreateButton(
+            //     "Move",
+            //     () => _characterController.MoveTo(entity.transform.position)
+            // );
+            popupMenu.CreateButton("Cancel", () => Destroy(_entityPopupMenu));
         }
 
         public void ShowToast(string message)

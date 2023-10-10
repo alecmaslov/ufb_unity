@@ -5,7 +5,7 @@ using UFB.Camera;
 using UFB.Events;
 
 namespace UFB.Entities {
-    public class Chest : MonoBehaviour, ISpawnableEntity, ICameraFocusable, IRaycastSelectable
+    public class Chest : MonoBehaviour, ISpawnableEntity, ICameraFocusable, IRaycastClickable
     {
         public SpawnEntity SpawnEntity => throw new System.NotImplementedException();
 

@@ -1,5 +1,7 @@
 
-public interface IRaycastSelectable
+using UnityEngine;
+
+public interface IRaycastClickable
 {
     void OnClick();
 }

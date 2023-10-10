@@ -18,7 +18,7 @@ namespace UFB.Events
 
 namespace UFB.Map
 {
-    public class Tile : MonoBehaviour, IRaycastSelectable
+    public class Tile : MonoBehaviour, IRaycastClickable
     {
         public string Id => _state.id;
         public Coordinates Coordinates => _state.coordinates.ToCoordinates();
