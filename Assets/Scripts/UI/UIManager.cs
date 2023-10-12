@@ -6,6 +6,44 @@ using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using SchemaTest.InheritedTypes;
 using UFB.Core;
+using UFB.UI;
+
+namespace UFB.Events
+{
+    public class PopupMenuEvent
+    {
+        public class CreateButton
+        {
+            public string text;
+            public System.Action onClick;
+
+            public CreateButton(string text, System.Action onClick)
+            {
+                this.text = text;
+                this.onClick = onClick;
+            }
+        }
+
+        public string title;
+        public Vector3 positionOffset = new(0, 2, 0);
+        public Transform target;
+        public System.Action onCancel;
+        public CreateButton[] buttons;
+
+        public PopupMenuEvent(
+            string title,
+            Transform target,
+            System.Action onCancel,
+            CreateButton[] buttons
+        )
+        {
+            this.title = title;
+            this.target = target;
+            this.onCancel = onCancel;
+            this.buttons = buttons;
+        }
+    }
+}
 
 namespace UFB.UI
 {
@@ -43,9 +81,12 @@ namespace UFB.UI
         private RectTransform _bottomSlot;
 
         [SerializeField]
-        private GameObject _entityPopupMenuPrefab;
+        private GameObject _popupMenuScreenPrefab;
 
-        private GameObject _entityPopupMenu;
+        [SerializeField]
+        private GameObject _popupMenuWorldPrefab;
+
+        private PopupMenu _currentPopupMenu;
 
         private Character.CharacterController _characterController;
 
@@ -65,6 +106,7 @@ namespace UFB.UI
                 OnRoomNotificationMessage
             );
             EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+            EventBus.Subscribe<PopupMenuEvent>(OnPopupMenuEvent);
 
             ServiceLocator.Current.Register(this);
         }
@@ -76,28 +118,27 @@ namespace UFB.UI
                 OnRoomNotificationMessage
             );
             EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
-
+            EventBus.Unsubscribe<PopupMenuEvent>(OnPopupMenuEvent);
             ServiceLocator.Current.Unregister<UIManager>();
         }
 
         private void OnSelectedCharacterEvent(SelectedCharacterEvent e) =>
             _characterController = e.controller;
 
-        public void ShowEntityPopupMenu(GameObject entity, Vector3 screenPosition)
+        private void OnPopupMenuEvent(PopupMenuEvent e)
         {
-            if (_entityPopupMenu != null)
+            Debug.Log("Showing popup menu");
+            if (_currentPopupMenu != null)
             {
-                Destroy(_entityPopupMenu);
+                Destroy(_currentPopupMenu.gameObject);
             }
-            _entityPopupMenu = Instantiate(_entityPopupMenuPrefab, RootCanvas.transform);
-            _entityPopupMenu.transform.position = screenPosition;
-            var popupMenu = _entityPopupMenu.GetComponent<EntityPopupMenu>();
-            popupMenu.Initialize(entity);
-            // popupMenu.CreateButton(
-            //     "Move",
-            //     () => _characterController.MoveTo(entity.transform.position)
-            // );
-            popupMenu.CreateButton("Cancel", () => Destroy(_entityPopupMenu));
+
+            _currentPopupMenu = Instantiate(_popupMenuWorldPrefab, transform)
+                .GetComponent<PopupMenu>();
+            _currentPopupMenu.Initialize(e);
+            // _currentPopupMenu.transform.position = e.target.position + e.positionOffset;
+
+            // popupMenu.CreateButton("Cancel", () => Destroy(_entityPopupMenu));
         }
 
         public void ShowToast(string message)

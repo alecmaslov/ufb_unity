@@ -27,7 +27,6 @@ namespace UFB.Map
                 int index = w.Key;
                 if (w.Value == 1)
                 {
-                    Debug.Log($"Spawning Wall {index}");
                     var wallObject = await Addressables.InstantiateAsync(wallPrefabAddress, transform).Task;
                     wallObject.transform.localPosition = Vector3.zero;
                     wallObject.name = $"Wall_{index}";

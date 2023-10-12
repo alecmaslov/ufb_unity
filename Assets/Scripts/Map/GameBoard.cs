@@ -39,18 +39,13 @@ namespace UFB.Map
 
         private void OnTileClickedEvent(TileClickedEvent e)
         {
-            // depending on the selection mode of the GameBoard, it may or may not
-            // trigger a player move
-
-            // switch some tile click mode to determine if this is what should happen?
-
             // maybe make a global way of sending message requests to the room? <- THIS
-            EventBus.Publish(
-                new RoomSendMessageEvent(
-                    "move",
-                    new RequestMoveMessage { tileId = e.tile.Id, destination = e.tile.Coordinates }
-                )
-            );
+            // EventBus.Publish(
+            //     new RoomSendMessageEvent(
+            //         "move",
+            //         new RequestMoveMessage { tileId = e.tile.Id, destination = e.tile.Coordinates }
+            //     )
+            // );
         }
 
         public void SpawnBoard(MapState state)

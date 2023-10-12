@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using UFB.Core;
 using UFB.Events;
 using UFB.Input;
 using UnityEngine;
@@ -9,17 +10,18 @@ using UnityEngine.InputSystem;
 
 namespace UFB.Events
 {
-    public class RaycastClickableEvent
-    {
-        public RaycastHit Hit { get; }
-        public IRaycastClickable Clickable { get; }
+    // public class RaycastClickableEvent
+    // {
+    //     public RaycastHit Hit { get; }
+    //     public Transform Transform => Hit.transform;
+    //     public IRaycastClickable Clickable { get; }
 
-        public RaycastClickableEvent(RaycastHit hit, IRaycastClickable clickable)
-        {
-            Hit = hit;
-            Clickable = clickable;
-        }
-    }
+    //     public RaycastClickableEvent(RaycastHit hit, IRaycastClickable clickable)
+    //     {
+    //         Hit = hit;
+    //         Clickable = clickable;
+    //     }
+    // }
 }
 
 namespace UFB.Interactions
@@ -104,20 +106,10 @@ namespace UFB.Interactions
                 if (hit.transform.TryGetComponent<IRaycastClickable>(out var clickable))
                 {
                     Debug.Log($"IRaycastClickable component found | {hit.transform.name}");
-                    EventBus.Publish(new RaycastClickableEvent(hit, clickable));
+                    // EventBus.Publish(new RaycastClickableEvent(hit, clickable));
+                    ServiceLocator.Current.Get<InteractionManager>().OnRaycastClicked(hit.transform, clickable);
                 }
             }
         }
-
-        // void Update()
-        // {
-        //     // If left mouse button is clicked
-        //     if (UnityEngine.Input.GetMouseButtonDown(0)
-        //     // && !EventSystem.current.IsPointerOverGameObject()
-        //     )
-        //     {
-        //         RaycastObjects(UnityEngine.Input.mousePosition);
-        //     }
-        // }
     }
 }
