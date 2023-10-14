@@ -15,12 +15,13 @@ namespace UFB.UI
         public override void OnClickNext()
         {
             base.OnClickNext();
+            SetDisplayContent(CurrentSelection.mapThumbnail);
         }
 
         public override void OnClickLast()
         {
             base.OnClickLast();
-            // SetDisplayContent(CurrentSelection.avatar);
+            SetDisplayContent(CurrentSelection.mapThumbnail);
         }
     }
 }

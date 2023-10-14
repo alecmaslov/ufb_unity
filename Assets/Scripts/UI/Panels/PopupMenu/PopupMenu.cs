@@ -29,13 +29,6 @@ namespace UFB.UI
 
         private PopupMenuEvent _event;
 
-        // public void Initialize(GameObject entity)
-        // {
-        //     _entity = entity;
-        //     _menuTitle.text = entity.name;
-        //     _meshTriangle.SetTarget(entity.transform);
-        // }
-
         public virtual void Initialize(PopupMenuEvent popupMenuEvent)
         {
             SetTitle(popupMenuEvent.title);
@@ -43,6 +36,10 @@ namespace UFB.UI
             {
                 CreateButton(button.text, button.onClick);
             }
+            CreateButton("Cancel", () => {
+                Destroy(gameObject);
+                popupMenuEvent.onCancel();
+            });
             transform.position = popupMenuEvent.target.position + popupMenuEvent.positionOffset;
             _event = popupMenuEvent;
         }

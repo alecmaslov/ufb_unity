@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public interface IRaycastClickable
+public interface IClickable
 {
     void OnClick();
 }

@@ -9,7 +9,7 @@ namespace UFB.UI
     {
         public Menu mainMenu;
         public Menu loadingMenu;
-        public Menu selectCharacterMenu;
+        // public Menu selectCharacterMenu;
         public CharacterSelector characterSelector;
 
         private void OnEnable()
@@ -43,10 +43,10 @@ namespace UFB.UI
 
         public void OnMapButton() => Debug.Log("Map button hit!");
 
-        public void OnPlayerButton()
-        {
-            _menuManager.OpenMenu(selectCharacterMenu);
-        }
+        // public void OnPlayerButton()
+        // {
+        //     _menuManager.OpenMenu(selectCharacterMenu);
+        // }
 
         public void OnRulesButton() => Debug.Log("Rules button hit!");
 

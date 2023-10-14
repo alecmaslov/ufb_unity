@@ -143,6 +143,65 @@ namespace UFB.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""GameUI"",
+            ""id"": ""85e66857-faa2-45ec-b058-fc77eccd555e"",
+            ""actions"": [
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f2dd056-ed92-4b50-9220-59e3b28b5b81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Swipe"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""aec8fb8a-e779-4a59-811e-ab69f697e1df"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""775a05e6-3283-45e5-867a-326092524d88"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8dfe350-869a-4885-9716-7938e0efee0f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""084afe66-306c-4a95-a46e-702a21502104"",
+                    ""path"": ""<Touchscreen>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -171,6 +230,10 @@ namespace UFB.Input
             m_OrbitView_TouchPosition = m_OrbitView.FindAction("TouchPosition", throwIfNotFound: true);
             m_OrbitView_MouseClick = m_OrbitView.FindAction("MouseClick", throwIfNotFound: true);
             m_OrbitView_RotateCamera = m_OrbitView.FindAction("RotateCamera", throwIfNotFound: true);
+            // GameUI
+            m_GameUI = asset.FindActionMap("GameUI", throwIfNotFound: true);
+            m_GameUI_Select = m_GameUI.FindAction("Select", throwIfNotFound: true);
+            m_GameUI_Swipe = m_GameUI.FindAction("Swipe", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -306,6 +369,60 @@ namespace UFB.Input
             }
         }
         public OrbitViewActions @OrbitView => new OrbitViewActions(this);
+
+        // GameUI
+        private readonly InputActionMap m_GameUI;
+        private List<IGameUIActions> m_GameUIActionsCallbackInterfaces = new List<IGameUIActions>();
+        private readonly InputAction m_GameUI_Select;
+        private readonly InputAction m_GameUI_Swipe;
+        public struct GameUIActions
+        {
+            private @GameInput m_Wrapper;
+            public GameUIActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Select => m_Wrapper.m_GameUI_Select;
+            public InputAction @Swipe => m_Wrapper.m_GameUI_Swipe;
+            public InputActionMap Get() { return m_Wrapper.m_GameUI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(GameUIActions set) { return set.Get(); }
+            public void AddCallbacks(IGameUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_GameUIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_GameUIActionsCallbackInterfaces.Add(instance);
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
+                @Swipe.started += instance.OnSwipe;
+                @Swipe.performed += instance.OnSwipe;
+                @Swipe.canceled += instance.OnSwipe;
+            }
+
+            private void UnregisterCallbacks(IGameUIActions instance)
+            {
+                @Select.started -= instance.OnSelect;
+                @Select.performed -= instance.OnSelect;
+                @Select.canceled -= instance.OnSelect;
+                @Swipe.started -= instance.OnSwipe;
+                @Swipe.performed -= instance.OnSwipe;
+                @Swipe.canceled -= instance.OnSwipe;
+            }
+
+            public void RemoveCallbacks(IGameUIActions instance)
+            {
+                if (m_Wrapper.m_GameUIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IGameUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_GameUIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_GameUIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public GameUIActions @GameUI => new GameUIActions(this);
         private int m_MainSchemeIndex = -1;
         public InputControlScheme MainScheme
         {
@@ -322,6 +439,11 @@ namespace UFB.Input
             void OnTouchPosition(InputAction.CallbackContext context);
             void OnMouseClick(InputAction.CallbackContext context);
             void OnRotateCamera(InputAction.CallbackContext context);
+        }
+        public interface IGameUIActions
+        {
+            void OnSelect(InputAction.CallbackContext context);
+            void OnSwipe(InputAction.CallbackContext context);
         }
     }
 }

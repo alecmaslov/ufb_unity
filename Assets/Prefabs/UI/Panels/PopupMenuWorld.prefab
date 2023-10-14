@@ -427,6 +427,7 @@ GameObject:
   - component: {fileID: 6591696120480803576}
   - component: {fileID: 6630585355372939135}
   - component: {fileID: 2296416656554764321}
+  - component: {fileID: 3592768007404156127}
   m_Layer: 5
   m_Name: PopupMenuWorld
   m_TagString: Untagged
@@ -587,6 +588,27 @@ MonoBehaviour:
   _panel: {fileID: 6348083454657560008}
   lookAtCameraSpeed: 0.1
   _meshTriangleMaterial: {fileID: 2100000, guid: f82a0319946ac4ac394b47aaf4ca339e, type: 2}
+--- !u!65 &3592768007404156127
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5187480094877492632}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 270.4671, y: 248.76657, z: 1}
+  m_Center: {x: -0, y: 0, z: -0}
 --- !u!1 &8077306498168421253
 GameObject:
   m_ObjectHideFlags: 0

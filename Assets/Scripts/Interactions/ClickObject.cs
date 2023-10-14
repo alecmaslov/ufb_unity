@@ -103,9 +103,9 @@ namespace UFB.Interactions
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.TryGetComponent<IRaycastClickable>(out var clickable))
+                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
                 {
-                    Debug.Log($"IRaycastClickable component found | {hit.transform.name}");
+                    Debug.Log($"IClickable component found | {hit.transform.name}");
                     // EventBus.Publish(new RaycastClickableEvent(hit, clickable));
                     ServiceLocator.Current.Get<InteractionManager>().OnRaycastClicked(hit.transform, clickable);
                 }

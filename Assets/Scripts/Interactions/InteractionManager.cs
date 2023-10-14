@@ -53,7 +53,6 @@ namespace UFB.Interactions
 
         private void OnEnable()
         {
-            // EventBus.Subscribe<RaycastClickableEvent>(OnRaycastClicked);
             EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
             ServiceLocator.Current.Register(this);
@@ -61,19 +60,18 @@ namespace UFB.Interactions
 
         private void OnDisable()
         {
-            // EventBus.Unsubscribe<RaycastClickableEvent>(OnRaycastClicked);
             EventBus.Unsubscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             ServiceLocator.Current.Unregister<InteractionManager>();
         }
 
-        public void OnRaycastClicked(Transform transform, IRaycastClickable clickable)
+        public void OnRaycastClicked(Transform transform, IClickable clickable)
         {
             if (Mode != InteractionMode.SelectItem)
             {
                 return;
             }
 
-            EventBus.Publish<PopupMenuEvent>(
+            ServiceLocator.Current.Get<UIManager>().OnPopupMenuEvent(
                 new PopupMenuEvent(
                     transform.name,
                     transform,
@@ -85,7 +83,7 @@ namespace UFB.Interactions
                             () =>
                                 EventBus.Publish(
                                     new RoomSendMessageEvent(
-                                        "move",
+                                        "Move To",
                                         new RequestMoveMessage
                                         {
                                             tileId = transform.GetComponent<Tile>().Id,
@@ -94,69 +92,19 @@ namespace UFB.Interactions
                                     )
                                 )
                         ),
+
+
+                        new(
+                            "Focus",
+                            () => EventBus.Publish(new CameraOrbitAroundEvent(transform, 0.3f))
+                        )
                         // we should make CreateButton a bit more feature rich, so
                         // we can have certain types of buttons with certain icons
-                        // new("Move To", () => EventBus.Publish<),
-                        new("Cancel", () => Debug.Log("Calling Cancel"))
+                        // new("Move To", () => EventBus.Publish<)
                     }
                 )
             );
         }
-
-        // public void OnRaycastClicked(RaycastClickableEvent e)
-        // {
-        //     Debug.Log(
-        //         $"InteractionManager received RaycastClickableEvent: {e.Clickable.GetType()}"
-        //     );
-
-        //     // var screenPosition = e.Hit.transform.position;
-        //     // Ray ray = UnityEngine.Camera.main.ScreenPointToRay(e.Hit.transform.position);
-        //     // var screenPosition = UnityEngine.Camera.main.WorldToScreenPoint(e.Hit.transform.position);
-
-        //     // ServiceLocator.Current.Get<UIManager>().ShowEntityPopupMenu(e.Hit.transform.gameObject, screenPosition);
-        //     // ServiceLocator.Current.Get<UIManager>().ShowEntityPopupMenuWorldSpace(e.Hit.transform.gameObject);
-
-        //     // basically in the RaycastClickableEvent, instead we should make it an
-        //     // interactionRequestEvent. It could possibly have a popupMenuEvent
-        //     // meh, it forces objects like tiles to have really specific requests to the UI
-
-
-        //     if (e.Clickable.GetType() == typeof(Tile) && Mode == InteractionMode.SelectItem)
-        //     {
-        //         Debug.Log("YOOO");
-        //         e.Clickable.OnClick();
-        //         EventBus.Publish<PopupMenuEvent>(
-        //             new PopupMenuEvent(
-        //                 e.Transform.name,
-        //                 e.Transform,
-        //                 () => Debug.Log("Calling Cancel"),
-        //                 new PopupMenuEvent.CreateButton[]
-        //                 {
-        //                     new(
-        //                         "move",
-        //                         () =>
-        //                             EventBus.Publish(
-        //                                 new RoomSendMessageEvent(
-        //                                     "move",
-        //                                     new RequestMoveMessage
-        //                                     {
-        //                                         tileId = e.Transform.GetComponent<Tile>().Id,
-        //                                         destination = e.Transform
-        //                                             .GetComponent<Tile>()
-        //                                             .Coordinates
-        //                                     }
-        //                                 )
-        //                             )
-        //                     ),
-        //                     // we should make CreateButton a bit more feature rich, so
-        //                     // we can have certain types of buttons with certain icons
-        //                     // new("Move To", () => EventBus.Publish<),
-        //                     new("Cancel", () => Debug.Log("Calling Cancel"))
-        //                 }
-        //             )
-        //         );
-        //     }
-        // }
 
         public void CycleInteractionMode()
         {

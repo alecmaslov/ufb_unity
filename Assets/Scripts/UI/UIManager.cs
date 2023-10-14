@@ -4,7 +4,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
-using SchemaTest.InheritedTypes;
 using UFB.Core;
 using UFB.UI;
 
@@ -125,20 +124,13 @@ namespace UFB.UI
         private void OnSelectedCharacterEvent(SelectedCharacterEvent e) =>
             _characterController = e.controller;
 
-        private void OnPopupMenuEvent(PopupMenuEvent e)
+        public void OnPopupMenuEvent(PopupMenuEvent e)
         {
-            Debug.Log("Showing popup menu");
             if (_currentPopupMenu != null)
-            {
                 Destroy(_currentPopupMenu.gameObject);
-            }
-
             _currentPopupMenu = Instantiate(_popupMenuWorldPrefab, transform)
                 .GetComponent<PopupMenu>();
             _currentPopupMenu.Initialize(e);
-            // _currentPopupMenu.transform.position = e.target.position + e.positionOffset;
-
-            // popupMenu.CreateButton("Cancel", () => Destroy(_entityPopupMenu));
         }
 
         public void ShowToast(string message)
