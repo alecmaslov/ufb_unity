@@ -12,7 +12,7 @@ namespace UFB.UI
     public class WorldspacePopupMenu : PopupMenu
     {
         [SerializeField]
-        private float lookAtCameraSpeed = 0.1f;
+        private float lookAtCameraSpeed = 0.2f;
 
         private WorldspaceMeshTriangle _meshTriangle;
 
@@ -37,7 +37,8 @@ namespace UFB.UI
 
         private void OnDisable()
         {
-            Destroy(_meshTriangle.gameObject);
+            if (_meshTriangle != null)
+                Destroy(_meshTriangle.gameObject);
         }
 
         private void Update()
@@ -46,7 +47,7 @@ namespace UFB.UI
                 _camera.transform.forward,
                 _camera.transform.up
             );
-            transform.rotation = Quaternion.Slerp(
+            transform.rotation = Quaternion.Lerp(
                 transform.rotation,
                 lookRotation,
                 lookAtCameraSpeed

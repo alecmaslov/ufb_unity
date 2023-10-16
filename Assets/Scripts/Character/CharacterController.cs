@@ -81,34 +81,50 @@ namespace UFB.Character
             // detach from current tile
             transform.parent = null;
             // wait for it to hop up
-            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 2f);
+            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 1f);
 
             if (_moveAlongPathCoroutine != null)
                 StopCoroutine(_moveAlongPathCoroutine);
-            _moveAlongPathCoroutine = StartCoroutine(MoveAlongPathCoroutine(path, speed));
 
-            await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 2f);
+            var tcs = new TaskCompletionSource<bool>();
+
+            _moveAlongPathCoroutine = StartCoroutine(
+                MoveAlongPathCoroutine(path, speed, () => tcs.SetResult(true))
+            );
+
+            await tcs.Task;
+            await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 1f);
             path.Last().AttachGameObject(gameObject, true);
             IsMoving = false;
-            new RippleTilesEffect(CurrentTile, 20, 1f).Execute();
         }
 
-
-        private IEnumerator MoveAlongPathCoroutine(IEnumerable<Tile> path, float speed = 0.1f)
+        private IEnumerator MoveAlongPathCoroutine(
+            IEnumerable<Tile> path,
+            float speed = 0.1f,
+            Action onComplete = null
+        )
         {
             foreach (Tile tile in path.Skip(0))
             {
                 var thisTile = tile;
                 var destination = thisTile.Position;
-                thisTile.Stretch(0.5f, speed * 0.5f);
+                if (tile != path.Last())
+                {
+                    thisTile.Stretch(0.5f, speed * 0.5f);
+                }
                 bool isFinished = false;
                 _positionAnimator.AnimateTo(destination, speed, () => isFinished = true);
                 while (!isFinished)
                 {
                     yield return null;
                 }
-                thisTile.ResetStretch(2f);
+                if (tile != path.Last())
+                {
+                    thisTile.ResetStretch(2f);
+                }
             }
+
+            onComplete?.Invoke();
         }
 
         public void ForceMoveToTile(

@@ -151,6 +151,7 @@ namespace UFB.Core
 
         private void OnRoomSendMessageEvent(RoomSendMessageEvent e)
         {
+            Debug.Log("Sending message to room: " + e.MessageType + " | " + e.Message.ToDetailedString());
             Room.Send(e.MessageType, e.Message);
         }
 

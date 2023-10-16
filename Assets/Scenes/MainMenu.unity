@@ -6132,6 +6132,7 @@ MonoBehaviour:
   mainMenu: {fileID: 1618418616}
   loadingMenu: {fileID: 1264995427245040814}
   characterSelector: {fileID: 530770159}
+  mapSelector: {fileID: 1975800226}
 --- !u!1 &1005573382
 GameObject:
   m_ObjectHideFlags: 0
@@ -7970,7 +7971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8, y: 27}
+  m_AnchoredPosition: {x: 27.2, y: 27}
   m_SizeDelta: {x: 369.26, y: 481.357}
   m_Pivot: {x: 0.5464246, y: 0.49999997}
 --- !u!114 &1348628318
@@ -12842,6 +12843,7 @@ MonoBehaviour:
   mainMenu: {fileID: 0}
   loadingMenu: {fileID: 1264995427245040814}
   characterSelector: {fileID: 7461509710171094222}
+  mapSelector: {fileID: 0}
 --- !u!222 &681338963339710261
 CanvasRenderer:
   m_ObjectHideFlags: 0

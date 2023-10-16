@@ -2,6 +2,7 @@ using UnityEngine;
 using UFB.Network.RoomMessageTypes;
 using UFB.Core;
 using UFB.Character;
+using UFB.Map;
 
 namespace UFB.UI
 {
@@ -9,8 +10,10 @@ namespace UFB.UI
     {
         public Menu mainMenu;
         public Menu loadingMenu;
+
         // public Menu selectCharacterMenu;
         public CharacterSelector characterSelector;
+        public MapSelector mapSelector;
 
         private void OnEnable()
         {
@@ -25,11 +28,20 @@ namespace UFB.UI
             }
 
             characterSelector.OnSelectionChanged += OnCharacterSelectionChanged;
+            mapSelector.OnSelectionChanged += OnMapSelectionChanged;
         }
 
         private void OnDisable()
         {
             characterSelector.OnSelectionChanged -= OnCharacterSelectionChanged;
+            mapSelector.OnSelectionChanged -= OnMapSelectionChanged;
+        }
+
+        private void OnMapSelectionChanged(UfbMap map)
+        {
+            var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
+            createOptions.mapName = map.name;
+            _menuManager.SetMenuData("createOptions", createOptions);
         }
 
         private void OnCharacterSelectionChanged(UfbCharacter character)
@@ -43,21 +55,18 @@ namespace UFB.UI
 
         public void OnMapButton() => Debug.Log("Map button hit!");
 
-        // public void OnPlayerButton()
-        // {
-        //     _menuManager.OpenMenu(selectCharacterMenu);
-        // }
-
         public void OnRulesButton() => Debug.Log("Rules button hit!");
 
         public void OnStartButton()
         {
             _menuManager.OpenMenu(loadingMenu);
-            
-            ServiceLocator.Current.Get<GameService>().CreateGame(
-                _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
-                _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
-            );
+
+            ServiceLocator.Current
+                .Get<GameService>()
+                .CreateGame(
+                    _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
+                    _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
+                );
         }
     }
 }

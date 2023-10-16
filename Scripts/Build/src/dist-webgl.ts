@@ -11,33 +11,32 @@ import {
     writeFileSync,
     rmdirSync,
     rmSync,
+    existsSync,
 } from "fs";
 import path from "path";
 import { getBucketManager } from "./AWSBucket";
 import { copyDirSync, checkMakeDir } from "./files";
 
-const buildDir = "../../BUILD";
-const tempDir = "../../Builds/WebGL_Temp";
-const outDir = "E:/UFB/ufb-web";
+const buildDir = "../../Builds/WebGL/WebGL-Build";
+const tempDir = "../../Builds/temp";
+const outDir = process.env.BUILD_OUT_DIR as string;
 
 // Before your existing code starts
 checkMakeDir(tempDir);
 
 // clear temp dir
 // rmdirSync(path.join(tempDir, "public"));
-try {
-    rmdirSync(path.join(tempDir, "StreamingAssets"), { recursive: true });
-    rmSync(path.join(tempDir, "index.html"));
 
-} catch (error) {
-    console.log(error)
+if (!existsSync(tempDir)) {
+    mkdirSync(tempDir);
+} else {
+    console.log("Clearing temp dir...");
+    rmdirSync(tempDir, { recursive: true });
+    mkdirSync(tempDir);
 }
 
-// rmdirSync(path.join(tempDir, "Build"), { recursive: true });
-
 copyDirSync(buildDir, tempDir);
-copyDirSync(path.join(buildDir, "StreamingAssets"), tempDir);
-
+// copyDirSync(path.join(buildDir, "StreamingAssets"), tempDir);
 
 interface BuildFile {
     filename: string;
@@ -63,7 +62,6 @@ async function processBuild() {
         }
         return path.join(tempDir, filename);
     }
-
 
     const targetBuildFiles: BuildFile[] = [
         {
@@ -159,7 +157,7 @@ async function processBuild() {
     rmdirSync(path.join(tempDir, "Build"), { recursive: true });
 
     checkMakeDir(outDir);
-    console.log(`Saving to ${outDir} | Bundle size: ${bundleSize / 1024} KB`)
+    console.log(`Saving to ${outDir} | Bundle size: ${bundleSize / 1024} KB`);
 
     rmdirSync(path.join(outDir, "StreamingAssets"), { recursive: true });
     copyDirSync(tempDir, outDir);

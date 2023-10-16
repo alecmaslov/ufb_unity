@@ -73,14 +73,14 @@
         </style>
     </head>
     <body>
-        <!-- <div id="load-screen">
+        <div id="load-screen">
             <div id="pbar">
                 <div id="fill"></div>
             </div>
             <img
                 src="https://ufb-assets.s3.us-west-2.amazonaws.com/images/ufb-logo.png"
             />
-        </div> -->
+        </div>
         <div id="container">
             <canvas id="unity-canvas" tabindex="-1"></canvas>
         </div>
@@ -102,7 +102,7 @@
 
         <script src="Build/{{{ LOADER_FILENAME }}}"></script>
         <script>
-                  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                     // Mobile device style: fill the whole browser client area with the game canvas:
                     var meta = document.createElement('meta');
                     meta.name = 'viewport';
@@ -115,19 +115,23 @@
                     canvas.style.position = "fixed";
 
                     document.body.style.textAlign = "left";
-                  }
+                }
 
-                  var fill = document.getElementById("fill");
-                    const progressBarCallback = (progress) => {
-                        console.log(`Unity Loader Progress: ${progress} %`);
-                        fill.style.width = progress * 100 + "%";
-                        if (progress >= 1) {
-                            document.getElementById("load-screen").style.display =
-                                "none";
-                        }
-                    };
+                var fill = document.getElementById("fill");
+                let loaded = false;
 
-                  createUnityInstance(document.querySelector("#unity-canvas"), {
+                const progressBarCallback = (progress) => {
+                    if (loaded) return;
+                    console.log(`Unity Loader Progress: ${progress} %`);
+                    fill.style.width = progress * 100 + "%";
+                    if (progress >= 1) {
+                        document.getElementById("load-screen").style.display =
+                            "none";
+                        loaded = true;
+                    }
+                };
+
+                createUnityInstance(document.querySelector("#unity-canvas"), {
                     dataUrl: "Build/{{{ DATA_FILENAME }}}",
                     frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
             #if USE_THREADS
@@ -148,7 +152,7 @@
                     productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
                     // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
                     // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-                  });
+                }, progressBarCallback);
         </script>
     </body>
 </html>

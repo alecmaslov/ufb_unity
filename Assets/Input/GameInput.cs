@@ -48,15 +48,6 @@ namespace UFB.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TouchPosition"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""bbe4411c-b899-44b0-bb77-7745bcf9aeb7"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""MouseClick"",
                     ""type"": ""Button"",
                     ""id"": ""4c4b6eb5-d862-4ff5-a0ec-1f53888f4cc3"",
@@ -73,6 +64,69 @@ namespace UFB.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ScrollZoom"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""aef431a4-d644-4d6b-922d-6034c8ec0619"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OrbitCamera"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""8d733f67-848e-4936-9824-5885df07bd27"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrimaryPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""27a5bd17-30ab-4be3-84ad-754c0d372af8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""bbe4411c-b899-44b0-bb77-7745bcf9aeb7"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TapSelect"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""195adaa1-42ad-40d8-8926-f9f89114f59e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MultitouchHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""cfbc357f-930f-4267-8768-2351098df75e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrimaryFingerPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""778f3fc2-f386-4b6f-820a-9987574c5b55"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -95,17 +149,6 @@ namespace UFB.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TouchPress"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""97458cde-6fb8-473b-9ed7-31ad99cdd2cd"",
-                    ""path"": ""<Touchscreen>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -139,6 +182,215 @@ namespace UFB.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb38836c-903f-4ecb-b162-476841c983ad"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Touch"",
+                    ""id"": ""4a1410ad-f9c5-4527-a762-309ecce21982"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c664b793-4882-47cc-b358-adceb9b90f32"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""93870d2f-0aa1-4c17-aa2e-27e637d06b8d"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3bee26ac-6f84-4732-bf1d-d1d9d34b3f5c"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""06c4de81-c81a-43dc-88b4-a327700a9c3a"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Mouse"",
+                    ""id"": ""630f17d4-1426-44e1-993b-e5ffe34db589"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""23f435a0-dad1-484f-a187-a40fa8766ec7"",
+                    ""path"": ""<Mouse>/delta/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0e081a62-ee26-45ef-9e6e-a739f194e50b"",
+                    ""path"": ""<Mouse>/delta/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""50ffc521-645c-481c-8b2f-5deb55bf9bab"",
+                    ""path"": ""<Mouse>/delta/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""fc0f5a7d-25a0-48f4-a9d9-9cd535b7c980"",
+                    ""path"": ""<Mouse>/delta/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OrbitCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ebe343b-aa0a-4575-bb86-b23c4e9d865e"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e56887f7-be59-48ee-9edc-97436764d779"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21c82bfe-b271-4572-b67b-e8c3dd7f8a3d"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TapSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56210b28-a676-49f9-a88d-358389fa717d"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TapSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9e3a324-5b7e-4849-a666-76b60ea0b2eb"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97458cde-6fb8-473b-9ed7-31ad99cdd2cd"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4de499a1-947e-4e99-82f6-c9ed71e17529"",
+                    ""path"": ""<Touchscreen>/touch*/Press"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MultitouchHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a12fe35a-ab62-414f-8f1f-1dd1d96085af"",
+                    ""path"": ""<Touchscreen>/touch1/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFingerPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -227,9 +479,15 @@ namespace UFB.Input
             m_OrbitView = asset.FindActionMap("OrbitView", throwIfNotFound: true);
             m_OrbitView_TouchInput = m_OrbitView.FindAction("TouchInput", throwIfNotFound: true);
             m_OrbitView_TouchPress = m_OrbitView.FindAction("TouchPress", throwIfNotFound: true);
-            m_OrbitView_TouchPosition = m_OrbitView.FindAction("TouchPosition", throwIfNotFound: true);
             m_OrbitView_MouseClick = m_OrbitView.FindAction("MouseClick", throwIfNotFound: true);
             m_OrbitView_RotateCamera = m_OrbitView.FindAction("RotateCamera", throwIfNotFound: true);
+            m_OrbitView_ScrollZoom = m_OrbitView.FindAction("ScrollZoom", throwIfNotFound: true);
+            m_OrbitView_OrbitCamera = m_OrbitView.FindAction("OrbitCamera", throwIfNotFound: true);
+            m_OrbitView_PrimaryPress = m_OrbitView.FindAction("PrimaryPress", throwIfNotFound: true);
+            m_OrbitView_PointerPosition = m_OrbitView.FindAction("PointerPosition", throwIfNotFound: true);
+            m_OrbitView_TapSelect = m_OrbitView.FindAction("TapSelect", throwIfNotFound: true);
+            m_OrbitView_MultitouchHold = m_OrbitView.FindAction("MultitouchHold", throwIfNotFound: true);
+            m_OrbitView_PrimaryFingerPosition = m_OrbitView.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
             // GameUI
             m_GameUI = asset.FindActionMap("GameUI", throwIfNotFound: true);
             m_GameUI_Select = m_GameUI.FindAction("Select", throwIfNotFound: true);
@@ -297,18 +555,30 @@ namespace UFB.Input
         private List<IOrbitViewActions> m_OrbitViewActionsCallbackInterfaces = new List<IOrbitViewActions>();
         private readonly InputAction m_OrbitView_TouchInput;
         private readonly InputAction m_OrbitView_TouchPress;
-        private readonly InputAction m_OrbitView_TouchPosition;
         private readonly InputAction m_OrbitView_MouseClick;
         private readonly InputAction m_OrbitView_RotateCamera;
+        private readonly InputAction m_OrbitView_ScrollZoom;
+        private readonly InputAction m_OrbitView_OrbitCamera;
+        private readonly InputAction m_OrbitView_PrimaryPress;
+        private readonly InputAction m_OrbitView_PointerPosition;
+        private readonly InputAction m_OrbitView_TapSelect;
+        private readonly InputAction m_OrbitView_MultitouchHold;
+        private readonly InputAction m_OrbitView_PrimaryFingerPosition;
         public struct OrbitViewActions
         {
             private @GameInput m_Wrapper;
             public OrbitViewActions(@GameInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @TouchInput => m_Wrapper.m_OrbitView_TouchInput;
             public InputAction @TouchPress => m_Wrapper.m_OrbitView_TouchPress;
-            public InputAction @TouchPosition => m_Wrapper.m_OrbitView_TouchPosition;
             public InputAction @MouseClick => m_Wrapper.m_OrbitView_MouseClick;
             public InputAction @RotateCamera => m_Wrapper.m_OrbitView_RotateCamera;
+            public InputAction @ScrollZoom => m_Wrapper.m_OrbitView_ScrollZoom;
+            public InputAction @OrbitCamera => m_Wrapper.m_OrbitView_OrbitCamera;
+            public InputAction @PrimaryPress => m_Wrapper.m_OrbitView_PrimaryPress;
+            public InputAction @PointerPosition => m_Wrapper.m_OrbitView_PointerPosition;
+            public InputAction @TapSelect => m_Wrapper.m_OrbitView_TapSelect;
+            public InputAction @MultitouchHold => m_Wrapper.m_OrbitView_MultitouchHold;
+            public InputAction @PrimaryFingerPosition => m_Wrapper.m_OrbitView_PrimaryFingerPosition;
             public InputActionMap Get() { return m_Wrapper.m_OrbitView; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -324,15 +594,33 @@ namespace UFB.Input
                 @TouchPress.started += instance.OnTouchPress;
                 @TouchPress.performed += instance.OnTouchPress;
                 @TouchPress.canceled += instance.OnTouchPress;
-                @TouchPosition.started += instance.OnTouchPosition;
-                @TouchPosition.performed += instance.OnTouchPosition;
-                @TouchPosition.canceled += instance.OnTouchPosition;
                 @MouseClick.started += instance.OnMouseClick;
                 @MouseClick.performed += instance.OnMouseClick;
                 @MouseClick.canceled += instance.OnMouseClick;
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
+                @ScrollZoom.started += instance.OnScrollZoom;
+                @ScrollZoom.performed += instance.OnScrollZoom;
+                @ScrollZoom.canceled += instance.OnScrollZoom;
+                @OrbitCamera.started += instance.OnOrbitCamera;
+                @OrbitCamera.performed += instance.OnOrbitCamera;
+                @OrbitCamera.canceled += instance.OnOrbitCamera;
+                @PrimaryPress.started += instance.OnPrimaryPress;
+                @PrimaryPress.performed += instance.OnPrimaryPress;
+                @PrimaryPress.canceled += instance.OnPrimaryPress;
+                @PointerPosition.started += instance.OnPointerPosition;
+                @PointerPosition.performed += instance.OnPointerPosition;
+                @PointerPosition.canceled += instance.OnPointerPosition;
+                @TapSelect.started += instance.OnTapSelect;
+                @TapSelect.performed += instance.OnTapSelect;
+                @TapSelect.canceled += instance.OnTapSelect;
+                @MultitouchHold.started += instance.OnMultitouchHold;
+                @MultitouchHold.performed += instance.OnMultitouchHold;
+                @MultitouchHold.canceled += instance.OnMultitouchHold;
+                @PrimaryFingerPosition.started += instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.performed += instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.canceled += instance.OnPrimaryFingerPosition;
             }
 
             private void UnregisterCallbacks(IOrbitViewActions instance)
@@ -343,15 +631,33 @@ namespace UFB.Input
                 @TouchPress.started -= instance.OnTouchPress;
                 @TouchPress.performed -= instance.OnTouchPress;
                 @TouchPress.canceled -= instance.OnTouchPress;
-                @TouchPosition.started -= instance.OnTouchPosition;
-                @TouchPosition.performed -= instance.OnTouchPosition;
-                @TouchPosition.canceled -= instance.OnTouchPosition;
                 @MouseClick.started -= instance.OnMouseClick;
                 @MouseClick.performed -= instance.OnMouseClick;
                 @MouseClick.canceled -= instance.OnMouseClick;
                 @RotateCamera.started -= instance.OnRotateCamera;
                 @RotateCamera.performed -= instance.OnRotateCamera;
                 @RotateCamera.canceled -= instance.OnRotateCamera;
+                @ScrollZoom.started -= instance.OnScrollZoom;
+                @ScrollZoom.performed -= instance.OnScrollZoom;
+                @ScrollZoom.canceled -= instance.OnScrollZoom;
+                @OrbitCamera.started -= instance.OnOrbitCamera;
+                @OrbitCamera.performed -= instance.OnOrbitCamera;
+                @OrbitCamera.canceled -= instance.OnOrbitCamera;
+                @PrimaryPress.started -= instance.OnPrimaryPress;
+                @PrimaryPress.performed -= instance.OnPrimaryPress;
+                @PrimaryPress.canceled -= instance.OnPrimaryPress;
+                @PointerPosition.started -= instance.OnPointerPosition;
+                @PointerPosition.performed -= instance.OnPointerPosition;
+                @PointerPosition.canceled -= instance.OnPointerPosition;
+                @TapSelect.started -= instance.OnTapSelect;
+                @TapSelect.performed -= instance.OnTapSelect;
+                @TapSelect.canceled -= instance.OnTapSelect;
+                @MultitouchHold.started -= instance.OnMultitouchHold;
+                @MultitouchHold.performed -= instance.OnMultitouchHold;
+                @MultitouchHold.canceled -= instance.OnMultitouchHold;
+                @PrimaryFingerPosition.started -= instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.performed -= instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.canceled -= instance.OnPrimaryFingerPosition;
             }
 
             public void RemoveCallbacks(IOrbitViewActions instance)
@@ -436,9 +742,15 @@ namespace UFB.Input
         {
             void OnTouchInput(InputAction.CallbackContext context);
             void OnTouchPress(InputAction.CallbackContext context);
-            void OnTouchPosition(InputAction.CallbackContext context);
             void OnMouseClick(InputAction.CallbackContext context);
             void OnRotateCamera(InputAction.CallbackContext context);
+            void OnScrollZoom(InputAction.CallbackContext context);
+            void OnOrbitCamera(InputAction.CallbackContext context);
+            void OnPrimaryPress(InputAction.CallbackContext context);
+            void OnPointerPosition(InputAction.CallbackContext context);
+            void OnTapSelect(InputAction.CallbackContext context);
+            void OnMultitouchHold(InputAction.CallbackContext context);
+            void OnPrimaryFingerPosition(InputAction.CallbackContext context);
         }
         public interface IGameUIActions
         {

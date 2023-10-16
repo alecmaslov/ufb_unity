@@ -4,6 +4,11 @@ using UFB.Map;
 using UFB.Core;
 using UFB.UI;
 using UFB.Network.RoomMessageTypes;
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UFB.Input;
+using UFB.Camera;
 
 namespace UFB.Events
 {
@@ -40,70 +45,176 @@ namespace UFB.Interactions
 
     // Controls state of game interactivity, allowing users to be in different states/modes of interaction
     // such as selecting a tile, focusing an entity, or controlling the camera
-    [RequireComponent(typeof(ClickObject))]
+
     public class InteractionManager : MonoBehaviour, IService
     {
         public InteractionMode Mode { get; private set; }
-        private ClickObject _clickObject;
+        private UnityEngine.Camera _mainCamera;
+        private GameInput _gameInput;
+        private CameraController _cameraController;
+
+        private bool _isOrbitLocked = false;
 
         private void Awake()
         {
-            _clickObject = GetComponent<ClickObject>();
+#if UNITY_EDITOR
+            if (!Mouse.current.enabled)
+            {
+                InputSystem.EnableDevice(Mouse.current);
+            }
+#endif
+
+            _gameInput = new GameInput();
+            _mainCamera = UnityEngine.Camera.main;
+            _cameraController = _mainCamera.GetComponent<CameraController>();
         }
 
         private void OnEnable()
         {
-            EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
-            EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
+            Events.EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
+            Events.EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
             ServiceLocator.Current.Register(this);
+            // _gameInput.OrbitView.TouchPress.started += OnTouchPressStarted;
+            // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
+            _gameInput.OrbitView.OrbitCamera.performed += OnOrbitCamera;
+            _gameInput.OrbitView.ScrollZoom.performed += OnScrollZoom;
+            _gameInput.OrbitView.TapSelect.performed += OnTapSelect;
+            _gameInput.Enable();
         }
 
         private void OnDisable()
         {
-            EventBus.Unsubscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
+            Events.EventBus.Unsubscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             ServiceLocator.Current.Unregister<InteractionManager>();
+            // _gameInput.OrbitView.TouchPress.started -= OnTouchPressStarted;
+            // _gameInput.OrbitView.MouseClick.started -= OnMouseClickStarted;
+            _gameInput.OrbitView.OrbitCamera.performed -= OnOrbitCamera;
+            _gameInput.OrbitView.ScrollZoom.performed -= OnScrollZoom;
+            _gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
+            _gameInput.Disable();
         }
 
-        public void OnRaycastClicked(Transform transform, IClickable clickable)
+        private void OnTapSelect(InputAction.CallbackContext ctx)
+        {
+            Debug.Log(
+                $"Tap select performed | {ctx.ReadValue<float>()} | {_gameInput.OrbitView.PointerPosition.ReadValue<Vector2>()}"
+            );
+            // int pointerId = Touchscreen.current.primaryTouch.touchId.ReadValue();
+            if (EventSystem.current.IsPointerOverGameObject(-1))
+            {
+                Debug.Log("Pointer is over UI");
+                return;
+            }
+            Vector2 pointerPosition = _gameInput.OrbitView.PointerPosition.ReadValue<Vector2>();
+            Debug.Log($"Touch position: {pointerPosition.x} {pointerPosition.y}");
+            RaycastObjects(pointerPosition);
+        }
+
+        // we're going to need to think of some way to toggle the orbit on and off
+        // because in top down mode, we need a different control
+        // we could consider having the camera controller add/remove the monobehavior
+        // responsivle for control, then we send the controller a simple Control
+        // or TemporaryControl message
+        private void OnOrbitCamera(InputAction.CallbackContext ctx)
+        {
+            if (_gameInput.OrbitView.PrimaryPress.ReadValue<float>() < 0.5f)
+            {
+                return;
+            }
+
+            if (_isOrbitLocked)
+            {
+                _cameraController.Orbit.RotateTemporary(ctx.ReadValue<Vector2>() * 3f, 2f);
+            }
+            else
+            {
+                _cameraController.Orbit.Rotate(ctx.ReadValue<Vector2>() * 3f);
+            }
+        }
+
+        private void OnScrollZoom(InputAction.CallbackContext ctx)
+        {
+            if (_isOrbitLocked)
+            {
+                _cameraController.Orbit.ChangeRadiusTemporary(ctx.ReadValue<Vector2>().y * 0.01f, 2f);
+            }
+            else
+            {
+                _cameraController.Orbit.ChangeRadius(ctx.ReadValue<Vector2>().y * 0.01f);
+            }
+        }
+
+        private void RaycastObjects(Vector2 position)
+        {
+            // Convert mouse position to ray
+            Vector3 position3D = new Vector3(position.x, position.y, 0f);
+            Ray ray = _mainCamera.ScreenPointToRay(position3D);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                {
+                    OnRaycastClicked(hit.transform, clickable);
+                }
+            }
+        }
+
+        private void OnRaycastClicked(Transform transform, IClickable clickable)
         {
             if (Mode != InteractionMode.SelectItem)
             {
                 return;
             }
 
-            ServiceLocator.Current.Get<UIManager>().OnPopupMenuEvent(
-                new PopupMenuEvent(
-                    transform.name,
-                    transform,
-                    () => Debug.Log("Calling Cancel"),
-                    new PopupMenuEvent.CreateButton[]
-                    {
-                        new(
-                            "move",
-                            () =>
-                                EventBus.Publish(
-                                    new RoomSendMessageEvent(
-                                        "Move To",
-                                        new RequestMoveMessage
-                                        {
-                                            tileId = transform.GetComponent<Tile>().Id,
-                                            destination = transform.GetComponent<Tile>().Coordinates
-                                        }
+            var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
+            Debug.Log(turnOrder.Serialize());
+
+            ServiceLocator.Current
+                .Get<UIManager>()
+                .OnPopupMenuEvent(
+                    new PopupMenuEvent(
+                        transform.name,
+                        transform,
+                        () => Debug.Log("Calling Cancel"),
+                        new PopupMenuEvent.CreateButton[]
+                        {
+                            new(
+                                "Move To",
+                                () => {
+                                    Events.EventBus.Publish(
+                                        new RoomSendMessageEvent(
+                                            "move",
+                                            new RequestMoveMessage
+                                            {
+                                                tileId = transform.GetComponent<Tile>().Id,
+                                                destination = transform
+                                                    .GetComponent<Tile>()
+                                                    .Coordinates
+                                            }
+                                        )
+                                    );
+                                    Events.EventBus.Publish(new CancelPopupMenuEvent());
+                                }
+                            ),
+                            new(
+                                "Focus",
+                                () =>
+                                    Events.EventBus.Publish(
+                                        new CameraOrbitAroundEvent(transform, 0.3f)
                                     )
-                                )
-                        ),
+                            )
+                            // we should make CreateButton a bit more feature rich, so
+                            // we can have certain types of buttons with certain icons
+                            // new("Move To", () => UFB.Events.EventBus.Publish<)
+                        }
+                    )
+                );
+        }
 
-
-                        new(
-                            "Focus",
-                            () => EventBus.Publish(new CameraOrbitAroundEvent(transform, 0.3f))
-                        )
-                        // we should make CreateButton a bit more feature rich, so
-                        // we can have certain types of buttons with certain icons
-                        // new("Move To", () => EventBus.Publish<)
-                    }
-                )
-            );
+        public void ToggleLockOrbit()
+        {
+            Debug.Log($"Toggling lock orbit {_isOrbitLocked}");
+            _isOrbitLocked = !_isOrbitLocked;
         }
 
         public void CycleInteractionMode()
@@ -111,31 +222,25 @@ namespace UFB.Interactions
             switch (Mode)
             {
                 case InteractionMode.FocusEntity:
-                    EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
+                    UFB.Events.EventBus.Publish(
+                        new InteractionModeChangeEvent(InteractionMode.SelectItem)
+                    );
                     break;
                 case InteractionMode.SelectItem:
-                    EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.CameraControl));
+                    UFB.Events.EventBus.Publish(
+                        new InteractionModeChangeEvent(InteractionMode.CameraControl)
+                    );
                     break;
                 case InteractionMode.CameraControl:
-                    EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.FocusEntity));
+                    UFB.Events.EventBus.Publish(
+                        new InteractionModeChangeEvent(InteractionMode.FocusEntity)
+                    );
                     break;
             }
         }
 
         private void OnInteractionModeChangeEvent(InteractionModeChangeEvent e)
         {
-            switch (e.Mode)
-            {
-                case InteractionMode.FocusEntity:
-                    _clickObject.enabled = true;
-                    break;
-                case InteractionMode.SelectItem:
-                    _clickObject.enabled = true;
-                    break;
-                case InteractionMode.CameraControl:
-                    _clickObject.enabled = false;
-                    break;
-            }
             Mode = e.Mode;
         }
     }

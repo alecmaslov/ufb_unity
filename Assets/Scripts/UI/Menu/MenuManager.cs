@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace UFB.UI
 {
@@ -17,6 +18,20 @@ namespace UFB.UI
         {
             _menuData[key] = value;
         }
+
+        // public void SetMenuData<T>(Action<T> setAction)
+        // {
+        //     var key = typeof(T).Name;
+        //     if (_menuData.ContainsKey(key))
+        //     {
+        //         setAction((T)_menuData[key]);
+        //     }
+        //     else
+        //     {
+        //         _menuData[key] = Activator.CreateInstance<T>();
+        //         setAction((T)_menuData[key]);
+        //     }
+        // }
 
         public object GetMenuData(string key)
         {

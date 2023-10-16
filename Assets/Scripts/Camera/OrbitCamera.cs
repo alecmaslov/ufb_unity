@@ -9,6 +9,7 @@ namespace UFB.Camera
         public float radius = 10f;
         public float azimuthSpeed = 0.01f;
         public float elevationSpeed = 0.01f;
+        public float minElevation = 1f;
 
         [SerializeField]
         private float focusLerpSpeed = 0.1f;
@@ -55,38 +56,107 @@ namespace UFB.Camera
             }
 
             azimuth += azimuthSpeed * Time.deltaTime;
-
-            // #if UNITY_EDITOR
-            //             PcControls();
-            // #endif
-
             var rotation = Quaternion.Euler(elevation, azimuth, 0);
             var position = rotation * new Vector3(0.0f, 0.0f, -radius) + target.position;
+            t.SetPositionAndRotation(
+                Vector3.Lerp(transform.position, position, lerpSpeed),
+                Quaternion.Slerp(transform.rotation, rotation, lerpSpeed)
+            );
 
-            transform.position = Vector3.Lerp(transform.position, position, lerpSpeed);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, lerpSpeed);
-
-            // t.SetPositionAndRotation(position, rotation);
             t.LookAt(
                 new Vector3(target.position.x, target.position.y + yOffset, target.position.z)
             );
         }
 
-        public void Control(float horizontal, float vertical)
+        private Coroutine _restorePositionRoutine;
+        private Vector2 _restorePosition;
+        private float _restoreRadius;
+
+        public void CancelRestorePosition()
         {
+            if (_restorePositionRoutine != null)
+            {
+                StopCoroutine(_restorePositionRoutine);
+            }
+        }
+
+        // temporarily allows camera to be panned to a position, but restores after given timeout
+        public void RotateTemporary(Vector2 axis, float timeout)
+        {
+            Debug.Log($"[OrbitCamera] RotateTemporary: {axis} | {timeout}");
+            Vector2 restorePosition = new(azimuth, elevation);
+            azimuth += axis.x;
+            elevation += axis.y;
+            CancelRestorePosition();
+            _restorePositionRoutine = CoroutineHelpers.DelayedAction(
+                () =>
+                {
+                    azimuth = restorePosition.x;
+                    elevation = restorePosition.y;
+                },
+                timeout,
+                this
+            );
+        }
+
+        public void Rotate(Vector2 axis)
+        {
+            Rotate(axis.x, axis.y);
+        }
+
+        public void Rotate(float horizontal, float vertical)
+        {
+            // make sure we cancel any existing restore position routine
+            CancelRestorePosition();
             azimuth += horizontal;
             elevation += vertical;
+            elevation = Mathf.Clamp(elevation, minElevation, 90f);
+        }
+
+        public void ChangeRadius(float delta)
+        {
+            radius = Mathf.Clamp(radius + delta * zoomSpeed, minRadius, maxRadius);
+        }
+
+        public void ChangeRadiusTemporary(float delta, float timeout)
+        {
+            float restoreRadius = radius;
+            radius = Mathf.Clamp(radius + delta * zoomSpeed, minRadius, maxRadius);
+            CancelRestorePosition();
+            _restorePositionRoutine = CoroutineHelpers.DelayedAction(
+                () =>
+                {
+                    radius = restoreRadius;
+                },
+                timeout,
+                this
+            );
         }
 
         public void FocusOn(Transform t)
         {
+            CancelRestorePosition();
             target = t;
             azimuth = initAzimuth;
         }
 
+        // public void FocusOn
+
         public void LookAtTarget(Transform t)
         {
-            t.LookAt(target);
+            CancelRestorePosition();
+            // we need to also figure out the calculation
+            // t.LookAt(target);
+
+            Vector3 relativePos = t.position - target.position;
+
+            azimuth = Mathf.Atan2(relativePos.z, relativePos.x) * Mathf.Rad2Deg;
+            elevation =
+                Mathf.Atan2(
+                    relativePos.y,
+                    Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.z * relativePos.z)
+                ) * Mathf.Rad2Deg;
+
         }
 
         /// <summary>
@@ -95,6 +165,7 @@ namespace UFB.Camera
         /// <param name="pos"></param>
         public void SolvePosition(Vector3 pos)
         {
+            CancelRestorePosition();
             Debug.Log(
                 $"[OrbitCamera] Solving position: {pos} | Current => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}"
             );
@@ -114,6 +185,8 @@ namespace UFB.Camera
                     relativePos.y,
                     Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.z * relativePos.z)
                 ) * Mathf.Rad2Deg;
+            
+            elevation = Mathf.Clamp(elevation, minElevation, 90f);
 
             Debug.Log(
                 $"[OrbitCamera] Solved position: {pos} | New => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}"
@@ -124,32 +197,5 @@ namespace UFB.Camera
         {
             return Vector3.Distance(transform.position, target.position);
         }
-
-        private void PcControls()
-        {
-            float scrollInput = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
-            if (Mathf.Abs(scrollInput) > 0.01f)
-            {
-                radius += (scrollInput * -1) * zoomSpeed; // Adjust the zoom speed as needed
-                radius = Mathf.Clamp(radius, minRadius, maxRadius); // Optional: Clamp the zoom distance
-            }
-
-            float lrInput = UnityEngine.Input.GetKey(KeyCode.LeftArrow)
-                ? -1
-                : (UnityEngine.Input.GetKey(KeyCode.RightArrow) ? 1 : 0);
-            if (Mathf.Abs(lrInput) > 0.01f)
-            {
-                azimuth += lrInput * arrowSpeed;
-            }
-        }
     }
 }
-// private IEnumerator FocusOnRoutine(Transform t)
-// {
-//     while (Vector3.Distance(target.position, t.position) > 0.01f)
-//     {
-//         target.position = Vector3.Lerp(target.position, t.position, focusLerpSpeed * Time.deltaTime);
-//         yield return null;
-//     }
-//     target.position = t.position;
-// }

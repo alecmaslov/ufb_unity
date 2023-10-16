@@ -36,7 +36,6 @@ namespace UFB.UI
         {
             if (_target == null || _anchor == null)
             {
-                Debug.Log("YO TARGET IS NULL OR ANCHOR");
                 return;
             }
 
@@ -58,8 +57,6 @@ namespace UFB.UI
             var triangle = new GameObject("Triangle");
             var meshTriangle = triangle.AddComponent<WorldspaceMeshTriangle>();
             meshTriangle.SetMaterial(material);
-            triangle.AddComponent<MeshFilter>();
-            triangle.AddComponent<MeshRenderer>();
             triangle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             triangle.transform.localScale = Vector3.one;
             return meshTriangle;

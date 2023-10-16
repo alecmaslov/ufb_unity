@@ -42,6 +42,10 @@ namespace UFB.Events
             this.buttons = buttons;
         }
     }
+
+    public class CancelPopupMenuEvent
+    {
+    }
 }
 
 namespace UFB.UI
@@ -85,6 +89,9 @@ namespace UFB.UI
         [SerializeField]
         private GameObject _popupMenuWorldPrefab;
 
+        [SerializeField]
+        private GameObject _optionsMenu;
+
         private PopupMenu _currentPopupMenu;
 
         private Character.CharacterController _characterController;
@@ -106,8 +113,12 @@ namespace UFB.UI
             );
             EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
             EventBus.Subscribe<PopupMenuEvent>(OnPopupMenuEvent);
+            EventBus.Subscribe<CancelPopupMenuEvent>(OnCancelPopupMenuEvent);
 
             ServiceLocator.Current.Register(this);
+            
+            if (_optionsMenu != null)
+                _optionsMenu.SetActive(false);
         }
 
         private void OnDisable()
@@ -118,6 +129,7 @@ namespace UFB.UI
             );
             EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
             EventBus.Unsubscribe<PopupMenuEvent>(OnPopupMenuEvent);
+            EventBus.Unsubscribe<CancelPopupMenuEvent>(OnCancelPopupMenuEvent);
             ServiceLocator.Current.Unregister<UIManager>();
         }
 
@@ -131,6 +143,22 @@ namespace UFB.UI
             _currentPopupMenu = Instantiate(_popupMenuWorldPrefab, transform)
                 .GetComponent<PopupMenu>();
             _currentPopupMenu.Initialize(e);
+        }
+
+        public void OnCancelPopupMenuEvent(CancelPopupMenuEvent e)
+        {
+            if (_currentPopupMenu != null)
+                Destroy(_currentPopupMenu.gameObject);
+        }
+
+        public void OnLeaveGameButton()
+        {
+            ServiceLocator.Current.Get<GameService>().LeaveGame();
+        }
+
+        public void ToggleOptionsMenu(bool toggle)
+        {
+            _optionsMenu.SetActive(toggle);
         }
 
         public void ShowToast(string message)

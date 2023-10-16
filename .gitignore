@@ -105,3 +105,6 @@ BUILD/
 Assets/_Resources/
 Assets/_Resources.meta
 ServerData/
+Scripts/Build/.env
+
+ProjectSettings/

@@ -12,11 +12,17 @@ namespace UFB.Events
         // so the camera can move to that location
         public Transform target;
         public float duration = 0.5f;
+        public bool orientAngleToPreviousTarget = false;
 
-        public CameraOrbitAroundEvent(Transform target, float duration)
+        public CameraOrbitAroundEvent(
+            Transform target,
+            float duration,
+            bool orientAngleToPreviousTarget = false
+        )
         {
             this.target = target;
             this.duration = duration;
+            this.orientAngleToPreviousTarget = orientAngleToPreviousTarget;
         }
     }
 
