@@ -118,15 +118,6 @@ namespace UFB.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PrimaryFingerPosition"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""778f3fc2-f386-4b6f-820a-9987574c5b55"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -382,17 +373,6 @@ namespace UFB.Input
                     ""action"": ""MultitouchHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a12fe35a-ab62-414f-8f1f-1dd1d96085af"",
-                    ""path"": ""<Touchscreen>/touch1/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryFingerPosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -487,7 +467,6 @@ namespace UFB.Input
             m_OrbitView_PointerPosition = m_OrbitView.FindAction("PointerPosition", throwIfNotFound: true);
             m_OrbitView_TapSelect = m_OrbitView.FindAction("TapSelect", throwIfNotFound: true);
             m_OrbitView_MultitouchHold = m_OrbitView.FindAction("MultitouchHold", throwIfNotFound: true);
-            m_OrbitView_PrimaryFingerPosition = m_OrbitView.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
             // GameUI
             m_GameUI = asset.FindActionMap("GameUI", throwIfNotFound: true);
             m_GameUI_Select = m_GameUI.FindAction("Select", throwIfNotFound: true);
@@ -563,7 +542,6 @@ namespace UFB.Input
         private readonly InputAction m_OrbitView_PointerPosition;
         private readonly InputAction m_OrbitView_TapSelect;
         private readonly InputAction m_OrbitView_MultitouchHold;
-        private readonly InputAction m_OrbitView_PrimaryFingerPosition;
         public struct OrbitViewActions
         {
             private @GameInput m_Wrapper;
@@ -578,7 +556,6 @@ namespace UFB.Input
             public InputAction @PointerPosition => m_Wrapper.m_OrbitView_PointerPosition;
             public InputAction @TapSelect => m_Wrapper.m_OrbitView_TapSelect;
             public InputAction @MultitouchHold => m_Wrapper.m_OrbitView_MultitouchHold;
-            public InputAction @PrimaryFingerPosition => m_Wrapper.m_OrbitView_PrimaryFingerPosition;
             public InputActionMap Get() { return m_Wrapper.m_OrbitView; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -618,9 +595,6 @@ namespace UFB.Input
                 @MultitouchHold.started += instance.OnMultitouchHold;
                 @MultitouchHold.performed += instance.OnMultitouchHold;
                 @MultitouchHold.canceled += instance.OnMultitouchHold;
-                @PrimaryFingerPosition.started += instance.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.performed += instance.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.canceled += instance.OnPrimaryFingerPosition;
             }
 
             private void UnregisterCallbacks(IOrbitViewActions instance)
@@ -655,9 +629,6 @@ namespace UFB.Input
                 @MultitouchHold.started -= instance.OnMultitouchHold;
                 @MultitouchHold.performed -= instance.OnMultitouchHold;
                 @MultitouchHold.canceled -= instance.OnMultitouchHold;
-                @PrimaryFingerPosition.started -= instance.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.performed -= instance.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.canceled -= instance.OnPrimaryFingerPosition;
             }
 
             public void RemoveCallbacks(IOrbitViewActions instance)
@@ -750,7 +721,6 @@ namespace UFB.Input
             void OnPointerPosition(InputAction.CallbackContext context);
             void OnTapSelect(InputAction.CallbackContext context);
             void OnMultitouchHold(InputAction.CallbackContext context);
-            void OnPrimaryFingerPosition(InputAction.CallbackContext context);
         }
         public interface IGameUIActions
         {

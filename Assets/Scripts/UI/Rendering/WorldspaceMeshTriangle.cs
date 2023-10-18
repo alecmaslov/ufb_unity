@@ -6,6 +6,8 @@ namespace UFB.UI
     [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
     public class WorldspaceMeshTriangle : MonoBehaviour
     {
+        public float triangleWidth = 0.6f;
+
         private RectTransform _anchor;
         private Transform _target;
         private Mesh _mesh;
@@ -41,10 +43,18 @@ namespace UFB.UI
 
             Vector3[] vertices = new Vector3[3];
             vertices[0] = _target.position;
-            vertices[1] = _anchor.TransformPoint(_anchor.rect.min);
-            vertices[2] = _anchor.TransformPoint(
-                new Vector2(_anchor.rect.max.x, _anchor.rect.min.y)
-            );
+
+            float xRange = _anchor.rect.max.x - _anchor.rect.min.x;
+
+
+            float xLeft = _anchor.rect.min.x + (xRange * triangleWidth);
+            float xRight = _anchor.rect.max.x - (xRange * triangleWidth);
+
+            Vector2 leftPoint = new(xLeft, _anchor.rect.min.y);
+            Vector2 rightPoint = new(xRight, _anchor.rect.min.y);
+
+            vertices[1] = _anchor.TransformPoint(leftPoint);
+            vertices[2] = _anchor.TransformPoint(rightPoint);
             int[] triangles = new int[3] { 0, 1, 2 };
 
             _mesh.Clear();
@@ -52,11 +62,12 @@ namespace UFB.UI
             _mesh.triangles = triangles;
         }
 
-        public static WorldspaceMeshTriangle Create(Material material)
+        public static WorldspaceMeshTriangle Create(Material material, float triangleWidth = 0.6f)
         {
             var triangle = new GameObject("Triangle");
             var meshTriangle = triangle.AddComponent<WorldspaceMeshTriangle>();
             meshTriangle.SetMaterial(material);
+            meshTriangle.triangleWidth = triangleWidth;
             triangle.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             triangle.transform.localScale = Vector3.one;
             return meshTriangle;

@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/QRScanner.unity
+    guid: c70de55433c634f79adfe9d2717eee86
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 814a0cb994ca41d4a99068447439032a, type: 2}

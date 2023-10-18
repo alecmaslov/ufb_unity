@@ -29,6 +29,7 @@ namespace UFB.Core
 #if UNITY_EDITOR
             if (currentScene.name == "Game")
             {
+                Debug.Log("Bootstrapper: Loading game from editor");
                 var joinOptions = new UfbRoomJoinOptions();
                 joinOptions.characterClass = "ophaia";
                 gameService.CreateGame(new UfbRoomCreateOptions(), joinOptions);

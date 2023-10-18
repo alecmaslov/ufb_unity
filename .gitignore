@@ -108,3 +108,5 @@ ServerData/
 Scripts/Build/.env
 
 ProjectSettings/
+
+mono_crash.*

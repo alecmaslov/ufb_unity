@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using System;
 using NativeWebSocket;
 
-
-
 namespace UFB.Events
 {
     public class RoomReceieveMessageEvent<T>
@@ -42,6 +40,16 @@ namespace UFB.Events
             return new RoomSendMessageEvent(messageType, message);
         }
     }
+
+    public class GameReadyEvent
+    {
+        public ColyseusRoom<UfbRoomState> room;
+
+        public GameReadyEvent(ColyseusRoom<UfbRoomState> room)
+        {
+            this.room = room;
+        }
+    }
 }
 
 namespace UFB.Core
@@ -66,21 +74,32 @@ namespace UFB.Core
 
         public GameService() { }
 
-        public async void JoinGame(string roomId, UfbRoomJoinOptions joinOptions)
+        public async void JoinGame(
+            string roomId,
+            UfbRoomJoinOptions joinOptions,
+            Action onJoinError = null
+        )
         {
-            Debug.Log("JoinGame called!");
-            var tcs = new TaskCompletionSource<bool>();
-            await ServiceLocator.Current
-                .Get<NetworkService>()
-                .JoinRoom(
-                    roomId,
-                    joinOptions,
-                    async (room) =>
-                    {
-                        tcs.SetResult(await LoadGame(room));
-                    }
-                );
-            await tcs.Task;
+            try
+            {
+                var tcs = new TaskCompletionSource<bool>();
+                await ServiceLocator.Current
+                    .Get<NetworkService>()
+                    .JoinRoom(
+                        roomId,
+                        joinOptions,
+                        async (room) =>
+                        {
+                            tcs.SetResult(await LoadGame(room));
+                        }
+                    );
+                await tcs.Task;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Error joining room: " + e.Message);
+                onJoinError?.Invoke();
+            }
         }
 
         public async void CreateGame(
@@ -109,6 +128,7 @@ namespace UFB.Core
             var tcs = new TaskCompletionSource<bool>();
             SceneManager.LoadSceneAsync("Game").completed += (op) =>
             {
+                EventBus.Publish(new GameReadyEvent(room));
                 tcs.SetResult(true);
             };
             // consider having a dependency injector that searches for monobehaviours,
@@ -151,7 +171,9 @@ namespace UFB.Core
 
         private void OnRoomSendMessageEvent(RoomSendMessageEvent e)
         {
-            Debug.Log("Sending message to room: " + e.MessageType + " | " + e.Message.ToDetailedString());
+            Debug.Log(
+                "Sending message to room: " + e.MessageType + " | " + e.Message.ToDetailedString()
+            );
             Room.Send(e.MessageType, e.Message);
         }
 

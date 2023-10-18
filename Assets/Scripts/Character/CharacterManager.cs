@@ -79,7 +79,18 @@ namespace UFB.Character
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
+            EventBus.Subscribe<GameReadyEvent>(OnGameReadyEvent);
+        }
 
+        private void OnDisable()
+        {
+            ServiceLocator.Current.Unregister<CharacterManager>();
+            EventBus.Unsubscribe<GameReadyEvent>(OnGameReadyEvent);
+        }
+
+        private void OnGameReadyEvent(GameReadyEvent e)
+        {
+            Debug.Log("[CharacterManager] Game ready, initializing characters");
             var gameService = ServiceLocator.Current.Get<GameService>();
             _playerCharacterId = ServiceLocator.Current.Get<NetworkService>().ClientId;
             // _selectedCharacterId = _playerCharacterId;
@@ -152,12 +163,6 @@ namespace UFB.Character
                     isPlayer = characterId == _playerCharacterId
                 }
             );
-        }
-
-        private void OnDisable()
-        {
-            // EventBus.Unsubscribe<RequestCharacterMoveEvent>(OnRequestCharacterMove);
-            ServiceLocator.Current.Unregister<CharacterManager>();
         }
 
         private async void OnCharacterAdded(string key, CharacterState characterState)

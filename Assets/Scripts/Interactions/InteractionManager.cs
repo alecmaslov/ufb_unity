@@ -122,6 +122,13 @@ namespace UFB.Interactions
                 return;
             }
 
+            // var value = ctx.ReadValue<Vector2>();
+            // if (value.x > 0 || value.y > 0)
+            // {
+            //     Debug.Log($"Orbiting camera {_isOrbitLocked} {ctx.ReadValue<Vector2>()}");
+            // }
+
+
             if (_isOrbitLocked)
             {
                 _cameraController.Orbit.RotateTemporary(ctx.ReadValue<Vector2>() * 3f, 2f);

@@ -20,7 +20,7 @@ namespace UFB.Map
         private bool _recalculateQueued = false;
         private List<Vector3> _currentVertices = new List<Vector3>();
 
-        private void Awake()
+        private void OnEnable()
         {
             _mesh = GetComponent<MeshFilter>().mesh;
         }
@@ -64,6 +64,7 @@ namespace UFB.Map
             Vector3? tileScalar = null
         )
         {
+            _mesh = GetComponent<MeshFilter>().mesh;
             MeshMapTile[] tiles = new MeshMapTile[gridHeight * gridWidth];
             boardMaterial.mainTexture = boardSprite.texture;
             List<CombineInstance> combineInstances = new List<CombineInstance>();

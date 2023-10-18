@@ -75,15 +75,6 @@ namespace UFB.UI
         private Canvas _rootCanvas;
 
         [SerializeField]
-        private RectTransform _topSlot;
-
-        [SerializeField]
-        private RectTransform _middleSlot;
-
-        [SerializeField]
-        private RectTransform _bottomSlot;
-
-        [SerializeField]
         private GameObject _popupMenuScreenPrefab;
 
         [SerializeField]
@@ -147,8 +138,10 @@ namespace UFB.UI
 
         public void OnCancelPopupMenuEvent(CancelPopupMenuEvent e)
         {
-            if (_currentPopupMenu != null)
+            if (_currentPopupMenu != null) {
                 Destroy(_currentPopupMenu.gameObject);
+                _currentPopupMenu = null;
+            }
         }
 
         public void OnLeaveGameButton()

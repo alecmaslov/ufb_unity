@@ -114,7 +114,7 @@ namespace UFB.Network
                     { "joinOptions", joinRoomOptions.ConvertToDictionary() }
                 }
             );
-            RegisterHandlers(room, onFirstStateChange);
+            RegisterRoom(room, onFirstStateChange);
             EventBus.Publish(new RoomJoinedEvent(room));
         }
 
@@ -139,11 +139,11 @@ namespace UFB.Network
             Debug.Log(
                 $"[NetworkManager] Created room {room.RoomId} with {room.State.characters.Count} characters"
             );
-            RegisterHandlers(room, onFirstStateChange);
+            RegisterRoom(room, onFirstStateChange);
             EventBus.Publish(new RoomJoinedEvent(room));
         }
 
-        private void RegisterHandlers(
+        private void RegisterRoom(
             ColyseusRoom<UfbRoomState> room,
             Action<ColyseusRoom<UfbRoomState>> onFirstStateChange
         )
