@@ -13,11 +13,6 @@ namespace UFB.UI
         public Menu newGameMenu;
         public Menu joinGameMenu;
 
-        // public override async void Start()
-        // {
-        //     base.Start();
-        //     await GameController.Instance.Initialize();
-        // }
 
         private void OnEnable()
         {

@@ -28,6 +28,9 @@ namespace UFB.Map
                 if (w.Value == 1)
                 {
                     var wallObject = await Addressables.InstantiateAsync(wallPrefabAddress, transform).Task;
+                    // var wallMaterial = await Addressables.LoadAssetAsync<Material>("Materials/Wall").Task;
+
+                    // wallObject.GetComponent<MeshRenderer>().material = wallMaterial;
                     wallObject.transform.localPosition = Vector3.zero;
                     wallObject.name = $"Wall_{index}";
                     ApplyTransforms(wallObject, _tileSideMapping[index]);

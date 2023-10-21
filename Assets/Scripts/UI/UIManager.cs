@@ -43,9 +43,7 @@ namespace UFB.Events
         }
     }
 
-    public class CancelPopupMenuEvent
-    {
-    }
+    public class CancelPopupMenuEvent { }
 }
 
 namespace UFB.UI
@@ -97,7 +95,8 @@ namespace UFB.UI
                     throw new System.Exception("UIManager requires a Canvas component");
                 }
             }
-
+            
+            EventBus.Subscribe<GameReadyEvent>(OnGameReadyEvent);
             EventBus.Subscribe<ToastMessageEvent>(OnToastMessageEvent);
             EventBus.Subscribe<RoomReceieveMessageEvent<NotificationMessage>>(
                 OnRoomNotificationMessage
@@ -106,14 +105,13 @@ namespace UFB.UI
             EventBus.Subscribe<PopupMenuEvent>(OnPopupMenuEvent);
             EventBus.Subscribe<CancelPopupMenuEvent>(OnCancelPopupMenuEvent);
 
-            ServiceLocator.Current.Register(this);
-            
             if (_optionsMenu != null)
                 _optionsMenu.SetActive(false);
         }
 
         private void OnDisable()
         {
+            EventBus.Unsubscribe<GameReadyEvent>(OnGameReadyEvent);
             EventBus.Unsubscribe<ToastMessageEvent>(OnToastMessageEvent);
             EventBus.Unsubscribe<RoomReceieveMessageEvent<NotificationMessage>>(
                 OnRoomNotificationMessage
@@ -121,7 +119,12 @@ namespace UFB.UI
             EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
             EventBus.Unsubscribe<PopupMenuEvent>(OnPopupMenuEvent);
             EventBus.Unsubscribe<CancelPopupMenuEvent>(OnCancelPopupMenuEvent);
-            ServiceLocator.Current.Unregister<UIManager>();
+            // ServiceLocator.Current.Unregister<UIManager>();
+        }
+
+        private void OnGameReadyEvent(GameReadyEvent e)
+        {
+            ServiceLocator.Current.Register(this);
         }
 
         private void OnSelectedCharacterEvent(SelectedCharacterEvent e) =>
@@ -138,7 +141,8 @@ namespace UFB.UI
 
         public void OnCancelPopupMenuEvent(CancelPopupMenuEvent e)
         {
-            if (_currentPopupMenu != null) {
+            if (_currentPopupMenu != null)
+            {
                 Destroy(_currentPopupMenu.gameObject);
                 _currentPopupMenu = null;
             }

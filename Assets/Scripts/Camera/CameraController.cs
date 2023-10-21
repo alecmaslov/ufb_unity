@@ -26,6 +26,19 @@ namespace UFB.Events
         }
     }
 
+    // while orbiting around specific object, this focuses the azimuth and focus distance
+    // to another object
+    public class CameraOrbitLookAtSecondaryTargetEvent {
+        public Transform target;
+        public float duration = 0.5f;
+
+        public CameraOrbitLookAtSecondaryTargetEvent(Transform target, float duration = 0.5f)
+        {
+            this.target = target;
+            this.duration = duration;
+        }
+     }
+
     public class SetCameraStateEvent
     {
         public CameraState cameraState;
@@ -105,6 +118,7 @@ namespace UFB.Camera
             EventBus.Subscribe<CameraOrbitAroundEvent>(OnOrbitAroundEvent);
             EventBus.Subscribe<SetCameraStateEvent>(OnSetCameraStateEvent);
             EventBus.Subscribe<SetCameraPresetStateEvent>(OnCameraSetPresetStateEvent);
+            EventBus.Subscribe<CameraOrbitLookAtSecondaryTargetEvent>(OnOrbitLookAtSecondaryTargetEvent);
         }
 
         private void OnDisable()
@@ -112,6 +126,7 @@ namespace UFB.Camera
             EventBus.Unsubscribe<CameraOrbitAroundEvent>(OnOrbitAroundEvent);
             EventBus.Unsubscribe<SetCameraStateEvent>(OnSetCameraStateEvent);
             EventBus.Unsubscribe<SetCameraPresetStateEvent>(OnCameraSetPresetStateEvent);
+            EventBus.Unsubscribe<CameraOrbitLookAtSecondaryTargetEvent>(OnOrbitLookAtSecondaryTargetEvent);
         }
 
         private void Update()
@@ -137,15 +152,17 @@ namespace UFB.Camera
             _rotationAnimator.AnimateTo(rotation, duration);
         }
 
-        public void OrbitAround(Transform t)
-        {
-            UseOrbit = true;
-            Orbit.FocusOn(t);
-        }
-
         public void OnOrbitAroundEvent(CameraOrbitAroundEvent orbitAroundEvent)
         {
-            OrbitAround(orbitAroundEvent.target);
+            UseOrbit = true;
+            Orbit.FocusOn(orbitAroundEvent.target);
+        }
+
+        public void OnOrbitLookAtSecondaryTargetEvent(CameraOrbitLookAtSecondaryTargetEvent e)
+        {
+            UseOrbit = true;
+            Orbit.LookAtSecondaryTarget(e.target);
+            GetComponent<DepthOfFieldController>().FocalLength = 20f;
         }
 
         private void OnCameraSetPresetStateEvent(SetCameraPresetStateEvent e)

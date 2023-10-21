@@ -1,15 +1,31 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.PlayerLoop;
 
 namespace UFB.Camera
 {
+    [RequireComponent(typeof(DepthOfFieldController))]
     public class OrbitCamera : MonoBehaviour, ICameraPositioner
     {
         public Transform target;
-        public float radius = 10f;
         public float azimuthSpeed = 0.01f;
         public float elevationSpeed = 0.01f;
         public float minElevation = 1f;
+
+        public float Radius
+        {
+            get => _radius;
+            set
+            {
+                _radius = value;
+                _dof.AutoFocus(_radius, maxRadius, null);
+            }
+        }
+
+        [SerializeField]
+        private float _radius = 10f;
 
         [SerializeField]
         private float focusLerpSpeed = 0.1f;
@@ -41,10 +57,21 @@ namespace UFB.Camera
         [SerializeField]
         private float arrowSpeed = 5f;
 
+        [SerializeField]
+        private Volume _volume;
+
+        [SerializeField]
+        private float _dofOffset = -0.5f;
+
+        private DepthOfFieldController _dof;
+
         private void Start()
         {
             if (target != null)
-                radius = Vector3.Distance(transform.position, target.position);
+                _radius = Vector3.Distance(transform.position, target.position);
+            // UpdateDepthOfFieldFocusDistance(_radius);
+            _dof = GetComponent<DepthOfFieldController>();
+            _dof.AutoFocus(_radius, maxRadius, null);
         }
 
         public void ApplyTransform(Transform t)
@@ -57,10 +84,10 @@ namespace UFB.Camera
 
             azimuth += azimuthSpeed * Time.deltaTime;
             var rotation = Quaternion.Euler(elevation, azimuth, 0);
-            var position = rotation * new Vector3(0.0f, 0.0f, -radius) + target.position;
+            var position = rotation * new Vector3(0.0f, 0.0f, -_radius) + target.position;
             t.SetPositionAndRotation(
-                Vector3.Lerp(transform.position, position, lerpSpeed),
-                Quaternion.Slerp(transform.rotation, rotation, lerpSpeed)
+                Vector3.Lerp(transform.position, position, lerpSpeed * Time.deltaTime),
+                Quaternion.Slerp(transform.rotation, rotation, lerpSpeed * Time.deltaTime)
             );
 
             t.LookAt(
@@ -115,18 +142,18 @@ namespace UFB.Camera
 
         public void ChangeRadius(float delta)
         {
-            radius = Mathf.Clamp(radius + delta * zoomSpeed, minRadius, maxRadius);
+            Radius = Mathf.Clamp(_radius + delta * zoomSpeed, minRadius, maxRadius);
         }
 
         public void ChangeRadiusTemporary(float delta, float timeout)
         {
-            float restoreRadius = radius;
-            radius = Mathf.Clamp(radius + delta * zoomSpeed, minRadius, maxRadius);
+            float restoreRadius = _radius;
+            Radius = Mathf.Clamp(_radius + delta * zoomSpeed, minRadius, maxRadius);
             CancelRestorePosition();
             _restorePositionRoutine = CoroutineHelpers.DelayedAction(
                 () =>
                 {
-                    radius = restoreRadius;
+                    Radius = restoreRadius;
                 },
                 timeout,
                 this
@@ -137,26 +164,37 @@ namespace UFB.Camera
         {
             CancelRestorePosition();
             target = t;
-            azimuth = initAzimuth;
+            // azimuth = initAzimuth;
+            // UpdateDepthOfFieldFocusDistance(_radius);
+            _dof.AutoFocus(_radius, maxRadius, null);
         }
 
-        // public void FocusOn
-
-        public void LookAtTarget(Transform t)
+        public void LookAtSecondaryTarget(Transform secondaryTarget, float newElevation = 20f)
         {
             CancelRestorePosition();
-            // we need to also figure out the calculation
-            // t.LookAt(target);
 
-            Vector3 relativePos = t.position - target.position;
+            // Direction from primary target to secondary target
+            Vector3 toSecondary = (secondaryTarget.position - target.position).normalized;
 
-            azimuth = Mathf.Atan2(relativePos.z, relativePos.x) * Mathf.Rad2Deg;
-            elevation =
-                Mathf.Atan2(
-                    relativePos.y,
-                    Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.z * relativePos.z)
-                ) * Mathf.Rad2Deg;
+            // Desired direction from camera to primary target for the secondary target to be in-between
+            Vector3 desiredDirectionToPrimary = -toSecondary;
 
+            // Compute the azimuth
+            azimuth =
+                -90f
+                - (
+                    Mathf.Atan2(desiredDirectionToPrimary.z, desiredDirectionToPrimary.x)
+                    * Mathf.Rad2Deg
+                );
+
+            elevation = Mathf.Clamp(newElevation, minElevation, 90f);
+
+            // Update the focus distance
+            float distanceToSecondary = Vector3.Distance(
+                secondaryTarget.position,
+                transform.position
+            );
+            // UpdateDepthOfFieldFocusDistance(distanceToSecondary);
         }
 
         /// <summary>
@@ -167,12 +205,12 @@ namespace UFB.Camera
         {
             CancelRestorePosition();
             Debug.Log(
-                $"[OrbitCamera] Solving position: {pos} | Current => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}"
+                $"[OrbitCamera] Solving position: {pos} | Current => radius: {_radius}, azimuth: {azimuth}, elevation: {elevation}"
             );
             // Calculate relative position to the target
             Vector3 relativePos = pos - target.position;
             // Calculate the radius
-            radius = Mathf.Sqrt(
+            _radius = Mathf.Sqrt(
                 relativePos.x * relativePos.x
                     + relativePos.y * relativePos.y
                     + relativePos.z * relativePos.z
@@ -185,11 +223,11 @@ namespace UFB.Camera
                     relativePos.y,
                     Mathf.Sqrt(relativePos.x * relativePos.x + relativePos.z * relativePos.z)
                 ) * Mathf.Rad2Deg;
-            
+
             elevation = Mathf.Clamp(elevation, minElevation, 90f);
 
             Debug.Log(
-                $"[OrbitCamera] Solved position: {pos} | New => radius: {radius}, azimuth: {azimuth}, elevation: {elevation}"
+                $"[OrbitCamera] Solved position: {pos} | New => radius: {_radius}, azimuth: {azimuth}, elevation: {elevation}"
             );
         }
 

@@ -25,7 +25,6 @@ namespace UFB.Map
 
         private void OnEnable()
         {
-            ServiceLocator.Current.Register(this);
             EventBus.Subscribe<GameReadyEvent>(OnGameReadyEvent);
             EventBus.Subscribe<TileClickedEvent>(OnTileClickedEvent);
             // RegisterEffects();
@@ -33,7 +32,7 @@ namespace UFB.Map
 
         private void OnDisable()
         {
-            ServiceLocator.Current.Unregister<GameBoard>();
+            // ServiceLocator.Current.Unregister<GameBoard>();
             EventBus.Unsubscribe<GameReadyEvent>(OnGameReadyEvent);
             EventBus.Unsubscribe<TileClickedEvent>(OnTileClickedEvent);
         }
@@ -41,6 +40,7 @@ namespace UFB.Map
 
         private void OnGameReadyEvent(GameReadyEvent e)
         {
+            ServiceLocator.Current.Register(this);
             SpawnBoard(e.room.State.map);
         }
 

@@ -15,24 +15,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TouchPress",
-                    "type": "Button",
-                    "id": "c653a1c4-1e1f-479c-a795-badf8fb265af",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseClick",
-                    "type": "Button",
-                    "id": "4c4b6eb5-d862-4ff5-a0ec-1f53888f4cc3",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "RotateCamera",
                     "type": "Value",
                     "id": "b37c0540-5f6f-42b4-a802-7c8086ffa3b6",
@@ -78,21 +60,39 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TapSelect",
-                    "type": "PassThrough",
-                    "id": "195adaa1-42ad-40d8-8926-f9f89114f59e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "MultitouchHold",
                     "type": "Button",
                     "id": "cfbc357f-930f-4267-8768-2351098df75e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SingleTapSelect",
+                    "type": "Button",
+                    "id": "195adaa1-42ad-40d8-8926-f9f89114f59e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DoubleTapSelect",
+                    "type": "PassThrough",
+                    "id": "54ca385f-d417-46cf-91c4-420b41b239cc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "MultiTap(tapDelay=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TapHoldSelect",
+                    "type": "Button",
+                    "id": "ebfbe0d2-5e2a-4513-8218-b6198e1739f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 }
             ],
@@ -105,28 +105,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "TouchInput",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fa750fc0-cff9-4212-83f5-e9f706605df3",
-                    "path": "<Touchscreen>/primaryTouch/press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TouchPress",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2fa2b461-a1b5-4516-8018-53e794f8a708",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Main",
-                    "action": "MouseClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -297,28 +275,6 @@
                 },
                 {
                     "name": "",
-                    "id": "21c82bfe-b271-4572-b67b-e8c3dd7f8a3d",
-                    "path": "<Mouse>/press",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TapSelect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "56210b28-a676-49f9-a88d-358389fa717d",
-                    "path": "<Touchscreen>/Press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TapSelect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e9e3a324-5b7e-4849-a666-76b60ea0b2eb",
                     "path": "<Mouse>/position",
                     "interactions": "",
@@ -347,6 +303,72 @@
                     "processors": "",
                     "groups": "",
                     "action": "MultitouchHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e20d5b9-8a67-42c1-b4b0-a120de7d84c0",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DoubleTapSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f712de6-1616-4c6c-8109-ad4711dee496",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DoubleTapSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21c82bfe-b271-4572-b67b-e8c3dd7f8a3d",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SingleTapSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56210b28-a676-49f9-a88d-358389fa717d",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SingleTapSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9566c99f-9d34-4ba8-9d19-3e0b12ee5ef8",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TapHoldSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c81069f-5379-4923-adba-ad427d71087a",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TapHoldSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

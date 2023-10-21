@@ -78,18 +78,19 @@ namespace UFB.Character
 
         private void OnEnable()
         {
-            ServiceLocator.Current.Register(this);
             EventBus.Subscribe<GameReadyEvent>(OnGameReadyEvent);
         }
 
         private void OnDisable()
         {
-            ServiceLocator.Current.Unregister<CharacterManager>();
+            // ServiceLocator.Current.Unregister<CharacterManager>();
             EventBus.Unsubscribe<GameReadyEvent>(OnGameReadyEvent);
         }
 
         private void OnGameReadyEvent(GameReadyEvent e)
         {
+            ServiceLocator.Current.Register(this);
+
             Debug.Log("[CharacterManager] Game ready, initializing characters");
             var gameService = ServiceLocator.Current.Get<GameService>();
             _playerCharacterId = ServiceLocator.Current.Get<NetworkService>().ClientId;
