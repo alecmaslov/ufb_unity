@@ -110,3 +110,7 @@ Scripts/Build/.env
 ProjectSettings/
 
 mono_crash.*
+_Library/
+Builds_BurstDebugInformation_DoNotShip/
+Assets/Packages/SkySeries Freebie
+Assets/Packages/SkySeries Freebie.meta
