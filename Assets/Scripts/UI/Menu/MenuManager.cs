@@ -69,9 +69,9 @@ namespace UFB.UI
         }
         
 
-        public void OpenMenu(Menu menu)
+        public void OpenMenu(Menu menu, bool isSetting = true)
         {
-            if (menuStack.Count > 0)
+            if (menuStack.Count > 0 && isSetting)
             {
                 menuStack.Peek().CloseMenu();
             }

@@ -9,6 +9,10 @@ namespace UFB.UI
 {
     public class SelectCharacterMenu : Menu
     {
+
+        public Menu mainMenu;
+        public Menu selectMapMenu;
+
         [SerializeField]
         private Image _characterCard;
 
@@ -21,10 +25,27 @@ namespace UFB.UI
 
         private int _characterIndex = 0;
 
-        public void OnBackButton() => _menuManager.CloseMenu();
+        // 0 : NEW GAME, 1 : JOIN GAME
+        [SerializeField]
+        public int menuType = 0;
 
+        public void OnBackButton()
+        {
+            _menuManager.CloseMenu();
+            _menuManager.OpenMenu(mainMenu);
+        }
         private void OnEnable()
         {
+            if (_menuManager.GetMenuData("joinOptions") == null)
+            {
+                _menuManager.SetMenuData("joinOptions", new UfbRoomJoinOptions());
+            }
+
+            if (_menuManager.GetMenuData("createOptions") == null)
+            {
+                _menuManager.SetMenuData("createOptions", new UfbRoomCreateOptions());
+            }
+
             SetCharacter(_characterIndex);
         }
 
@@ -34,6 +55,7 @@ namespace UFB.UI
             joinOptions.characterClass = _characters[_characterIndex].id;
             // _menuManager.SetMenuData("joinOptions", joinOptions);
             _menuManager.CloseMenu();
+            _menuManager.OpenMenu(selectMapMenu);
         }
 
         private void SetCharacter(int index)
