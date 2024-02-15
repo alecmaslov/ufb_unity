@@ -7,6 +7,7 @@ using UFB.Network.RoomMessageTypes;
 using UFB.Map;
 using System;
 using UFB.Core;
+using UnityEngine.TextCore.Text;
 
 namespace UFB.UI
 {
@@ -16,13 +17,19 @@ namespace UFB.UI
         public Menu loadingMenu;
 
         [SerializeField]
+        private GameObject mapList;
+
+        [SerializeField]
+        private ListItem mapItem;
+
+        [SerializeField]
         private MapSelector mapSelector;
 
         [SerializeField]
         private Image _characterCard;
 
         [SerializeField]
-        private TextMeshProUGUI _characterName;
+        private Text _characterName;
 
         // [SerializeField] private Dictionary<string, Sprite> _characterSprites = new Dictionary<string, Sprite>();
         [SerializeField]
@@ -50,6 +57,11 @@ namespace UFB.UI
             {
                 _menuManager.SetMenuData("createOptions", new UfbRoomCreateOptions());
             }
+
+            InitCharacterList();
+
+            SetItemImage(mapSelector.GetSelectOptions()[0].id);
+
             mapSelector.OnSelectionChanged += OnMapSelectionChanged;
         }
 
@@ -57,11 +69,38 @@ namespace UFB.UI
         {
             mapSelector.OnSelectionChanged -= OnMapSelectionChanged;
         }
+        public void InitCharacterList()
+        {
+            if (mapList.transform.childCount != 1) return;
+            foreach (var item in mapSelector.GetSelectOptions())
+            {
+                ListItem li = Instantiate(mapItem, mapList.transform) as ListItem;
+                li.SetImage(item.mapThumbnail);
+                li.id = item.id;
+                li.gameObject.SetActive(true);
+            }
+        }
+        public void SetItemImage(string characterId)
+        {
+            for (int i = 0; i < mapList.transform.childCount; i++)
+            {
+                ListItem li = mapList.transform.GetChild(i).GetComponent<ListItem>();
+                Color color = Color.white;
+                if (li.id != characterId)
+                {
+                    color.a = 0.5f;
+                }
+                li.image.color = color;
+                li.transform.GetComponent<Image>().color = color;
+            }
+        }
 
         private void OnMapSelectionChanged(UfbMap map)
         {
             var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
             createOptions.mapName = map.name;
+            _characterName.text = map.name;
+            SetItemImage(map.id);
             _menuManager.SetMenuData("createOptions", createOptions);
         }
 

@@ -42,6 +42,11 @@ namespace UFB.UI
             }
         }
 
+        public List<T> GetSelectOptions()
+        {
+            return _selectionOptions;
+        }
+
         public void SetDisplayContent(Sprite sprite)
         {
             _displayContentImage.sprite = sprite;

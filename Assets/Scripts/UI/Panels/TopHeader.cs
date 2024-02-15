@@ -16,7 +16,7 @@ namespace UFB.UI
         private Image _avatarImage;
 
         [SerializeField]
-        private TextMeshProUGUI _screenNameText;
+        private Text _screenNameText;
 
         [SerializeField]
         private LinearIndicatorBar _healthBar;

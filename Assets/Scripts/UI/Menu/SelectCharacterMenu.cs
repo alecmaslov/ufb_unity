@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UFB.Character;
 using TMPro;
 using UFB.Network.RoomMessageTypes;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace UFB.UI
 {
@@ -14,10 +15,16 @@ namespace UFB.UI
         public Menu selectMapMenu;
 
         [SerializeField]
+        private GameObject _characterList;
+
+        [SerializeField]
+        private ListItem characterItem;
+
+        [SerializeField]
         private Image _characterCard;
 
         [SerializeField]
-        private TextMeshProUGUI _characterName;
+        private Text _characterName;
 
         // [SerializeField] private Dictionary<string, Sprite> _characterSprites = new Dictionary<string, Sprite>();
         [SerializeField]
@@ -46,6 +53,8 @@ namespace UFB.UI
                 _menuManager.SetMenuData("createOptions", new UfbRoomCreateOptions());
             }
 
+            InitCharacterList();
+
             SetCharacter(_characterIndex);
         }
 
@@ -62,8 +71,36 @@ namespace UFB.UI
         {
             var character = _characters[index];
             // Sprite avatarSprite = TextureToSprite(character.avatar);
-            _characterCard.sprite = character.card;
+            _characterCard.sprite = character.avatar;
             _characterName.text = character.characterName;
+            SetItemImage(character.id);
+        }
+
+        public void InitCharacterList()
+        {
+            if (_characterList.transform.childCount != 1) return;
+            foreach (var item in _characters)
+            {
+                ListItem li = Instantiate(characterItem, _characterList.transform) as ListItem;
+                li.SetImage(item.avatar);
+                li.id = item.id;
+                li.gameObject.SetActive(true);
+            }
+        }
+
+        public void SetItemImage(string characterId)
+        {
+            for(int i = 0; i <  _characterList.transform.childCount; i++)
+            {
+                ListItem li = _characterList.transform.GetChild(i).GetComponent<ListItem>();
+                Color color = Color.white;
+                if (li.id != characterId)
+                {
+                    color.a = 0.5f;
+                }
+                li.image.color = color;
+                li.transform.GetComponent<Image>().color = color;
+            }
         }
 
         public void OnNextButton()
