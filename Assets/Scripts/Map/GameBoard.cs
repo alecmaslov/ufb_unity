@@ -23,6 +23,9 @@ namespace UFB.Map
         public RippleTilesEffect RippleTilesEffect;
         private MapState _state;
 
+        [SerializeField]
+        private GameObject boardPos;
+
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
@@ -70,6 +73,12 @@ namespace UFB.Map
                 LoadBoardFromSprite(obj.Result, state);
                 SpawnEntities(state);
                 _state = state;
+            };
+
+            var task1 = Addressables.LoadAssetAsync<GameObject>($"maps/{state.name}");
+            task1.Completed += (obj) =>
+            {
+                Instantiate(obj.Result, boardPos.transform);
             };
         }
 
