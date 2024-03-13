@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: kaiju
   mapName: Kaiju
-  mapThumbnail: {fileID: 21300000, guid: 11ec58ee3572f47728ce0a5de8a62564, type: 3}
+  mapThumbnail: {fileID: 21300000, guid: 78d83e930fac74cd995a58253e5d12f5, type: 3}
   mapImage:
     m_AssetGUID: 1c2ba26af9000bd44a1cce883e32df19
     m_SubObjectName: 

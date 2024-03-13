@@ -6,11 +6,11 @@ namespace UFB.Map
 {
     public class GameBoardTester : MonoBehaviour
     {
-        private GameBoard _gameBoard;
+        private GameMapController _gameBoard;
 
         private void Awake()
         {
-            _gameBoard = GetComponent<GameBoard>();
+            _gameBoard = GetComponent<GameMapController>();
         }
 
         public void SpawnBoard(MapState mapState)

@@ -5,10 +5,10 @@ namespace UFB.Effects
 {
     public class RandomTileStretchEffect : IEffect
     {
-        private readonly GameBoard _gameBoard;
+        private readonly GameMapController _gameBoard;
         private readonly float _rate;
 
-        public RandomTileStretchEffect(GameBoard gameBoard, float rate)
+        public RandomTileStretchEffect(GameMapController gameBoard, float rate)
         {
             _gameBoard = gameBoard;
             _rate = rate;

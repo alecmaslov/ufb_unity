@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UFB.Events;
 using UFB.Core;
 using UFB.Network;
+using UnityEngine.SceneManagement;
 
 namespace UFB.UI
 {
@@ -48,6 +49,11 @@ namespace UFB.UI
         public void OnNewGameButton() => _menuManager.OpenMenu(newGameMenu);
 
         public void OnJoinGameButton() => _menuManager.OpenMenu(joinGameMenu);
+
+        public void OnScanButton()
+        {
+            SceneManager.LoadScene("NfcReader");
+        }
 
         public void OnSettingsButton()
         {

@@ -6,12 +6,12 @@ namespace UFB.Effects
 {
     public class ResetTilesEffect : IEffect
     {
-        private readonly GameBoard _gameBoard;
+        private readonly GameMapController _gameBoard;
         private readonly float _rate;
 
         public ResetTilesEffect(float rate)
         {
-            _gameBoard = ServiceLocator.Current.Get<GameBoard>();
+            _gameBoard = ServiceLocator.Current.Get<GameMapController>();
             _rate = rate;
         }
 

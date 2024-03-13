@@ -131,10 +131,6 @@ namespace UFB.Core
                 EventBus.Publish(new GameReadyEvent(room));
                 tcs.SetResult(true);
             };
-            // consider having a dependency injector that searches for monobehaviours,
-            // and initializes them when a message is sent
-            // this could effectively signal to classes that rely on "Game" that it has loaded
-
             return await tcs.Task;
         }
 

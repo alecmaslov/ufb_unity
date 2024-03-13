@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: kraken
   mapName: Kraken
-  mapThumbnail: {fileID: 21300000, guid: c12c034669562471a8c7b9395861bc5b, type: 3}
+  mapThumbnail: {fileID: 21300000, guid: 6449a3eda618c4a669073165f1e87377, type: 3}
   mapImage:
     m_AssetGUID: 6ea8b139d6b26f84f822e34d6bb3b310
     m_SubObjectName: 

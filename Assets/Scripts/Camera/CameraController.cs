@@ -162,7 +162,6 @@ namespace UFB.Camera
         {
             UseOrbit = true;
             Orbit.LookAtSecondaryTarget(e.target);
-            GetComponent<DepthOfFieldController>().FocalLength = 20f;
         }
 
         private void OnCameraSetPresetStateEvent(SetCameraPresetStateEvent e)

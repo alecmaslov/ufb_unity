@@ -7,15 +7,15 @@ namespace UFB.Effects
     [System.Serializable]
     public class RippleTilesEffect : IEffect
     {
-        public Tile CurrentTile;
+        public BaseTile CurrentTile;
         public float Rate = 10f;
         public float Intensity = 5f;
         public float StretchDuration = 0.2f;
         public float Decay = 0.3f;
-        private GameBoard _gameBoard;
+        private GameMapController _gameBoard;
 
         public RippleTilesEffect(
-            Tile centerTile,
+            BaseTile centerTile,
             float rate = 10f,
             float intensity = 5f,
             float stretchDuration = 0.2f,
@@ -26,7 +26,7 @@ namespace UFB.Effects
             StretchDuration = stretchDuration;
             Decay = decay;
             CurrentTile = centerTile;
-            _gameBoard = ServiceLocator.Current.Get<GameBoard>();
+            _gameBoard = ServiceLocator.Current.Get<GameMapController>();
         }
         
         public void Execute()
@@ -35,7 +35,7 @@ namespace UFB.Effects
         }
 
 
-        private void TileCallback(Tile tile, Tile currentTile)
+        private void TileCallback(BaseTile tile, BaseTile currentTile)
         {
             if (tile == currentTile) return; // skip center tile
             float distance = currentTile.Coordinates.DistanceTo(tile.Coordinates);

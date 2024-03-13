@@ -20,7 +20,8 @@ namespace UFB.Camera
             set
             {
                 _radius = value;
-                _dof.AutoFocus(_radius, maxRadius, null);
+                if (_dof != null && _dof.isActiveAndEnabled)
+                    _dof.AutoFocus(_radius, maxRadius, null);
             }
         }
 
@@ -69,9 +70,10 @@ namespace UFB.Camera
         {
             if (target != null)
                 _radius = Vector3.Distance(transform.position, target.position);
-            // UpdateDepthOfFieldFocusDistance(_radius);
+
             _dof = GetComponent<DepthOfFieldController>();
-            _dof.AutoFocus(_radius, maxRadius, null);
+            if (_dof != null && _dof.isActiveAndEnabled)
+                _dof.AutoFocus(_radius, maxRadius, null);
         }
 
         public void ApplyTransform(Transform t)
@@ -86,7 +88,7 @@ namespace UFB.Camera
             var rotation = Quaternion.Euler(elevation, azimuth, 0);
             var position = rotation * new Vector3(0.0f, 0.0f, -_radius) + target.position;
             t.SetPositionAndRotation(
-                Vector3.Lerp(transform.position, position, lerpSpeed * Time.deltaTime),
+                Vector3.Slerp(transform.position, position, lerpSpeed * Time.deltaTime),
                 Quaternion.Slerp(transform.rotation, rotation, lerpSpeed * Time.deltaTime)
             );
 
@@ -164,21 +166,19 @@ namespace UFB.Camera
         {
             CancelRestorePosition();
             target = t;
-            // azimuth = initAzimuth;
-            // UpdateDepthOfFieldFocusDistance(_radius);
-            _dof.AutoFocus(_radius, maxRadius, null);
+
+            if (_dof != null && _dof.isActiveAndEnabled)
+                _dof.AutoFocus(_radius, maxRadius, null);
         }
 
+        // while orbit camera is active, orbit to the position where the secondary target is in-between the primary target and the camera
         public void LookAtSecondaryTarget(Transform secondaryTarget, float newElevation = 20f)
         {
             CancelRestorePosition();
-
             // Direction from primary target to secondary target
             Vector3 toSecondary = (secondaryTarget.position - target.position).normalized;
-
             // Desired direction from camera to primary target for the secondary target to be in-between
             Vector3 desiredDirectionToPrimary = -toSecondary;
-
             // Compute the azimuth
             azimuth =
                 -90f
@@ -188,13 +188,14 @@ namespace UFB.Camera
                 );
 
             elevation = Mathf.Clamp(newElevation, minElevation, 90f);
-
             // Update the focus distance
             float distanceToSecondary = Vector3.Distance(
                 secondaryTarget.position,
                 transform.position
             );
-            // UpdateDepthOfFieldFocusDistance(distanceToSecondary);
+            // TODO - fix this so this will work properly
+            if (_dof != null && _dof.isActiveAndEnabled)
+                _dof.FocalLength = distanceToSecondary;
         }
 
         /// <summary>

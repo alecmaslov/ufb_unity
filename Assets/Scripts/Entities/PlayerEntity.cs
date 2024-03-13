@@ -30,14 +30,14 @@ namespace UFB.Entities
 
         [SerializeField] Transform _modelTransform;
 
-        private GameBoard _gameBoard;
+        private GameMapController _gameBoard;
         private Animator _animator;
         private bool _isMoving = false;
         private PositionAnimator _positionAnimator;
 
         // idea - add in player ability to face in the most optimal direction
 
-        public void Initialize(string characterName, GameBoard gameBoard, TileEntity startingTile, string playerId)
+        public void Initialize(string characterName, GameMapController gameBoard, TileEntity startingTile, string playerId)
         {
             PlayerId = playerId;
             // _animator = GetComponentInChildren<Animator>();

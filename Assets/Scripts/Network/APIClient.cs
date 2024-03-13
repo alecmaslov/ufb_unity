@@ -69,7 +69,6 @@ namespace UFB.Network
                     tcs.SetException(e);
                 }
             };
-
             return await tcs.Task;
         }
 

@@ -26,7 +26,7 @@ namespace UFB.Character
         public CharacterState State { get; private set; }
         public AnimationDispatcher AnimationDispatcher { get; private set; }
         public bool IsMoving { get; private set; }
-        public Tile CurrentTile { get; private set; }
+        public BaseTile CurrentTile { get; private set; }
 
         private GameObject _model;
         private PositionAnimator _positionAnimator;
@@ -53,14 +53,14 @@ namespace UFB.Character
             _model = await task.Task;
             AnimationDispatcher = new AnimationDispatcher(_model.GetComponent<Animator>());
 
-            CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[State.currentTileId];
+            CurrentTile = ServiceLocator.Current.Get<GameMapController>().Tiles[State.currentTileId];
             CurrentTile.AttachGameObject(gameObject, true);
 
             State.OnCurrentTileIdChange(
                 (newTileId, oldTileId) =>
                 {
                     Debug.Log($"Character {Id} moved to tile {newTileId} from {oldTileId}");
-                    CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+                    CurrentTile = ServiceLocator.Current.Get<GameMapController>().Tiles[newTileId];
                 }
             );
 
@@ -75,23 +75,19 @@ namespace UFB.Character
             new RippleTilesEffect(CurrentTile, 20, 1f).Execute();
         }
 
-        public async Task MoveAlongPath(IEnumerable<Tile> path, float speed = 0.1f)
+        public async Task MoveAlongPath(IEnumerable<BaseTile> path, float speed = 0.1f)
         {
             IsMoving = true;
             // detach from current tile
             transform.parent = null;
             // wait for it to hop up
-            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 1f);
-
+            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 10f);
             if (_moveAlongPathCoroutine != null)
                 StopCoroutine(_moveAlongPathCoroutine);
-
             var tcs = new TaskCompletionSource<bool>();
-
             _moveAlongPathCoroutine = StartCoroutine(
                 MoveAlongPathCoroutine(path, speed, () => tcs.SetResult(true))
             );
-
             await tcs.Task;
             await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 1f);
             path.Last().AttachGameObject(gameObject, true);
@@ -99,18 +95,19 @@ namespace UFB.Character
         }
 
         private IEnumerator MoveAlongPathCoroutine(
-            IEnumerable<Tile> path,
+            IEnumerable<BaseTile> path,
             float speed = 0.1f,
             Action onComplete = null
         )
         {
-            foreach (Tile tile in path.Skip(0))
+            foreach (BaseTile tile in path.Skip(0))
             {
                 var thisTile = tile;
                 var destination = thisTile.Position;
                 if (tile != path.Last())
                 {
-                    thisTile.Stretch(0.5f, speed * 0.5f);
+                    thisTile.Stretch(0.1f, speed * 0.5f); // instead of doing this, 
+                    // we should have some generic interface way of doing this
                 }
                 bool isFinished = false;
                 _positionAnimator.AnimateTo(destination, speed, () => isFinished = true);
@@ -128,7 +125,7 @@ namespace UFB.Character
         }
 
         public void ForceMoveToTile(
-            Tile destination,
+            BaseTile destination,
             float duration = 0.5f,
             Action onComplete = null
         )

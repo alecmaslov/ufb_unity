@@ -39,7 +39,7 @@ public class CharacterControllerEditor : Editor
 
             if (GUILayout.Button("Force Move to Tile"))
             {
-                var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+                var gameBoard = ServiceLocator.Current.Get<GameMapController>();
                 characterController.ForceMoveToTile(
                     gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination))
                 );

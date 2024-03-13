@@ -212,7 +212,6 @@ namespace UFB.Interactions
 
         private void ClickablePopupMenu(Transform t, IClickable clickable)
         {
-            Debug.Log("Single clicked");
             if (Mode != InteractionMode.SelectItem)
             {
                 return;
@@ -238,8 +237,8 @@ namespace UFB.Interactions
                                             "move",
                                             new RequestMoveMessage
                                             {
-                                                tileId = t.GetComponent<Tile>().Id,
-                                                destination = t.GetComponent<Tile>().Coordinates
+                                                tileId = t.GetComponent<BaseTile>().Id,
+                                                destination = t.GetComponent<BaseTile>().Coordinates
                                             }
                                         )
                                     );

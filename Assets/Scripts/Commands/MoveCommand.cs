@@ -5,10 +5,10 @@ namespace UFB.Commands
 {
     public class MoveCommand : Command
     {
-        private Tile _tile;
+        private BaseTile _tile;
         private Vector3 _destination;
 
-        public MoveCommand(Tile tile, Vector3 destination)
+        public MoveCommand(BaseTile tile, Vector3 destination)
         {
             _tile = tile;
             _destination = destination;

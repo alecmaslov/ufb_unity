@@ -3,7 +3,7 @@ using UnityEngine;
 using UFB.Map;
 using Unity.VisualScripting;
 
-[CustomEditor(typeof(Tile))]
+[CustomEditor(typeof(BaseTile))]
 public class TileEditor : Editor
 {
     private float _wallHeight = 0.5f;
@@ -15,7 +15,7 @@ public class TileEditor : Editor
     {
         DrawDefaultInspector();
 
-        Tile tile = (Tile)target;
+        BaseTile tile = (BaseTile)target;
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         EditorGUILayout.LabelField("Editor Properties", EditorStyles.boldLabel);
@@ -46,7 +46,7 @@ public class TileEditor : Editor
         }
 
         if (GUILayout.Button("Print State")) { 
-            tile.PrintState();
+            Debug.Log(tile.ToString());
         }
 
         // if (GUILayout.Button("Toggle Coordinates")) {

@@ -94,7 +94,7 @@ namespace UFB.Entities
             transform.position = position;
         }
 
-        public void Initialize(GameTile tile, GameBoard board)
+        public void Initialize(GameTile tile, GameMapController board)
         {
             // GameTile = tile;
             // this.name = tile.Coordinates.GameId;

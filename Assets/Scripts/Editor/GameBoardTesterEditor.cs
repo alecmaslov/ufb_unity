@@ -46,14 +46,6 @@ public class GameBoardTesterEditor : Editor
 
         _mapId = EditorGUILayout.TextField("Map ID", _mapId);
 
-        // slider with range 26*26
-        int newSliderValue = EditorGUILayout.IntSlider("Mesh Offset Index", _sliderValue, 0, 26 * 26 - 1);
-        if (newSliderValue != _sliderValue)
-        {
-            _sliderValue = newSliderValue;
-            gameBoardTester.GetComponent<MeshMap>().MeshVericesOffset = _sliderValue;
-            Debug.Log($"Slider value: {_sliderValue}");
-        }
 
 
         _tileSliderValue = EditorGUILayout.IntSlider("Tile Index", _tileSliderValue, 0, 26 * 26 - 1);

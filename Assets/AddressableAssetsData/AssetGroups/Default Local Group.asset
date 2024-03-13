@@ -71,14 +71,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - Character
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1c2ba26af9000bd44a1cce883e32df19
-    m_Address: maps/kaiju
+  - m_GUID: 7c2c7e0b9a36848509db60004828cffb
+    m_Address: maps/kaiju/material
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ea8b139d6b26f84f822e34d6bb3b310
-    m_Address: maps/kraken
+  - m_GUID: e0f5cf8635a31487088a7a3eeb65413d
+    m_Address: maps/kraken/material
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map

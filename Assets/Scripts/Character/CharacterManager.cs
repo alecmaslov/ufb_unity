@@ -231,7 +231,7 @@ namespace UFB.Character
             tileIds.Reverse();
             /// select all tiles from tiles using tileIds
 
-            var path = ServiceLocator.Current.Get<GameBoard>().GetTilesByIds(tileIds);
+            var path = ServiceLocator.Current.Get<GameMapController>().GetTilesByIds(tileIds);
 
             Debug.Log($"[CharacterManager] Moving character {m.characterId} along path");
             var task = _characters[m.characterId].MoveAlongPath(path);

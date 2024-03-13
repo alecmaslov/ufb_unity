@@ -47,11 +47,12 @@ namespace UFB.UI
                 _camera.transform.forward,
                 _camera.transform.up
             );
-            transform.rotation = Quaternion.Lerp(
-                transform.rotation,
-                lookRotation,
-                lookAtCameraSpeed
-            );
+            // transform.rotation = Quaternion.Lerp(
+            //     transform.rotation,
+            //     lookRotation,
+            //     lookAtCameraSpeed * Time.deltaTime
+            // );
+            transform.rotation = lookRotation;
         }
     }
 }
