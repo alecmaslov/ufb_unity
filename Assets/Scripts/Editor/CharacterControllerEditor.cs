@@ -66,10 +66,10 @@ public class CharacterControllerEditor : Editor
             //     playerEntity.ForceMoveToTileAnimate(tile, 1.0f);
             // }
 
-            // if (GUILayout.Button("Preview Pathfind"))
-            // {
-            //     playerEntity.PreviewRoute(UFB.Map.Coordinates.FromVector2Int(_destination));
-            // }
+            if (GUILayout.Button("Preview Pathfind"))
+            {
+                //characterController.PreviewRoute(UFB.Map.Coordinates.FromVector2Int(_destination));
+            }
 
             // if (GUILayout.Button("Toggle Hop"))
             // {

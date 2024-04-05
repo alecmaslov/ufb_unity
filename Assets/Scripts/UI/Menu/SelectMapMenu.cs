@@ -8,6 +8,7 @@ using UFB.Map;
 using System;
 using UFB.Core;
 using UnityEngine.TextCore.Text;
+using UI.ThreeDimensional;
 
 namespace UFB.UI
 {
@@ -34,6 +35,12 @@ namespace UFB.UI
         // [SerializeField] private Dictionary<string, Sprite> _characterSprites = new Dictionary<string, Sprite>();
         [SerializeField]
         private List<UfbCharacter> _characters;
+
+        [SerializeField]
+        private UIObject3D uIObject3D;
+
+        [SerializeField]
+        private GameObject[] uI3DMaps;
 
         private int _characterIndex = 0;
 

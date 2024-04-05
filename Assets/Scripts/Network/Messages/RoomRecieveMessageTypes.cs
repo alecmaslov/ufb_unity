@@ -14,6 +14,10 @@ namespace UFB.Network.RoomMessageTypes
     {
         public string characterId;
         public PathStep[] path;
+        public int left;
+        public int right;
+        public int top;
+        public int down;
     }
 
     public class NotificationMessage : IReceiveMessage

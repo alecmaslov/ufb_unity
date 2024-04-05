@@ -24,6 +24,8 @@ namespace UFB.UI
         public override void Initialize(PopupMenuEvent popupMenuEvent)
         {
             base.Initialize(popupMenuEvent);
+
+            if (_meshTriangle == null) return;
             _meshTriangle.SetTarget(popupMenuEvent.target);
         }
 

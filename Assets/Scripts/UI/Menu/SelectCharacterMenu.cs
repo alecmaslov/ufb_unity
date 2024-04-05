@@ -5,6 +5,7 @@ using UFB.Character;
 using TMPro;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine.InputSystem.LowLevel;
+using UI.ThreeDimensional;
 
 namespace UFB.UI
 {
@@ -29,6 +30,12 @@ namespace UFB.UI
         // [SerializeField] private Dictionary<string, Sprite> _characterSprites = new Dictionary<string, Sprite>();
         [SerializeField]
         private List<UfbCharacter> _characters;
+
+        [SerializeField]
+        private GameObject[] character3D;
+
+        [SerializeField]
+        private UIObject3D uIObject3D;
 
         private int _characterIndex = 0;
 
@@ -69,6 +76,9 @@ namespace UFB.UI
 
         private void SetCharacter(int index)
         {
+            uIObject3D.ObjectPrefab = character3D[index].transform;
+            //uIObject3D.gameObject.SetActive(false);
+            //uIObject3D.gameObject.SetActive(true);
             var character = _characters[index];
             // Sprite avatarSprite = TextureToSprite(character.avatar);
             _characterCard.sprite = character.avatar;

@@ -194,6 +194,33 @@ namespace UFB.Map
             return tile;
         }
 
+        public Tile GetTileByDirection(Coordinates coordinates, string dirction)
+        {
+
+            if (dirction == "top")
+            {
+                coordinates.Y++;
+            } 
+            else if (dirction == "down")
+            {
+                coordinates.Y--;
+            } 
+            else if (dirction == "left")
+            {
+                coordinates.X--;
+            }
+            else if(dirction == "right")
+            {
+                coordinates.X++;
+            }
+
+
+            var tile = Tiles.Values.FirstOrDefault(t => t.Coordinates.Equals(coordinates));
+            if (tile == null)
+                Debug.LogError($"Tile not found at coordinates {coordinates.Id}");
+            return tile;
+        }
+
         public IEnumerable<Tile> GetPathFromCoordinates(IEnumerable<Coordinates> coordinates)
         {
             return coordinates.Select(coord => GetTileByCoordinates(coord));

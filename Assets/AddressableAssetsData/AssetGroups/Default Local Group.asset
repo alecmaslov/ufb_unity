@@ -129,6 +129,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b5dfe9c70e57d64ca1da87445d2e41f
+    m_Address: Assets/Prefabs/Characters/Avenger.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0eed8cf1fb8ef7a4b88918f180eba958
+    m_Address: maps/kraken2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}
   m_SchemaSet:

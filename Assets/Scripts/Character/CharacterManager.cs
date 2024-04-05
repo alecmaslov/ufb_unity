@@ -68,6 +68,9 @@ namespace UFB.Character
         [SerializeField]
         private GameObject _characterPrefab;
 
+        [SerializeField]
+        private MovePanel movePanel;
+
         private Dictionary<string, CharacterController> _characters =
             new Dictionary<string, CharacterController>();
 
@@ -143,6 +146,8 @@ namespace UFB.Character
         private void SetSelectedCharacter(string characterId)
         {
             _selectedCharacterId = characterId;
+
+            movePanel.character = _characters[characterId];
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(
@@ -220,6 +225,7 @@ namespace UFB.Character
 
         private void OnCharacterMoved(CharacterMovedMessage m)
         {
+            movePanel.OnCharacterMoved(m);
             // var coordinates = m.path.Select(p => p.coord.ToCoordinates());
             var tileIds = m.path.Select(p => p.tileId);
             tileIds.Reverse();
@@ -229,7 +235,6 @@ namespace UFB.Character
 
             Debug.Log($"[CharacterManager] Moving character {m.characterId} along path");
             var task = _characters[m.characterId].MoveAlongPath(path);
-
             task.ContinueWith(
                 (t) =>
                 {

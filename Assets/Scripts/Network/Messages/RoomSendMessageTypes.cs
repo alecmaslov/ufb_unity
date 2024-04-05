@@ -31,5 +31,10 @@ namespace UFB.Network.RoomMessageTypes
     {
         public Coordinates destination;
         public string tileId;
+        public float originEnergy;
+        public string left;
+        public string right;
+        public string top;
+        public string down;
     }
 }

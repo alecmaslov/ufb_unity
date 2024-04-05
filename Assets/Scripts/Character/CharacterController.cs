@@ -19,7 +19,7 @@ namespace UFB.Character
 {
     [RequireComponent(typeof(TileAttachable))]
     [RequireComponent(typeof(PositionAnimator))]
-    public class CharacterController : MonoBehaviour, ICameraFocusable
+    public class CharacterController : MonoBehaviour, ICameraFocusable, IClickable
     {
         public string Id => State.id;
         public UfbCharacter Character { get; private set; }
@@ -81,7 +81,7 @@ namespace UFB.Character
             // detach from current tile
             transform.parent = null;
             // wait for it to hop up
-            await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 1f);
+            //await AnimationDispatcher.PlayAnimationAsync("HopStart", "Moving", 1f);
 
             if (_moveAlongPathCoroutine != null)
                 StopCoroutine(_moveAlongPathCoroutine);
@@ -147,6 +147,44 @@ namespace UFB.Character
             );
         }
 
+        public void CancelMoveToTile(
+            Tile destination,
+            float originEnergy,
+            float duration = 0.5f,
+            Action onComplete = null
+        )
+        {
+            //EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
+
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    "cancelMove",
+                    new RequestMoveMessage
+                    {
+                        tileId = destination.Id,
+                        destination = destination.Coordinates,
+                        originEnergy = originEnergy,
+                    }
+                )
+            );
+        }
+
+        public void MoveToTile(Tile tile)
+        {
+
+            EventBus.Publish(
+                new RoomSendMessageEvent(
+                    "move",
+                    new RequestMoveMessage
+                    {
+                        tileId = tile.Id,
+                        destination = tile.Coordinates,
+                    }
+                )
+            );
+            EventBus.Publish(new CancelPopupMenuEvent());
+        }
+
         public void OnFocus()
         {
             // EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));
@@ -156,6 +194,11 @@ namespace UFB.Character
         public void OnUnfocus()
         {
             return;
+        }
+
+        public void OnClick()
+        {
+            
         }
     }
 }

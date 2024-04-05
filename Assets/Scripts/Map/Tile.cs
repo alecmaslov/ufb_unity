@@ -26,6 +26,8 @@ namespace UFB.Map
         public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
         public bool IsMoving { get; private set; }
 
+        public string TilePosText => Coordinates.ColumnName + int.Parse(Coordinates.RowName).ToString("D2");
+
         private MeshMapTile _meshMapTile;
         private TileState _state;
         private Interpolator<float> _heightInterpolator;
@@ -64,7 +66,7 @@ namespace UFB.Map
         {
             _meshMapTile = meshMapTile;
             _state = tileState;
-            name = Coordinates.GameId + $" ({Coordinates.X}, {Coordinates.Y})";
+            name = Coordinates.GameId + $" ({Coordinates.X}, {Coordinates.Y})" + Id;
             SpawnWalls();
         }
 
@@ -85,6 +87,8 @@ namespace UFB.Map
             if (zeroLocalPosition)
                 gameObject.transform.localPosition = Vector3.zero;
         }
+
+        public TileState GetTileState() { return _state; }
 
         public void OnClick()
         {
