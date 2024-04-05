@@ -11,10 +11,10 @@ namespace UFB.UI
         private Slider _slider;
 
         [SerializeField]
-        private TextMeshProUGUI _valueText;
+        private Text _valueText;
 
         [SerializeField]
-        private TextMeshProUGUI _maxValueText;
+        private Text _maxValueText;
 
         [SerializeField]
         private RectTransform _valueIndicatorContainer;

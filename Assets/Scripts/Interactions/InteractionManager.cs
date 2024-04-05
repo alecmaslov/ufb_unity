@@ -9,6 +9,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UFB.Input;
 using UFB.Camera;
+using UFB.Character;
+using CharacterController = UFB.Character.CharacterController;
 
 namespace UFB.Events
 {
@@ -54,6 +56,10 @@ namespace UFB.Interactions
         private CameraController _cameraController;
 
         private bool _isOrbitLocked = false;
+        
+        [SerializeField]
+        private GameObject stepPanel;
+
 
         private void Awake()
         {
@@ -166,8 +172,33 @@ namespace UFB.Interactions
                 return;
             }
 
+            string playerId = ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.Id;
+
+            if(transform.childCount > 0)
+            {
+                if(transform.GetChild(0).TryGetComponent(out CharacterController character))
+                {
+                    if(stepPanel != null && character != null && character.Id == playerId)
+                    {
+                        stepPanel.gameObject.SetActive(true);
+                    }
+                }
+            }
+
             var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
             Debug.Log(turnOrder.Serialize());
+
+            /*            new RoomSendMessageEvent(
+                            "move",
+                            new RequestMoveMessage
+                            {
+                                tileId = transform.GetComponent<Tile>().Id,
+                                destination = transform
+                                    .GetComponent<Tile>()
+                                    .Coordinates
+                            }
+                        );*/
+
 
             ServiceLocator.Current
                 .Get<UIManager>()

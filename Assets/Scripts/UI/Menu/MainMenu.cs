@@ -12,6 +12,8 @@ namespace UFB.UI
     {
         public Menu newGameMenu;
         public Menu joinGameMenu;
+        public Menu selectCharacterMenu;
+        public Menu settingMenu;
 
         // public override async void Start()
         // {
@@ -50,9 +52,19 @@ namespace UFB.UI
             }
         }
 
-        public void OnNewGameButton() => _menuManager.OpenMenu(newGameMenu);
+        public void OnSettingMenu() => _menuManager.OpenMenu(settingMenu, false);
 
-        public void OnJoinGameButton() => _menuManager.OpenMenu(joinGameMenu);
+        public void OnNewGameButton()
+        {
+            _menuManager.OpenMenu(selectCharacterMenu);
+            ((SelectCharacterMenu)selectCharacterMenu).menuType = 0;
+        } 
+
+        public void OnJoinGameButton()
+        {
+            _menuManager.OpenMenu(selectCharacterMenu);
+            ((SelectCharacterMenu)selectCharacterMenu).menuType = 1;
+        }
 
         public void OnSettingsButton()
         {

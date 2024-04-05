@@ -7,6 +7,7 @@ using UFB.Events;
 using TMPro;
 using UFB.Character;
 using UnityEngine.UI;
+using UFB.Map;
 
 namespace UFB.UI
 {
@@ -16,13 +17,19 @@ namespace UFB.UI
         private Image _avatarImage;
 
         [SerializeField]
-        private TextMeshProUGUI _screenNameText;
+        private Text _screenNameText;
 
         [SerializeField]
         private LinearIndicatorBar _healthBar;
 
         [SerializeField]
         private LinearIndicatorBar _energyBar;
+
+        [SerializeField]
+        private Text _stepEnergeText;
+
+        [SerializeField]
+        private Text _tilePosText;
 
         private void OnEnable()
         {
@@ -38,7 +45,25 @@ namespace UFB.UI
         {
             _healthBar.SetRangedValueState(e.controller.State.stats.health);
             _energyBar.SetRangedValueState(e.controller.State.stats.energy);
+
             _screenNameText.text = e.controller.State.displayName;
+            _stepEnergeText.text = e.controller.State.stats.energy.current.ToString();
+
+            string newTileId = e.controller.State.currentTileId;
+            Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+            _tilePosText.text = CurrentTile.TilePosText;
+
+            e.controller.State.OnChange(() => 
+            {
+                _screenNameText.text = e.controller.State.displayName;
+                _stepEnergeText.text = e.controller.State.stats.energy.current.ToString();
+
+                string newTileId = e.controller.State.currentTileId;
+                Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+                _tilePosText.text = CurrentTile.TilePosText;
+            });
+
+
 
             Addressables
                 .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.controller.State.characterClass)
