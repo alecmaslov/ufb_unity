@@ -125,7 +125,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8daa7b4d60a939e4ba09ce8377ec3a4a
-    m_Address: maps/kraken
+    m_Address: maps/kraken1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -134,8 +134,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0eed8cf1fb8ef7a4b88918f180eba958
-    m_Address: maps/kraken2
+  - m_GUID: 41664ec29b0efdb4c91f0841f2e9f2bf
+    m_Address: maps/kraken
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
