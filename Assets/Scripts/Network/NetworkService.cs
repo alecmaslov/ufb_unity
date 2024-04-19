@@ -8,6 +8,7 @@ using System;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.Core;
+using System.Net;
 
 namespace UFB.Events
 {
@@ -92,8 +93,13 @@ namespace UFB.Network
                 Status = NetworkServiceStatus.Ready;
                 EventBus.Publish(new NetworkServiceStatusEvent(Status));
             }
-            catch
+            catch (Exception ex)
             {
+                if(ex is WebException)
+                {
+                    Debug.Log($"{ex.Message}");
+                }
+
                 Status = NetworkServiceStatus.Failed;
                 EventBus.Publish(new NetworkServiceStatusEvent(Status));
             }

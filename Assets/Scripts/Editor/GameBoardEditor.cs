@@ -28,7 +28,7 @@ public class GameBoardEditor : Editor
 
     private async Task<UFB.Network.ApiTypes.MapTile[]> GetMapTiles(string mapId)
     {
-        var apiClient = new ApiClient("api.thig.io", 8080);
+        var apiClient = new ApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT);
         var mapTiles = await apiClient.Get<UFB.Network.ApiTypes.MapTile[]>(
             $"/maps/tiles?mapId={mapId}"
         );
@@ -37,7 +37,7 @@ public class GameBoardEditor : Editor
 
     private async Task<UFB.Network.ApiTypes.Map> GetMapInfo(string mapId)
     {
-        var apiClient = new ApiClient("api.thig.io", 8080);
+        var apiClient = new ApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT);
         var mapInfo = await apiClient.Get<UFB.Network.ApiTypes.Map>($"/maps/{mapId}");
         return mapInfo;
     }
