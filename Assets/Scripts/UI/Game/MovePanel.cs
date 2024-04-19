@@ -38,6 +38,9 @@ public class MovePanel : MonoBehaviour
     [SerializeField]
     private Tile currentTile;
 
+    [SerializeField]
+    private GameObject globalDirection;
+
     private bool isLeft = true;
     private bool isRight = true;
     private bool isTop = true;
@@ -86,6 +89,9 @@ public class MovePanel : MonoBehaviour
         originEnergy = character.State.stats.energy.current;
 
         character.MoveToTile(character.CurrentTile);
+
+        globalDirection.SetActive(true);
+        globalDirection.transform.position = character.transform.position;
     }
 
     public void InitMoveBtns()
@@ -105,6 +111,7 @@ public class MovePanel : MonoBehaviour
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
+        globalDirection.SetActive(false) ;
 
         Tile tile = character.CurrentTile;
         character.MoveToTile(tile);

@@ -12,7 +12,7 @@ namespace UFB.Core
         {
             ServiceLocator.Initiailze();
 
-            var networkService = new NetworkService(new UfbApiClient("api.thig.io", 8080));
+            var networkService = new NetworkService(new UfbApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT));
             var spawnerService = SpawnerService.Instance;
             var gameService = new GameService();
 
