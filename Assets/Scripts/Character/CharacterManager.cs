@@ -71,6 +71,9 @@ namespace UFB.Character
         [SerializeField]
         private MovePanel movePanel;
 
+        [SerializeField]
+        private SpawnPanel spawnPanel;
+
         private Dictionary<string, CharacterController> _characters =
             new Dictionary<string, CharacterController>();
 
@@ -147,7 +150,23 @@ namespace UFB.Character
         {
             _selectedCharacterId = characterId;
 
-            movePanel.character = _characters[characterId];
+            CharacterController character = _characters[characterId];
+
+            movePanel.character = character;
+            spawnPanel.character = character;
+
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    "spawnMove",
+                    new RequestSpawnMessage
+                    {
+                        tileId = character.CurrentTile.Id,
+                        destination = character.CurrentTile.Coordinates,
+                        playerId = characterId
+                    }
+                )
+            );
+
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(

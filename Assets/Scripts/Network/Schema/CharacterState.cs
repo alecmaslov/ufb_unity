@@ -37,6 +37,12 @@ namespace UFB.StateSchema {
 		[Type(8, "ref", typeof(CharacterStatsState))]
 		public CharacterStatsState stats = new CharacterStatsState();
 
+		[Type(9, "array", typeof(ArraySchema<Item>))]
+		public ArraySchema<Item> items = new ArraySchema<Item>();
+
+		[Type(10, "array", typeof(ArraySchema<Item>))]
+		public ArraySchema<Item> powers = new ArraySchema<Item>();
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -149,6 +155,30 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<ArraySchema<Item>> __itemsChange;
+		public Action OnItemsChange(PropertyChangeHandler<ArraySchema<Item>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.items));
+			__itemsChange += __handler;
+			if (__immediate && this.items != null) { __handler(this.items, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(items));
+				__itemsChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<ArraySchema<Item>> __powersChange;
+		public Action OnPowersChange(PropertyChangeHandler<ArraySchema<Item>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.powers));
+			__powersChange += __handler;
+			if (__immediate && this.powers != null) { __handler(this.powers, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(powers));
+				__powersChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
@@ -160,6 +190,8 @@ namespace UFB.StateSchema {
 				case nameof(currentTileId): __currentTileIdChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(coordinates): __coordinatesChange?.Invoke((CoordinatesState) change.Value, (CoordinatesState) change.PreviousValue); break;
 				case nameof(stats): __statsChange?.Invoke((CharacterStatsState) change.Value, (CharacterStatsState) change.PreviousValue); break;
+				case nameof(items): __itemsChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
+				case nameof(powers): __powersChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				default: break;
 			}
 		}

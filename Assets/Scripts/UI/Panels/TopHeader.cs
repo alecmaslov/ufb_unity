@@ -17,6 +17,9 @@ namespace UFB.UI
         private Image _avatarImage;
 
         [SerializeField]
+        private Image _resourceAvatarImage;
+
+        [SerializeField]
         private Text _screenNameText;
 
         [SerializeField]
@@ -73,7 +76,10 @@ namespace UFB.UI
                     op.Status
                     == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
                 )
+                {
                     _avatarImage.sprite = op.Result.avatar;
+                    _resourceAvatarImage.sprite = op.Result.avatar;
+                }
                 else
                     Debug.LogError(
                         "Failed to load character avatar: " + op.OperationException.Message

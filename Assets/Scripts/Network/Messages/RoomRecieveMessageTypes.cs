@@ -20,6 +20,16 @@ namespace UFB.Network.RoomMessageTypes
         public int down;
     }
 
+    public class SpawnInitMessage : IReceiveMessage
+    {
+        public string characterId;
+        public string spawnId;
+        public int coin;
+        public int itemId;
+        public int powerId;
+
+    }
+
     public class NotificationMessage : IReceiveMessage
     {
         public string type;

@@ -37,4 +37,19 @@ namespace UFB.Network.RoomMessageTypes
         public string top;
         public string down;
     }
+
+    public class RequestSpawnMessage : ISendMessage
+    {
+        public Coordinates destination;
+        public string tileId;
+        public string playerId;
+    }
+
+    public class RequestGetSpawnMessage : ISendMessage
+    {
+        public int itemId;
+        public string playerId;
+        public int powerId;
+        public int coinCount;
+    }
 }
