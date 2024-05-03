@@ -16,6 +16,9 @@ namespace UFB.StateSchema {
 		[Type(1, "ref", typeof(RangedValueState))]
 		public RangedValueState energy = new RangedValueState();
 
+		[Type(2, "number")]
+		public float coin = default(float);
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -44,10 +47,23 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<float> __coinChange;
+		public Action OnCoinChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.coin));
+			__coinChange += __handler;
+			if (__immediate && this.coin != default(float)) { __handler(this.coin, default(float)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(coin));
+				__coinChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(health): __healthChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(energy): __energyChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
+				case nameof(coin): __coinChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
 				default: break;
 			}
 		}
