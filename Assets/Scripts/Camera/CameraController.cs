@@ -26,6 +26,15 @@ namespace UFB.Events
         }
     }
 
+    public class SpawnItemEvent
+    {
+        public string tileId = "";
+        public SpawnItemEvent(string tileId)
+        {
+            this.tileId = tileId;
+        }
+    }
+
     public class SetCameraStateEvent
     {
         public CameraState cameraState;

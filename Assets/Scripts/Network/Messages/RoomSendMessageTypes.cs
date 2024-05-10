@@ -52,4 +52,9 @@ namespace UFB.Network.RoomMessageTypes
         public int powerId;
         public int coinCount;
     }
+
+    public class RequestGetResourceMessage : ISendMessage
+    {
+        public string playerId;
+    }
 }

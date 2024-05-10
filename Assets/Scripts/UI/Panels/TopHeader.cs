@@ -44,7 +44,7 @@ namespace UFB.UI
             EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
-        private void OnSelectedCharacterEvent(SelectedCharacterEvent e)
+        public void OnSelectedCharacterEvent(SelectedCharacterEvent e)
         {
             _healthBar.SetRangedValueState(e.controller.State.stats.health);
             _energyBar.SetRangedValueState(e.controller.State.stats.energy);

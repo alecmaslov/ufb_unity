@@ -25,9 +25,14 @@ namespace UFB.Network.RoomMessageTypes
         public string characterId;
         public string spawnId;
         public int coin;
-        public int itemId;
-        public int powerId;
+        public int item;
+        public int power;
+        public string tileId;
+    }
 
+    public class GetResourceDataMessage : IReceiveMessage
+    {
+        public CharacterState characterState;
     }
 
     public class NotificationMessage : IReceiveMessage

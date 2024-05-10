@@ -16,8 +16,11 @@ namespace UFB.StateSchema {
 		[Type(1, "ref", typeof(RangedValueState))]
 		public RangedValueState energy = new RangedValueState();
 
-		[Type(2, "number")]
-		public float coin = default(float);
+		[Type(2, "int32")]
+		public int coin = default(int);
+
+		[Type(3, "int32")]
+		public int bags = default(int);
 
 		/*
 		 * Support for individual property change callbacks below...
@@ -47,15 +50,27 @@ namespace UFB.StateSchema {
 			};
 		}
 
-		protected event PropertyChangeHandler<float> __coinChange;
-		public Action OnCoinChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<int> __coinChange;
+		public Action OnCoinChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
 			__callbacks.AddPropertyCallback(nameof(this.coin));
 			__coinChange += __handler;
-			if (__immediate && this.coin != default(float)) { __handler(this.coin, default(float)); }
+			if (__immediate && this.coin != default(int)) { __handler(this.coin, default(int)); }
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(coin));
 				__coinChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __bagsChange;
+		public Action OnBagsChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.bags));
+			__bagsChange += __handler;
+			if (__immediate && this.bags != default(int)) { __handler(this.bags, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(bags));
+				__bagsChange -= __handler;
 			};
 		}
 
@@ -63,7 +78,8 @@ namespace UFB.StateSchema {
 			switch (change.Field) {
 				case nameof(health): __healthChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(energy): __energyChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
-				case nameof(coin): __coinChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
+				case nameof(coin): __coinChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				default: break;
 			}
 		}

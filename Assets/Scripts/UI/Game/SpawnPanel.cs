@@ -5,6 +5,7 @@ using UFB.Core;
 using UFB.Network.RoomMessageTypes;
 using UFB.Events;
 using UnityEngine.TextCore.Text;
+using UFB.Map;
 
 public class SpawnPanel : MonoBehaviour
 {
@@ -48,12 +49,20 @@ public class SpawnPanel : MonoBehaviour
     private int powerIdx;
     private int coin;
     private string characterId;
+    private string tileId;
 
     private int step = 0;
 
+    public bool isSpawn = false;
+    [SerializeField]
+    MovePanel movePanel;
+
+    [SerializeField]
+    GameObject sideStep;
+
     private void Start()
     {
-        var gameService = ServiceLocator.Current.Get<GameService>();
+ /*       var gameService = ServiceLocator.Current.Get<GameService>();
         if (gameService.Room == null)
         {
             Debug.LogError("Room is null");
@@ -62,19 +71,23 @@ public class SpawnPanel : MonoBehaviour
         gameService.SubscribeToRoomMessage<SpawnInitMessage>(
             "spawnInit",
             InitSpawn
-        );
+        );*/
     }
 
-    private void InitSpawn(SpawnInitMessage m)
+    public void InitSpawn(SpawnInitMessage m)
     {
-        Debug.Log("ddeedddd");
-        itemIdx = m.itemId;
-        powerIdx = m.powerId;
+        Debug.Log($"ddeedddd itemId: {m.item}, powerId: {m.power}");
+        itemIdx = m.item;
+        powerIdx = m.power;
         coin = m.coin;
         characterId = m.characterId;
+        tileId = m.tileId;
+
+        Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
         //InitSpawnPanel()
 
-        InitSpawnPanel(spawnImage.sprite, character.CurrentTile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+        InitSpawnPanel(spawnImage.sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+        gameObject.SetActive(true);
     }
 
     public void InitSpawnPanel(Sprite panelImage, string posText, Sprite itemSprite, Sprite powerSprite, string coin)
@@ -82,7 +95,7 @@ public class SpawnPanel : MonoBehaviour
         cancelBtn.SetActive(true);
         spawnConfirmPanel.SetActive(false);
         spawnImage.sprite = panelImage;
-        spawnImage1.sprite = itemSprite;
+        spawnImage1.sprite = panelImage;
         spawnText.text = posText;
         itemImage.sprite = itemSprite;
         powerImage.sprite = powerSprite;
@@ -98,11 +111,17 @@ public class SpawnPanel : MonoBehaviour
             cancelBtn.SetActive(false);
             spawnConfirmPanel.SetActive(true);
         }
-        else
+        else if(step == 1) 
         {
             posPanel.SetActive(true);
             spawnConfirmPanel.SetActive(false);
             spawnImage.gameObject.SetActive(false);
+            EventBus.Publish(
+                new SpawnItemEvent(tileId)
+            );
+        }
+        else if(step == 2)
+        {
             //spawnText.text = "MOVE TO";
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
@@ -116,14 +135,26 @@ public class SpawnPanel : MonoBehaviour
                     }
                 )
             );
-            gameObject.SetActive(false);
+            
 
+            if(!isSpawn)
+            {
+                movePanel.gameObject.SetActive(true);
+            } else
+            {
+                sideStep.SetActive(true);
+            }
+            gameObject.SetActive(false);
         }
         step++;
     }
 
     public void OnCancelClick()
     {
-
+        if (!isSpawn)
+        {
+            movePanel.gameObject.SetActive(true);
+        }
+        gameObject.SetActive(false);
     }
 }

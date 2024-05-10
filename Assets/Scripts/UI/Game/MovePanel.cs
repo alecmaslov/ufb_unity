@@ -8,6 +8,8 @@ using UFB.Map;
 using UFB.Core;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
+using UFB.Entities;
+using UFB.Events;
 
 public class MovePanel : MonoBehaviour
 {
@@ -79,6 +81,8 @@ public class MovePanel : MonoBehaviour
             bottomBtn.sprite = sprites[5];
             isDown = false;
         }
+
+        Debug.Log($"Tile Pos: {character.CurrentTile.TilePosText}, Tile State: {character.CurrentTile.GetTileState().type}");
     }
 
     public void Show()
@@ -122,6 +126,7 @@ public class MovePanel : MonoBehaviour
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
+        globalDirection.SetActive(false);
 
         character.CancelMoveToTile(
             currentTile,
@@ -139,13 +144,35 @@ public class MovePanel : MonoBehaviour
         var gameBoard = ServiceLocator.Current.Get<GameBoard>();
         Tile tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
         TileState state = tile1.GetTileState();
-        Debug.Log("STATE TILE TYPE: " +  state);
+        Debug.Log("STATE TILE TYPE: " +  state.type);
         if(state.type == "Bridge" || state.type == "Floor")
         {
             NextCoordinates(tile1.Coordinates, move);
         }
         tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
         character.MoveToTile(tile1);
+        for (int i = 0; i < tile1.transform.childCount; i++)
+        {
+            GameObject item = tile1.transform.GetChild(i).gameObject;
+            if (item.GetComponent<Chest>() != null || item.GetComponent<Merchant>() != null)
+            {
+                Debug.Log("Item position Destination...");
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        "spawnMove",
+                        new RequestSpawnMessage
+                        {
+                            tileId = tile1.Id,
+                            destination = tile1.Coordinates,
+                            playerId = character.Id,
+                        }
+                    )
+                );
+
+                gameObject.SetActive( false );
+            }
+        }
+
     }
 
     private void NextCoordinates(Coordinates coordinates, string move)
@@ -181,6 +208,13 @@ public class MovePanel : MonoBehaviour
         _destination.x = x;
         _destination.y = y;
         Debug.Log($"Current Tile pos: {x}, {y}");
+    }
+
+    private void Update()
+    {
+        if (character == null || !gameObject.active) return;
+
+        globalDirection.transform.position = character.transform.position;
     }
 
 }
