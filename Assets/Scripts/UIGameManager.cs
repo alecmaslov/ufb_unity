@@ -8,6 +8,8 @@ using UFB.Character;
 
 public class UIGameManager : MonoBehaviour
 {
+    public static UIGameManager instance;
+
     public UFB.Character.CharacterController controller;
 
     [SerializeField]
@@ -26,7 +28,21 @@ public class UIGameManager : MonoBehaviour
     ResourcePanel ResourcePanel;
 
     [SerializeField]
+    EquipPanel equipPanel;
+
+    [SerializeField]
     StepPanel StepPanel;
+
+    [SerializeField]
+    PowerMovePanel powerMovePanel;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     private void OnEnable()
     {
@@ -64,5 +80,6 @@ public class UIGameManager : MonoBehaviour
         TopStatusBar.OnSelectedCharacterEvent(e);
         ResourcePanel.OnCharacterValueEvent(e);
         StepPanel.OnCharacterStateChanged(e);
+        equipPanel.InitEquipList(e.controller.State);
     }
 }

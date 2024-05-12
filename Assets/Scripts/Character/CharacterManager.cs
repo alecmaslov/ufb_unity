@@ -155,7 +155,6 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            //character.gameObject.SetActive( false );
             character.transform.position = new Vector3(-100, -100, 100);
             EventBus.Publish(
                 new SetCameraPresetStateEvent
@@ -208,12 +207,15 @@ namespace UFB.Character
                 // if it's an NPC, don't play the intro
                 await character.Initialize(ufbCharacter, characterState, true);
                 _characters.Add(characterState.id, character);
+                
 
                 if (character.Id == _playerCharacterId)
                 {
                     SetSelectedCharacter(character.Id);
+                } else
+                {
+                    character.gameObject.SetActive(false);
                 }
-                character.gameObject.SetActive(false);
             }
             catch (Exception e)
             {

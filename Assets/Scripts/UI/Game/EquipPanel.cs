@@ -3,34 +3,63 @@ using System.Collections.Generic;
 using UFB.Character;
 using UFB.Core;
 using UFB.StateSchema;
+using UFB.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EquipPanel : MonoBehaviour
 {
+    public static EquipPanel instance;
+
     [SerializeField]
     Transform scrollView;
 
     [SerializeField]
     EquipItem item;
 
+    [SerializeField]
+    List<EquipSlot> equipItems;
+
+    [SerializeField]
+    PowerMovePanel powerMovePanel;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
+
     public void OnInitEquipView()
     {
+        if(gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
         gameObject.SetActive(true);
         
-        InitScrollView();
-        
-        CharacterState state = ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.State;
+    }
 
-        state.powers.ForEach(power =>
+    public void InitEquipList(CharacterState state)
+    {
+        state.OnChange(() =>
         {
-            if (power != null && power.count > 0)
+            InitScrollView();
+
+            state.powers.ForEach(power =>
             {
-                EquipItem go = Instantiate(item);
-                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
-                go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
-            }
+                if (power != null && power.count > 0)
+                {
+                    EquipItem go = Instantiate(item, scrollView);
+                    go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
+                    go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
+                    go.gameObject.SetActive(true);
+                }
+            });
         });
+
     }
 
     private void InitScrollView()
@@ -44,5 +73,10 @@ public class EquipPanel : MonoBehaviour
     public void OnClickEquip(Item equip)
     {
         Debug.Log($"equip logic system..");
+        powerMovePanel.Init(equip, equipItems[0]);
+
+        equipItems[0].Init(equip);
+
+        gameObject.SetActive(false);
     }
 }

@@ -46,6 +46,9 @@ namespace UFB.StateSchema {
 		[Type(11, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> stacks = new ArraySchema<Item>();
 
+		[Type(12, "array", typeof(ArraySchema<Item>))]
+		public ArraySchema<Item> equipSlots = new ArraySchema<Item>();
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -194,6 +197,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<ArraySchema<Item>> __equipSlotsChange;
+		public Action OnEquipSlotsChange(PropertyChangeHandler<ArraySchema<Item>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.equipSlots));
+			__equipSlotsChange += __handler;
+			if (__immediate && this.equipSlots != null) { __handler(this.equipSlots, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(equipSlots));
+				__equipSlotsChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
@@ -208,6 +223,7 @@ namespace UFB.StateSchema {
 				case nameof(items): __itemsChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				case nameof(powers): __powersChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				case nameof(stacks): __stacksChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
+				case nameof(equipSlots): __equipSlotsChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				default: break;
 			}
 		}
