@@ -26,6 +26,9 @@ namespace UFB.Map
         [SerializeField]
         private GameObject boardPos;
 
+        [SerializeField]
+        SpawnListPanel _spawnListPanel;
+
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
@@ -112,6 +115,7 @@ namespace UFB.Map
                 // SpawnEntity(entity.prefabAddress, tile);
                 SpawnEntity(entity);
             }
+            _spawnListPanel.InitSpawnItems(state, Tiles);
         }
 
         public async void SpawnEntity(StateSchema.SpawnEntity spawnEntity)

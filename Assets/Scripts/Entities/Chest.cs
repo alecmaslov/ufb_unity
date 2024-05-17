@@ -7,13 +7,32 @@ using UFB.Events;
 namespace UFB.Entities {
     public class Chest : MonoBehaviour, ISpawnableEntity, ICameraFocusable, IClickable
     {
-        public SpawnEntity SpawnEntity => throw new System.NotImplementedException();
+        public SpawnEntity SpawnEntity { get; private set; }
 
         public SpawnEntityParameters Parameters => throw new System.NotImplementedException();
 
         public void Initialize(SpawnEntity spawnEntity)
         {
+            SpawnEntity = spawnEntity;
+
             return;
+        }
+
+        private void OnEnable()
+        {
+            EventBus.Subscribe<SpawnItemEvent>(OnGetItemEvent);
+
+        }
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<SpawnItemEvent>(OnGetItemEvent);
+        }
+
+        private void OnGetItemEvent(SpawnItemEvent e)
+        {
+            if (e.tileId != SpawnEntity.tileId) return;
+            Destroy(gameObject);
+
         }
 
         public void OnClick()

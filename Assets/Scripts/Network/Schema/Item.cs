@@ -10,8 +10,8 @@ using Action = System.Action;
 
 namespace UFB.StateSchema {
 	public partial class Item : Schema {
-		[Type(0, "number")]
-		public float id = default(float);
+		[Type(0, "int32")]
+		public int id = default(int);
 
 		[Type(1, "string")]
 		public string name = default(string);
@@ -19,22 +19,25 @@ namespace UFB.StateSchema {
 		[Type(2, "string")]
 		public string description = default(string);
 
-		[Type(3, "number")]
-		public float count = default(float);
+		[Type(3, "int16")]
+		public short count = default(short);
 
-		[Type(4, "number")]
-		public float level = default(float);
+		[Type(4, "int16")]
+		public short level = default(short);
+
+		[Type(5, "int16")]
+		public short cost = default(short);
 
 		/*
 		 * Support for individual property change callbacks below...
 		 */
 
-		protected event PropertyChangeHandler<float> __idChange;
-		public Action OnIdChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<int> __idChange;
+		public Action OnIdChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
 			__callbacks.AddPropertyCallback(nameof(this.id));
 			__idChange += __handler;
-			if (__immediate && this.id != default(float)) { __handler(this.id, default(float)); }
+			if (__immediate && this.id != default(int)) { __handler(this.id, default(int)); }
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(id));
 				__idChange -= __handler;
@@ -65,37 +68,50 @@ namespace UFB.StateSchema {
 			};
 		}
 
-		protected event PropertyChangeHandler<float> __countChange;
-		public Action OnCountChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<short> __countChange;
+		public Action OnCountChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
 			__callbacks.AddPropertyCallback(nameof(this.count));
 			__countChange += __handler;
-			if (__immediate && this.count != default(float)) { __handler(this.count, default(float)); }
+			if (__immediate && this.count != default(short)) { __handler(this.count, default(short)); }
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(count));
 				__countChange -= __handler;
 			};
 		}
 
-		protected event PropertyChangeHandler<float> __levelChange;
-		public Action OnLevelChange(PropertyChangeHandler<float> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<short> __levelChange;
+		public Action OnLevelChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
 			__callbacks.AddPropertyCallback(nameof(this.level));
 			__levelChange += __handler;
-			if (__immediate && this.level != default(float)) { __handler(this.level, default(float)); }
+			if (__immediate && this.level != default(short)) { __handler(this.level, default(short)); }
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(level));
 				__levelChange -= __handler;
 			};
 		}
 
+		protected event PropertyChangeHandler<short> __costChange;
+		public Action OnCostChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.cost));
+			__costChange += __handler;
+			if (__immediate && this.cost != default(short)) { __handler(this.cost, default(short)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(cost));
+				__costChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
-				case nameof(id): __idChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
+				case nameof(id): __idChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(name): __nameChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(description): __descriptionChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
-				case nameof(count): __countChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
-				case nameof(level): __levelChange?.Invoke((float) change.Value, (float) change.PreviousValue); break;
+				case nameof(count): __countChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
+				case nameof(level): __levelChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
+				case nameof(cost): __costChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				default: break;
 			}
 		}

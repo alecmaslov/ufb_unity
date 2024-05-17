@@ -10,6 +10,18 @@ namespace UFB.Network.RoomMessageTypes
         public CoordinatesState coord;
     }
 
+    public class PowerMove : IReceiveMessage
+    {
+        public int id;
+        public string name;
+        public int powerImageId;
+        public int[] powerIds;
+        public Item[] costList;
+        public int light;
+        public int coin;
+        public int range;
+    }
+
     public class CharacterMovedMessage : IReceiveMessage
     {
         public string characterId;
@@ -20,14 +32,24 @@ namespace UFB.Network.RoomMessageTypes
         public int down;
     }
 
+    public class PowerMoveListMessage : IReceiveMessage
+    {
+        public PowerMove[] powermoves;
+    }
+
     public class SpawnInitMessage : IReceiveMessage
     {
         public string characterId;
         public string spawnId;
         public int coin;
-        public int itemId;
-        public int powerId;
+        public int item;
+        public int power;
+        public string tileId;
+    }
 
+    public class GetResourceDataMessage : IReceiveMessage
+    {
+        public CharacterState characterState;
     }
 
     public class NotificationMessage : IReceiveMessage

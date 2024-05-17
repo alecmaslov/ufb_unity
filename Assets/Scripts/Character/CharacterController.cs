@@ -185,6 +185,13 @@ namespace UFB.Character
             EventBus.Publish(new CancelPopupMenuEvent());
         }
 
+        public void InitMovePos(Tile tile)
+        {
+            Vector3 position = tile.Position;
+            _positionAnimator.AnimateTo(position, 0.5f);
+            tile.AttachGameObject(gameObject);
+        }
+
         public void OnFocus()
         {
             // EventBus.Publish(new CameraOrbitAroundEvent(_model.transform, 0.3f));

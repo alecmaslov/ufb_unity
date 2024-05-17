@@ -14,6 +14,7 @@ using UFB.Network.RoomMessageTypes;
 using UFB.Core;
 using System.Threading.Tasks;
 using Colyseus.Schema;
+using UFB.Camera;
 
 namespace UFB.Events
 {
@@ -154,18 +155,24 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-
+            character.transform.position = new Vector3(-100, -100, 100);
             EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "spawnMove",
-                    new RequestSpawnMessage
-                    {
-                        tileId = character.CurrentTile.Id,
-                        destination = character.CurrentTile.Coordinates,
-                        playerId = characterId
-                    }
-                )
+                new SetCameraPresetStateEvent
+                {
+                    presetState = CameraController.PresetState.TopDown
+                }
             );
+            /*            EventBus.Publish(
+                            RoomSendMessageEvent.Create(
+                                "spawnMove",
+                                new RequestSpawnMessage
+                                {
+                                    tileId = character.CurrentTile.Id,
+                                    destination = character.CurrentTile.Coordinates,
+                                    playerId = characterId
+                                }
+                            )
+                        );*/
 
 
             // now it's up to any listeners to register events with these
@@ -200,10 +207,14 @@ namespace UFB.Character
                 // if it's an NPC, don't play the intro
                 await character.Initialize(ufbCharacter, characterState, true);
                 _characters.Add(characterState.id, character);
+                
 
                 if (character.Id == _playerCharacterId)
                 {
                     SetSelectedCharacter(character.Id);
+                } else
+                {
+                    character.gameObject.SetActive(false);
                 }
             }
             catch (Exception e)

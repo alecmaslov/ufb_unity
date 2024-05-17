@@ -11,6 +11,8 @@ using UFB.Input;
 using UFB.Camera;
 using UFB.Character;
 using CharacterController = UFB.Character.CharacterController;
+using UFB.Entities;
+using UnityEngine.TextCore.Text;
 
 namespace UFB.Events
 {
@@ -58,8 +60,12 @@ namespace UFB.Interactions
         private bool _isOrbitLocked = false;
         
         [SerializeField]
-        private GameObject stepPanel;
+        private GameObject resourcePanel;
 
+        [SerializeField]
+        UIGameManager uiGameManager;
+
+        private bool isSpawn = true;
 
         private void Awake()
         {
@@ -153,8 +159,21 @@ namespace UFB.Interactions
         private void RaycastObjects(Vector2 position)
         {
             // Convert mouse position to ray
-            Vector3 position3D = new Vector3(position.x, position.y, 0f);
+            Vector3 position3D = new Vector3(position.x, position.y, -4f);
             Ray ray = _mainCamera.ScreenPointToRay(position3D);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                {
+                    OnRaycastClicked(hit.transform, clickable);
+                }
+            }
+        }
+
+        private void RaycastObjects(Vector3 position)
+        {
+            Ray ray = _mainCamera.ScreenPointToRay(position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -174,7 +193,64 @@ namespace UFB.Interactions
 
             string playerId = ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.Id;
 
-            if(transform.childCount > 0)
+            string tileId = transform.GetComponent<Tile>().Id;
+            Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
+
+            if (tile != null)
+            {
+                if(isSpawn)
+                {
+                    Events.EventBus.Publish(
+                        new CameraOrbitAroundEvent(transform, 0.3f)
+                    );
+                }
+
+
+                for (int i = 0; i < tile.transform.childCount; i++)
+                {
+                    GameObject item = tile.transform.GetChild(i).gameObject;
+                    
+                    if (item.GetComponent<CharacterController>() != null && !isSpawn && uiGameManager.TopPanel.activeSelf)
+                    {
+                        if (resourcePanel != null && item.GetComponent<CharacterController>().Id == playerId)
+                        {
+                            resourcePanel.gameObject.SetActive(true);
+                        }
+                    }
+
+
+                    if (item.GetComponent<Chest>() != null && isSpawn)
+                    {
+                        item.GetComponent<Chest>().OnClick();
+
+                        Events.EventBus.Publish(
+                            RoomSendMessageEvent.Create(
+                                "initSpawnMove",
+                                new RequestSpawnMessage
+                                {
+                                    tileId = tile.Id,
+                                    destination = tile.Coordinates,
+                                    playerId = playerId,
+                                }
+                            )
+                        );
+                        uiGameManager.controller.InitMovePos(tile);
+
+                        ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
+                        Events.EventBus.Publish(
+                            new CameraOrbitAroundEvent(
+                                ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
+                                0.3f
+                            )
+                        );
+                        isSpawn = false;
+                    }
+
+
+                }
+            }
+
+            /*if (transform.childCount > 0)
             {
                 if(transform.GetChild(0).TryGetComponent(out CharacterController character))
                 {
@@ -183,7 +259,23 @@ namespace UFB.Interactions
                         stepPanel.gameObject.SetActive(true);
                     }
                 }
-            }
+                if (transform.GetChild(0).TryGetComponent(out Chest chest))
+                {
+                    if (stepPanel != null && chest != null)
+                    {
+                        Debug.Log("Click chest");
+                        chest.OnClick();
+                    }
+                }
+                if (transform.GetChild(0).TryGetComponent(out Merchant merchant))
+                {
+                    if (stepPanel != null && merchant != null)
+                    {
+                        Debug.Log("Click merchant");
+                        merchant.OnClick();
+                    }
+                }
+            }*/
 
             var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
             Debug.Log(turnOrder.Serialize());

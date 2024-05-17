@@ -9,6 +9,7 @@ using System;
 using UFB.Core;
 using UnityEngine.TextCore.Text;
 using UI.ThreeDimensional;
+using UFB.Network.ApiTypes;
 
 namespace UFB.UI
 {
@@ -70,6 +71,10 @@ namespace UFB.UI
             SetItemImage(mapSelector.GetSelectOptions()[0].id);
 
             mapSelector.OnSelectionChanged += OnMapSelectionChanged;
+
+            var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
+            createOptions.mapName = mapSelector.CurrentSelection.mapName;
+            _menuManager.SetMenuData("createOptions", createOptions);
         }
 
         private void OnDisable()

@@ -1,6 +1,11 @@
+using Colyseus.Schema;
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Events;
+using UFB.Items;
+using UFB.StateSchema;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StepPanel : MonoBehaviour
 {
@@ -10,17 +15,12 @@ public class StepPanel : MonoBehaviour
     [SerializeField]
     GameObject resourcePanel;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    Text meleeText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField]
+    Text manaText;
+
 
     public void OnMoveBtn()
     {
@@ -39,8 +39,29 @@ public class StepPanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void OnStopBtn()
+    public void OnManaBtn()
     {
 
+    }
+
+    public void OnCharacterStateChanged(SelectedCharacterEvent e)
+    {
+        e.controller.State.OnChange(() =>
+        {
+            ArraySchema<Item> items = e.controller.State.items;
+            items.ForEach(item =>
+            {
+                ITEM type = (ITEM) item.id;
+                if(type == ITEM.Melee)
+                {
+                    meleeText.text = item.count.ToString();
+                } 
+                else if(type == ITEM.Mana)
+                {
+                    manaText.text = item.count.ToString();
+                }
+
+            });
+        });
     }
 }
