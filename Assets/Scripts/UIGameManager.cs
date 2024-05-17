@@ -36,6 +36,7 @@ public class UIGameManager : MonoBehaviour
     [SerializeField]
     PowerMovePanel powerMovePanel;
 
+
     private void Awake()
     {
         if (instance == null)
@@ -57,6 +58,11 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<SpawnInitMessage>(
             "spawnInit",
             InitSpawn
+        );
+
+        gameService.SubscribeToRoomMessage<PowerMoveListMessage>(
+            "ReceivePowerMoveList",
+            equipPanel.OnReceivePowerMoveList
         );
     }
 

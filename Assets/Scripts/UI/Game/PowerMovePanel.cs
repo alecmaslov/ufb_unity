@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class PowerMovePanel : MonoBehaviour
     public static PowerMovePanel instance;
 
     [SerializeField]
-    PowerMoveItem item;
+    PowerMoveItem moveitem;
 
     [SerializeField]
     Image powerImage;
@@ -20,6 +21,9 @@ public class PowerMovePanel : MonoBehaviour
 
     [SerializeField]
     Text powerLevelText;
+
+    [SerializeField]
+    Transform moveList;
 
     public EquipSlot slot;
 
@@ -33,13 +37,23 @@ public class PowerMovePanel : MonoBehaviour
         }
     }
 
-    public void Init(Item item, EquipSlot slt)
+    public void Init(Item item, EquipSlot slt, PowerMove[] moves)
     {
         slot = slt;
         powerItem = item;
         powerImage.sprite = GlobalResources.instance.powers[item.id];
         powerNameText.text = item.name;
         powerLevelText.text = $"LEVEL {item.level}";
+
+        //INIT MOVE LIST PART
+        InitMoveList();
+        foreach (PowerMove move in moves)
+        {
+            PowerMoveItem pm = Instantiate(moveitem, moveList);
+            pm.Init(move);
+            pm.gameObject.SetActive(true);
+        }
+
         gameObject.SetActive(true);
 
     }
@@ -51,5 +65,12 @@ public class PowerMovePanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void InitMoveList()
+    {
+        for(int i = 1; i < moveList.childCount; i++)
+        {
+            Destroy(moveList.GetChild(i).gameObject);
+        }
+    }
 
 }

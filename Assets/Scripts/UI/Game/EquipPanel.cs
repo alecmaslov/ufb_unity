@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UFB.Character;
 using UFB.Core;
+using UFB.Events;
+using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class EquipPanel : MonoBehaviour
@@ -23,12 +26,23 @@ public class EquipPanel : MonoBehaviour
     [SerializeField]
     PowerMovePanel powerMovePanel;
 
+    private Item seletedItem = null;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+    }
+
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
     }
 
     public void OnInitEquipView()
@@ -73,9 +87,25 @@ public class EquipPanel : MonoBehaviour
     public void OnClickEquip(Item equip)
     {
         Debug.Log($"equip logic system..");
-        powerMovePanel.Init(equip, equipItems[0]);
 
-        equipItems[0].Init(equip);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "getPowerMoveList",
+                new RequestGetPowerMoveList
+                {
+                    powerId = equip.id
+                }
+            )
+        );
+
+        seletedItem = equip;
+    }
+
+    public void OnReceivePowerMoveList(PowerMoveListMessage message)
+    {
+        powerMovePanel.Init(seletedItem, equipItems[0], message.powermoves);
+
+        equipItems[0].Init(seletedItem);
 
         gameObject.SetActive(false);
     }

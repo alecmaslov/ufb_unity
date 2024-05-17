@@ -45,6 +45,12 @@ namespace UFB.Network.RoomMessageTypes
         public string playerId;
     }
 
+    public class RequestGetPowerMoveList : ISendMessage
+    {
+        public int powerId;    
+    }
+
+
     public class RequestGetSpawnMessage : ISendMessage
     {
         public int itemId;

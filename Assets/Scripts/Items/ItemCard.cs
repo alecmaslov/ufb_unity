@@ -11,17 +11,6 @@ public class ItemCard : MonoBehaviour
     [SerializeField]
     private Text countText;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void InitDate(string count, Sprite sprite) 
     {

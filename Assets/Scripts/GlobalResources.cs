@@ -10,6 +10,10 @@ public class GlobalResources : MonoBehaviour
     public Sprite[] powers;
     public Sprite[] stacks;
 
+    public Sprite coin;
+    public Sprite range;
+    public Sprite lightImage;
+
     private void Awake()
     {
         if (instance == null)
