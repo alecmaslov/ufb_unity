@@ -16,10 +16,13 @@ namespace UFB.StateSchema {
 		[Type(1, "ref", typeof(RangedValueState))]
 		public RangedValueState energy = new RangedValueState();
 
-		[Type(2, "int32")]
-		public int coin = default(int);
+		[Type(2, "ref", typeof(RangedValueState))]
+		public RangedValueState ultimate = new RangedValueState();
 
 		[Type(3, "int32")]
+		public int coin = default(int);
+
+		[Type(4, "int32")]
 		public int bags = default(int);
 
 		/*
@@ -47,6 +50,18 @@ namespace UFB.StateSchema {
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(energy));
 				__energyChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<RangedValueState> __ultimateChange;
+		public Action OnUltimateChange(PropertyChangeHandler<RangedValueState> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.ultimate));
+			__ultimateChange += __handler;
+			if (__immediate && this.ultimate != null) { __handler(this.ultimate, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(ultimate));
+				__ultimateChange -= __handler;
 			};
 		}
 
@@ -78,6 +93,7 @@ namespace UFB.StateSchema {
 			switch (change.Field) {
 				case nameof(health): __healthChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(energy): __energyChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
+				case nameof(ultimate): __ultimateChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(coin): __coinChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				default: break;

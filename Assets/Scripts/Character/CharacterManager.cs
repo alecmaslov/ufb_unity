@@ -44,6 +44,12 @@ namespace UFB.Events
         public bool isPlayer = false; // lets us set zombie
     }
 
+    public class ChangeCharacterStateEvent
+    {
+        public CharacterState state;
+        public bool isPlayer = false; // lets us set zombie
+    }
+
     // public class CharacterStatsChangedEvent
     // {
     //     public CharacterState state;
@@ -61,6 +67,7 @@ namespace UFB.Character
     // will require access to characters
     public class CharacterManager : MonoBehaviourService
     {
+        public static CharacterManager Instance { get; private set; }
         public CharacterController PlayerCharacter => _characters[_playerCharacterId];
         public CharacterController SelectedCharacter => _characters[_selectedCharacterId];
 
@@ -75,6 +82,7 @@ namespace UFB.Character
         [SerializeField]
         private SpawnPanel spawnPanel;
 
+
         private Dictionary<string, CharacterController> _characters =
             new Dictionary<string, CharacterController>();
 
@@ -82,6 +90,14 @@ namespace UFB.Character
         private string _selectedCharacterId; // during zombie mode, we can set this to a different player
 
         private MapSchema<CharacterState> _characterStates;
+
+        private void Awake()
+        {
+            if(Instance == null)
+            {
+                Instance = this;
+            }
+        }
 
         private void OnEnable()
         {
@@ -119,12 +135,14 @@ namespace UFB.Character
             _characterStates.ForEach(
                 (key, character) =>
                 {
-                    character.stats.OnChange(() => {
-                        // EventBus.Publish(new SelectedCharacterEvent {
-                        //     character = _characters[key].Character,
-                        //     state = character,
-                        //     isPlayerControlled = key == _selectedCharacterId
-                        // });
+                    character.stats.OnChange(() =>
+                    {
+                        Debug.Log($"key: {key}, coin: {character.stats.coin}");
+                        EventBus.Publish(new ChangeCharacterStateEvent
+                        {
+                            state = character,
+                            isPlayer = character.id == _selectedCharacterId
+                        });
                     });
                 }
             );
@@ -181,6 +199,14 @@ namespace UFB.Character
                 {
                     controller = _characters[characterId],
                     isPlayer = characterId == _playerCharacterId
+                }
+            );
+
+            EventBus.Publish(
+                new ChangeCharacterStateEvent
+                {
+                    state = character.State,
+                    isPlayer = true
                 }
             );
         }

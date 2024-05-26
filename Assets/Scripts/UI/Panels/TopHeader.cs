@@ -29,6 +29,9 @@ namespace UFB.UI
         private LinearIndicatorBar _energyBar;
 
         [SerializeField]
+        private LinearIndicatorBar _ultimateBar;
+        
+        [SerializeField]
         private Text _stepEnergeText;
 
         [SerializeField]
@@ -36,32 +39,33 @@ namespace UFB.UI
 
         private void OnEnable()
         {
-            EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+            //EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
         private void OnDisable()
         {
-            EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+            //EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
-        public void OnSelectedCharacterEvent(SelectedCharacterEvent e)
+        public void OnSelectedCharacterEvent(ChangeCharacterStateEvent e)
         {
-            _healthBar.SetRangedValueState(e.controller.State.stats.health);
-            _energyBar.SetRangedValueState(e.controller.State.stats.energy);
+            _healthBar.SetRangedValueState(e.state.stats.health);
+            _energyBar.SetRangedValueState(e.state.stats.energy);
+            _ultimateBar.SetRangedValueState(e.state.stats.ultimate);
 
-            _screenNameText.text = e.controller.State.displayName;
-            _stepEnergeText.text = e.controller.State.stats.energy.current.ToString();
+            _screenNameText.text = e.state.displayName;
+            _stepEnergeText.text = e.state.stats.energy.current.ToString();
 
-            string newTileId = e.controller.State.currentTileId;
+            string newTileId = e.state.currentTileId;
             Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
             _tilePosText.text = CurrentTile.TilePosText;
 
-            e.controller.State.OnChange(() => 
+            e.state.OnChange(() => 
             {
-                _screenNameText.text = e.controller.State.displayName;
-                _stepEnergeText.text = e.controller.State.stats.energy.current.ToString();
+                _screenNameText.text = e.state.displayName;
+                _stepEnergeText.text = e.state.stats.energy.current.ToString();
 
-                string newTileId = e.controller.State.currentTileId;
+                string newTileId = e.state.currentTileId;
                 Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
                 _tilePosText.text = CurrentTile.TilePosText;
             });
@@ -69,7 +73,7 @@ namespace UFB.UI
 
 
             Addressables
-                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.controller.State.characterClass)
+                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
                 .Completed += (op) =>
             {
                 if (

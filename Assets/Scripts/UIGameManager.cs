@@ -4,6 +4,7 @@ using UFB.Network.RoomMessageTypes;
 using UFB.UI;
 using UnityEngine;
 using UFB.Character;
+using UnityEngine.TextCore.Text;
 
 
 public class UIGameManager : MonoBehaviour
@@ -12,29 +13,22 @@ public class UIGameManager : MonoBehaviour
 
     public UFB.Character.CharacterController controller;
 
-    [SerializeField]
-    SpawnPanel spawnPanel;
+    public SpawnPanel spawnPanel;
 
-    [SerializeField]
-    TopHeader TopStatusBar;
+    public TopHeader TopStatusBar;
 
-    [SerializeField]
     public GameObject TopPanel;
 
     [SerializeField]
     GameObject BottomStatusBar;
 
-    [SerializeField]
-    ResourcePanel ResourcePanel;
+    public ResourcePanel ResourcePanel;
 
-    [SerializeField]
-    EquipPanel equipPanel;
+    public EquipPanel equipPanel;
 
-    [SerializeField]
-    StepPanel StepPanel;
+    public StepPanel StepPanel;
 
-    [SerializeField]
-    PowerMovePanel powerMovePanel;
+    public PowerMovePanel powerMovePanel;
 
 
     private void Awake()
@@ -47,6 +41,7 @@ public class UIGameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventBus.Subscribe<ChangeCharacterStateEvent>(OnChangeCharacterStateEvent);
         EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
 
         var gameService = ServiceLocator.Current.Get<GameService>();
@@ -64,10 +59,13 @@ public class UIGameManager : MonoBehaviour
             "ReceivePowerMoveList",
             equipPanel.OnReceivePowerMoveList
         );
+
+        gameService.SubscribeToRoomMessage<BecomeZombieMessage>("unEquipPowerReceived", OnUnEquipPowerReceived);
     }
 
     private void OnDisable()
     {
+        EventBus.Unsubscribe<ChangeCharacterStateEvent>(OnChangeCharacterStateEvent);
         EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
     }
 
@@ -80,12 +78,34 @@ public class UIGameManager : MonoBehaviour
         spawnPanel.InitSpawn(m);
     }
 
-    private void OnSelectedCharacterEvent(SelectedCharacterEvent e)
+    private void OnSelectedCharacterEvent(SelectedCharacterEvent e) 
     {
         controller = e.controller;
+    }
+
+    private void OnChangeCharacterStateEvent(ChangeCharacterStateEvent e)
+    {
         TopStatusBar.OnSelectedCharacterEvent(e);
         ResourcePanel.OnCharacterValueEvent(e);
         StepPanel.OnCharacterStateChanged(e);
-        equipPanel.InitEquipList(e.controller.State);
+        equipPanel.InitEquipList(e.state);
+    }
+
+    private void OnUnEquipPowerReceived(BecomeZombieMessage e)
+    {
+        powerMovePanel.ClosePowerMovePanel();
+    }
+
+    public void OnTest() 
+    {
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "testPath",
+                new RequestGetPowerMoveList
+                {
+                    powerId = 0,
+                }
+            )
+        );
     }
 }

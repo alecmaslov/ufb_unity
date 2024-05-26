@@ -28,6 +28,8 @@ public class EquipPanel : MonoBehaviour
 
     private Item seletedItem = null;
 
+    public int slotIdx = 0;
+
     private void Awake()
     {
         if (instance == null)
@@ -45,35 +47,43 @@ public class EquipPanel : MonoBehaviour
     {
     }
 
-    public void OnInitEquipView()
+    public void OnInitEquipView(int slot)
     {
+        slotIdx = slot;
         if(gameObject.activeSelf)
         {
             gameObject.SetActive(false);
             return;
         }
         gameObject.SetActive(true);
-        
+        InitEquipList(CharacterManager.Instance.PlayerCharacter.State);
+        UIGameManager.instance.powerMovePanel.gameObject.SetActive(false);
     }
 
     public void InitEquipList(CharacterState state)
     {
-        state.OnChange(() =>
+        Debug.Log($"power count: {state.powers.Count}");
+        InitScrollView();
+
+        state.powers.ForEach(power =>
         {
-            InitScrollView();
-
-            state.powers.ForEach(power =>
+            if (power != null && power.count > 0)
             {
-                if (power != null && power.count > 0)
-                {
-                    EquipItem go = Instantiate(item, scrollView);
-                    go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
-                    go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
-                    go.gameObject.SetActive(true);
-                }
-            });
-        });
+                EquipItem go = Instantiate(item, scrollView);
+                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
+                go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
+                go.gameObject.SetActive(true);
 
+                power.OnChange(() =>
+                {
+                    Debug.Log($"power count: {power.count}");
+                    if(power.count == 0)
+                    {
+                        Destroy(go.gameObject);
+                    }
+                });
+            }
+        });
     }
 
     private void InitScrollView()
@@ -103,9 +113,9 @@ public class EquipPanel : MonoBehaviour
 
     public void OnReceivePowerMoveList(PowerMoveListMessage message)
     {
-        powerMovePanel.Init(seletedItem, equipItems[0], message.powermoves);
+        powerMovePanel.Init(seletedItem, equipItems[slotIdx], message.powermoves);
 
-        equipItems[0].Init(seletedItem);
+        equipItems[slotIdx].Init(seletedItem, message.powermoves);
 
         gameObject.SetActive(false);
     }

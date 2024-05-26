@@ -16,6 +16,9 @@ public class SpawnPanel : MonoBehaviour
     Text spawnText;
 
     [SerializeField]
+    Sprite[] spawnImages;
+
+    [SerializeField]
     Image spawnImage;
 
     [SerializeField]
@@ -39,6 +42,9 @@ public class SpawnPanel : MonoBehaviour
     [SerializeField]
     GlobalResources global;
 
+    [SerializeField]
+    Text moveText;
+
     [HideInInspector]
     [SerializeField]
     public UFB.Character.CharacterController character;
@@ -59,6 +65,8 @@ public class SpawnPanel : MonoBehaviour
 
     [SerializeField]
     GameObject sideStep;
+
+    private string _spawnId = "";
 
     private void Start()
     {
@@ -82,11 +90,19 @@ public class SpawnPanel : MonoBehaviour
         coin = m.coin;
         characterId = m.characterId;
         tileId = m.tileId;
+        _spawnId = m.spawnId;
 
         Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
         //InitSpawnPanel()
+        Sprite sprite = m.spawnId == "default"? spawnImages[0] : spawnImages[1];
 
-        InitSpawnPanel(spawnImage.sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+        InitSpawnPanel(sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+
+        if(!isSpawn)
+        {
+            OnConfirmClick();
+        }
+
         gameObject.SetActive(true);
     }
 
@@ -131,7 +147,7 @@ public class SpawnPanel : MonoBehaviour
                         coinCount = coin,
                         itemId = itemIdx,
                         powerId = powerIdx,
-
+                        spawnId = _spawnId,
                     }
                 )
             );
@@ -145,6 +161,7 @@ public class SpawnPanel : MonoBehaviour
                 sideStep.SetActive(true);
             }
             gameObject.SetActive(false);
+            moveText.text = "Move To";
         }
         step++;
     }

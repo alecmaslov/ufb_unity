@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,12 +13,16 @@ namespace UFB.UI
         [SerializeField]
         private Image _icon;
 
+        public int slotIdx = 0;
         // have a property of an equippable
 
         private Item _item;
 
-        public void Init(Item power)
+        private PowerMove[] powerMoves;
+
+        public void Init(Item power, PowerMove[] _powerMoves)
         {
+            powerMoves = _powerMoves;
             _item = power;
             _icon.sprite = GlobalResources.instance.powers[power.id];
             _icon.gameObject.SetActive(true);
@@ -27,6 +32,18 @@ namespace UFB.UI
         {
             _item = null;
             _icon.gameObject.SetActive(false);
+        }
+
+        public void OnClickSlot()
+        {
+            if(_item != null)
+            {
+                UIGameManager.instance.powerMovePanel.Init(_item, this, powerMoves);
+            } 
+            else
+            {
+                UIGameManager.instance.equipPanel.OnInitEquipView(slotIdx);
+            }
         }
     }
 }

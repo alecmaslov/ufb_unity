@@ -146,10 +146,10 @@ namespace UFB.UI
 
         }*/
 
-        public void OnCharacterValueEvent(SelectedCharacterEvent e)
+        public void OnCharacterValueEvent(ChangeCharacterStateEvent e)
         {
             Addressables
-                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.controller.State.characterClass)
+                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
                 .Completed += (op) =>
                 {
                     if (
@@ -163,12 +163,11 @@ namespace UFB.UI
                         );
                 };
 
-            e.controller.State.OnChange(() =>
-            {
-                coinText.text = e.controller.State.stats.coin.ToString();
-                itemBagText.text = e.controller.State.stats.bags.ToString();
 
-                ArraySchema<Item> items = e.controller.State.items;
+                coinText.text = e.state.stats.coin.ToString();
+                itemBagText.text = e.state.stats.bags.ToString();
+
+                ArraySchema<Item> items = e.state.items;
                 items.ForEach(item =>
                 {
                     ITEM type = (ITEM)item.id;
@@ -215,7 +214,6 @@ namespace UFB.UI
 
                 crystalText.text = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
 
-            });
         }
 
         private string GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)

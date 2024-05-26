@@ -7,6 +7,8 @@ using UFB.Events;
 namespace UFB.Entities {
     public class Chest : MonoBehaviour, ISpawnableEntity, ICameraFocusable, IClickable
     {
+        public bool isItemBag = false;
+
         public SpawnEntity SpawnEntity { get; private set; }
 
         public SpawnEntityParameters Parameters => throw new System.NotImplementedException();
