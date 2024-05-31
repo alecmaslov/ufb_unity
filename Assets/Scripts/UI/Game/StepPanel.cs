@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class StepPanel : MonoBehaviour
 {
+    public static StepPanel instance { get; private set; }
+
     [SerializeField] 
     MovePanel movePanel;
 
@@ -21,6 +23,17 @@ public class StepPanel : MonoBehaviour
     [SerializeField]
     Text manaText;
 
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     public void OnMoveBtn()
     {
@@ -44,24 +57,21 @@ public class StepPanel : MonoBehaviour
 
     }
 
-    public void OnCharacterStateChanged(SelectedCharacterEvent e)
+    public void OnCharacterStateChanged(ChangeCharacterStateEvent e)
     {
-        e.controller.State.OnChange(() =>
+        ArraySchema<Item> items = e.state.items;
+        items.ForEach(item =>
         {
-            ArraySchema<Item> items = e.controller.State.items;
-            items.ForEach(item =>
+            ITEM type = (ITEM) item.id;
+            if(type == ITEM.Melee)
             {
-                ITEM type = (ITEM) item.id;
-                if(type == ITEM.Melee)
-                {
-                    meleeText.text = item.count.ToString();
-                } 
-                else if(type == ITEM.Mana)
-                {
-                    manaText.text = item.count.ToString();
-                }
+                meleeText.text = item.count.ToString();
+            } 
+            else if(type == ITEM.Mana)
+            {
+                manaText.text = item.count.ToString();
+            }
 
-            });
         });
     }
 }

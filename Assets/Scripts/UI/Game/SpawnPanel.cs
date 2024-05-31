@@ -9,11 +9,16 @@ using UFB.Map;
 
 public class SpawnPanel : MonoBehaviour
 {
+    public static SpawnPanel instance;
+
     [SerializeField]
     GameObject spawnConfirmPanel;
 
     [SerializeField]
     Text spawnText;
+
+    [SerializeField]
+    Sprite[] spawnImages;
 
     [SerializeField]
     Image spawnImage;
@@ -39,6 +44,9 @@ public class SpawnPanel : MonoBehaviour
     [SerializeField]
     GlobalResources global;
 
+    [SerializeField]
+    Text moveText;
+
     [HideInInspector]
     [SerializeField]
     public UFB.Character.CharacterController character;
@@ -60,6 +68,8 @@ public class SpawnPanel : MonoBehaviour
     [SerializeField]
     GameObject sideStep;
 
+    private string _spawnId = "";
+
     private void Start()
     {
  /*       var gameService = ServiceLocator.Current.Get<GameService>();
@@ -74,6 +84,18 @@ public class SpawnPanel : MonoBehaviour
         );*/
     }
 
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
     public void InitSpawn(SpawnInitMessage m)
     {
         Debug.Log($"ddeedddd itemId: {m.item}, powerId: {m.power}");
@@ -82,11 +104,19 @@ public class SpawnPanel : MonoBehaviour
         coin = m.coin;
         characterId = m.characterId;
         tileId = m.tileId;
+        _spawnId = m.spawnId;
 
         Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
         //InitSpawnPanel()
+        Sprite sprite = m.spawnId == "default"? spawnImages[0] : spawnImages[1];
 
-        InitSpawnPanel(spawnImage.sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+        InitSpawnPanel(sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+
+        if(!isSpawn)
+        {
+            OnConfirmClick();
+        }
+
         gameObject.SetActive(true);
     }
 
@@ -131,7 +161,7 @@ public class SpawnPanel : MonoBehaviour
                         coinCount = coin,
                         itemId = itemIdx,
                         powerId = powerIdx,
-
+                        spawnId = _spawnId,
                     }
                 )
             );
@@ -145,6 +175,7 @@ public class SpawnPanel : MonoBehaviour
                 sideStep.SetActive(true);
             }
             gameObject.SetActive(false);
+            moveText.text = "Move To";
         }
         step++;
     }

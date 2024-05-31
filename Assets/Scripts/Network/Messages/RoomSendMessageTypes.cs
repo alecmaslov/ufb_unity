@@ -43,6 +43,7 @@ namespace UFB.Network.RoomMessageTypes
         public Coordinates destination;
         public string tileId;
         public string playerId;
+        public bool isItemBag;
     }
 
     public class RequestGetPowerMoveList : ISendMessage
@@ -57,6 +58,7 @@ namespace UFB.Network.RoomMessageTypes
         public string playerId;
         public int powerId;
         public int coinCount;
+        public string spawnId;
     }
 
     public class RequestGetResourceMessage : ISendMessage

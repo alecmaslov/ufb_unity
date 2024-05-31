@@ -15,6 +15,7 @@ namespace UFB.UI
 {
     public class ResourcePanel : MonoBehaviour
     {
+        public static ResourcePanel instance;
         [SerializeField]
         private ItemCard item;
 
@@ -31,7 +32,7 @@ namespace UFB.UI
         private Text itemText;
 
         [SerializeField]
-        private Text[] powers;
+        private Text[] stacks;
 
         [SerializeField]
         private Text heartText;
@@ -56,6 +57,12 @@ namespace UFB.UI
 
         [SerializeField]
         private Text warpCrystalText;
+
+        [SerializeField]
+        Image heartBackImage;
+
+        [SerializeField]
+        Image crystalBackImage;
 
         private void OnEnable()
         {
@@ -146,79 +153,92 @@ namespace UFB.UI
 
         }*/
 
-        public void OnCharacterValueEvent(SelectedCharacterEvent e)
+        private void Awake()
         {
-            Addressables
-                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.controller.State.characterClass)
-                .Completed += (op) =>
-                {
-                    if (
-                        op.Status
-                        == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
-                    )
-                        _avatarImage.sprite = op.Result.avatar;
-                    else
-                        Debug.LogError(
-                            "Failed to load character avatar: " + op.OperationException.Message
-                        );
-                };
-
-            e.controller.State.OnChange(() =>
-            {
-                coinText.text = e.controller.State.stats.coin.ToString();
-                itemBagText.text = e.controller.State.stats.bags.ToString();
-
-                ArraySchema<Item> items = e.controller.State.items;
-                items.ForEach(item =>
-                {
-                    ITEM type = (ITEM)item.id;
-                    if (type == ITEM.Feather)
-                    {
-                        featherText.text = item.count.ToString();
-                    }
-                    else if (type == ITEM.Potion)
-                    {
-                        potionText.text = item.count.ToString();
-                    }
-                    else if (type == ITEM.Elixir)
-                    {
-                        elixirText.text = item.count.ToString();
-                    }
-                    else if (type == ITEM.WarpCrystal)
-                    {
-                        warpCrystalText.text = item.count.ToString();
-                    }
-                });
-
-                List<ITEM> arrows = new List<ITEM>
-                {
-                    ITEM.IceArrow,
-                    ITEM.BombArrow,
-                    ITEM.FireArrow,
-                    ITEM.VoidArrow,
-                    ITEM.Arrow
-                };
-
-                quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1);
-
-                List<ITEM> bombs = new List<ITEM>
-                {
-                    ITEM.Bomb,
-                    ITEM.IceBomb,
-                    ITEM.VoidBomb,
-                    ITEM.FireBomb
-                };
-
-                bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1);
-
-                heartText.text = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
-
-                crystalText.text = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
-
-            });
+            if (instance == null)
+                instance = this;
         }
 
-        private string GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)
+        public void InitInstance()
+        {
+            if (instance == null)
+                instance = this;
+        }
+
+        public void OnCharacterValueEvent(ChangeCharacterStateEvent e)
+        {
+            Addressables
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
+            .Completed += (op) =>
+            {
+                if (
+                    op.Status
+                    == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+                )
+                    _avatarImage.sprite = op.Result.avatar;
+                else
+                    Debug.LogError(
+                        "Failed to load character avatar: " + op.OperationException.Message
+                    );
+            };
+
+
+            coinText.text = e.state.stats.coin.ToString();
+            itemBagText.text = e.state.stats.bags.ToString();
+
+            ArraySchema<Item> items = e.state.items;
+            items.ForEach(item =>
+            {
+                ITEM type = (ITEM)item.id;
+                if (type == ITEM.Feather)
+                {
+                    featherText.text = item.count.ToString();
+                }
+                else if (type == ITEM.Potion)
+                {
+                    potionText.text = item.count.ToString();
+                }
+                else if (type == ITEM.Elixir)
+                {
+                    elixirText.text = item.count.ToString();
+                }
+                else if (type == ITEM.WarpCrystal)
+                {
+                    warpCrystalText.text = item.count.ToString();
+                }
+            });
+
+            List<ITEM> arrows = new List<ITEM>
+            {
+                ITEM.IceArrow,
+                ITEM.BombArrow,
+                ITEM.FireArrow,
+                ITEM.VoidArrow,
+                ITEM.Arrow
+            };
+
+            quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
+
+            List<ITEM> bombs = new List<ITEM>
+            {
+                ITEM.Bomb,
+                ITEM.IceBomb,
+                ITEM.VoidBomb,
+                ITEM.FireBomb
+            };
+
+            bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
+
+            int heartPieceNum = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
+            heartText.text = heartPieceNum.ToString();
+            heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceNum % 5];
+
+            int crystalPieceNum = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
+            crystalText.text = crystalPieceNum.ToString();
+            crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
+        }
+
+        private int GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)
         {
             int totalCount = 0;
             int subCount = 0;
@@ -238,7 +258,7 @@ namespace UFB.UI
 
             totalCount = mainCount + Mathf.FloorToInt((float)subCount / (float)divideNum);
 
-            return totalCount.ToString();
+            return totalCount;
         }
     }
 }

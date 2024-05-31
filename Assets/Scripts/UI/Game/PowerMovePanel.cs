@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,13 +34,24 @@ public class PowerMovePanel : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
     }
 
     public void Init(Item item, EquipSlot slt, PowerMove[] moves)
     {
+
+        if(gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         slot = slt;
         powerItem = item;
         powerImage.sprite = GlobalResources.instance.powers[item.id];
@@ -55,13 +68,28 @@ public class PowerMovePanel : MonoBehaviour
         }
 
         gameObject.SetActive(true);
+        UIGameManager.instance.equipPanel.gameObject.SetActive(false);
 
     }
 
     public void UnEquipPower()
     {
+
+        UFB.Events.EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "unEquipPower",
+                new RequestGetPowerMoveList
+                {
+                    powerId = powerItem.id,
+                }
+            )
+        );
+    }
+
+    public void ClosePowerMovePanel()
+    {
         slot.ResetImage();
-        EquipPanel.instance.OnInitEquipView();
+        //EquipPanel.instance.OnInitEquipView(slot.slotIdx);
         gameObject.SetActive(false);
     }
 
