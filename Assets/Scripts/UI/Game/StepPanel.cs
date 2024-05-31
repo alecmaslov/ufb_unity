@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class StepPanel : MonoBehaviour
 {
+    public static StepPanel instance { get; private set; }
+
     [SerializeField] 
     MovePanel movePanel;
 
@@ -21,6 +23,17 @@ public class StepPanel : MonoBehaviour
     [SerializeField]
     Text manaText;
 
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     public void OnMoveBtn()
     {

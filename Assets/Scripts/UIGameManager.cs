@@ -30,6 +30,8 @@ public class UIGameManager : MonoBehaviour
 
     public PowerMovePanel powerMovePanel;
 
+    public UIDirection uIDirection;
+
 
     private void Awake()
     {

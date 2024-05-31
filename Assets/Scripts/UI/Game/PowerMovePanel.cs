@@ -34,9 +34,13 @@ public class PowerMovePanel : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
     }
 
     public void Init(Item item, EquipSlot slt, PowerMove[] moves)

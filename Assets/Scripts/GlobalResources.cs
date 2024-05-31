@@ -14,6 +14,9 @@ public class GlobalResources : MonoBehaviour
     public Sprite range;
     public Sprite lightImage;
 
+    public Sprite[] divideTo4;
+    public Sprite[] divideTo3;
+
     private void Awake()
     {
         if (instance == null)

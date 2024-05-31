@@ -9,6 +9,8 @@ using UFB.Map;
 
 public class SpawnPanel : MonoBehaviour
 {
+    public static SpawnPanel instance;
+
     [SerializeField]
     GameObject spawnConfirmPanel;
 
@@ -80,6 +82,18 @@ public class SpawnPanel : MonoBehaviour
             "spawnInit",
             InitSpawn
         );*/
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
     }
 
     public void InitSpawn(SpawnInitMessage m)

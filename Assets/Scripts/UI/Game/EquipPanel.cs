@@ -33,9 +33,13 @@ public class EquipPanel : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
+    }
+
+    public void InitInstance()
+    {
+        if (instance == null)
+            instance = this;
     }
 
     private void OnEnable()
