@@ -32,6 +32,11 @@ public class UIGameManager : MonoBehaviour
 
     public UIDirection uIDirection;
 
+    public MovePanel movePanel;
+
+    public AddExtraScore[] scoreTexts;
+
+    public AttackPanel attackPanel;
 
     private void Awake()
     {
@@ -62,6 +67,27 @@ public class UIGameManager : MonoBehaviour
             equipPanel.OnReceivePowerMoveList
         );
 
+        gameService.SubscribeToRoomMessage<MoveItemMessage>(
+            "ReceiveMoveItem",
+            movePanel.OnReceiveMoveItem
+        );
+
+        gameService.SubscribeToRoomMessage<SetMoveItemMessage>(
+            "SetMoveItem",
+            movePanel.OnSetMoveItemReceived
+        );
+
+        gameService.SubscribeToRoomMessage<AddExtraScoreMessage>(
+            "addExtraScore",
+            OnReceiveExtraScore
+        );
+
+        gameService.SubscribeToRoomMessage<GetBombMessage>(
+            "getBombDamage",
+            movePanel.OnReceiveGetBombMessage
+        );
+        
+
         gameService.SubscribeToRoomMessage<BecomeZombieMessage>("unEquipPowerReceived", OnUnEquipPowerReceived);
     }
 
@@ -87,6 +113,7 @@ public class UIGameManager : MonoBehaviour
 
     private void OnChangeCharacterStateEvent(ChangeCharacterStateEvent e)
     {
+        attackPanel.InitCharacterState(e);
         TopStatusBar.OnSelectedCharacterEvent(e);
         ResourcePanel.OnCharacterValueEvent(e);
         StepPanel.OnCharacterStateChanged(e);
@@ -96,6 +123,14 @@ public class UIGameManager : MonoBehaviour
     private void OnUnEquipPowerReceived(BecomeZombieMessage e)
     {
         powerMovePanel.ClosePowerMovePanel();
+    }
+
+    private void OnReceiveExtraScore(AddExtraScoreMessage message)
+    {
+        foreach (AddExtraScore item in scoreTexts)
+        {
+            item.OnReceiveExtraScore(message);
+        }
     }
 
     public void OnTest() 

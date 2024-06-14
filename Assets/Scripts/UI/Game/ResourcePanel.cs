@@ -64,6 +64,12 @@ namespace UFB.UI
         [SerializeField]
         Image crystalBackImage;
 
+        [SerializeField]
+        ItemDetailPanel bombDetailPanel;
+
+        [SerializeField]
+        ItemDetailPanel arrowDetailPanel;
+
         private void OnEnable()
         {
 
@@ -217,49 +223,40 @@ namespace UFB.UI
                 ITEM.Arrow
             };
 
-            quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
+            quiverText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
 
             List<ITEM> bombs = new List<ITEM>
             {
                 ITEM.Bomb,
                 ITEM.IceBomb,
                 ITEM.VoidBomb,
-                ITEM.FireBomb
+                ITEM.FireBomb,
+                ITEM.caltropBomb,
             };
 
-            bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
+            bombText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
 
-            int heartPieceNum = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
+            int heartPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
             heartText.text = heartPieceNum.ToString();
             heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceNum % 5];
 
-            int crystalPieceNum = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
+            int crystalPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
             crystalText.text = crystalPieceNum.ToString();
             crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
         }
 
-        private int GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)
+        public void OnBombItemDetailClicked()
         {
-            int totalCount = 0;
-            int subCount = 0;
-            int mainCount = 0;
-            items.ForEach((item) =>
-            {
-                ITEM type = (ITEM)item.id;
-                if(type == mainType)
-                {
-                    mainCount++;
-                }
-                if(subTypes.FindIndex(tp => tp == type) != -1)
-                {
-                    subCount++;
-                }
-            });
+            bombDetailPanel.Init();
+        }
 
-            totalCount = mainCount + Mathf.FloorToInt((float)subCount / (float)divideNum);
-
-            return totalCount;
+        public void OnArrowsItemDetailClicked()
+        {
+            arrowDetailPanel.Init();
         }
     }
+
+ 
+
 }
 

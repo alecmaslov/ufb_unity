@@ -21,7 +21,7 @@ namespace UFB.Network
         private string _baseUrl;
         private int _port;
 
-        public ApiClient(string apiBase, int port, bool useHttps = true)
+        public ApiClient(string apiBase, int port, bool useHttps = false)
         {
             this._baseUrl = apiBase;
             this._port = port;

@@ -82,7 +82,7 @@ namespace UFB.Network
         public NetworkService(UfbApiClient apiClient)
         {
             ApiClient = apiClient;
-            _colyseusClient = new ColyseusClient(ApiClient.GetUrlWithProtocol("wss://"));
+            _colyseusClient = new ColyseusClient(ApiClient.GetUrlWithProtocol(GlobalDefine.WebSocketHeader));
         }
 
         public async Task Connect()

@@ -98,7 +98,8 @@ namespace UFB.Map
             foreach (var meshMapTile in meshMapTiles)
             {
                 var tile = meshMapTile.GameObject.AddComponent<Tile>();
-                tile.Initialize(meshMapTile, state.TileStateAtCoordinates(meshMapTile.Coordinates));
+                TileState tileState = state.TileStateAtCoordinates(meshMapTile.Coordinates);
+                tile.Initialize(meshMapTile, tileState);
                 Tiles.Add(tile.Id, tile);
             }
         }

@@ -67,6 +67,8 @@ namespace UFB.Interactions
 
         private bool isSpawn = true;
 
+        private bool isMoveDirection = false;
+
         private void Awake()
         {
 #if UNITY_EDITOR
@@ -86,11 +88,11 @@ namespace UFB.Interactions
             Events.EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             Events.EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
             ServiceLocator.Current.Register(this);
-            // _gameInput.OrbitView.TouchPress.started += OnTouchPressStarted;
+            _gameInput.OrbitView.TouchPress.started += OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
             _gameInput.OrbitView.OrbitCamera.performed += OnOrbitCamera;
             _gameInput.OrbitView.ScrollZoom.performed += OnScrollZoom;
-            _gameInput.OrbitView.TapSelect.performed += OnTapSelect;
+            //_gameInput.OrbitView.TapSelect.performed += OnTapSelect;
             _gameInput.Enable();
         }
 
@@ -98,11 +100,11 @@ namespace UFB.Interactions
         {
             Events.EventBus.Unsubscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             ServiceLocator.Current.Unregister<InteractionManager>();
-            // _gameInput.OrbitView.TouchPress.started -= OnTouchPressStarted;
+            _gameInput.OrbitView.TouchPress.started -= OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started -= OnMouseClickStarted;
             _gameInput.OrbitView.OrbitCamera.performed -= OnOrbitCamera;
             _gameInput.OrbitView.ScrollZoom.performed -= OnScrollZoom;
-            _gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
+            //_gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
             _gameInput.Disable();
         }
 
@@ -171,23 +173,16 @@ namespace UFB.Interactions
             }
         }
 
-        private void RaycastObjects(Vector3 position)
-        {
-            Ray ray = _mainCamera.ScreenPointToRay(position);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
-                {
-                    OnRaycastClicked(hit.transform, clickable);
-                }
-            }
-        }
 
         private void OnRaycastClicked(Transform transform, IClickable clickable)
         {
             if (Mode != InteractionMode.SelectItem)
             {
+                return;
+            }
+            if (isMoveDirection) 
+            { 
+                clickable.OnClick();
                 return;
             }
 
@@ -250,47 +245,9 @@ namespace UFB.Interactions
                 }
             }
 
-            /*if (transform.childCount > 0)
-            {
-                if(transform.GetChild(0).TryGetComponent(out CharacterController character))
-                {
-                    if(stepPanel != null && character != null && character.Id == playerId)
-                    {
-                        stepPanel.gameObject.SetActive(true);
-                    }
-                }
-                if (transform.GetChild(0).TryGetComponent(out Chest chest))
-                {
-                    if (stepPanel != null && chest != null)
-                    {
-                        Debug.Log("Click chest");
-                        chest.OnClick();
-                    }
-                }
-                if (transform.GetChild(0).TryGetComponent(out Merchant merchant))
-                {
-                    if (stepPanel != null && merchant != null)
-                    {
-                        Debug.Log("Click merchant");
-                        merchant.OnClick();
-                    }
-                }
-            }*/
 
             var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
             Debug.Log(turnOrder.Serialize());
-
-            /*            new RoomSendMessageEvent(
-                            "move",
-                            new RequestMoveMessage
-                            {
-                                tileId = transform.GetComponent<Tile>().Id,
-                                destination = transform
-                                    .GetComponent<Tile>()
-                                    .Coordinates
-                            }
-                        );*/
-
 
             ServiceLocator.Current
                 .Get<UIManager>()
@@ -365,6 +322,11 @@ namespace UFB.Interactions
         private void OnInteractionModeChangeEvent(InteractionModeChangeEvent e)
         {
             Mode = e.Mode;
+        }
+
+        private void Update()
+        {
+            isMoveDirection = UIGameManager.instance.movePanel.globalDirection.gameObject.activeSelf;
         }
     }
 }

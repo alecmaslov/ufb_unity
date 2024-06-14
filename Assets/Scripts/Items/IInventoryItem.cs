@@ -34,7 +34,8 @@ namespace UFB.Items {
         VoidArrow,
         FireBomb,
         IceBomb,
-        VoidBomb
+        VoidBomb,
+        caltropBomb
     }
 
     public enum POWER

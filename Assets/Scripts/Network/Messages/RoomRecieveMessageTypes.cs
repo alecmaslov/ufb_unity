@@ -37,6 +37,26 @@ namespace UFB.Network.RoomMessageTypes
         public PowerMove[] powermoves;
     }
 
+    public class MoveItemMessage : IReceiveMessage
+    {
+        public int left;
+        public int right;
+        public int top;
+        public int down;
+        public int itemId;
+    }
+
+    public class SetMoveItemMessage : IReceiveMessage 
+    { 
+        public int itemId;
+        public string tileId;
+    }
+
+    public class GetBombMessage : IReceiveMessage
+    {
+        public string playerId;
+    }
+
     public class SpawnInitMessage : IReceiveMessage
     {
         public string characterId;
@@ -45,6 +65,13 @@ namespace UFB.Network.RoomMessageTypes
         public int item;
         public int power;
         public string tileId;
+    }
+
+    public class AddExtraScoreMessage: IReceiveMessage
+    {
+        public string characterId;
+        public string type;
+        public int score;
     }
 
     public class GetResourceDataMessage : IReceiveMessage

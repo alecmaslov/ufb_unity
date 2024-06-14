@@ -65,6 +65,10 @@ public class PowerMovePanel : MonoBehaviour
             PowerMoveItem pm = Instantiate(moveitem, moveList);
             pm.Init(move);
             pm.gameObject.SetActive(true);
+            pm.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                UIGameManager.instance.attackPanel.Init(pm);
+            });
         }
 
         gameObject.SetActive(true);

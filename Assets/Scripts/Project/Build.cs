@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 namespace UFB.Project
 {
@@ -24,6 +25,13 @@ namespace UFB.Project
             buildPlayerOptions.options = BuildOptions.None;
             BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
+
+        [MenuItem("Build/Run Project")]
+        public static void RunProject() 
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
     }
     #endif
 }

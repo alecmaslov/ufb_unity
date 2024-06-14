@@ -68,10 +68,10 @@ namespace UFB.Map
             _state = tileState;
             name = Coordinates.GameId + $" ({Coordinates.X}, {Coordinates.Y})" + Id;
 
-            if(tileState.type == "Bridge" || tileState.type == "Floor" || tileState.type == "Void")
-            {
-                SpawnWalls();
-            }
+            //if(tileState.type == "Bridge" || tileState.type == "Floor" || tileState.type == "Void")
+            //{
+                //SpawnWalls();
+            //}
         }
 
         public void Stretch(float height, float duration = 0.5f, Action onComplete = null)

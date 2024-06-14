@@ -10,6 +10,7 @@ using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.Entities;
 using UFB.Events;
+using UFB.Items;
 
 public class MovePanel : MonoBehaviour
 {
@@ -41,7 +42,18 @@ public class MovePanel : MonoBehaviour
     private Tile currentTile;
 
     [SerializeField]
-    private GameObject globalDirection;
+    public UIDirection globalDirection;
+
+    [SerializeField]
+    Text[] btnList;
+
+    [SerializeField]
+    MoveItemDetailPanel moveItemDetailPanel;
+
+    public int selectedItemId = -1;
+
+    [SerializeField]
+    GameObject explosionBtn;
 
     private bool isLeft = true;
     private bool isRight = true;
@@ -61,26 +73,54 @@ public class MovePanel : MonoBehaviour
     public void OnCharacterMoved(CharacterMovedMessage m)
     {
         InitMoveBtns();
-        if(m.left == 0)
+
+        Sprite leftSprite = sprites[0];
+        Sprite rightSprite = sprites[0];
+        Sprite topprite = sprites[0];
+        Sprite bottomSprite = sprites[0];
+
+        if (m.left == 0)
         {
             leftBtn.sprite = sprites[5];
             isLeft = false;
+            leftSprite = sprites[5];
         }
         if(m.right == 0)
         {
             rightBtn.sprite = sprites[5];
             isRight = false;
+            rightSprite = sprites[5];
         }
-        if(m.top == 0) 
+        if (m.top == 0) 
         {
             topBtn.sprite = sprites[5];
             isTop = false;
+            topprite = sprites[5];
         }
-        if(m.down == 0)
+        if (m.down == 0)
         {
             bottomBtn.sprite = sprites[5];
             isDown = false;
+            bottomSprite = sprites[5];
         }
+
+        globalDirection.InitPosDirection(leftSprite, rightSprite, topprite, bottomSprite, isLeft, isRight, isTop, isDown);
+
+
+        List<ITEM> bombs = new List<ITEM>
+        {
+            ITEM.IceBomb,
+            ITEM.VoidBomb,
+            ITEM.FireBomb,
+            ITEM.caltropBomb,
+        };
+
+        btnList[0].text = GlobalResources.instance.GetItemTotalCount(character.State.items, ITEM.Bomb, bombs, 1).ToString();
+
+        btnList[1].text = GlobalResources.instance.GetItemTotalCount(character.State.items, ITEM.Feather, new List<ITEM> { }, 1).ToString();
+
+        btnList[2].text = GlobalResources.instance.GetItemTotalCount(character.State.items, ITEM.WarpCrystal, new List<ITEM> { }, 1).ToString();
+
 
         Debug.Log($"Tile Pos: {character.CurrentTile.TilePosText}, Tile State: {character.CurrentTile.GetTileState().type}");
     }
@@ -94,7 +134,7 @@ public class MovePanel : MonoBehaviour
 
         character.MoveToTile(character.CurrentTile);
 
-        globalDirection.SetActive(true);
+        globalDirection.gameObject.SetActive(true);
         globalDirection.transform.position = character.transform.position;
     }
 
@@ -108,14 +148,16 @@ public class MovePanel : MonoBehaviour
         isRight = true;
         isTop = true;
         isDown = true;
-}
+        explosionBtn.SetActive(false);
+
+    }
 
     public void OnConfirm()
     {
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
-        globalDirection.SetActive(false) ;
+        globalDirection.gameObject.SetActive(false) ;
 
         Tile tile = character.CurrentTile;
         character.MoveToTile(tile);
@@ -126,7 +168,7 @@ public class MovePanel : MonoBehaviour
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
-        globalDirection.SetActive(false);
+        globalDirection.gameObject.SetActive(false);
 
         character.CancelMoveToTile(
             currentTile,
@@ -176,6 +218,32 @@ public class MovePanel : MonoBehaviour
 
     }
 
+    public void OnDirectionClicked(string move)
+    {
+        if(selectedItemId == -1)
+        {
+            OnMoveClick(move);
+        } 
+        else
+        {
+            NextCoordinates(character.CurrentTile.Coordinates, move);
+            var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+            Tile tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
+
+            if((ITEM) selectedItemId == ITEM.Feather)
+            {
+                OnSetMoveItem(tile1, selectedItemId);
+            } 
+            else if((ITEM)selectedItemId == ITEM.Bomb)
+            {
+                moveItemDetailPanel.tile = tile1;
+                moveItemDetailPanel.Init();
+            }
+
+
+        }
+    }
+
     private void NextCoordinates(Coordinates coordinates, string move)
     {
         int x = coordinates.X;
@@ -211,9 +279,72 @@ public class MovePanel : MonoBehaviour
         Debug.Log($"Current Tile pos: {x}, {y}");
     }
 
+    public void OnBombClick(int type)
+    {
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "getMoveItem",
+                new RequestMoveItem
+                {
+                    tileId = character.CurrentTile.Id,
+                    itemId = type,
+                }
+            )
+        );
+    }
+
+    public void OnReceiveMoveItem(MoveItemMessage message)
+    {
+        selectedItemId = message.itemId;
+        Sprite sprite = GlobalResources.instance.items[message.itemId];
+        globalDirection.InitItemDirection(
+            message.left == 1? sprite : null,
+            message.right == 1? sprite : null,
+            message.top == 1? sprite : null,
+            message.down == 1? sprite : null
+        );
+    }
+
+    public void OnSetMoveItem(Tile tile, int itemId)
+    {
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "setMoveItem",
+                new RequestMoveItem
+                {
+                    tileId = tile.Id,
+                    itemId = itemId,
+                }
+            )
+        );
+    }
+
+    public void OnReceiveGetBombMessage(GetBombMessage message)
+    {
+        explosionBtn.SetActive( true );
+        globalDirection.gameObject.SetActive(false);
+    }
+
+    public void OnSetMoveItemReceived(SetMoveItemMessage message)
+    {
+        selectedItemId = -1;
+
+        if ((ITEM)message.itemId == ITEM.Feather) 
+        {
+            var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+            character.MoveToTile(gameBoard.Tiles[message.tileId]);
+        }
+        else
+        {
+            character.MoveToTile(character.CurrentTile);
+        }
+
+        moveItemDetailPanel.gameObject.SetActive( false );
+    }
+
     private void Update()
     {
-        if (character == null || !gameObject.active) return;
+        if (character == null || !gameObject.activeSelf) return;
 
         globalDirection.transform.position = character.transform.position;
     }

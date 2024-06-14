@@ -1,5 +1,8 @@
+using Colyseus.Schema;
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Items;
+using UFB.StateSchema;
 using UnityEngine;
 
 public class GlobalResources : MonoBehaviour
@@ -23,5 +26,28 @@ public class GlobalResources : MonoBehaviour
         {
             instance = this;
         }
+    }
+
+    public int GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)
+    {
+        int totalCount = 0;
+        int subCount = 0;
+        int mainCount = 0;
+        items.ForEach((item) =>
+        {
+            ITEM type = (ITEM)item.id;
+            if (type == mainType)
+            {
+                mainCount += item.count;
+            }
+            if (subTypes.FindIndex(tp => tp == type) != -1)
+            {
+                subCount += item.count;
+            }
+        });
+
+        totalCount = mainCount + Mathf.FloorToInt((float)subCount / (float)divideNum);
+
+        return totalCount;
     }
 }
