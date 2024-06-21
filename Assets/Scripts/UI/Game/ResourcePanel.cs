@@ -1,4 +1,5 @@
 using Colyseus.Schema;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Character;
@@ -11,13 +12,25 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
+
 namespace UFB.UI
 {
+
     public class ResourcePanel : MonoBehaviour
     {
+        [Serializable]
+        public struct StackItem
+        {
+            public Text count;
+            public Image image;
+        }
+
         public static ResourcePanel instance;
+
         [SerializeField]
         private ItemCard item;
+
+        public StackItem[] stackItems;
 
         [SerializeField]
         private Image _avatarImage;
@@ -72,29 +85,7 @@ namespace UFB.UI
 
         private void OnEnable()
         {
-
-            /*var gameService = ServiceLocator.Current.Get<GameService>();
-            if (gameService.Room == null)
-            {
-                Debug.LogError("Room is null");
-                return;
-            }
-            gameService.SubscribeToRoomMessage<GetResourceDataMessage>(
-                "sendResourceList",
-                GetResourceDataReceived
-            );*/
-
-            /*EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "getResourceList",
-                    new RequestGetResourceMessage
-                    {
-                        playerId = "",
-                    }
-                )
-            );*/
-
-
+            InitResoureData();
         }
 
         private void OnDisable()
@@ -102,62 +93,6 @@ namespace UFB.UI
             
         }
 
-        /*private void GetResourceDataReceived( GetResourceDataMessage message )
-        {
-            if ( message == null ) return;
-
-            CharacterState characterState = message.characterState;
-            coinText.text = characterState.stats.coin.ToString();
-            itemBagText.text = characterState.stats.bags.ToString();
-
-            ArraySchema<Item> items = characterState.items;
-            items.ForEach(item =>
-            {
-                ITEM type = (ITEM)item.id;
-                if (type == ITEM.Feather)
-                {
-                    featherText.text = item.count.ToString();
-                }
-                else if (type == ITEM.Potion)
-                {
-                    potionText.text = item.count.ToString();
-                }
-                else if (type == ITEM.Elixir)
-                {
-                    potionText.text = item.count.ToString();
-                }
-                else if (type == ITEM.WarpCrystal)
-                {
-                    potionText.text = item.count.ToString();
-                }
-            });
-
-            List<ITEM> arrows = new List<ITEM>
-                {
-                    ITEM.IceArrow,
-                    ITEM.BombArrow,
-                    ITEM.FireArrow,
-                    ITEM.VoidArrow,
-                    ITEM.Arrow
-                };
-
-            quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1);
-
-            List<ITEM> bombs = new List<ITEM>
-                {
-                    ITEM.Bomb,
-                    ITEM.IceBomb,
-                    ITEM.VoidBomb,
-                    ITEM.FireBomb
-                };
-
-            bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1);
-
-            heartText.text = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
-
-            crystalText.text = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
-
-        }*/
 
         private void Awake()
         {
@@ -188,11 +123,29 @@ namespace UFB.UI
                     );
             };
 
+            InitResoureData();
+        }
 
-            coinText.text = e.state.stats.coin.ToString();
-            itemBagText.text = e.state.stats.bags.ToString();
+        public void InitResoureData()
+        {
+            CharacterState characterState = UIGameManager.instance.controller.State;
 
-            ArraySchema<Item> items = e.state.items;
+            coinText.text = characterState.stats.coin.ToString();
+            itemBagText.text = characterState.stats.bags.ToString();
+
+            ArraySchema<Item> stacks = characterState.stacks;
+
+            stacks.ForEach(stack => {
+                if (stack != null)
+                {
+                    int stackId = stack.id;
+                    Debug.Log($"stack id: {stackId}, count : {stack.count}");
+                    stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stack.id];
+                    stackItems[stackId].count.text = stack.count.ToString();
+                }
+            });
+
+            ArraySchema<Item> items = characterState.items;
             items.ForEach(item =>
             {
                 ITEM type = (ITEM)item.id;
@@ -247,12 +200,12 @@ namespace UFB.UI
 
         public void OnBombItemDetailClicked()
         {
-            bombDetailPanel.Init();
+            bombDetailPanel.Init(0);
         }
 
         public void OnArrowsItemDetailClicked()
         {
-            arrowDetailPanel.Init();
+            arrowDetailPanel.Init(1);
         }
     }
 

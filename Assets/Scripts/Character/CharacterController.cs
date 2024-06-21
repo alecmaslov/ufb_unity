@@ -14,6 +14,7 @@ using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.Effects;
 using UFB.Camera;
+using Colyseus.Schema;
 
 namespace UFB.Character
 {
@@ -148,6 +149,7 @@ namespace UFB.Character
         }
 
         public void CancelMoveToTile(
+            List<Item> items,
             Tile destination,
             float originEnergy,
             float duration = 0.5f,
@@ -159,11 +161,12 @@ namespace UFB.Character
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     "cancelMove",
-                    new RequestMoveMessage
+                    new RequestCancelMoveMessage
                     {
                         tileId = destination.Id,
                         destination = destination.Coordinates,
                         originEnergy = originEnergy,
+                        items = items
                     }
                 )
             );

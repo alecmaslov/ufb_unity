@@ -16,6 +16,9 @@ public class GlobalResources : MonoBehaviour
     public Sprite coin;
     public Sprite range;
     public Sprite lightImage;
+    public Sprite energy;
+    public Sprite ultimate;
+    public Sprite health;
 
     public Sprite[] divideTo4;
     public Sprite[] divideTo3;

@@ -20,8 +20,12 @@ public class PowerMoveItem : MonoBehaviour
     [SerializeField]
     ItemCard card;
 
+    public PowerMove pm;
+
     public void Init(PowerMove powerMove)
     {
+        pm = powerMove;
+
         InitCostList();
 
         moveName.text = powerMove.name;

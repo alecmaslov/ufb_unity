@@ -1,11 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Events;
 using UFB.Items;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UFB.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ResourceDetailPanel : MonoBehaviour
 {
+    public enum DetailType
+    {
+        COIN,
+        GIFT,
+        KILL,
+        STACK,
+        ITEMTYPE,
+        ITEMGROUP,
+
+    }
+
+    [Serializable]
+    public struct DetailItem
+    {
+        public DetailType type;
+        public int id;
+    }
+
+    public DetailItem[] detailTypes;
+
     [SerializeField]
     Text nameTxt;
 
@@ -39,11 +64,90 @@ public class ResourceDetailPanel : MonoBehaviour
 
         itemCountText.text = "0";
 
+        DetailItem detailItem = detailTypes[idx];
+        if (detailItem.type == DetailType.ITEMTYPE)
+        {
+            UIGameManager.instance.controller.State.items.ForEach((Item item) =>
+            {
+                if (item.id == detailItem.id)
+                {
+                    itemCountText.text = item.count.ToString();
+                }
+            });
+        }
+        else if (detailItem.type == DetailType.ITEMGROUP)
+        {
+            if(detailItem.id == (int) ITEM.Bomb)
+            {
+                List<ITEM> bombs = new List<ITEM>
+                {
+                    ITEM.Bomb,
+                    ITEM.IceBomb,
+                    ITEM.VoidBomb,
+                    ITEM.FireBomb,
+                    ITEM.caltropBomb,
+                };
+
+                itemCountText.text = GlobalResources.instance.GetItemTotalCount(UIGameManager.instance.controller.State.items, ITEM.BombBag, bombs, 1).ToString();
+            } 
+            else if(detailItem.id == (int)(ITEM.Arrow))
+            {
+                List<ITEM> arrows = new List<ITEM>
+                {
+                    ITEM.IceArrow,
+                    ITEM.BombArrow,
+                    ITEM.FireArrow,
+                    ITEM.VoidArrow,
+                    ITEM.Arrow
+                };
+
+                itemCountText.text = GlobalResources.instance.GetItemTotalCount(UIGameManager.instance.controller.State.items, ITEM.Quiver, arrows, 1).ToString();
+            }
+        }
+        else if (detailItem.type == DetailType.COIN)
+        {
+            itemCountText.text = UIGameManager.instance.controller.State.stats.coin.ToString();
+        }
+        else if(detailItem.type == DetailType.STACK)
+        {
+            UIGameManager.instance.controller.State.stacks.ForEach((Item item) =>
+            {
+                if(item.id == detailItem.id) 
+                { 
+                    itemCountText.text = item.count.ToString();
+                }
+            });
+        }
+        else if ( detailItem.type == DetailType.KILL)
+        {
+
+        }
+        else if(detailItem.type == DetailType.GIFT)
+        {
+            itemCountText.text = UIGameManager.instance.controller.State.stats.bags.ToString();
+        }
+
+
+
         foreach (var item in itemDetails)
         {
             item.gameObject.SetActive(false);
         }
 
         itemDetails[idx].gameObject.SetActive(true);
+    }
+
+    public void OnSetItemClicked(int type)
+    {
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "setMoveItem",
+                new RequestMoveItem
+                {
+                    tileId = UIGameManager.instance.controller.CurrentTile.Id,
+                    itemId = type,
+                }
+            )
+        );
     }
 }

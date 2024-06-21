@@ -11,6 +11,7 @@ using UFB.StateSchema;
 using UFB.Entities;
 using UFB.Events;
 using UFB.Items;
+using Colyseus.Schema;
 
 public class MovePanel : MonoBehaviour
 {
@@ -55,12 +56,20 @@ public class MovePanel : MonoBehaviour
     [SerializeField]
     GameObject explosionBtn;
 
+    [SerializeField]
+    ItemCard damageItem;
+
+    [SerializeField]
+    Transform damageList;
+
+
     private bool isLeft = true;
     private bool isRight = true;
     private bool isTop = true;
     private bool isDown = true;
 
     private float originEnergy;
+    private List<Item> originItems = new List<Item>();
 
     Vector2Int _destination;
 
@@ -128,9 +137,21 @@ public class MovePanel : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+        explosionBtn.SetActive(false);
         InitMoveBtns();
         currentTile = character.CurrentTile;
         originEnergy = character.State.stats.energy.current;
+        originItems.Clear();
+        character.State.items.ForEach((Item item) =>
+        {
+            Item item1 = new Item();
+            item1.id = item.id;
+            item1.name = item.name;
+            item1.count = item.count;
+            item1.level = item.level;
+            item1.description = item.description;
+            originItems.Add(item1);
+        });
 
         character.MoveToTile(character.CurrentTile);
 
@@ -148,7 +169,7 @@ public class MovePanel : MonoBehaviour
         isRight = true;
         isTop = true;
         isDown = true;
-        explosionBtn.SetActive(false);
+        //explosionBtn.SetActive(false);
 
     }
 
@@ -171,6 +192,7 @@ public class MovePanel : MonoBehaviour
         globalDirection.gameObject.SetActive(false);
 
         character.CancelMoveToTile(
+            originItems,
             currentTile,
             originEnergy
         );
@@ -321,7 +343,54 @@ public class MovePanel : MonoBehaviour
 
     public void OnReceiveGetBombMessage(GetBombMessage message)
     {
-        explosionBtn.SetActive( true );
+        ItemResult result = message.itemResult;
+
+        for (int i = 1; i < damageList.childCount; i++) 
+        { 
+            Destroy(damageList.GetChild(i));
+        }
+
+        if(result.energy != 0)
+        {
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate(result.energy.ToString(), GlobalResources.instance.energy);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if (result.heart != 0)
+        {
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate(result.heart.ToString(), GlobalResources.instance.health);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if (result.ultimate != 0)
+        {
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate(result.ultimate.ToString(), GlobalResources.instance.ultimate);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if (result.stackId > -1)
+        {
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate("+1", GlobalResources.instance.stacks[result.stackId]);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if(result.perkId > 0)
+        {
+
+        }
+
+        if(result.powerId > 0)
+        {
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate("+1", GlobalResources.instance.powers[result.powerId]);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        explosionBtn.gameObject.SetActive( true );
         globalDirection.gameObject.SetActive(false);
     }
 

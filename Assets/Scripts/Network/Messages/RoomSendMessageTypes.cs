@@ -1,4 +1,7 @@
+using Colyseus.Schema;
+using System.Collections.Generic;
 using UFB.Map;
+using UFB.StateSchema;
 
 namespace UFB.Network.RoomMessageTypes
 {
@@ -38,6 +41,18 @@ namespace UFB.Network.RoomMessageTypes
         public string down;
     }
 
+    public class RequestCancelMoveMessage : ISendMessage
+    {
+        public Coordinates destination;
+        public string tileId;
+        public float originEnergy;
+        public string left;
+        public string right;
+        public string top;
+        public string down;
+        public List<Item> items;
+    }
+
     public class RequestSpawnMessage : ISendMessage
     {
         public Coordinates destination;
@@ -49,6 +64,11 @@ namespace UFB.Network.RoomMessageTypes
     public class RequestGetPowerMoveList : ISendMessage
     {
         public int powerId;    
+    }
+
+    public class RequestSetPowerMoveItem : ISendMessage
+    {
+        public int powerMoveId;
     }
 
     public class RequestMoveItem : ISendMessage 

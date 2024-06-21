@@ -10,6 +10,22 @@ namespace UFB.Network.RoomMessageTypes
         public CoordinatesState coord;
     }
 
+    public class ResultItem : IReceiveMessage
+    {
+        public int id;
+        public int count;
+    }
+
+    public class PowerMoveResult : IReceiveMessage 
+    {
+        public ResultItem[] items;
+        public ResultItem[] stacks;
+        public int ultimate;
+        public int energy;
+        public int health;
+        public int coin;
+    }
+
     public class PowerMove : IReceiveMessage
     {
         public int id;
@@ -17,6 +33,7 @@ namespace UFB.Network.RoomMessageTypes
         public int powerImageId;
         public int[] powerIds;
         public Item[] costList;
+        public PowerMoveResult result;
         public int light;
         public int coin;
         public int range;
@@ -52,9 +69,20 @@ namespace UFB.Network.RoomMessageTypes
         public string tileId;
     }
 
+    public class ItemResult : IReceiveMessage 
+    {
+        public int heart;
+        public int energy;
+        public int ultimate;
+        public int stackId = -1;
+        public int powerId = -1;
+        public int perkId;
+    }
+
     public class GetBombMessage : IReceiveMessage
     {
         public string playerId;
+        public ItemResult itemResult;
     }
 
     public class SpawnInitMessage : IReceiveMessage

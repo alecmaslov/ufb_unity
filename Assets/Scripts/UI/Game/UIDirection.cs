@@ -51,6 +51,11 @@ public class UIDirection : MonoBehaviour, IPointerClickHandler
         isTop = _isTop;
         isDown = _isDown;
 
+        dirctions[0].gameObject.SetActive(isTop);
+        dirctions[1].gameObject.SetActive(isDown);
+        dirctions[2].gameObject.SetActive(isLeft);
+        dirctions[3].gameObject.SetActive(isRight);
+
         posObject.SetActive(true);
         moveItemObject.SetActive(false);
     }

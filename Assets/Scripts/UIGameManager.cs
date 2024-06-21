@@ -5,6 +5,7 @@ using UFB.UI;
 using UnityEngine;
 using UFB.Character;
 using UnityEngine.TextCore.Text;
+using UFB.Items;
 
 
 public class UIGameManager : MonoBehaviour
@@ -131,6 +132,21 @@ public class UIGameManager : MonoBehaviour
         {
             item.OnReceiveExtraScore(message);
         }
+    }
+
+    public int GetItemCount(ITEM type)
+    {
+        int count = 0;
+
+        controller.State.items.ForEach(item => {
+            if(item.id == (int) type)
+            {
+                count = item.count;
+                return;
+            }
+        });
+
+        return count;
     }
 
     public void OnTest() 

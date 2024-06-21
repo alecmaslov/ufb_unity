@@ -105,17 +105,24 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 85409a57704f941448c58d3acf82af9c, type: 3}
   - {fileID: 21300000, guid: ecf70c30a3272684b9eaca2feb46655f, type: 3}
   stacks:
-  - {fileID: 21300000, guid: 424690ea2a5dad643aba82fb2bb87b29, type: 3}
-  - {fileID: 21300000, guid: b95e4170134bd3441a2c8129f50d5355, type: 3}
-  - {fileID: 21300000, guid: 0dc62c372a5ffa948a3791503bd05b0a, type: 3}
-  - {fileID: 21300000, guid: 5fdbed25d724cd44cb05d200ae2cc824, type: 3}
-  - {fileID: 21300000, guid: fc5c3fe9f391cbd41a42f62a6b874e11, type: 3}
-  - {fileID: 21300000, guid: 0cff194171bc05c40bd1b67efd4aa057, type: 3}
-  - {fileID: 21300000, guid: 59353bde1729c044596026a4c4f388bd, type: 3}
-  - {fileID: 21300000, guid: 01506a3489d542a4b87ffa2ecde3508e, type: 3}
+  - {fileID: 21300000, guid: 60ac9f1e2a323614dacedd16da112be1, type: 3}
+  - {fileID: 21300000, guid: 4b97d2b647933f744a5abb998b9cf8cf, type: 3}
+  - {fileID: 21300000, guid: 77106536b9a02d141a413b8dc0925290, type: 3}
+  - {fileID: 21300000, guid: cf7347b59e9288346bac78303ee39176, type: 3}
+  - {fileID: 21300000, guid: cb996e9011ffda045bc96689cb79d9f6, type: 3}
+  - {fileID: 21300000, guid: 406cba156bac63042a32493af8599d9e, type: 3}
+  - {fileID: 21300000, guid: 27f77a49f2f378444871b023163afc2a, type: 3}
+  - {fileID: 21300000, guid: d55ec0e0aac2e6e4ca8dc5bd77bc504c, type: 3}
+  - {fileID: 21300000, guid: d6fc016089b92364f84ef129f9b971be, type: 3}
+  - {fileID: 21300000, guid: d35649657ad5217448127a3f96372a0f, type: 3}
+  - {fileID: 21300000, guid: 2926211a47d841e4a81822aa8a24250e, type: 3}
+  - {fileID: 21300000, guid: 6b0038387e2367e4dbd7f27826cbbdb3, type: 3}
   coin: {fileID: 21300000, guid: ec6d0c158f43d1648a6241a4e6651427, type: 3}
   range: {fileID: 21300000, guid: f8b84311f2a49734e972c1f07f47934e, type: 3}
   lightImage: {fileID: 21300000, guid: b01f769f8531c6c4397797b13abff7f7, type: 3}
+  energy: {fileID: 21300000, guid: b01f769f8531c6c4397797b13abff7f7, type: 3}
+  ultimate: {fileID: 21300000, guid: 9f07909b0c3596642851ba32d7b94384, type: 3}
+  health: {fileID: 21300000, guid: 1f636cc2ad795bb4abdef56b510793b4, type: 3}
   divideTo4:
   - {fileID: 21300000, guid: d94eb50a8a996314dbb058a4a616f66e, type: 3}
   - {fileID: 21300000, guid: 9a47fb82cb2bffc4ea1a731ba907c14d, type: 3}

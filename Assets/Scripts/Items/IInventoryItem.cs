@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 
 namespace UFB.Items {
+    [Serializable]
     public enum ItemType {
         MagicToken,
         EnergyShard,
@@ -11,6 +13,7 @@ namespace UFB.Items {
         Gold
     }
 
+    [Serializable]
     public enum ITEM
     {
         HeartPiece = 0,
@@ -82,15 +85,18 @@ namespace UFB.Items {
 
     public enum Stack
     {
-        Dodge = 0,
-        Cure,
+        Cure = 0,
+        Block,
         Steady,
+        Reflect,
         Charge,
         Revenge,
-        Block,
-        Reflect,
         Revive,
-
+        Slow,
+        Dodge,
+        Freeze,
+        Burn,
+        Void,
     }
 
     public enum PowerType {
