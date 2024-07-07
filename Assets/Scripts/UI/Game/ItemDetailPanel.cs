@@ -22,7 +22,21 @@ public class ItemDetailPanel : MonoBehaviour
 
     public void Init(int type = 0)
     {
-        itemGroupText.text = "0 / 4";
+        string header = "";
+        if (type == 0)
+        {
+            header = "BOMBS";
+        }
+        else if (type == 1)
+        {
+            header = "ARROWS";
+        }
+        else if(type == 2) 
+        {
+            header = "ITEMS";
+        }
+
+        itemGroupText.text = header + "(0/4)";
 
         foreach (var item in itemCountTexts)
         {

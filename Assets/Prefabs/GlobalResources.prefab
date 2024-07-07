@@ -67,6 +67,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3b341cbfdbde89c4a9bce7d5b70556e5, type: 3}
   - {fileID: 21300000, guid: 94fb06aa7a00a4a4a84771162b9225ca, type: 3}
   - {fileID: 21300000, guid: ca5f72f935512ca4c84b663a3a336e39, type: 3}
+  - {fileID: 21300000, guid: a25b8912b51aa5d4288aa83901afef46, type: 3}
+  - {fileID: 21300000, guid: 80793e8996829e44aa254d222dfd8203, type: 3}
   powers:
   - {fileID: 21300000, guid: 3a558facb2af1bf40af79c3f8f89b528, type: 3}
   - {fileID: 21300000, guid: 1afa21b325154f1489d6547e7c22717d, type: 3}
@@ -117,6 +119,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d35649657ad5217448127a3f96372a0f, type: 3}
   - {fileID: 21300000, guid: 2926211a47d841e4a81822aa8a24250e, type: 3}
   - {fileID: 21300000, guid: 6b0038387e2367e4dbd7f27826cbbdb3, type: 3}
+  perks:
+  - {fileID: 21300000, guid: 2df72dcc056a4af4794ca43abaf6a456, type: 3}
+  - {fileID: 21300000, guid: c5f3f9e8c36ce2a4da6aa4e18b1cfe34, type: 3}
+  - {fileID: 21300000, guid: 09d534f38fadfb54e89c00eaaa7e27b5, type: 3}
+  - {fileID: 21300000, guid: d74a13c8276336d41a04c083571367d6, type: 3}
+  - {fileID: 21300000, guid: f335722a3c36e4449b8107845bff6e93, type: 3}
+  quests:
+  - {fileID: 21300000, guid: 3e3fa920907ec7b4da27f7bb33396b1c, type: 3}
+  - {fileID: 21300000, guid: dd5b0af42657d2e449941af75f970622, type: 3}
+  - {fileID: 21300000, guid: d9c0df41062204f43a462a6f02948064, type: 3}
+  - {fileID: 21300000, guid: a934e6f43cb4ef445ae2c775231fad92, type: 3}
+  - {fileID: 21300000, guid: 070d630ac2735f648a7fdf28962b4550, type: 3}
+  - {fileID: 21300000, guid: f4fbecd4dbabf5c4dbbae2b125a60021, type: 3}
+  - {fileID: 21300000, guid: 91d9227456507504a8d1684086b989d7, type: 3}
+  - {fileID: 21300000, guid: 8801e940428eabe4da6df8065061dcd2, type: 3}
   coin: {fileID: 21300000, guid: ec6d0c158f43d1648a6241a4e6651427, type: 3}
   range: {fileID: 21300000, guid: f8b84311f2a49734e972c1f07f47934e, type: 3}
   lightImage: {fileID: 21300000, guid: b01f769f8531c6c4397797b13abff7f7, type: 3}

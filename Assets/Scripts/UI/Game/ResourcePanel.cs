@@ -83,6 +83,10 @@ namespace UFB.UI
         [SerializeField]
         ItemDetailPanel arrowDetailPanel;
 
+        [SerializeField]
+        ItemDetailPanel itemsDetailPanel;
+
+
         private void OnEnable()
         {
             InitResoureData();
@@ -106,10 +110,10 @@ namespace UFB.UI
                 instance = this;
         }
 
-        public void OnCharacterValueEvent(ChangeCharacterStateEvent e)
+        public void OnCharacterValueEvent(CharacterState e)
         {
             Addressables
-            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
             .Completed += (op) =>
             {
                 if (
@@ -206,6 +210,11 @@ namespace UFB.UI
         public void OnArrowsItemDetailClicked()
         {
             arrowDetailPanel.Init(1);
+        }
+
+        public void OnItemsItemDetailClicked()
+        {
+            itemsDetailPanel.Init(1);
         }
     }
 

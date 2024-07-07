@@ -57,10 +57,11 @@ public class StepPanel : MonoBehaviour
 
     }
 
-    public void OnCharacterStateChanged(ChangeCharacterStateEvent e)
+    public void OnCharacterStateChanged(CharacterState e)
     {
-        ArraySchema<Item> items = e.state.items;
-        items.ForEach(item =>
+        CharacterState state = UIGameManager.instance.controller.State;
+
+        state.items.ForEach(item =>
         {
             ITEM type = (ITEM) item.id;
             if(type == ITEM.Melee)

@@ -36,10 +36,10 @@ public class AttackPanel : MonoBehaviour
     Text powermoveText;
 
     [SerializeField]
-    Image itemImage;
+    Image powermoveImage;
 
     [SerializeField]
-    Image powermoveImage;
+    Image powermoveResultImage;
 
     [SerializeField]
     Transform powerCostList;
@@ -53,7 +53,24 @@ public class AttackPanel : MonoBehaviour
     [SerializeField]
     ItemCard resultItem;
 
-    public void InitCharacterState(ChangeCharacterStateEvent e)
+    [SerializeField]
+    GameObject resultPanel;
+
+    [SerializeField]
+    Transform panelResutlList;
+
+    [SerializeField]
+    ItemCard panelResultItem;
+
+    [SerializeField]    
+    GameObject panelDetail;
+
+    [SerializeField]
+    GameObject resultPanelDetail;
+
+    public Text powerText;
+
+    public void InitCharacterState(CharacterState e)
     {
         InitOthers();
     }
@@ -64,8 +81,12 @@ public class AttackPanel : MonoBehaviour
         pm = powerMoveItem.pm;
 
         powermoveImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
-
+        powermoveResultImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
         powermoveText.text = pm.name.ToString();
+        powerText.text = UIGameManager.instance.powerMovePanel.powerItem.name;
+
+        panelDetail.SetActive(true);
+        resultPanelDetail.SetActive(false);
 
         InitCostList();
         InitResultList();
@@ -118,6 +139,11 @@ public class AttackPanel : MonoBehaviour
             Destroy(resultList.GetChild(i).gameObject);
         }
 
+        for (int i = 1; i < panelResutlList.childCount; i++) 
+        { 
+            Destroy(panelResutlList.GetChild(i).gameObject);
+        }
+
         PowerMoveResult result = pm.result;
         
         if (result == null) return;
@@ -127,11 +153,20 @@ public class AttackPanel : MonoBehaviour
             ItemCard itemCard = Instantiate(resultItem, resultList);
             itemCard.InitDate(result.coin.ToString(), GlobalResources.instance.coin);
             itemCard.gameObject.SetActive(true);
+
+            itemCard = Instantiate(panelResultItem, panelResutlList);
+            itemCard.InitDate(result.coin.ToString(), GlobalResources.instance.coin);
+            itemCard.gameObject.SetActive(true);
+
         }
 
-        if(result.energy > 0)
+        if (result.energy > 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
+            itemCard.InitDate(result.energy.ToString(), GlobalResources.instance.energy);
+            itemCard.gameObject.SetActive(true);
+
+            itemCard = Instantiate(panelResultItem, panelResutlList);
             itemCard.InitDate(result.energy.ToString(), GlobalResources.instance.energy);
             itemCard.gameObject.SetActive(true);
         }
@@ -139,6 +174,10 @@ public class AttackPanel : MonoBehaviour
         if (result.ultimate > 0) 
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
+            itemCard.InitDate(result.ultimate.ToString(), GlobalResources.instance.ultimate);
+            itemCard.gameObject.SetActive(true);
+
+            itemCard = Instantiate(panelResultItem, panelResutlList);
             itemCard.InitDate(result.ultimate.ToString(), GlobalResources.instance.ultimate);
             itemCard.gameObject.SetActive(true);
         }
@@ -150,6 +189,10 @@ public class AttackPanel : MonoBehaviour
                 ItemCard itemCard = Instantiate(costItem, resultList);
                 itemCard.InitDate(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
                 itemCard.gameObject.SetActive(true);
+
+                itemCard = Instantiate(panelResultItem, panelResutlList);
+                itemCard.InitDate(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
+                itemCard.gameObject.SetActive(true);
             }
         }
 
@@ -158,6 +201,10 @@ public class AttackPanel : MonoBehaviour
             foreach (var item in result.items)
             {
                 ItemCard itemCard = Instantiate(costItem, resultList);
+                itemCard.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id]);
+                itemCard.gameObject.SetActive(true);
+
+                itemCard = Instantiate(panelResultItem, panelResutlList);
                 itemCard.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id]);
                 itemCard.gameObject.SetActive(true);
             }
@@ -198,7 +245,10 @@ public class AttackPanel : MonoBehaviour
             )
         );
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+
+        panelDetail.SetActive(false);
+        resultPanelDetail.SetActive(true);
     }
 
     public void OnCancelBtnClicked()

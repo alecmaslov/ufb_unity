@@ -47,25 +47,25 @@ namespace UFB.UI
             //EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
-        public void OnSelectedCharacterEvent(ChangeCharacterStateEvent e)
+        public void OnSelectedCharacterEvent(CharacterState e)
         {
-            _healthBar.SetRangedValueState(e.state.stats.health);
-            _energyBar.SetRangedValueState(e.state.stats.energy);
-            _ultimateBar.SetRangedValueState(e.state.stats.ultimate);
+            _healthBar.SetRangedValueState(e.stats.health);
+            _energyBar.SetRangedValueState(e.stats.energy);
+            _ultimateBar.SetRangedValueState(e.stats.ultimate);
 
-            _screenNameText.text = e.state.displayName;
-            _stepEnergeText.text = e.state.stats.energy.current.ToString();
+            _screenNameText.text = e.displayName;
+            _stepEnergeText.text = e.stats.energy.current.ToString();
 
-            string newTileId = e.state.currentTileId;
+            string newTileId = e.currentTileId;
             Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
             _tilePosText.text = CurrentTile.TilePosText;
 
-            e.state.OnChange(() => 
+            e.OnChange(() => 
             {
-                _screenNameText.text = e.state.displayName;
-                _stepEnergeText.text = e.state.stats.energy.current.ToString();
+                _screenNameText.text = e.displayName;
+                _stepEnergeText.text = e.stats.energy.current.ToString();
 
-                string newTileId = e.state.currentTileId;
+                string newTileId = e.currentTileId;
                 Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
                 _tilePosText.text = CurrentTile.TilePosText;
             });
@@ -73,7 +73,7 @@ namespace UFB.UI
 
 
             Addressables
-                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
+                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
                 .Completed += (op) =>
             {
                 if (

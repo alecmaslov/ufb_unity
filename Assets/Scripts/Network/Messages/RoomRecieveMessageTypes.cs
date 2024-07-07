@@ -1,3 +1,4 @@
+using Colyseus.Schema;
 using UFB.StateSchema;
 
 namespace UFB.Network.RoomMessageTypes
@@ -79,6 +80,14 @@ namespace UFB.Network.RoomMessageTypes
         public int perkId;
     }
 
+    public class QuestItem: IReceiveMessage
+    {
+        public int questId;
+        public string questTitle;
+        public string questDescription;
+        public int cost;
+    }
+
     public class GetBombMessage : IReceiveMessage
     {
         public string playerId;
@@ -100,11 +109,24 @@ namespace UFB.Network.RoomMessageTypes
         public string characterId;
         public string type;
         public int score;
+        public int stackId = -1;
     }
 
     public class GetResourceDataMessage : IReceiveMessage
     {
         public CharacterState characterState;
+    }
+
+    public class GetMerchantDataMessage: IReceiveMessage
+    {
+        public Item[] items;
+        public Item[] stacks;
+        public Item[] powers;
+    }
+
+    public class GetQuestDataMessage: IReceiveMessage
+    {
+        public QuestItem[] questItems;
     }
 
     public class NotificationMessage : IReceiveMessage

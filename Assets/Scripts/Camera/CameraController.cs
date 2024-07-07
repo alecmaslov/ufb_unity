@@ -62,6 +62,7 @@ namespace UFB.Camera
         public ZoomController Zoom { get; private set; }
         public OrbitCamera Orbit { get; private set; }
         public CameraState topDownState;
+        public CameraState frontState;
 
         public enum PresetState
         {
@@ -165,6 +166,7 @@ namespace UFB.Camera
                     LoadCameraState(topDownState);
                     break;
                 case PresetState.Front:
+                    LoadCameraState(frontState);
                     break;
                 case PresetState.Back:
                     break;

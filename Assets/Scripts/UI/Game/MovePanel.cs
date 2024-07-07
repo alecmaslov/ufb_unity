@@ -62,6 +62,8 @@ public class MovePanel : MonoBehaviour
     [SerializeField]
     Transform damageList;
 
+    public Image damageMainItemImage;
+
 
     private bool isLeft = true;
     private bool isRight = true;
@@ -350,7 +352,12 @@ public class MovePanel : MonoBehaviour
             Destroy(damageList.GetChild(i));
         }
 
-        if(result.energy != 0)
+        if (selectedItemId > -1)
+        {
+            damageMainItemImage.sprite = GlobalResources.instance.items[selectedItemId];
+        }
+
+        if (result.energy != 0)
         {
             ItemCard itemCard = Instantiate(damageItem, damageList);
             itemCard.InitDate(result.energy.ToString(), GlobalResources.instance.energy);

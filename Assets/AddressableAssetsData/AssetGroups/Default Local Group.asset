@@ -90,7 +90,7 @@ MonoBehaviour:
     - default
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17bc4a06fb20d6347955a5336cb8fbd9
-    m_Address: CharacterPrefabs/Kirin_LowPoly
+    m_Address: CharacterPrefabs/Kirin_LowPoly1
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character
@@ -144,6 +144,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Entities
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e41033880f2aab438f831306af276b0
+    m_Address: CharacterPrefabs/Kirin_LowPoly
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Camera;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;

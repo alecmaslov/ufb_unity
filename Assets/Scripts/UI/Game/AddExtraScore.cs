@@ -18,7 +18,7 @@ public class AddExtraScore : MonoBehaviour
 
     public void OnReceiveExtraScore(AddExtraScoreMessage message)
     {
-        Debug.Log($"message: {message.type}, type: {scoreType}" );
+        Debug.Log($"message: {message.type}, type: {scoreType}, status: {message.type == scoreType}, score: {message.score}" );
         if (message.type == scoreType)
         {
             Init(message.score);

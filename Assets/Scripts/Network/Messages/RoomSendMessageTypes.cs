@@ -66,6 +66,11 @@ namespace UFB.Network.RoomMessageTypes
         public int powerId;    
     }
 
+    public class RequestGetMerchantList: ISendMessage
+    {
+
+    }
+
     public class RequestSetPowerMoveItem : ISendMessage
     {
         public int powerMoveId;

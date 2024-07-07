@@ -12,6 +12,8 @@ public class GlobalResources : MonoBehaviour
     public Sprite[] items;
     public Sprite[] powers;
     public Sprite[] stacks;
+    public Sprite[] perks;
+    public Sprite[] quests;
 
     public Sprite coin;
     public Sprite range;

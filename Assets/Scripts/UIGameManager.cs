@@ -6,6 +6,7 @@ using UnityEngine;
 using UFB.Character;
 using UnityEngine.TextCore.Text;
 using UFB.Items;
+using UFB.StateSchema;
 
 
 public class UIGameManager : MonoBehaviour
@@ -37,7 +38,11 @@ public class UIGameManager : MonoBehaviour
 
     public AddExtraScore[] scoreTexts;
 
+    public AddStackScore stackScoreText;
+
     public AttackPanel attackPanel;
+
+    public MerchantPanel merchantPanel;
 
     private void Awake()
     {
@@ -87,7 +92,11 @@ public class UIGameManager : MonoBehaviour
             "getBombDamage",
             movePanel.OnReceiveGetBombMessage
         );
-        
+
+        gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(
+            "getMerchantData",
+            merchantPanel.InitMerchantData
+        );
 
         gameService.SubscribeToRoomMessage<BecomeZombieMessage>("unEquipPowerReceived", OnUnEquipPowerReceived);
     }
@@ -114,11 +123,12 @@ public class UIGameManager : MonoBehaviour
 
     private void OnChangeCharacterStateEvent(ChangeCharacterStateEvent e)
     {
-        attackPanel.InitCharacterState(e);
-        TopStatusBar.OnSelectedCharacterEvent(e);
-        ResourcePanel.OnCharacterValueEvent(e);
-        StepPanel.OnCharacterStateChanged(e);
-        equipPanel.InitEquipList(e.state);
+        CharacterState state = e.state;
+        attackPanel.InitCharacterState(state);
+        TopStatusBar.OnSelectedCharacterEvent(state);
+        ResourcePanel.OnCharacterValueEvent(state);
+        StepPanel.OnCharacterStateChanged(state);
+        equipPanel.InitEquipList(state);
     }
 
     private void OnUnEquipPowerReceived(BecomeZombieMessage e)
@@ -132,6 +142,13 @@ public class UIGameManager : MonoBehaviour
         {
             item.OnReceiveExtraScore(message);
         }
+        stackScoreText.OnReceiveMessageData(message);
+
+        attackPanel.InitCharacterState(controller.State);
+        TopStatusBar.OnSelectedCharacterEvent(controller.State);
+        ResourcePanel.OnCharacterValueEvent(controller.State);
+        StepPanel.OnCharacterStateChanged(controller.State);
+        equipPanel.InitEquipList(controller.State);
     }
 
     public int GetItemCount(ITEM type)

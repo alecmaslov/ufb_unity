@@ -20,7 +20,7 @@ MonoBehaviour:
   description: 
   mesh: {fileID: 0}
   modelPrefab:
-    m_AssetGUID: 17bc4a06fb20d6347955a5336cb8fbd9
+    m_AssetGUID: 3e41033880f2aab438f831306af276b0
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0

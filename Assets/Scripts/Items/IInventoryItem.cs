@@ -38,7 +38,9 @@ namespace UFB.Items {
         FireBomb,
         IceBomb,
         VoidBomb,
-        caltropBomb
+        caltropBomb,
+        IceTea,
+        FlameChili
     }
 
     public enum POWER
@@ -97,6 +99,27 @@ namespace UFB.Items {
         Freeze,
         Burn,
         Void,
+    }
+
+    public enum Perk
+    {
+        PUSH,
+        PULL,
+        VAMPIRE,
+        X_RAY,
+        AREA_OF_EFFECT
+    }
+
+    public enum QUEST 
+    {
+        SLAYER,
+        GLITTER,
+        KILL,
+        CRAFTS,
+        LUCK,
+        ENERGY,
+        STRENGTH,
+        LIFE
     }
 
     public enum PowerType {
