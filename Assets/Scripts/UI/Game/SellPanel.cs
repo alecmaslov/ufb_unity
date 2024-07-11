@@ -23,6 +23,10 @@ public class SellPanel : MonoBehaviour
         CharacterState state = UIGameManager.instance.controller.State;
 
         coinText.text = state.stats.coin.ToString();
+        state.stats.OnCoinChange((int newCoin, int preCoin) =>
+        {
+            coinText.text = newCoin.ToString();
+        });
 
         InitItem(state);
         InitPower(state);
@@ -38,10 +42,19 @@ public class SellPanel : MonoBehaviour
 
         state.items.ForEach(_item => 
         { 
-            if(_item.sell > 0)
+            if(_item.sell > 0 && 
+                !(_item.id == (int)ITEM.HeartPiece || 
+                _item.id == (int)ITEM.HeartCrystal || 
+                _item.id == (int)ITEM.EnergyShard || 
+                _item.id == (int)ITEM.EnergyCrystal || 
+                _item.id == (int)ITEM.Elixir ||
+                _item.id == (int)ITEM.Melee ||
+                _item.id == (int)ITEM.Mana ||
+                _item.id == (int)ITEM.Quiver)
+                )
             {
                 ItemCard it = Instantiate(itemCard, itemList);
-                it.InitDate(_item.cost.ToString(), GlobalResources.instance.items[_item.id]);
+                it.InitDate(_item.sell.ToString(), GlobalResources.instance.items[_item.id]);
                 it.gameObject.SetActive(true);
                 it.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -64,7 +77,7 @@ public class SellPanel : MonoBehaviour
             if(power.sell > 0)
             {
                 ItemCard card = Instantiate(powerCard, powerList);
-                card.InitDate(power.cost.ToString(), GlobalResources.instance.powers[power.id]);
+                card.InitDate(power.sell.ToString(), GlobalResources.instance.powers[power.id]);
                 card.gameObject.SetActive(true);
                 card.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -83,10 +96,15 @@ public class SellPanel : MonoBehaviour
 
         state.stacks.ForEach(stack => 
         {
-            if(stack.sell > 0)
+            if(stack.sell > 0 && !(
+                stack.id == (int)STACK.Freeze ||
+                stack.id == (int)STACK.Burn ||
+                stack.id == (int)STACK.Slow ||
+                stack.id == (int)STACK.Void 
+                ))
             {
                 ItemCard card = Instantiate(stackCard, stackList);
-                card.InitDate(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
+                card.InitDate(stack.sell.ToString(), GlobalResources.instance.stacks[stack.id]);
                 card.gameObject.SetActive(true);
                 card.GetComponent<Button>().onClick.AddListener(() =>
                 {

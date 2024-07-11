@@ -1,4 +1,5 @@
 using Colyseus.Schema;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Items;
@@ -24,6 +25,27 @@ public class GlobalResources : MonoBehaviour
 
     public Sprite[] divideTo4;
     public Sprite[] divideTo3;
+
+    [Serializable]
+    public class CraftPowerSystem
+    {
+        public POWER power1;
+        public POWER power2;
+        public POWER powerResult;
+        public int coin;
+    }
+
+    [Serializable]
+    public class CraftItemSystem
+    {
+        public ITEM item1;
+        public ITEM item2;
+        public ITEM itemResult;
+        public int coin;
+    }
+
+    public CraftItemSystem[] itemCraftSystem;
+    public CraftPowerSystem[] powerCraftSystem;
 
     private void Awake()
     {

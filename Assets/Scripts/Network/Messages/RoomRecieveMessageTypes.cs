@@ -122,6 +122,14 @@ namespace UFB.Network.RoomMessageTypes
         public Item[] items;
         public Item[] stacks;
         public Item[] powers;
+        public Quest[] quests;
+        public string tileId;
+    }
+
+    public class GetReSpawnMerchantMessage : IReceiveMessage
+    {
+        public string tileId;
+        public string oldTileId;
     }
 
     public class GetQuestDataMessage: IReceiveMessage

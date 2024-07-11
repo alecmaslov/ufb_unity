@@ -85,7 +85,7 @@ namespace UFB.Items {
         Void3,
     }
 
-    public enum Stack
+    public enum STACK
     {
         Cure = 0,
         Block,
@@ -101,7 +101,7 @@ namespace UFB.Items {
         Void,
     }
 
-    public enum Perk
+    public enum PERK
     {
         PUSH,
         PULL,

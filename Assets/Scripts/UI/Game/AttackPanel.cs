@@ -225,10 +225,18 @@ public class AttackPanel : MonoBehaviour
             if (type == ITEM.Melee)
             {
                 meleeText.text = item.count.ToString();
+                item.OnCountChange((short newCount, short oldCount) =>
+                {
+                    meleeText.text = newCount.ToString();
+                });
             }
             else if (type == ITEM.Mana)
             {
                 manaText.text = item.count.ToString();
+                item.OnCountChange((short newCount, short oldCount) =>
+                {
+                    manaText.text = newCount.ToString();
+                });
             }
         });
     }

@@ -71,6 +71,37 @@ namespace UFB.Network.RoomMessageTypes
 
     }
 
+    public class RequestTile: ISendMessage
+    {
+        public string tileId;
+    }
+
+    public class RequestActiveQuest: ISendMessage
+    {
+        public Quest quest;
+    }
+
+    public class RequestAddCraftItem: ISendMessage
+    {
+        public int idx1;
+        public int idx2;
+        public int idx3;
+        public int coin;
+        public string type;
+    }
+
+    public class RequestBuyItem: ISendMessage
+    {
+        public string type;
+        public int id;
+    }
+
+    public class RequestSellItem : ISendMessage 
+    {
+        public string type;
+        public int id;
+    }
+
     public class RequestSetPowerMoveItem : ISendMessage
     {
         public int powerMoveId;

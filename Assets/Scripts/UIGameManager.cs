@@ -7,6 +7,7 @@ using UFB.Character;
 using UnityEngine.TextCore.Text;
 using UFB.Items;
 using UFB.StateSchema;
+using UFB.Map;
 
 
 public class UIGameManager : MonoBehaviour
@@ -97,6 +98,11 @@ public class UIGameManager : MonoBehaviour
             "getMerchantData",
             merchantPanel.InitMerchantData
         );
+        
+        gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>(
+            "respawnMerchant",
+            OnReSpawnMerchant
+        );
 
         gameService.SubscribeToRoomMessage<BecomeZombieMessage>("unEquipPowerReceived", OnUnEquipPowerReceived);
     }
@@ -114,6 +120,21 @@ public class UIGameManager : MonoBehaviour
         TopPanel.SetActive(true);
         BottomStatusBar.SetActive(true);
         spawnPanel.InitSpawn(m);
+    }
+
+    private void OnReSpawnMerchant(GetReSpawnMerchantMessage message)
+    {
+        Debug.Log("===> respawn event");
+        var gameService = ServiceLocator.Current.Get<GameService>();
+        
+        Transform target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId].transform;
+        SpawnItemEvent sEvent = new SpawnItemEvent(message.oldTileId);
+        sEvent.tileId = message.oldTileId;
+        sEvent.target = target;
+        sEvent.targetTileId = message.tileId;
+        EventBus.Publish(
+            sEvent
+        );
     }
 
     private void OnSelectedCharacterEvent(SelectedCharacterEvent e) 

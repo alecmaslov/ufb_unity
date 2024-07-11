@@ -49,6 +49,9 @@ namespace UFB.StateSchema {
 		[Type(12, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> equipSlots = new ArraySchema<Item>();
 
+		[Type(13, "array", typeof(ArraySchema<Quest>))]
+		public ArraySchema<Quest> quests = new ArraySchema<Quest>();
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -209,6 +212,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<ArraySchema<Quest>> __questsChange;
+		public Action OnQuestsChange(PropertyChangeHandler<ArraySchema<Quest>> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.quests));
+			__questsChange += __handler;
+			if (__immediate && this.quests != null) { __handler(this.quests, null); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(quests));
+				__questsChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
@@ -224,6 +239,7 @@ namespace UFB.StateSchema {
 				case nameof(powers): __powersChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				case nameof(stacks): __stacksChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
 				case nameof(equipSlots): __equipSlotsChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;
+				case nameof(quests): __questsChange?.Invoke((ArraySchema<Quest>) change.Value, (ArraySchema<Quest>) change.PreviousValue); break;
 				default: break;
 			}
 		}

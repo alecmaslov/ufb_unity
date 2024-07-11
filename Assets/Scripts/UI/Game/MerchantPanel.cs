@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Events;
+using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UI.ThreeDimensional;
@@ -17,6 +18,8 @@ public class MerchantPanel : MonoBehaviour
     public MerchantModalPanel merchantModalPanel;
     public UIObject3D ui3DModel;
 
+    public string tileId;
+
     public Animator animator;
 
     public Vector3[] panelAngles;
@@ -29,6 +32,9 @@ public class MerchantPanel : MonoBehaviour
     public Item[] powerData;
     [HideInInspector]
     public Item[] stackData;
+    [HideInInspector]
+    public Quest[] questData;
+
 
     private void Awake()
     {
@@ -37,14 +43,7 @@ public class MerchantPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        UFB.Events.EventBus.Publish(
-            RoomSendMessageEvent.Create(
-                "getMerchantData",
-                new RequestGetMerchantList
-                {
-                }
-            )
-        );
+
     }
 
     public void InitMerchantData(GetMerchantDataMessage message)
@@ -55,6 +54,9 @@ public class MerchantPanel : MonoBehaviour
         itemData = message.items;
         powerData = message.powers;
         stackData = message.stacks;
+        questData = message.quests;
+
+        tileId = message.tileId;
         InitData();
     }
 
@@ -65,6 +67,8 @@ public class MerchantPanel : MonoBehaviour
         buyPanel.InitData();
         sellPanel.InitData();
         craftPanel.InitData();
+        questPanel.gameObject.SetActive(true);
+        merchantModalPanel.gameObject.SetActive(false);
         gameObject.SetActive(true);
     }
 
@@ -121,5 +125,19 @@ public class MerchantPanel : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         panelIdx = 0;
         animator.SetInteger("panelIdx", panelIdx);
+    }
+
+    public void CloseMerchant()
+    {
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "leaveMerchant",
+                new RequestTile
+                {
+                    tileId = tileId,
+                }
+            )
+        );
+        gameObject.SetActive( false );
     }
 }

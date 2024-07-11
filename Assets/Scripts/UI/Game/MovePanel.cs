@@ -220,7 +220,7 @@ public class MovePanel : MonoBehaviour
         for (int i = 0; i < tile1.transform.childCount; i++)
         {
             GameObject item = tile1.transform.GetChild(i).gameObject;
-            if (item.GetComponent<Chest>() != null )
+            if (item.GetComponent<Chest>() != null)
             {
                 Debug.Log("Item position Destination...");
                 EventBus.Publish(
@@ -236,7 +236,20 @@ public class MovePanel : MonoBehaviour
                     )
                 );
 
-                gameObject.SetActive( false );
+                gameObject.SetActive(false);
+            }
+            else if (item.GetComponent<Merchant>() != null) 
+            { 
+                Debug.Log("Merchant position Destination...");
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        "getMerchantData",
+                        new RequestTile
+                        {
+                            tileId = tile1.Id,
+                        }
+                    )
+                );
             }
         }
 

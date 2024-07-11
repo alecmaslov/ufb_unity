@@ -1,5 +1,7 @@
+using Colyseus.Schema;
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Items;
 using UFB.StateSchema;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +33,10 @@ public class BuyPanel : MonoBehaviour
         CharacterState state = UIGameManager.instance.controller.State;
 
         coinText.text = state.stats.coin.ToString();
+
+        state.stats.OnCoinChange((int newCoin, int preCoin) => {
+            coinText.text = newCoin.ToString();
+        }, true);
 
         InitItem(UIGameManager.instance.merchantPanel.itemData);
         InitItem1(UIGameManager.instance.merchantPanel.itemData);
@@ -126,7 +132,7 @@ public class BuyPanel : MonoBehaviour
         for(int i = 0; i < stacks.Length; i++)
         {
             Item stack = stacks[i];
-            if (stack.cost > 0) 
+            if (stack.cost > 0 && !(stack.id == (int)STACK.Slow || stack.id == (int)STACK.Void)) 
             {
                 ItemCard card = Instantiate(stackCard, stackList);
                 card.InitDate(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
