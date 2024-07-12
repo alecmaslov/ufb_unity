@@ -54,7 +54,8 @@ public class SellPanel : MonoBehaviour
                 )
             {
                 ItemCard it = Instantiate(itemCard, itemList);
-                it.InitDate(_item.sell.ToString(), GlobalResources.instance.items[_item.id]);
+                it.InitData3(_item.sell.ToString(), GlobalResources.instance.items[_item.id], _item.count.ToString(), _item);
+
                 it.gameObject.SetActive(true);
                 it.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -77,7 +78,7 @@ public class SellPanel : MonoBehaviour
             if(power.sell > 0)
             {
                 ItemCard card = Instantiate(powerCard, powerList);
-                card.InitDate(power.sell.ToString(), GlobalResources.instance.powers[power.id]);
+                card.InitData3(power.sell.ToString(), GlobalResources.instance.powers[power.id], power.count.ToString(), power);
                 card.gameObject.SetActive(true);
                 card.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -104,7 +105,8 @@ public class SellPanel : MonoBehaviour
                 ))
             {
                 ItemCard card = Instantiate(stackCard, stackList);
-                card.InitDate(stack.sell.ToString(), GlobalResources.instance.stacks[stack.id]);
+                card.InitData3(stack.sell.ToString(), GlobalResources.instance.stacks[stack.id], stack.count.ToString(), stack);
+
                 card.gameObject.SetActive(true);
                 card.GetComponent<Button>().onClick.AddListener(() =>
                 {

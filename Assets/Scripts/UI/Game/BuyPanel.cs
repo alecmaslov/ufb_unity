@@ -22,12 +22,23 @@ public class BuyPanel : MonoBehaviour
 
     public Text coinText;
 
+    public bool isLoadData = false;
+
+    private List<Item> items1 = new List<Item>();
+    private List<Item> items2 = new List<Item>();
+    private List<Item> powers = new List<Item>();
+    private List<Item> stacks = new List<Item>();
+
     public void InitData()
     {
         Debug.Log("=====>Buy model");
         if(UIGameManager.instance.merchantPanel.itemData != null)
         {
             Debug.Log(UIGameManager.instance.merchantPanel.itemData.Length);
+        }
+        else
+        {
+            return;
         }
 
         CharacterState state = UIGameManager.instance.controller.State;
@@ -38,10 +49,13 @@ public class BuyPanel : MonoBehaviour
             coinText.text = newCoin.ToString();
         }, true);
 
+
         InitItem(UIGameManager.instance.merchantPanel.itemData);
         InitItem1(UIGameManager.instance.merchantPanel.itemData);
         InitPower(UIGameManager.instance.merchantPanel.powerData);
         InitStack(UIGameManager.instance.merchantPanel.stackData);
+
+        isLoadData = true;
     }
 
     public void InitItem(Item[] items)

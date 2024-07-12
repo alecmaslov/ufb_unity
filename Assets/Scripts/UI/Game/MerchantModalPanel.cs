@@ -34,10 +34,14 @@ public class MerchantModalPanel : MonoBehaviour
     public CraftItem selectedCraftItem;
     #endregion
 
-
+    public Sprite[] buttonImages;
+    public bool isCanBuy = false;
+    public Image applyBtn;
 
     public void InitData(Item item, string type, bool isBuy = true)
     {
+        int remainCoin = UIGameManager.instance.controller.State.stats.coin;
+
         itemType = type;
         isBuyStatus = isBuy;
         selectedItem = item;
@@ -62,10 +66,21 @@ public class MerchantModalPanel : MonoBehaviour
         if (isBuy)
         {
             coinText.text = item.cost.ToString();
+            isCanBuy = remainCoin >= item.cost;
         }
         else
         {
             coinText.text = item.sell.ToString();
+            isCanBuy = true;
+        }
+
+        if(isCanBuy) 
+        {
+            applyBtn.sprite = buttonImages[0];
+        }
+        else
+        {
+            applyBtn.sprite = buttonImages[1];
         }
 
         costImage.gameObject.SetActive(false);
@@ -76,6 +91,9 @@ public class MerchantModalPanel : MonoBehaviour
 
     public void InitCraft(CraftItem craftItem)
     {
+        isCanBuy = true;
+        applyBtn.sprite = buttonImages[0];
+
         selectedCraftItem = craftItem;
         buySellPanel.SetActive(false);
         craftPanel.SetActive(true);
@@ -109,6 +127,7 @@ public class MerchantModalPanel : MonoBehaviour
 
     public void OnApplyBtnClick()
     {
+        if(!isCanBuy) { return; }
         // SEND COST STATUS DATA TO SERVER
         if (selectedItem != null)
         {
