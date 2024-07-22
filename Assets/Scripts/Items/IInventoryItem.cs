@@ -40,7 +40,36 @@ namespace UFB.Items {
         VoidBomb,
         caltropBomb,
         IceTea,
-        FlameChili
+        FlameChili,
+
+        FlameChili2,
+        FlameChili3,
+        IceTea2,
+        IceTea3,
+        HeartPiece2,
+        Potion2,
+        Potion3,
+        Feather2,
+        Feather3,
+        Arrow2,
+        Arrow3,
+        Bomb2,
+        Bomb3,
+
+        Melee2,
+        Mana2,
+        Quiver2,
+        BombBag2,
+        WarpCrystal2,
+        Elixir2,
+        BombArrow2,
+        FireArrow2,
+        IceArrow2,
+        VoidArrow2,
+        FireBomb2,
+        IceBomb2,
+        VoidBomb2,
+        caltropBomb2,
     }
 
     public enum POWER
@@ -90,7 +119,7 @@ namespace UFB.Items {
         Cure = 0,
         Block,
         Steady,
-        Reflect,
+        Barrier,
         Charge,
         Revenge,
         Revive,
@@ -99,6 +128,14 @@ namespace UFB.Items {
         Freeze,
         Burn,
         Void,
+
+        Dodge2,
+        Cure2,
+        Charge2,
+        Barrier2,
+        Steady2,
+        Revenge2,
+        Block2
     }
 
     public enum PERK

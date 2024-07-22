@@ -263,12 +263,14 @@ public class MovePanel : MonoBehaviour
         } 
         else
         {
-            NextCoordinates(character.CurrentTile.Coordinates, move);
+            NextCoordinates(character.CurrentTile.Coordinates, move, false);
+
             var gameBoard = ServiceLocator.Current.Get<GameBoard>();
             Tile tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
 
             if((ITEM) selectedItemId == ITEM.Feather)
             {
+                Debug.Log("Feather sent : " + tile1.TilePosText);
                 OnSetMoveItem(tile1, selectedItemId);
             } 
             else if((ITEM)selectedItemId == ITEM.Bomb)
@@ -281,32 +283,32 @@ public class MovePanel : MonoBehaviour
         }
     }
 
-    private void NextCoordinates(Coordinates coordinates, string move)
+    private void NextCoordinates(Coordinates coordinates, string move, bool isFeather = true)
     {
         int x = coordinates.X;
         int y = coordinates.Y;
 
         if (move == "left")
         {
-            if (!isLeft) return;
+            if (!isLeft && isFeather) return;
             x--;
             x = x < 0 ? 0 : x;
         }
         else if (move == "right")
         {
-            if (!isRight) return;
+            if (!isRight && isFeather) return;
             x++;
             x = x > 25 ? 25 : x;
         }
         else if (move == "top")
         {
-            if (!isTop) return;
+            if (!isTop && isFeather) return;
             y--;
             y = y < 0 ? 0 : y;
         }
         else if (move == "down")
         {
-            if (!isDown) return;
+            if (!isDown && isFeather) return;
             y++;
             y = y > 25 ? 25 : y;
         }
@@ -420,8 +422,11 @@ public class MovePanel : MonoBehaviour
 
         if ((ITEM)message.itemId == ITEM.Feather) 
         {
+            Debug.Log("Feather Message Received");
             var gameBoard = ServiceLocator.Current.Get<GameBoard>();
-            character.MoveToTile(gameBoard.Tiles[message.tileId]);
+            Tile tile = gameBoard.Tiles[message.tileId];
+            Debug.Log("Feather Position : " + tile.TilePosText);
+            character.MoveToTile(tile);
         }
         else
         {
