@@ -203,19 +203,30 @@ public class MovePanel : MonoBehaviour
     public void OnMoveClick(string move)
     {
         Tile tile = character.CurrentTile;
+        TileState stateCurrent = tile.GetTileState();
 
         NextCoordinates(tile.Coordinates, move);
 
+        if (move == "top" && (EdgeProperty)stateCurrent.walls[0] == EdgeProperty.BRIDGE)
+        {
+            NextCoordinates(new Coordinates(_destination.x, _destination.y), move);
+        }
+        else if (move == "right" && (EdgeProperty)stateCurrent.walls[1] == EdgeProperty.BRIDGE)
+        {
+            NextCoordinates(new Coordinates(_destination.x, _destination.y), move);
+        }
+        else if (move == "down" && (EdgeProperty)stateCurrent.walls[2] == EdgeProperty.BRIDGE)
+        {
+            NextCoordinates(new Coordinates(_destination.x, _destination.y), move);
+        }
+        else if (move == "left" && (EdgeProperty)stateCurrent.walls[3] == EdgeProperty.BRIDGE)
+        {
+            NextCoordinates(new Coordinates(_destination.x, _destination.y), move);
+        }
 
         var gameBoard = ServiceLocator.Current.Get<GameBoard>();
         Tile tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
-        TileState state = tile1.GetTileState();
-        Debug.Log("STATE TILE TYPE: " +  state.type);
-        if(state.type == "Bridge" || state.type == "Floor")
-        {
-            NextCoordinates(tile1.Coordinates, move);
-        }
-        tile1 = gameBoard.GetTileByCoordinates(Coordinates.FromVector2Int(_destination));
+
         character.MoveToTile(tile1);
         for (int i = 0; i < tile1.transform.childCount; i++)
         {
@@ -426,6 +437,14 @@ public class MovePanel : MonoBehaviour
             var gameBoard = ServiceLocator.Current.Get<GameBoard>();
             Tile tile = gameBoard.Tiles[message.tileId];
             Debug.Log("Feather Position : " + tile.TilePosText);
+            character.MoveToTile(tile);
+        }
+        else if((ITEM)message.itemId == ITEM.WarpCrystal)
+        {
+            var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+            Tile tile = gameBoard.Tiles[message.tileId];
+            Debug.Log("Warp Position : " + tile.TilePosText);
+            //tile.GetTileState().walls[0] == EdgeProperty.BASIC
             character.MoveToTile(tile);
         }
         else

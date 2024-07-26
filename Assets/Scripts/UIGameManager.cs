@@ -8,6 +8,8 @@ using UnityEngine.TextCore.Text;
 using UFB.Items;
 using UFB.StateSchema;
 using UFB.Map;
+using UFB.Entities;
+using System.Collections.Generic;
 
 
 public class UIGameManager : MonoBehaviour
@@ -44,6 +46,10 @@ public class UIGameManager : MonoBehaviour
     public AttackPanel attackPanel;
 
     public MerchantPanel merchantPanel;
+
+    public WndPortalPanel wndPortalPanel;
+
+    public List<Portal> portals = new List<Portal> ();
 
     private void Awake()
     {
@@ -125,7 +131,6 @@ public class UIGameManager : MonoBehaviour
     private void OnReSpawnMerchant(GetReSpawnMerchantMessage message)
     {
         Debug.Log("===> respawn event");
-        var gameService = ServiceLocator.Current.Get<GameService>();
         
         Transform target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId].transform;
         SpawnItemEvent sEvent = new SpawnItemEvent(message.oldTileId);

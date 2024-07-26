@@ -59,8 +59,14 @@ namespace UFB.Map {
 
     public enum EdgeProperty
     {
-        Wall,
-        Bridge
+        NULL = -1,
+        BASIC,
+        WALL,
+        RAVINE,
+        VOID,
+        CLIFF,
+        BRIDGE,
+        STAIR,
     }
 
     public class TileEdge

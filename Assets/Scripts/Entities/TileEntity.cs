@@ -305,9 +305,9 @@ namespace UFB.Entities
 
         public float DistanceTo(TileEntity other) => this.Coordinates.DistanceTo(other.Coordinates);
 
-        public bool HasWall(TileSide side) => GameTile.Edges.Any(edge => edge.Side == side && edge.EdgeProperty == EdgeProperty.Wall);
+        public bool HasWall(TileSide side) => GameTile.Edges.Any(edge => edge.Side == side && edge.EdgeProperty == EdgeProperty.WALL);
 
-        public bool HasBridge(TileSide side) => GameTile.Edges.Any(edge => edge.Side == side && edge.EdgeProperty == EdgeProperty.Bridge);
+        public bool HasBridge(TileSide side) => GameTile.Edges.Any(edge => edge.Side == side && edge.EdgeProperty == EdgeProperty.BRIDGE);
 
         /// <summary>
         /// Is the target adjacent tile blocked by a wall?
