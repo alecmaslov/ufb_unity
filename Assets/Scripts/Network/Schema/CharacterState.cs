@@ -31,25 +31,28 @@ namespace UFB.StateSchema {
 		[Type(6, "string")]
 		public string currentTileId = default(string);
 
-		[Type(7, "ref", typeof(CoordinatesState))]
+		[Type(7, "int8")]
+		public sbyte type = default(sbyte);
+
+		[Type(8, "ref", typeof(CoordinatesState))]
 		public CoordinatesState coordinates = new CoordinatesState();
 
-		[Type(8, "ref", typeof(CharacterStatsState))]
+		[Type(9, "ref", typeof(CharacterStatsState))]
 		public CharacterStatsState stats = new CharacterStatsState();
 
-		[Type(9, "array", typeof(ArraySchema<Item>))]
+		[Type(10, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> items = new ArraySchema<Item>();
 
-		[Type(10, "array", typeof(ArraySchema<Item>))]
+		[Type(11, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> powers = new ArraySchema<Item>();
 
-		[Type(11, "array", typeof(ArraySchema<Item>))]
+		[Type(12, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> stacks = new ArraySchema<Item>();
 
-		[Type(12, "array", typeof(ArraySchema<Item>))]
+		[Type(13, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> equipSlots = new ArraySchema<Item>();
 
-		[Type(13, "array", typeof(ArraySchema<Quest>))]
+		[Type(14, "array", typeof(ArraySchema<Quest>))]
 		public ArraySchema<Quest> quests = new ArraySchema<Quest>();
 
 		/*
@@ -137,6 +140,18 @@ namespace UFB.StateSchema {
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(currentTileId));
 				__currentTileIdChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<sbyte> __typeChange;
+		public Action OnTypeChange(PropertyChangeHandler<sbyte> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.type));
+			__typeChange += __handler;
+			if (__immediate && this.type != default(sbyte)) { __handler(this.type, default(sbyte)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(type));
+				__typeChange -= __handler;
 			};
 		}
 
@@ -233,6 +248,7 @@ namespace UFB.StateSchema {
 				case nameof(characterClass): __characterClassChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(mapName): __mapNameChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(currentTileId): __currentTileIdChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+				case nameof(type): __typeChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;
 				case nameof(coordinates): __coordinatesChange?.Invoke((CoordinatesState) change.Value, (CoordinatesState) change.PreviousValue); break;
 				case nameof(stats): __statsChange?.Invoke((CharacterStatsState) change.Value, (CharacterStatsState) change.PreviousValue); break;
 				case nameof(items): __itemsChange?.Invoke((ArraySchema<Item>) change.Value, (ArraySchema<Item>) change.PreviousValue); break;

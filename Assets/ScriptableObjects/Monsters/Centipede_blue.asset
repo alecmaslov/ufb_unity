@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 616d191e887de9e41bfecb2a3532b5e5, type: 3}
+  m_Name: Centipede_blue
+  m_EditorClassIdentifier: 
+  id: Centipede_blue
+  characterClass: Centipede_blue
+  characterName: Centipede 1
+  avatar: {fileID: 21300000, guid: dd36dc500d1c51748a6030b6c4e7e681, type: 3}
+  card: {fileID: 21300000, guid: 3c30d8ab1bc0c5c45a5fa28bbe765957, type: 3}
+  description: 
+  mesh: {fileID: 0}
+  modelPrefab:
+    m_AssetGUID: a0787054504b9a048aa3af90f12e657d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

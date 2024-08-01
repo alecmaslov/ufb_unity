@@ -130,7 +130,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b5dfe9c70e57d64ca1da87445d2e41f
-    m_Address: Assets/Prefabs/Characters/Avenger.prefab
+    m_Address: CharacterPrefabs/Avenger
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -150,6 +150,155 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e83c06a23f4a97488d98978c0911cf9
+    m_Address: UfbCharacter/data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62f170de49d75fb4aab8ab34621a210f
+    m_Address: UfbCharacter/Centipede_blue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0787054504b9a048aa3af90f12e657d
+    m_Address: CharacterPrefabs/Centipede_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc50b49335b74dc43927a1a7b85ad5b4
+    m_Address: CharacterPrefabs/Centipede_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ccd5b9b031b0804cb24a9142230c2d0
+    m_Address: CharacterPrefabs/Centipede_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d45b425b7994ff46ba925b66ed570bb
+    m_Address: CharacterPrefabs/Earwig_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7910528bbedd1d04f80314158fa04e63
+    m_Address: CharacterPrefabs/Earwig_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d069a9d541f5cd4d83083ebc1c24903
+    m_Address: CharacterPrefabs/Earwig_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aebd8099732ee24498ffaac26c9d22a4
+    m_Address: CharacterPrefabs/Spider_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04756650508a1f744aff349d5e0d6098
+    m_Address: CharacterPrefabs/Spider_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a6a96a3834276041bb7c8c5296e616c
+    m_Address: CharacterPrefabs/Spider_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 142939ae22362f14b8f61cf612d426dd
+    m_Address: CharacterPrefabs/Wasp_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78ae77d65b6475d4e8b084e0f91ac032
+    m_Address: CharacterPrefabs/Wasp_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 614bfb1f4f5090549b8e78e8b562068c
+    m_Address: CharacterPrefabs/Wasp_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 774b6622baf5ea64298873926819cdf6
+    m_Address: UfbCharacter/Centipede_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36af503fe36c61b4e98943e7e22543e1
+    m_Address: UfbCharacter/Earwig_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 102640e72cb98b74f8771c597c96d289
+    m_Address: UfbCharacter/Spider_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cb7730a27ec361448fe18bf73e84018
+    m_Address: UfbCharacter/Wasp_blue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9b946df32e46084f9a106c542317471
+    m_Address: UfbCharacter/Centipede_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 095273a22c45b5a4fa9e96697acd0fcc
+    m_Address: UfbCharacter/Earwig_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 308a1662b8363664baf3512b2bf8d2ba
+    m_Address: UfbCharacter/Earwig_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb841df99d5fcb748939a330c4f74989
+    m_Address: UfbCharacter/Spider_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6fea3e1d2175664a8b8c3d81fb29a14
+    m_Address: UfbCharacter/Spider_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0c672697dcc5a845abfa83fc2d396be
+    m_Address: UfbCharacter/Wasp_green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c124698349af4c498537fe9f1177c3c
+    m_Address: UfbCharacter/Wasp_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4dd2355fd6cd13d4ca0bfde12de1958b, type: 2}

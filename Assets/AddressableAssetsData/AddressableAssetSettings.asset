@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 9dd9f1ececacd594a81851fe172e8076
   m_currentHash:
     serializedVersion: 2
-    Hash: 5614a014872c91a9964308339259c0a7
+    Hash: 29ccf80069d8f97183ac7fdb33780b48
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
     - Character
     - Map
     - Entities
+    - Monster
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: bb7164b9162175247a0b28b98580f5b1, type: 2}

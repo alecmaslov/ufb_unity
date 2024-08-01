@@ -90,6 +90,11 @@ namespace UFB.Map
             gameObject.transform.SetParent(transform);
             if (zeroLocalPosition)
                 gameObject.transform.localPosition = Vector3.zero;
+            if(_state.type == "Upper")
+            {
+                gameObject.transform.localPosition += Vector3.up * 2.15f;
+            }
+
         }
 
         public TileState GetTileState() { return _state; }

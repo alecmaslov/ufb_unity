@@ -174,6 +174,7 @@ namespace UFB.Character
             movePanel.character = character;
             spawnPanel.character = character;
             character.transform.position = new Vector3(-100, -100, 100);
+
             EventBus.Publish(
                 new SetCameraPresetStateEvent
                 {
@@ -222,7 +223,7 @@ namespace UFB.Character
             EventBus.Publish(
                 new ToastMessageEvent($"Player {characterState.id} has joined the game!")
             );
-            Debug.Log($"[CharacterManager] Player {characterState.id} has joined the game!");
+            Debug.Log($"[CharacterManager] Player {characterState.id} has joined the game! class : {characterState.characterClass}, type : class : {characterState.type}");
 
             try
             {
@@ -240,7 +241,7 @@ namespace UFB.Character
                     SetSelectedCharacter(character.Id);
                 } else
                 {
-                    character.gameObject.SetActive(false);
+                    //character.gameObject.SetActive(false);
                 }
             }
             catch (Exception e)

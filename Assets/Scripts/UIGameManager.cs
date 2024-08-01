@@ -132,11 +132,12 @@ public class UIGameManager : MonoBehaviour
     {
         Debug.Log("===> respawn event");
         
-        Transform target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId].transform;
+        Tile target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId];
         SpawnItemEvent sEvent = new SpawnItemEvent(message.oldTileId);
         sEvent.tileId = message.oldTileId;
-        sEvent.target = target;
+        sEvent.target = target.transform;
         sEvent.targetTileId = message.tileId;
+        sEvent.tile = target;
         EventBus.Publish(
             sEvent
         );
@@ -203,5 +204,10 @@ public class UIGameManager : MonoBehaviour
                 }
             )
         );
+    }
+
+    public void OnChangeMonsterControl()
+    {
+
     }
 }

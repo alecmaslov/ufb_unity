@@ -54,9 +54,8 @@ namespace UFB.Entities
             SpawnEntity.tileId = e.targetTileId;
 
             if (e.target != null) 
-            { 
-                transform.parent = e.target;
-                transform.position = Vector3.zero;
+            {
+                e.tile.AttachGameObject(gameObject, true);
             }
             //Destroy(gameObject);
 

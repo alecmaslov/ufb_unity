@@ -53,9 +53,7 @@ namespace UFB.Interactions
     public class InteractionManager : MonoBehaviour, IService
     {
         public InteractionMode Mode { get; private set; }
-        private UnityEngine.Camera _mainCamera;
         private GameInput _gameInput;
-        private CameraController _cameraController;
 
         private bool _isOrbitLocked = false;
         
@@ -79,8 +77,6 @@ namespace UFB.Interactions
 #endif
 
             _gameInput = new GameInput();
-            _mainCamera = UnityEngine.Camera.main;
-            _cameraController = _mainCamera.GetComponent<CameraController>();
         }
 
         private void OnEnable()
@@ -90,8 +86,6 @@ namespace UFB.Interactions
             ServiceLocator.Current.Register(this);
             _gameInput.OrbitView.TouchPress.started += OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
-            _gameInput.OrbitView.OrbitCamera.performed += OnOrbitCamera;
-            _gameInput.OrbitView.ScrollZoom.performed += OnScrollZoom;
             //_gameInput.OrbitView.TapSelect.performed += OnTapSelect;
             _gameInput.Enable();
         }
@@ -102,8 +96,6 @@ namespace UFB.Interactions
             ServiceLocator.Current.Unregister<InteractionManager>();
             _gameInput.OrbitView.TouchPress.started -= OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started -= OnMouseClickStarted;
-            _gameInput.OrbitView.OrbitCamera.performed -= OnOrbitCamera;
-            _gameInput.OrbitView.ScrollZoom.performed -= OnScrollZoom;
             //_gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
             _gameInput.Disable();
         }
@@ -124,45 +116,12 @@ namespace UFB.Interactions
             RaycastObjects(pointerPosition);
         }
 
-        // we're going to need to think of some way to toggle the orbit on and off
-        // because in top down mode, we need a different control
-        // we could consider having the camera controller add/remove the monobehavior
-        // responsivle for control, then we send the controller a simple Control
-        // or TemporaryControl message
-        private void OnOrbitCamera(InputAction.CallbackContext ctx)
-        {
-            if (_gameInput.OrbitView.PrimaryPress.ReadValue<float>() < 0.5f)
-            {
-                return;
-            }
-
-            if (_isOrbitLocked)
-            {
-                _cameraController.Orbit.RotateTemporary(ctx.ReadValue<Vector2>() * 3f, 2f);
-            }
-            else
-            {
-                _cameraController.Orbit.Rotate(ctx.ReadValue<Vector2>() * 3f);
-            }
-        }
-
-        private void OnScrollZoom(InputAction.CallbackContext ctx)
-        {
-            if (_isOrbitLocked)
-            {
-                _cameraController.Orbit.ChangeRadiusTemporary(ctx.ReadValue<Vector2>().y * 0.01f, 2f);
-            }
-            else
-            {
-                _cameraController.Orbit.ChangeRadius(ctx.ReadValue<Vector2>().y * 0.01f);
-            }
-        }
 
         private void RaycastObjects(Vector2 position)
         {
             // Convert mouse position to ray
             Vector3 position3D = new Vector3(position.x, position.y, -4f);
-            Ray ray = _mainCamera.ScreenPointToRay(position3D);
+            Ray ray = CameraManager.instance.cam.ScreenPointToRay(position3D);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -238,6 +197,8 @@ namespace UFB.Interactions
                                 0.3f
                             )
                         );
+                        CameraManager.instance.SetTarget(uiGameManager.controller.transform);
+                        CameraManager.instance.OnActiveInputAction();
                         isSpawn = false;
                     }
 

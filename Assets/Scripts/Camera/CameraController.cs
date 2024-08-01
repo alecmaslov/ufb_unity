@@ -3,6 +3,7 @@ using UFB.Core;
 using UFB.Events;
 using Newtonsoft.Json;
 using UFB.Camera;
+using UFB.Map;
 
 namespace UFB.Events
 {
@@ -31,6 +32,7 @@ namespace UFB.Events
         public string tileId = "";
         public Transform target = null;
         public string targetTileId = "";
+        public Tile tile = null;
         public SpawnItemEvent(string tileId)
         {
             this.tileId = tileId;
