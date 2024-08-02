@@ -159,6 +159,12 @@ namespace UFB.Items {
         LIFE
     }
 
+    public enum USER_TYPE 
+    { 
+        USER = 1,
+        MONSTER
+    }
+
     public enum PowerType {
 
     }

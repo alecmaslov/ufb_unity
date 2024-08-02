@@ -15,6 +15,8 @@ using UFB.Core;
 using System.Threading.Tasks;
 using Colyseus.Schema;
 using UFB.Camera;
+using UFB.Items;
+using UnityEngine.TextCore.Text;
 
 namespace UFB.Events
 {
@@ -72,6 +74,7 @@ namespace UFB.Character
         public CharacterController SelectedCharacter => _characters[_selectedCharacterId];
 
         // public MapSchema<CharacterState> State { get; private set; }
+        public List<string> monsterKeys = new List<string>();
 
         [SerializeField]
         private GameObject _characterPrefab;
@@ -173,7 +176,7 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            character.transform.position = new Vector3(-100, -100, 100);
+            //character.transform.position = new Vector3(-100, -100, 100);
 
             EventBus.Publish(
                 new SetCameraPresetStateEvent
@@ -227,6 +230,11 @@ namespace UFB.Character
 
             try
             {
+                if(characterState.type == (int)USER_TYPE.MONSTER)
+                {
+                    monsterKeys.Add(key);
+                }
+
                 UfbCharacter ufbCharacter = await LoadCharacter(characterState.characterClass);
                 GameObject templateCharacter = Instantiate(_characterPrefab, transform);
                 var character = templateCharacter.GetComponent<CharacterController>();
@@ -300,53 +308,17 @@ namespace UFB.Character
             );
         }
 
-        // private async void OnRequestCharacterMove(RequestCharacterMoveEvent e)
-        // {
-        //     Debug.Log($"[PlayerManager] Requesting move to {e.Destination.ToString()}");
-        //     await _room.Send(
-        //         "move",
-        //         new Dictionary<string, object>() { { "destination", e.Destination.ToDictionary() } }
-        //     );
-        // }
+        public void OnSelectCharacter()
+        {
+            string key = monsterKeys[0];
+            
+            if(_selectedCharacterId == key)
+            {
+                key = _playerCharacterId;
+            }
+            SetSelectedCharacter(key);
 
-        // public void SavePlayerConfiguration(string fileName)
-        // {
-
-        //     // this will eventually be handled by the Player object, which PlayerEntity has a reference
-        //     // to. It will handle loading/unloading the JSON into the player state. For now, quick solution
-        //     var json = JsonConvert.SerializeObject(_players.Select(p => new PlayerConfiguration
-        //     {
-        //         CharacterName = p.CharacterName,
-        //         TileCoordinates = p.CurrentTile.Coordinates
-        //     }).ToList());
-
-        //     // save the json
-        //     ApplicationData.SaveJSON(json, "gamestate/player-config", fileName + ".json");
-        // }
-
-
-        //         public void LoadPlayerConfiguration(string fileName)
-        // {
-        //     // load the json
-        //     var playerConfigurations = ApplicationData.LoadJSON<List<PlayerConfiguration>>("gamestate/player-config", fileName + ".json");
-
-        //     // iterate through the players and set their tile coordinates
-        //     foreach (var playerConfiguration in playerConfigurations)
-        //     {
-        //         var player = _players.FirstOrDefault(p => p.CharacterName == playerConfiguration.CharacterName);
-        //         if (player == null)
-        //         {
-        //             Debug.LogError($"Player with character name {playerConfiguration.CharacterName} not found");
-        //             continue;
-        //         }
-        //         var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(playerConfiguration.TileCoordinates);
-        //         if (tile == null)
-        //         {
-        //             Debug.LogError($"Tile with coordinates {playerConfiguration.TileCoordinates} not found");
-        //             continue;
-        //         }
-        //         player.ForceMoveToTile(tile);
-        //     }
-        // }
+            CameraManager.instance.SetTarget(_characters[key].transform);
+        }
     }
 }

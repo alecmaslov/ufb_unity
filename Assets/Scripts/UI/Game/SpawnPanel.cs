@@ -158,6 +158,7 @@ public class SpawnPanel : MonoBehaviour
                     "getSpawn",
                     new RequestGetSpawnMessage
                     {
+                        characterId = characterId,
                         coinCount = coin,
                         itemId = itemIdx,
                         powerId = powerIdx,

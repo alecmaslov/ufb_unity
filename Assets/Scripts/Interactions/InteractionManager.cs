@@ -145,7 +145,7 @@ namespace UFB.Interactions
                 return;
             }
 
-            string playerId = ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.Id;
+            string playerId = CharacterManager.Instance.SelectedCharacter.Id;
 
             string tileId = transform.GetComponent<Tile>().Id;
             Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];

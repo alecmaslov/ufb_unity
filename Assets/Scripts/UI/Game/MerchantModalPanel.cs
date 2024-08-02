@@ -138,6 +138,7 @@ public class MerchantModalPanel : MonoBehaviour
                         "buyItem",
                         new RequestBuyItem
                         {
+                            characterId = UIGameManager.instance.controller.Id,
                             id = selectedItem.id,
                             type = itemType
                         }
@@ -151,6 +152,7 @@ public class MerchantModalPanel : MonoBehaviour
                         "sellItem",
                         new RequestSellItem
                         {
+                            characterId = UIGameManager.instance.controller.Id,
                             id = selectedItem.id,
                             type = itemType
                         }
@@ -166,6 +168,7 @@ public class MerchantModalPanel : MonoBehaviour
                     "addCraftItem",
                     new RequestAddCraftItem
                     {
+                        characterId = UIGameManager.instance.controller.Id,
                         idx1 = selectedCraftItem.data.idx1,
                         idx2 = selectedCraftItem.data.idx2,
                         type = selectedCraftItem.data.type,

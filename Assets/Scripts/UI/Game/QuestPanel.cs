@@ -22,6 +22,7 @@ public class QuestPanel : MonoBehaviour
                 "setActiveQuest",
                 new RequestActiveQuest
                 {
+                    characterId = UIGameManager.instance.controller.Id,
                     quest = quest,
                 }
             )

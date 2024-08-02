@@ -248,6 +248,7 @@ public class AttackPanel : MonoBehaviour
                 "setPowerMove",
                 new RequestSetPowerMoveItem
                 {
+                    characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
                 }
             )

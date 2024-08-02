@@ -26,7 +26,7 @@ namespace UFB.Map
         public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
         public bool IsMoving { get; private set; }
 
-        public string TilePosText => Coordinates.ColumnName + int.Parse(Coordinates.RowName).ToString("D2");
+        public string TilePosText => Coordinates.ColumnName + (int.Parse(Coordinates.RowName) + 1).ToString("D2");
 
         private MeshMapTile _meshMapTile;
         private TileState _state;

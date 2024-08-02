@@ -94,6 +94,7 @@ public class WndPortalPanel : MonoBehaviour
                 "setMoveItem",
                 new RequestMoveItem
                 {
+                    characterId = UIGameManager.instance.controller.Id,
                     tileId = selectedTile.Id,
                     itemId = (int)ITEM.WarpCrystal,
                 }

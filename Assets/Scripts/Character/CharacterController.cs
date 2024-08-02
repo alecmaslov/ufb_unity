@@ -141,6 +141,7 @@ namespace UFB.Character
                     "forceMove",
                     new RequestMoveMessage
                     {
+                        characterId = Id,
                         tileId = destination.Id,
                         destination = destination.Coordinates
                     }
@@ -163,6 +164,7 @@ namespace UFB.Character
                     "cancelMove",
                     new RequestCancelMoveMessage
                     {
+                        characterId = Id,
                         tileId = destination.Id,
                         destination = destination.Coordinates,
                         originEnergy = originEnergy,
@@ -180,6 +182,7 @@ namespace UFB.Character
                     "move",
                     new RequestMoveMessage
                     {
+                        characterId = Id,
                         tileId = tile.Id,
                         destination = tile.Coordinates,
                     }

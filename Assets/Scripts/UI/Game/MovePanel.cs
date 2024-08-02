@@ -257,6 +257,7 @@ public class MovePanel : MonoBehaviour
                         "getMerchantData",
                         new RequestTile
                         {
+                            characterId = character.Id,
                             tileId = tile1.Id,
                         }
                     )
@@ -336,6 +337,7 @@ public class MovePanel : MonoBehaviour
                 "getMoveItem",
                 new RequestMoveItem
                 {
+                    characterId = character.Id,
                     tileId = character.CurrentTile.Id,
                     itemId = type,
                 }
@@ -362,6 +364,7 @@ public class MovePanel : MonoBehaviour
                 "setMoveItem",
                 new RequestMoveItem
                 {
+                    characterId = character.Id,
                     tileId = tile.Id,
                     itemId = itemId,
                 }

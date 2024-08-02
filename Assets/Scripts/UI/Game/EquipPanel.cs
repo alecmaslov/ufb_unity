@@ -60,7 +60,7 @@ public class EquipPanel : MonoBehaviour
             return;
         }
         gameObject.SetActive(true);
-        InitEquipList(CharacterManager.Instance.PlayerCharacter.State);
+        InitEquipList(CharacterManager.Instance.SelectedCharacter.State);
         UIGameManager.instance.powerMovePanel.gameObject.SetActive(false);
     }
 
@@ -107,6 +107,7 @@ public class EquipPanel : MonoBehaviour
                 "getPowerMoveList",
                 new RequestGetPowerMoveList
                 {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
                     powerId = equip.id
                 }
             )

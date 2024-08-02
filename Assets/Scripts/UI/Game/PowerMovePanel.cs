@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Camera;
+using UFB.Character;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
@@ -85,6 +86,7 @@ public class PowerMovePanel : MonoBehaviour
                 "unEquipPower",
                 new RequestGetPowerMoveList
                 {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
                     powerId = powerItem.id,
                 }
             )

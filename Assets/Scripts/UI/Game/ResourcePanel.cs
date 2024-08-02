@@ -132,6 +132,11 @@ namespace UFB.UI
 
         public void InitResoureData()
         {
+            foreach(var si in stackItems)
+            {
+                si.count.text = "0";
+            }
+
             CharacterState characterState = UIGameManager.instance.controller.State;
 
             coinText.text = characterState.stats.coin.ToString();
@@ -144,8 +149,12 @@ namespace UFB.UI
                 {
                     int stackId = stack.id;
                     Debug.Log($"stack id: {stackId}, count : {stack.count}");
-                    stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stack.id];
-                    stackItems[stackId].count.text = stack.count.ToString();
+                    if (stackId < stackItems.Length)
+                    {
+                        stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stackId];
+                        stackItems[stackId].count.text = stack.count.ToString();
+                    }
+
                 }
             });
 

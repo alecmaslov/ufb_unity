@@ -144,6 +144,7 @@ public class ResourceDetailPanel : MonoBehaviour
                 "setMoveItem",
                 new RequestMoveItem
                 {
+                    characterId = UIGameManager.instance.controller.Id,
                     tileId = UIGameManager.instance.controller.CurrentTile.Id,
                     itemId = type,
                 }

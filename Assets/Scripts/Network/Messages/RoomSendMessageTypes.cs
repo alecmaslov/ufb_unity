@@ -15,6 +15,11 @@ namespace UFB.Network.RoomMessageTypes
         public float turnTime = 60f * 3f;
     }
 
+    public class RequestCharacterId : ISendMessage 
+    { 
+        public string characterId;
+    }
+
     public class UfbRoomCreateOptions : ISendMessage
     {
         public string mapName = "kaiju";
@@ -34,6 +39,7 @@ namespace UFB.Network.RoomMessageTypes
     {
         public Coordinates destination;
         public string tileId;
+        public string characterId;
         public float originEnergy;
         public string left;
         public string right;
@@ -45,6 +51,7 @@ namespace UFB.Network.RoomMessageTypes
     {
         public Coordinates destination;
         public string tileId;
+        public string characterId;
         public float originEnergy;
         public string left;
         public string right;
@@ -61,7 +68,7 @@ namespace UFB.Network.RoomMessageTypes
         public bool isItemBag;
     }
 
-    public class RequestGetPowerMoveList : ISendMessage
+    public class RequestGetPowerMoveList : RequestCharacterId
     {
         public int powerId;    
     }
@@ -71,17 +78,17 @@ namespace UFB.Network.RoomMessageTypes
 
     }
 
-    public class RequestTile: ISendMessage
+    public class RequestTile: RequestCharacterId
     {
         public string tileId;
     }
 
-    public class RequestActiveQuest: ISendMessage
+    public class RequestActiveQuest: RequestCharacterId
     {
         public Quest quest;
     }
 
-    public class RequestAddCraftItem: ISendMessage
+    public class RequestAddCraftItem: RequestCharacterId
     {
         public int idx1;
         public int idx2;
@@ -90,30 +97,30 @@ namespace UFB.Network.RoomMessageTypes
         public string type;
     }
 
-    public class RequestBuyItem: ISendMessage
+    public class RequestBuyItem: RequestCharacterId
     {
         public string type;
         public int id;
     }
 
-    public class RequestSellItem : ISendMessage 
+    public class RequestSellItem : RequestCharacterId 
     {
         public string type;
         public int id;
     }
 
-    public class RequestSetPowerMoveItem : ISendMessage
+    public class RequestSetPowerMoveItem : RequestCharacterId
     {
         public int powerMoveId;
     }
 
-    public class RequestMoveItem : ISendMessage 
+    public class RequestMoveItem : RequestCharacterId 
     {
         public int itemId;
         public string tileId;
     }
 
-    public class RequestGetSpawnMessage : ISendMessage
+    public class RequestGetSpawnMessage : RequestCharacterId
     {
         public int itemId;
         public string playerId;
