@@ -60,6 +60,11 @@ namespace UFB.Network.RoomMessageTypes
         public List<Item> items;
     }
 
+    public class RequestEndTurnMessage : RequestCharacterId
+    {
+        
+    }
+
     public class RequestSpawnMessage : ISendMessage
     {
         public Coordinates destination;

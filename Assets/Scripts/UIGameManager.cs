@@ -10,6 +10,8 @@ using UFB.StateSchema;
 using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
+using UFB.Events;
+using UI.ThreeDimensional;
 
 
 public class UIGameManager : MonoBehaviour
@@ -49,7 +51,20 @@ public class UIGameManager : MonoBehaviour
 
     public WndPortalPanel wndPortalPanel;
 
+    public TurnPanel turnPanel;
+
     public List<Portal> portals = new List<Portal> ();
+
+    public GameObject[] dices;
+
+    public UIObject3D diceUIObject;
+
+    #region public values
+
+    public float curTurnTime = 120;
+    public bool isPlayerTurn = false;
+
+    #endregion
 
     private void Awake()
     {
@@ -70,6 +85,17 @@ public class UIGameManager : MonoBehaviour
             Debug.LogError("Room is null");
             return;
         }
+
+        gameService.SubscribeToRoomMessage<TurnMessage>(
+            "InitTurn",
+            InitTurn
+        );
+
+        gameService.SubscribeToRoomMessage<TurnChangeMessage>(
+            "turnChanged",
+            TurnChanged
+        );
+
         gameService.SubscribeToRoomMessage<SpawnInitMessage>(
             "spawnInit",
             InitSpawn
@@ -117,6 +143,21 @@ public class UIGameManager : MonoBehaviour
     {
         EventBus.Unsubscribe<ChangeCharacterStateEvent>(OnChangeCharacterStateEvent);
         EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
+    }
+
+    private void InitTurn(TurnMessage e)
+    {
+        isPlayerTurn = controller.Id == e.characterId;
+        turnPanel.InitData(e.curTime);
+        curTurnTime = e.curTime;
+    }
+
+    private void TurnChanged(TurnChangeMessage e) 
+    {
+        CharacterManager.Instance.OnSelectCharacter(e.characterId);
+        curTurnTime = e.curTime;
+        isPlayerTurn = controller.Id == e.characterId;
+        turnPanel.InitData(curTurnTime);
     }
 
     private void InitSpawn(SpawnInitMessage m)
@@ -193,21 +234,47 @@ public class UIGameManager : MonoBehaviour
         return count;
     }
 
-    public void OnTest() 
-    {
-        EventBus.Publish(
-            RoomSendMessageEvent.Create(
-                "testPath",
-                new RequestGetPowerMoveList
-                {
-                    powerId = 0,
-                }
-            )
-        );
-    }
-
     public void OnChangeMonsterControl()
     {
 
     }
+
+    public void OnDiceStop()
+    {
+        diceUIObject.ObjectPrefab = dices[1].transform;
+        diceUIObject.GetComponent<RotateUIObject3D>().OnSnapBackObject();
+    }
+
+    public void OnDiceStart()
+    {
+        diceUIObject.GetComponent<RotateUIObject3D>().OnStartRotate();
+    }
+
+    #region Unity Function
+
+    private void Update()
+    {
+        if (curTurnTime <= 0) 
+        {
+            if (isPlayerTurn)
+            {
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        "endTurn",
+                        new RequestEndTurnMessage
+                        {
+                            characterId = controller.Id,
+                        }
+                    )
+                );
+            }
+            isPlayerTurn = false;
+        }
+        else
+        {
+            turnPanel.SetTurnTime(curTurnTime);
+            curTurnTime -= Time.deltaTime;
+        }
+    }
+    #endregion
 }

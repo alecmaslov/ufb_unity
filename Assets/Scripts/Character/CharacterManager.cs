@@ -308,10 +308,8 @@ namespace UFB.Character
             );
         }
 
-        public void OnSelectCharacter()
+        public void OnSelectCharacter(string key)
         {
-            string key = monsterKeys[0];
-            
             if(_selectedCharacterId == key)
             {
                 key = _playerCharacterId;

@@ -94,6 +94,19 @@ namespace UFB.Network.RoomMessageTypes
         public ItemResult itemResult;
     }
 
+    public class TurnMessage : IReceiveMessage
+    {
+        public string characterId;
+        public float curTime;
+    }
+
+    public class TurnChangeMessage : IReceiveMessage
+    {
+        public int turn;
+        public string characterId;
+        public float curTime;
+    }
+
     public class SpawnInitMessage : IReceiveMessage
     {
         public string characterId;

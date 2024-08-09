@@ -8,6 +8,7 @@ using TMPro;
 using UFB.Character;
 using UnityEngine.UI;
 using UFB.Map;
+using UFB.Items;
 
 namespace UFB.UI
 {

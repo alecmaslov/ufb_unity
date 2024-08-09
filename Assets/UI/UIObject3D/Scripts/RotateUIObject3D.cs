@@ -37,6 +37,8 @@ namespace UI.ThreeDimensional
 
         private Vector3 initialRotation = Vector3.zero;
 
+        public bool isRotated = true;
+
         private EventTrigger _eventTrigger = null;
         private EventTrigger eventTrigger
         {
@@ -70,7 +72,10 @@ namespace UI.ThreeDimensional
             {
                 case eRotationMode.Constant:
                     {
-                        UpdateRotation();
+                        if(isRotated)
+                        {
+                            UpdateRotation();
+                        }
                     }
                     break;
                 case eRotationMode.WhenMouseIsOver:
@@ -119,6 +124,18 @@ namespace UI.ThreeDimensional
             {
                 StartCoroutine(SnapBack(snapbackTime));
             }
+        }
+
+        public void OnSnapBackObject()
+        {
+            isRotated = false;
+            StartCoroutine(SnapBack(snapbackTime));
+        }
+
+        public void OnStartRotate()
+        {
+            timeSinceLastUpdate = 0f;
+            isRotated = true;
         }
 
         IEnumerator SnapBack(float time)
