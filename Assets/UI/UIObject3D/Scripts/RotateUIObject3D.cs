@@ -37,8 +37,6 @@ namespace UI.ThreeDimensional
 
         private Vector3 initialRotation = Vector3.zero;
 
-        public bool isRotated = true;
-
         private EventTrigger _eventTrigger = null;
         private EventTrigger eventTrigger
         {
@@ -50,6 +48,8 @@ namespace UI.ThreeDimensional
         }
 
         private float timeSinceLastUpdate = 0f;
+
+        public bool isRotated = true;
 
         void Awake()
         {
@@ -126,18 +126,6 @@ namespace UI.ThreeDimensional
             }
         }
 
-        public void OnSnapBackObject()
-        {
-            isRotated = false;
-            StartCoroutine(SnapBack(snapbackTime));
-        }
-
-        public void OnStartRotate()
-        {
-            timeSinceLastUpdate = 0f;
-            isRotated = true;
-        }
-
         IEnumerator SnapBack(float time)
         {
             var timeStarted = Time.time;
@@ -166,6 +154,18 @@ namespace UI.ThreeDimensional
             }
 
             UIObject3D.TargetRotation = initialRotation;
+        }
+
+        public void OnSnapBackObject()
+        {
+            isRotated = false;
+            StartCoroutine(SnapBack(snapbackTime));
+        }
+
+        public void OnStartRotate()
+        {
+            timeSinceLastUpdate = 0;
+            isRotated = true;
         }
 
         void OnValidate()

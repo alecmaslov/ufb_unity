@@ -70,13 +70,25 @@ public class AttackPanel : MonoBehaviour
 
     public Text powerText;
 
+    public TopHeader topHeader;
+
     public void InitCharacterState(CharacterState e)
     {
         InitOthers();
     }
 
+    public void InitEnemyState()
+    {
+        if (HighlightRect.Instance.selectedMonster != null) 
+        { 
+            topHeader.OnSelectedCharacterEvent(HighlightRect.Instance.selectedMonster.State);
+        }
+    }
+
     public void Init(PowerMoveItem _power)
     {
+        InitDiceData();
+        InitEnemyState();
         powerMoveItem = _power;
         pm = powerMoveItem.pm;
 
@@ -85,8 +97,8 @@ public class AttackPanel : MonoBehaviour
         powermoveText.text = pm.name.ToString();
         powerText.text = UIGameManager.instance.powerMovePanel.powerItem.name;
 
-        panelDetail.SetActive(true);
-        resultPanelDetail.SetActive(false);
+        //panelDetail.SetActive(true);
+        //resultPanelDetail.SetActive(false);
 
         InitCostList();
         InitResultList();
@@ -258,6 +270,16 @@ public class AttackPanel : MonoBehaviour
 
         panelDetail.SetActive(false);
         resultPanelDetail.SetActive(true);
+    }
+
+    public void OnSelectDice()
+    {
+        DiceArea.instance.LaunchDice();
+    }
+
+    public void InitDiceData()
+    {
+        DiceArea.instance.SetDiceType(0);
     }
 
     public void OnCancelBtnClicked()

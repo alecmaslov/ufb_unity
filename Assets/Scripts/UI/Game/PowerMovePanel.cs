@@ -69,7 +69,18 @@ public class PowerMovePanel : MonoBehaviour
             pm.gameObject.SetActive(true);
             pm.GetComponent<Button>().onClick.AddListener(() =>
             {
-                UIGameManager.instance.attackPanel.Init(pm);
+                UFB.Events.EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
+                        new RequestGetHighlightRect
+                        {
+                            characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                            powerMoveId = move.id
+                        }
+                    )
+                );
+                UIGameManager.instance.targetScreenPanel.InitData(pm);
+                gameObject.SetActive(false);
             });
         }
 

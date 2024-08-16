@@ -37,4 +37,9 @@ public class CameraManager : MonoBehaviour
         _cinemachineFreeLook.Follow = target;
     }
 
+    public void SetEnemyTarget(Transform target)
+    {
+        _cinemachineFreeLook.LookAt = target;
+    }
+
 }

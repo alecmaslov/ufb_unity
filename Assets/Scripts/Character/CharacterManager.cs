@@ -123,7 +123,7 @@ namespace UFB.Character
             _characterStates.OnRemove(OnCharacterRemoved);
 
             gameService.SubscribeToRoomMessage<CharacterMovedMessage>(
-                "characterMoved",
+                GlobalDefine.SERVER_MESSAGE.CHARACTER_MOVED,
                 OnCharacterMoved
             );
 
@@ -317,6 +317,18 @@ namespace UFB.Character
             SetSelectedCharacter(key);
 
             CameraManager.instance.SetTarget(_characters[key].transform);
+        }
+
+        public CharacterController GetMonsterFromId(string id)
+        {
+            if(_characters.ContainsKey(id))
+            {
+                return _characters[id];
+            } 
+            else
+            {
+                return null;
+            }
         }
     }
 }

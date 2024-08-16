@@ -53,11 +53,13 @@ public class UIGameManager : MonoBehaviour
 
     public TurnPanel turnPanel;
 
+    public TargetScreenPanel targetScreenPanel;
+
+    public GameObject bottomDrawer;
+
     public List<Portal> portals = new List<Portal> ();
 
     public GameObject[] dices;
-
-    public UIObject3D diceUIObject;
 
     #region public values
 
@@ -85,58 +87,20 @@ public class UIGameManager : MonoBehaviour
             Debug.LogError("Room is null");
             return;
         }
-
-        gameService.SubscribeToRoomMessage<TurnMessage>(
-            "InitTurn",
-            InitTurn
-        );
-
-        gameService.SubscribeToRoomMessage<TurnChangeMessage>(
-            "turnChanged",
-            TurnChanged
-        );
-
-        gameService.SubscribeToRoomMessage<SpawnInitMessage>(
-            "spawnInit",
-            InitSpawn
-        );
-
-        gameService.SubscribeToRoomMessage<PowerMoveListMessage>(
-            "ReceivePowerMoveList",
-            equipPanel.OnReceivePowerMoveList
-        );
-
-        gameService.SubscribeToRoomMessage<MoveItemMessage>(
-            "ReceiveMoveItem",
-            movePanel.OnReceiveMoveItem
-        );
-
-        gameService.SubscribeToRoomMessage<SetMoveItemMessage>(
-            "SetMoveItem",
-            movePanel.OnSetMoveItemReceived
-        );
-
-        gameService.SubscribeToRoomMessage<AddExtraScoreMessage>(
-            "addExtraScore",
-            OnReceiveExtraScore
-        );
-
-        gameService.SubscribeToRoomMessage<GetBombMessage>(
-            "getBombDamage",
-            movePanel.OnReceiveGetBombMessage
-        );
-
-        gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(
-            "getMerchantData",
-            merchantPanel.InitMerchantData
-        );
         
-        gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>(
-            "respawnMerchant",
-            OnReSpawnMerchant
-        );
+        gameService.SubscribeToRoomMessage<TurnMessage>(GlobalDefine.SERVER_MESSAGE.INIT_TURN,InitTurn);
+        gameService.SubscribeToRoomMessage<TurnChangeMessage>(GlobalDefine.SERVER_MESSAGE.TURN_CHANGED,TurnChanged);
+        gameService.SubscribeToRoomMessage<SpawnInitMessage>(GlobalDefine.SERVER_MESSAGE.SPAWN_INIT, InitSpawn);
+        gameService.SubscribeToRoomMessage<PowerMoveListMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_POWERMOVE_LIST, equipPanel.OnReceivePowerMoveList);
+        gameService.SubscribeToRoomMessage<MoveItemMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_MOVEITEM, movePanel.OnReceiveMoveItem);
+        gameService.SubscribeToRoomMessage<SetMoveItemMessage>(GlobalDefine.SERVER_MESSAGE.SET_MOVEITEM, movePanel.OnSetMoveItemReceived);
+        gameService.SubscribeToRoomMessage<AddExtraScoreMessage>(GlobalDefine.SERVER_MESSAGE.ADD_EXTRA_SCORE, OnReceiveExtraScore);
+        gameService.SubscribeToRoomMessage<GetBombMessage>( GlobalDefine.SERVER_MESSAGE.GET_BOMB_DAMAGE, movePanel.OnReceiveGetBombMessage );
+        gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(GlobalDefine.SERVER_MESSAGE.GET_MERCHANT_DATA, merchantPanel.InitMerchantData);
+        gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>( GlobalDefine.SERVER_MESSAGE.RESPAWN_MERCHANT , OnReSpawnMerchant);
+        gameService.SubscribeToRoomMessage<BecomeZombieMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
+        gameService.SubscribeToRoomMessage<SetHighLightRectMessage>(GlobalDefine.SERVER_MESSAGE.SET_HIGHLIGHT_RECT, OnSetHighLightRectReceived);
 
-        gameService.SubscribeToRoomMessage<BecomeZombieMessage>("unEquipPowerReceived", OnUnEquipPowerReceived);
     }
 
     private void OnDisable()
@@ -168,6 +132,23 @@ public class UIGameManager : MonoBehaviour
         BottomStatusBar.SetActive(true);
         spawnPanel.InitSpawn(m);
     }
+
+    private void OnSetHighLightRectReceived(SetHighLightRectMessage e)
+    {
+        List<Tile> tiles = new List<Tile>();
+
+        foreach(var id in e.tileIds)
+        {
+            if(id != "")
+            {
+                tiles.Add(ServiceLocator.Current.Get<GameBoard>().Tiles[id]);
+            }
+        }
+
+        HighlightRect.Instance.SetHighLightRect(tiles);
+
+    }
+
 
     private void OnReSpawnMerchant(GetReSpawnMerchantMessage message)
     {
@@ -241,13 +222,12 @@ public class UIGameManager : MonoBehaviour
 
     public void OnDiceStop()
     {
-        diceUIObject.ObjectPrefab = dices[1].transform;
-        diceUIObject.GetComponent<RotateUIObject3D>().OnSnapBackObject();
+
     }
 
     public void OnDiceStart()
     {
-        diceUIObject.GetComponent<RotateUIObject3D>().OnStartRotate();
+
     }
 
     #region Unity Function

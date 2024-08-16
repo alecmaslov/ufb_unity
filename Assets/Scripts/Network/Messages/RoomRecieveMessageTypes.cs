@@ -145,6 +145,10 @@ namespace UFB.Network.RoomMessageTypes
         public string oldTileId;
     }
 
+    public class SetHighLightRectMessage : IReceiveMessage {
+        public string[] tileIds;
+    }
+
     public class GetQuestDataMessage: IReceiveMessage
     {
         public QuestItem[] questItems;
