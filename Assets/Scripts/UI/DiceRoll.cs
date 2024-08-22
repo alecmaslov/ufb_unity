@@ -19,7 +19,7 @@ public class DiceRoll : MonoBehaviour
         dice3dObject.GetComponent<RotateUIObject3D>().OnStartRotate();
         StartCoroutine(StopDice());
         animator.SetBool("isDice", true);
-        diceCountObject.LanchDiceModel();
+        diceCountObject.LanchDiceModel(_diceCount);
     }
 
     IEnumerator StopDice()

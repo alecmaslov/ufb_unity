@@ -1,4 +1,5 @@
 using Colyseus.Schema;
+using UFB.Items;
 using UFB.StateSchema;
 
 namespace UFB.Network.RoomMessageTypes
@@ -17,10 +18,17 @@ namespace UFB.Network.RoomMessageTypes
         public int count;
     }
 
+    public class DiceData
+    {
+        public DICE_TYPE type;
+        public int diceCount;
+    }
+
     public class PowerMoveResult : IReceiveMessage 
     {
         public ResultItem[] items;
         public ResultItem[] stacks;
+        public int dice;
         public int ultimate;
         public int energy;
         public int health;
@@ -147,6 +155,19 @@ namespace UFB.Network.RoomMessageTypes
 
     public class SetHighLightRectMessage : IReceiveMessage {
         public string[] tileIds;
+    }
+
+    public class SetDiceRollMessage : IReceiveMessage {
+        public DiceData[] diceData;
+    }
+
+    public class EnemyDiceRollMessage : IReceiveMessage {
+        public string enemyId;
+        public string characterId;
+        public int powerMoveId;
+        public int stackId;
+        public int diceCount;
+        public int enemyDiceCount;
     }
 
     public class GetQuestDataMessage: IReceiveMessage

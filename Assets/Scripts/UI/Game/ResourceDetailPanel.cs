@@ -141,7 +141,7 @@ public class ResourceDetailPanel : MonoBehaviour
     {
         EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "setMoveItem",
+                GlobalDefine.CLIENT_MESSAGE.SET_MOVE_ITEM,
                 new RequestMoveItem
                 {
                     characterId = UIGameManager.instance.controller.Id,

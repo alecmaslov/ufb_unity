@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Character;
+using UFB.Events;
+using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -114,6 +116,37 @@ public class TargetScreenPanel : MonoBehaviour
 
         if (result == null) return;
 
+        if (result.dice > 0)
+        {
+            DICE_TYPE diceType = (DICE_TYPE)result.dice;
+
+            if (diceType == DICE_TYPE.DICE_6 || diceType == DICE_TYPE.DICE_4)
+            {
+                ItemCard itemCard = Instantiate(costItem, resultList);
+                itemCard.InitDate("", GlobalResources.instance.dice[(int)diceType - 1]);
+                itemCard.gameObject.SetActive(true);
+            } 
+            else if(diceType == DICE_TYPE.DICE_6_6)
+            {
+                ItemCard itemCard = Instantiate(costItem, resultList);
+                itemCard.InitDate("", GlobalResources.instance.dice[0]);
+                itemCard.gameObject.SetActive(true);
+                ItemCard itemCard1 = Instantiate(costItem, resultList);
+                itemCard1.InitDate("", GlobalResources.instance.dice[0]);
+                itemCard1.gameObject.SetActive(true);
+            } 
+            else if(diceType == DICE_TYPE.DICE_6_4)
+            {
+                ItemCard itemCard = Instantiate(costItem, resultList);
+                itemCard.InitDate("", GlobalResources.instance.dice[0]);
+                itemCard.gameObject.SetActive(true);
+                ItemCard itemCard1 = Instantiate(costItem, resultList);
+                itemCard1.InitDate("", GlobalResources.instance.dice[1]);
+                itemCard1.gameObject.SetActive(true);
+            }
+
+        }
+
         if (result.coin > 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
@@ -155,6 +188,8 @@ public class TargetScreenPanel : MonoBehaviour
             }
         }
 
+
+
     }
 
     public void OnTapOtherEnemy()
@@ -171,7 +206,32 @@ public class TargetScreenPanel : MonoBehaviour
     {
         if (powerMoveItem != null) 
         { 
-            UIGameManager.instance.attackPanel.Init(powerMoveItem);
+            if(pm.range == 0 )
+            {
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
+                        new RequestSetPowerMoveItem
+                        {
+                            enemyId = HighlightRect.Instance.selectedMonster == null ? "" : HighlightRect.Instance.selectedMonster.Id,
+                            characterId = UIGameManager.instance.controller.Id,
+                            powerMoveId = pm.id,
+                            diceCount = 1
+                        }
+                    )
+                );
+            }
+            else
+            {
+                if(HighlightRect.Instance.selectedMonster == null)
+                {
+                    UIGameManager.instance.errorPanel.InitData("Didn't select target!");
+                }
+                else
+                {
+                    UIGameManager.instance.attackPanel.Init(powerMoveItem);
+                }
+            }
         }
     }
 

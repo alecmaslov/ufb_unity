@@ -46,6 +46,7 @@ public class GlobalResources : MonoBehaviour
 
     public CraftItemSystem[] itemCraftSystem;
     public CraftPowerSystem[] powerCraftSystem;
+    public Sprite[] dice;
 
     private void Awake()
     {

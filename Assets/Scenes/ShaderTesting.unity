@@ -884,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1653467931441133415, guid: b5250e539736dc148ae6a71621a30f55, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2141915713193651677, guid: b5250e539736dc148ae6a71621a30f55, type: 3}
       propertyPath: m_LocalPosition.x
@@ -925,6 +925,10 @@ PrefabInstance:
     - target: {fileID: 2141915713193651677, guid: b5250e539736dc148ae6a71621a30f55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 37.941
+      objectReference: {fileID: 0}
+    - target: {fileID: 4006248833190911162, guid: b5250e539736dc148ae6a71621a30f55, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2823,11 +2827,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4508312735889656531, guid: 407817151e7873c48bc44054425ef626, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8508187304843225554, guid: 407817151e7873c48bc44054425ef626, type: 3}
       propertyPath: m_Mass
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166095462571549275, guid: 407817151e7873c48bc44054425ef626, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3057,6 +3065,7 @@ MonoBehaviour:
   - {fileID: 1684430042}
   firstPosObject: {fileID: 2110790727}
   diceType: 0
+  diceResultCount: -1
 --- !u!4 &2006077095
 Transform:
   m_ObjectHideFlags: 0

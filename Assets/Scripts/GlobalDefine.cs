@@ -25,10 +25,16 @@ public class GlobalDefine
         public static string UNEQUIP_POWER_RECEIVED = "unEquipPowerReceived";
         public static string CHARACTER_MOVED = "characterMoved";
         public static string SET_HIGHLIGHT_RECT = "setHighLightRect";
+        public static string SET_DICE_ROLL = "SET_DICE_ROLL";
+        public static string ENEMY_DICE_ROLL = "ENEMY_DICE_ROLL";
     }
 
     public static class CLIENT_MESSAGE
     {
         public static string GET_HIGHLIGHT_RECT = "GET_HIGHLIGHT_RECT";
+        public static string SET_POWER_MOVE_ITEM = "SET_POWER_MOVE_ITEM";
+        public static string SET_DICE_ROLL = "SET_DICE_ROLL";
+        public static string SET_MOVE_ITEM = "SET_MOVE_ITEM";
+        public static string END_POWER_MOVE_ITEM = "END_POWER_MOVE_ITEM";
     }
 }

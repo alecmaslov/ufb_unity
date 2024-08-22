@@ -7,18 +7,39 @@ public class DiceCountObject : MonoBehaviour
     public int diceCount = 1;
     public Rigidbody rigidbody;
     public float speed = 20.0f;
+    public float rotspeed = 400.0f;
+    public float upHeight = 5;
 
     public Transform[] countPoints;
     public bool isStoped = false;
 
-    public void LanchDiceModel()
-    {
-        rigidbody.AddForce((transform.forward + transform.up * 2.3f + Vector3.left * (0.5f - Random.Range(0f, 1f)) * 2) * speed);
-        transform.rotation = Random.rotation;
+    public Animator animator;
 
+    public void LanchDiceModel(int _diceCount)
+    {
+        rigidbody.AddTorque(Random.insideUnitSphere * rotspeed);
+        rigidbody.AddForce((transform.forward + transform.up * upHeight) * speed);
+        //transform.rotation = Random.rotation;
+        isStoped = false;
+        StartCoroutine(PlayAnimation(_diceCount));
     }
     // Start is called before the first frame update
 
+    public void FinishDiceRoll()
+    {
+        Debug.Log("Finish animation");
+        isStoped = true;
+        animator.Play("dice6_0");
+        animator.SetInteger("dice", 0);
+        animator.enabled = false;
+    }
+
+    IEnumerator PlayAnimation(int _diceCount)
+    {
+        yield return new WaitForSeconds(0.7f);
+        animator.enabled = true;
+        animator.SetInteger("dice", _diceCount);
+    }
 
     // Update is called once per frame
     void Update()

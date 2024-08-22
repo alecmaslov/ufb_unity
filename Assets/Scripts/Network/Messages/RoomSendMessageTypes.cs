@@ -121,6 +121,18 @@ namespace UFB.Network.RoomMessageTypes
 
     public class RequestSetPowerMoveItem : RequestCharacterId
     {
+        public string enemyId;
+        public int powerMoveId;
+        public int diceCount;
+    }
+
+    public class RequestEndPowerMoveItem : RequestSetPowerMoveItem 
+    {
+        public int enemyDiceCount;
+    }
+
+    public class RequestSetDiceRoll : RequestCharacterId
+    {
         public int powerMoveId;
     }
 

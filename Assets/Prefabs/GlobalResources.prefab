@@ -311,3 +311,6 @@ MonoBehaviour:
     power2: 23
     powerResult: 35
     coin: 20
+  dice:
+  - {fileID: 21300000, guid: b79e1f10214094a468bc7d381fc0a653, type: 3}
+  - {fileID: 21300000, guid: e851f0b4cceb3e843a6ccf38b5d12056, type: 3}

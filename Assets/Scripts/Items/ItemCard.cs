@@ -17,10 +17,21 @@ public class ItemCard : MonoBehaviour
     [HideInInspector]
     public Item item;
 
+    public void InitImage(Sprite sprite)
+    {
+        itemImage.sprite = sprite;
+    }
+
     public void InitDate(string count, Sprite sprite) 
     {
-        countText.text = count;
-        itemImage.sprite = sprite;
+        if (countText != null) 
+        {
+            countText.text = count;
+        }
+        if (itemImage != null)
+        {
+            itemImage.sprite = sprite;
+        }
     }
 
     public void InitData3(string count, Sprite sprite, string itemCount, Item _item) 

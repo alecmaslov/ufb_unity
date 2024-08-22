@@ -165,6 +165,14 @@ namespace UFB.Items {
         MONSTER
     }
 
+    public enum DICE_TYPE
+    {
+        DICE_6 = 1,
+        DICE_4,
+        DICE_6_6,
+        DICE_6_4
+    }
+
     public enum PowerType {
 
     }

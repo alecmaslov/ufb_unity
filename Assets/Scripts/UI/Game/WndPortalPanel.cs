@@ -91,7 +91,7 @@ public class WndPortalPanel : MonoBehaviour
         if (selectedTile == null) return;
         EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "setMoveItem",
+                GlobalDefine.CLIENT_MESSAGE.SET_MOVE_ITEM,
                 new RequestMoveItem
                 {
                     characterId = UIGameManager.instance.controller.Id,

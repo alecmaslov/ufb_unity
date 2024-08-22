@@ -68,9 +68,21 @@ public class AttackPanel : MonoBehaviour
     [SerializeField]
     GameObject resultPanelDetail;
 
+    public Transform enemyStackList;
+
+    public ItemCard enemyStackItem;
+
     public Text powerText;
 
     public TopHeader topHeader;
+
+    public GameObject diceRect;
+
+    // ENEMY DICE
+    public Image enemyStackImage;
+    public GameObject enemyStackDiceRect;
+
+    public Image addStackImage;
 
     public void InitCharacterState(CharacterState e)
     {
@@ -82,16 +94,35 @@ public class AttackPanel : MonoBehaviour
         if (HighlightRect.Instance.selectedMonster != null) 
         { 
             topHeader.OnSelectedCharacterEvent(HighlightRect.Instance.selectedMonster.State);
+            for(int i = 1; i < enemyStackList.childCount; i++)
+            {
+                Destroy(enemyStackList.GetChild(i).gameObject);
+            }
+
+            HighlightRect.Instance.selectedMonster.State.stacks.ForEach(stack =>
+            {
+                if(stack.count > 0)
+                {
+                    ItemCard ic = Instantiate(enemyStackItem, enemyStackList);
+                    ic.InitDate(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
+                    ic.gameObject.SetActive(true);
+                }
+            });
+            
+        } 
+        else
+        {
+
         }
     }
 
     public void Init(PowerMoveItem _power)
     {
-        InitDiceData();
         InitEnemyState();
         powerMoveItem = _power;
         pm = powerMoveItem.pm;
-
+        InitDiceData();
+        powermoveImage.gameObject.SetActive(true);
         powermoveImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
         powermoveResultImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
         powermoveText.text = pm.name.ToString();
@@ -99,6 +130,9 @@ public class AttackPanel : MonoBehaviour
 
         //panelDetail.SetActive(true);
         //resultPanelDetail.SetActive(false);
+
+        enemyStackImage.gameObject.SetActive(false);
+        enemyStackDiceRect.gameObject.SetActive(false);
 
         InitCostList();
         InitResultList();
@@ -205,6 +239,8 @@ public class AttackPanel : MonoBehaviour
                 itemCard = Instantiate(panelResultItem, panelResutlList);
                 itemCard.InitDate(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
                 itemCard.gameObject.SetActive(true);
+
+                addStackImage.sprite = GlobalResources.instance.stacks[stack.id];
             }
         }
 
@@ -274,12 +310,107 @@ public class AttackPanel : MonoBehaviour
 
     public void OnSelectDice()
     {
-        DiceArea.instance.LaunchDice();
+        UFB.Events.EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.SET_DICE_ROLL,
+                new RequestSetDiceRoll
+                {
+                    characterId = UIGameManager.instance.controller.Id,
+                    powerMoveId = pm.id,
+                }
+            )
+        );
+        //DiceArea.instance.LaunchDice();
+    }
+
+    private EnemyDiceRollMessage enemyMessage;
+    public void OnEnemyStackDiceRoll(EnemyDiceRollMessage e)
+    {
+        enemyMessage = e;
+        powermoveImage.gameObject.SetActive(false);
+        diceRect.gameObject.SetActive(false);
+
+        enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
+        enemyStackImage.gameObject.SetActive(true);
+
+        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4);
+        StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
+        
+        enemyStackDiceRect.gameObject.SetActive(true);
+    }
+
+    IEnumerator LanchEnemyDiceRoll(int diceCount)
+    {
+        yield return new WaitForSeconds(1.5f);
+        DiceData[] data = new DiceData[1];
+        data[0] = new DiceData();
+        data[0].type = DICE_TYPE.DICE_4;
+        data[0].diceCount = diceCount;
+        enemyStackImage.gameObject.SetActive(false);
+        DiceArea.instance.LaunchDice(data, true);
+    }
+
+    public void OnLanuchDiceRoll(SetDiceRollMessage message)
+    {
+        DiceArea.instance.LaunchDice(message.diceData);
     }
 
     public void InitDiceData()
     {
-        DiceArea.instance.SetDiceType(0);
+        if(pm.result.dice > 0)
+        {
+            diceRect.SetActive(true);
+            DiceArea.instance.SetDiceType((DICE_TYPE) pm.result.dice);
+        } 
+        else
+        {
+            diceRect.SetActive(false);
+        }
+
+    }
+
+    public void OnFinishDice()
+    {
+        powermoveImage.gameObject.SetActive(false);
+        int diceCount = DiceArea.instance.diceResultCount;
+        Debug.Log($"dice count finish{diceCount}" );
+        UFB.Events.EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
+                new RequestSetPowerMoveItem
+                {
+                    enemyId = HighlightRect.Instance.selectedMonster == null? "" : HighlightRect.Instance.selectedMonster.Id,
+                    characterId = UIGameManager.instance.controller.Id,
+                    powerMoveId = pm.id,
+                    diceCount = diceCount
+                }
+            )
+        );
+    }
+
+    public void OnFinishEnemy()
+    {
+        enemyStackImage.gameObject.SetActive(false);
+        int diceCount = DiceArea.instance.diceResultCount;
+        UFB.Events.EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.END_POWER_MOVE_ITEM,
+                new RequestEndPowerMoveItem
+                {
+                    enemyId = HighlightRect.Instance.selectedMonster == null ? "" : HighlightRect.Instance.selectedMonster.Id,
+                    characterId = UIGameManager.instance.controller.Id,
+                    powerMoveId = pm.id,
+                    diceCount = enemyMessage.diceCount,
+                    enemyDiceCount = enemyMessage.enemyDiceCount
+                }
+            )
+        );
+    }
+
+    IEnumerator EndAttackPanel()
+    {
+        yield return new WaitForSeconds(1f);
+        OnCancelBtnClicked();
     }
 
     public void OnCancelBtnClicked()

@@ -61,6 +61,8 @@ public class UIGameManager : MonoBehaviour
 
     public GameObject[] dices;
 
+    public ErrorPanel errorPanel;
+
     #region public values
 
     public float curTurnTime = 120;
@@ -100,6 +102,8 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>( GlobalDefine.SERVER_MESSAGE.RESPAWN_MERCHANT , OnReSpawnMerchant);
         gameService.SubscribeToRoomMessage<BecomeZombieMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
         gameService.SubscribeToRoomMessage<SetHighLightRectMessage>(GlobalDefine.SERVER_MESSAGE.SET_HIGHLIGHT_RECT, OnSetHighLightRectReceived);
+        gameService.SubscribeToRoomMessage<SetDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.SET_DICE_ROLL, OnSetDiceRoll);
+        gameService.SubscribeToRoomMessage<EnemyDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.ENEMY_DICE_ROLL, OnEnemyDiceRoll);
 
     }
 
@@ -147,6 +151,15 @@ public class UIGameManager : MonoBehaviour
 
         HighlightRect.Instance.SetHighLightRect(tiles);
 
+    }
+
+    private void OnSetDiceRoll(SetDiceRollMessage e) {
+        attackPanel.OnLanuchDiceRoll(e);
+    }
+
+    private void OnEnemyDiceRoll(EnemyDiceRollMessage e) 
+    { 
+        attackPanel.OnEnemyStackDiceRoll(e);
     }
 
 

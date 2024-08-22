@@ -11,6 +11,7 @@ public class AddExtraScore : MonoBehaviour
     public Sprite[] options;
 
     public Image bgImage;
+    public Image contentImage;
     public Text scoreText;
     private Color transColor = new Color(1, 1, 1, 0);
     private float transValue = 1;
@@ -41,6 +42,10 @@ public class AddExtraScore : MonoBehaviour
         transColor = new Color(1, 1, 1, 1);
         bgImage.color = transColor;
         scoreText.color = transColor;
+        if (contentImage != null) 
+        { 
+            contentImage.color = transColor;
+        }
         transValue = delay;
     }
 
@@ -55,6 +60,10 @@ public class AddExtraScore : MonoBehaviour
         transColor.a = transValue;
         bgImage.color = transColor;
         scoreText.color = transColor;
+        if (contentImage != null)
+        {
+            contentImage.color = transColor;
+        }
     }
 
 }
