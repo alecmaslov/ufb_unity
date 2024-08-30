@@ -12,9 +12,6 @@ using UnityEngine.UI;
 public class AttackPanel : MonoBehaviour
 {
     [HideInInspector]
-    public PowerMoveItem powerMoveItem;
-
-    [HideInInspector]
     public PowerMove pm;
 
     [SerializeField]
@@ -37,9 +34,6 @@ public class AttackPanel : MonoBehaviour
 
     [SerializeField]
     Image powermoveImage;
-
-    [SerializeField]
-    Image powermoveResultImage;
 
     [SerializeField]
     Transform powerCostList;
@@ -84,6 +78,10 @@ public class AttackPanel : MonoBehaviour
 
     public Image addStackImage;
 
+    public int diceTimes = 0;
+
+    public int totalDiceCount = 0;
+
     public void InitCharacterState(CharacterState e)
     {
         InitOthers();
@@ -116,28 +114,26 @@ public class AttackPanel : MonoBehaviour
         }
     }
 
-    public void Init(PowerMoveItem _power)
+    public void Init(PowerMove _powermove)
     {
         InitEnemyState();
-        powerMoveItem = _power;
-        pm = powerMoveItem.pm;
+        pm = _powermove;
         InitDiceData();
-        powermoveImage.gameObject.SetActive(true);
-        powermoveImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
-        powermoveResultImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
+
         powermoveText.text = pm.name.ToString();
-        powerText.text = UIGameManager.instance.powerMovePanel.powerItem.name;
+        //powerText.text = UIGameManager.instance.powerMovePanel.powerItem.name;
 
         //panelDetail.SetActive(true);
         //resultPanelDetail.SetActive(false);
 
         enemyStackImage.gameObject.SetActive(false);
-        enemyStackDiceRect.gameObject.SetActive(false);
+        enemyStackDiceRect.SetActive(false);
 
-        InitCostList();
-        InitResultList();
+        //InitCostList();
+        //InitResultList();
         InitOthers();
-
+        totalDiceCount = 0;
+        diceTimes = 0;
         gameObject.SetActive(true);
     }
 
@@ -310,6 +306,7 @@ public class AttackPanel : MonoBehaviour
 
     public void OnSelectDice()
     {
+        diceTimes++;
         UFB.Events.EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.SET_DICE_ROLL,
@@ -317,9 +314,11 @@ public class AttackPanel : MonoBehaviour
                 {
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
+                    diceTimes = diceTimes,
                 }
             )
         );
+        powermoveImage.gameObject.SetActive(false);
         //DiceArea.instance.LaunchDice();
     }
 
@@ -333,7 +332,7 @@ public class AttackPanel : MonoBehaviour
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
         enemyStackImage.gameObject.SetActive(true);
 
-        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4);
+        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, true);
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
         
         enemyStackDiceRect.gameObject.SetActive(true);
@@ -357,23 +356,39 @@ public class AttackPanel : MonoBehaviour
 
     public void InitDiceData()
     {
-        if(pm.result.dice > 0)
+        if(pm.result.dice > 0 && diceTimes == 0)
         {
             diceRect.SetActive(true);
             DiceArea.instance.SetDiceType((DICE_TYPE) pm.result.dice);
-        } 
+            powermoveImage.sprite = pm.id < 0 ? GlobalResources.instance.punch : GlobalResources.instance.powers[pm.powerImageId];
+        }
+        else if(pm.result.perkId == (int) PERK.VAMPIRE)
+        {
+            diceRect.SetActive(true);
+            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
+            powermoveImage.sprite = GlobalResources.instance.perks[(int) PERK.VAMPIRE];
+        }
         else
         {
             diceRect.SetActive(false);
         }
+        powermoveImage.gameObject.SetActive(true);
 
     }
 
     public void OnFinishDice()
     {
-        powermoveImage.gameObject.SetActive(false);
-        int diceCount = DiceArea.instance.diceResultCount;
-        Debug.Log($"dice count finish{diceCount}" );
+        totalDiceCount += DiceArea.instance.diceResultCount;
+
+        Debug.Log($"dice times: {diceTimes}, {pm.getDiceTime()}");
+
+        if (diceTimes < pm.getDiceTime()) 
+        {
+            InitDiceData();
+            return;
+        }
+        
+        Debug.Log($"dice count finish{totalDiceCount}" );
         UFB.Events.EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
@@ -382,7 +397,7 @@ public class AttackPanel : MonoBehaviour
                     enemyId = HighlightRect.Instance.selectedMonster == null? "" : HighlightRect.Instance.selectedMonster.Id,
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
-                    diceCount = diceCount
+                    diceCount = totalDiceCount
                 }
             )
         );

@@ -17,12 +17,6 @@ public class StepPanel : MonoBehaviour
     [SerializeField]
     GameObject resourcePanel;
 
-    [SerializeField]
-    Text meleeText;
-
-    [SerializeField]
-    Text manaText;
-
     private void Awake()
     {
         if (instance == null)
@@ -42,9 +36,9 @@ public class StepPanel : MonoBehaviour
         movePanel.Show();
     }
 
-    public void OnHitBtn()
+    public void OnPunchBtn()
     {
-
+        UIGameManager.instance.punchPanel.InitData();
     }
 
     public void OnConfirmBtn()
@@ -64,13 +58,10 @@ public class StepPanel : MonoBehaviour
         state.items.ForEach(item =>
         {
             ITEM type = (ITEM) item.id;
-            if(type == ITEM.Melee)
+
+            if(type == ITEM.Mana)
             {
-                meleeText.text = item.count.ToString();
-            } 
-            else if(type == ITEM.Mana)
-            {
-                manaText.text = item.count.ToString();
+                
             }
 
         });

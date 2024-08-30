@@ -27,6 +27,7 @@ public class GlobalDefine
         public static string SET_HIGHLIGHT_RECT = "setHighLightRect";
         public static string SET_DICE_ROLL = "SET_DICE_ROLL";
         public static string ENEMY_DICE_ROLL = "ENEMY_DICE_ROLL";
+        public static string GET_TURN_START_EQUIP = "GET_TURN_START_EQUIP";
     }
 
     public static class CLIENT_MESSAGE
@@ -36,5 +37,9 @@ public class GlobalDefine
         public static string SET_DICE_ROLL = "SET_DICE_ROLL";
         public static string SET_MOVE_ITEM = "SET_MOVE_ITEM";
         public static string END_POWER_MOVE_ITEM = "END_POWER_MOVE_ITEM";
+        public static string END_TURN = "END_TURN";
+        public static string TURN_START_EQUIP = "TURN_START_EQUIP";
+        public static string UN_EQUIP_POWER = "UN_EQUIP_POWER";
+        public static string EQUIP_POWER = "EQUIP_POWER";
     }
 }

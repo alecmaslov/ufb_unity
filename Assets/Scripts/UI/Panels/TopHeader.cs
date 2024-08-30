@@ -83,7 +83,10 @@ namespace UFB.UI
                 )
                 {
                     _avatarImage.sprite = op.Result.avatar;
-                    _resourceAvatarImage.sprite = op.Result.avatar;
+                    if (_resourceAvatarImage != null) 
+                    { 
+                        _resourceAvatarImage.sprite = op.Result.avatar;
+                    }
                 }
                 else
                     Debug.LogError(

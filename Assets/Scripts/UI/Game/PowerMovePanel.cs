@@ -79,7 +79,7 @@ public class PowerMovePanel : MonoBehaviour
                         }
                     )
                 );
-                UIGameManager.instance.targetScreenPanel.InitData(pm);
+                UIGameManager.instance.targetScreenPanel.InitData(pm.pm);
                 gameObject.SetActive(false);
             });
         }
@@ -94,7 +94,7 @@ public class PowerMovePanel : MonoBehaviour
 
         UFB.Events.EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "unEquipPower",
+                GlobalDefine.CLIENT_MESSAGE.UN_EQUIP_POWER,
                 new RequestGetPowerMoveList
                 {
                     characterId = CharacterManager.Instance.SelectedCharacter.Id,

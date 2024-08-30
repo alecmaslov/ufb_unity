@@ -10,8 +10,6 @@ using UFB.StateSchema;
 using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
-using UFB.Events;
-using UI.ThreeDimensional;
 
 
 public class UIGameManager : MonoBehaviour
@@ -55,6 +53,8 @@ public class UIGameManager : MonoBehaviour
 
     public TargetScreenPanel targetScreenPanel;
 
+    public PunchPanel punchPanel;
+
     public GameObject bottomDrawer;
 
     public List<Portal> portals = new List<Portal> ();
@@ -62,6 +62,8 @@ public class UIGameManager : MonoBehaviour
     public GameObject[] dices;
 
     public ErrorPanel errorPanel;
+
+    public EquipBonusPanel equipBonusPanel;
 
     #region public values
 
@@ -104,6 +106,7 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<SetHighLightRectMessage>(GlobalDefine.SERVER_MESSAGE.SET_HIGHLIGHT_RECT, OnSetHighLightRectReceived);
         gameService.SubscribeToRoomMessage<SetDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.SET_DICE_ROLL, OnSetDiceRoll);
         gameService.SubscribeToRoomMessage<EnemyDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.ENEMY_DICE_ROLL, OnEnemyDiceRoll);
+        gameService.SubscribeToRoomMessage<GetTurnStartEquipBonusMessage>(GlobalDefine.SERVER_MESSAGE.GET_TURN_START_EQUIP, GetTurnStartBonus);
 
     }
 
@@ -126,8 +129,24 @@ public class UIGameManager : MonoBehaviour
         curTurnTime = e.curTime;
         isPlayerTurn = controller.Id == e.characterId;
         turnPanel.InitData(curTurnTime);
+        if (isPlayerTurn) 
+        {
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.TURN_START_EQUIP,
+                    new RequestEndTurnMessage
+                    {
+                        characterId = controller.Id,
+                    }
+                )
+            );
+        }
     }
 
+    private void GetTurnStartBonus(GetTurnStartEquipBonusMessage e)
+    {
+        equipBonusPanel.InitData(e.bonuses);
+    }
     private void InitSpawn(SpawnInitMessage m)
     {
         spawnPanel.isSpawn = !TopPanel.gameObject.activeSelf;
@@ -230,7 +249,16 @@ public class UIGameManager : MonoBehaviour
 
     public void OnChangeMonsterControl()
     {
-
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.END_TURN,
+                new RequestEndTurnMessage
+                {
+                    characterId = controller.Id,
+                }
+            )
+        );
+        isPlayerTurn = false;
     }
 
     public void OnDiceStop()
@@ -253,7 +281,7 @@ public class UIGameManager : MonoBehaviour
             {
                 EventBus.Publish(
                     RoomSendMessageEvent.Create(
-                        "endTurn",
+                        GlobalDefine.CLIENT_MESSAGE.END_TURN,
                         new RequestEndTurnMessage
                         {
                             characterId = controller.Id,

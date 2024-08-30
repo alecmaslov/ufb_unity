@@ -123,11 +123,16 @@ namespace UFB.Interactions
             Vector3 position3D = new Vector3(position.x, position.y, -4f);
             Ray ray = CameraManager.instance.cam.ScreenPointToRay(position3D);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+
+            // Check if the click is on a UI element
+            if(!EventSystem.current.IsPointerOverGameObject())
             {
-                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                if (Physics.Raycast(ray, out hit))
                 {
-                    OnRaycastClicked(hit.transform, clickable);
+                    if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                    {
+                        OnRaycastClicked(hit.transform, clickable);
+                    }
                 }
             }
         }

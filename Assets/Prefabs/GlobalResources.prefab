@@ -185,6 +185,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 828c50ebb9d287646a882fabc3293fe3, type: 3}
   - {fileID: 21300000, guid: af9afb9ee3dc3df46a445f28cfe96661, type: 3}
   - {fileID: 21300000, guid: b1d26c0eb51bb384f9d882d298d69a57, type: 3}
+  punch: {fileID: 21300000, guid: ce5164c6550d15c46b26f6ccac37d8e7, type: 3}
   itemCraftSystem:
   - item1: 23
     item2: 4

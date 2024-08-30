@@ -11,9 +11,6 @@ using UnityEngine.UI;
 public class TargetScreenPanel : MonoBehaviour
 {
     [HideInInspector]
-    public PowerMoveItem powerMoveItem;
-
-    [HideInInspector]
     public PowerMove pm;
 
     
@@ -26,10 +23,9 @@ public class TargetScreenPanel : MonoBehaviour
     public Image targetImage;
 
 
-    public void InitData(PowerMoveItem _power)
+    public void InitData(PowerMove _powermove)
     {
-        powerMoveItem = _power;
-        pm = _power.pm;
+        pm = _powermove;
         powermoveImage.sprite = GlobalResources.instance.powers[pm.powerImageId];
         powermoveText.text = pm.name.ToString();
         InitCostList();
@@ -188,7 +184,19 @@ public class TargetScreenPanel : MonoBehaviour
             }
         }
 
+        if (result.perkId > 0) 
+        {
+            ItemCard itemCard = Instantiate(costItem, resultList);
+            itemCard.InitDate("", GlobalResources.instance.perks[result.perkId]);
+            itemCard.gameObject.SetActive(true);
+        }
 
+        if (result.perkId1 > 0)
+        {
+            ItemCard itemCard = Instantiate(costItem, resultList);
+            itemCard.InitDate("", GlobalResources.instance.perks[result.perkId1]);
+            itemCard.gameObject.SetActive(true);
+        }
 
     }
 
@@ -204,7 +212,7 @@ public class TargetScreenPanel : MonoBehaviour
 
     public void OnPowerMoveBtn()
     {
-        if (powerMoveItem != null) 
+        if (pm != null) 
         { 
             if(pm.range == 0 )
             {
@@ -229,7 +237,7 @@ public class TargetScreenPanel : MonoBehaviour
                 }
                 else
                 {
-                    UIGameManager.instance.attackPanel.Init(powerMoveItem);
+                    UIGameManager.instance.attackPanel.Init(pm);
                 }
             }
         }

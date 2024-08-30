@@ -134,6 +134,7 @@ namespace UFB.Network.RoomMessageTypes
     public class RequestSetDiceRoll : RequestCharacterId
     {
         public int powerMoveId;
+        public int diceTimes = 0;
     }
 
     public class RequestMoveItem : RequestCharacterId 

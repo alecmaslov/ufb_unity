@@ -104,7 +104,7 @@ public class EquipPanel : MonoBehaviour
 
         EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "getPowerMoveList",
+                GlobalDefine.CLIENT_MESSAGE.EQUIP_POWER,
                 new RequestGetPowerMoveList
                 {
                     characterId = CharacterManager.Instance.SelectedCharacter.Id,

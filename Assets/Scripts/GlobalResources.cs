@@ -26,6 +26,9 @@ public class GlobalResources : MonoBehaviour
     public Sprite[] divideTo4;
     public Sprite[] divideTo3;
 
+    public Sprite punch;
+
+
     [Serializable]
     public class CraftPowerSystem
     {

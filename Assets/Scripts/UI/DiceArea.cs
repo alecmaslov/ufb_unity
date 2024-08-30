@@ -13,6 +13,9 @@ public class DiceArea : MonoBehaviour
     public Transform firstPosObject;
     public Transform secondPosObject;
 
+    public Transform thirdPosObject;
+    public Transform fourthPosObject;
+
     public DICE_TYPE diceType;
     public int diceResultCount = -1;
     private bool isEnemyDiceTurn = false;
@@ -22,17 +25,26 @@ public class DiceArea : MonoBehaviour
         instance = this;
     }
 
-    public void SetDiceType(DICE_TYPE _diceType)
+    public void SetDiceType(DICE_TYPE _diceType, bool isEnemyTurn = false)
     {
         foreach(var ob in diceObject) {
             ob.gameObject.SetActive(false);
         }
         diceType = _diceType;
 
+        Transform first = firstPosObject;
+        Transform second = secondPosObject;
+
+        if (isEnemyTurn) 
+        { 
+            first = thirdPosObject;
+            second = fourthPosObject;
+        }
+
         if(diceType == DICE_TYPE.DICE_6 || diceType == DICE_TYPE.DICE_4)
         {
             DiceCountObject obj = diceObject[(int)diceType - 1];
-            obj.transform.position = firstPosObject.position + Vector3.forward * 1.6f;
+            obj.transform.position = first.position + Vector3.forward * 1.6f;
             obj.rigidbody.velocity = Vector3.zero;
             obj.rigidbody.isKinematic = true;
             obj.transform.rotation = Quaternion.identity;
@@ -42,13 +54,13 @@ public class DiceArea : MonoBehaviour
         {
             DiceCountObject obj = diceObject[0];
             DiceCountObject obj1 = diceObject[2];
-            obj.transform.position = firstPosObject.position + Vector3.right;
+            obj.transform.position = first.position + Vector3.right;
             obj.rigidbody.velocity = Vector3.zero;
             obj.rigidbody.isKinematic = true;
             obj.transform.rotation = Quaternion.identity;
             obj.gameObject.SetActive(true);
 
-            obj1.transform.position = secondPosObject.position;
+            obj1.transform.position = second.position;
             obj1.rigidbody.velocity = Vector3.zero;
             obj1.rigidbody.isKinematic = true;
             obj1.transform.rotation = Quaternion.identity;
@@ -58,13 +70,13 @@ public class DiceArea : MonoBehaviour
         {
             DiceCountObject obj = diceObject[0];
             DiceCountObject obj1 = diceObject[1];
-            obj.transform.position = firstPosObject.position + Vector3.right;
+            obj.transform.position = first.position + Vector3.right;
             obj.rigidbody.velocity = Vector3.zero;
             obj.rigidbody.isKinematic = true;
             obj.transform.rotation = Quaternion.identity;
             obj.gameObject.SetActive(true);
 
-            obj1.transform.position = secondPosObject.position;
+            obj1.transform.position = second.position;
             obj1.rigidbody.velocity = Vector3.zero;
             obj1.rigidbody.isKinematic = true;
             obj1.transform.rotation = Quaternion.identity;
@@ -86,7 +98,7 @@ public class DiceArea : MonoBehaviour
             DiceCountObject obj = diceObject[(int)diceType - 1];
             obj.rigidbody.isKinematic = false;
             obj.isStoped = false;
-            obj.LanchDiceModel(dices[0].diceCount);
+            obj.LanchDiceModel(dices[0].diceCount, isEnemyDiceTurn);
         }
         else if (diceType == DICE_TYPE.DICE_6_6)
         {
@@ -94,11 +106,11 @@ public class DiceArea : MonoBehaviour
             DiceCountObject obj1 = diceObject[2];
             obj.rigidbody.isKinematic = false;
             obj.isStoped = false;
-            obj.LanchDiceModel(dices[0].diceCount);
+            obj.LanchDiceModel(dices[0].diceCount, isEnemyDiceTurn);
 
             obj1.rigidbody.isKinematic = false;
             obj1.isStoped = false;
-            obj1.LanchDiceModel(dices[1].diceCount);
+            obj1.LanchDiceModel(dices[1].diceCount, isEnemyDiceTurn);
         }
         else if (diceType == DICE_TYPE.DICE_6_4)
         {
@@ -106,11 +118,11 @@ public class DiceArea : MonoBehaviour
             DiceCountObject obj1 = diceObject[1];
             obj.rigidbody.isKinematic = false;
             obj.isStoped = false;
-            obj.LanchDiceModel(dices[0].diceCount);
+            obj.LanchDiceModel(dices[0].diceCount, isEnemyDiceTurn);
 
             obj1.rigidbody.isKinematic = false;
             obj1.isStoped = false;
-            obj1.LanchDiceModel(dices[1].diceCount);
+            obj1.LanchDiceModel(dices[1].diceCount, isEnemyDiceTurn);
         }
         isLaunched = true;
     }

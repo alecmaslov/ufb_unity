@@ -33,6 +33,8 @@ namespace UFB.Network.RoomMessageTypes
         public int energy;
         public int health;
         public int coin;
+        public int perkId;
+        public int perkId1;
     }
 
     public class PowerMove : IReceiveMessage
@@ -46,6 +48,23 @@ namespace UFB.Network.RoomMessageTypes
         public int light;
         public int coin;
         public int range;
+        public int getDiceTime()
+        {
+            int count = 0;
+            if (result.dice > 0) 
+            {
+                count++;
+            }
+            if(result.perkId == (int)PERK.VAMPIRE)
+            {
+                count++;
+            }
+            if(result.perkId1 == (int)PERK.VAMPIRE)
+            {
+                count++;
+            }
+            return count;
+        }
     }
 
     public class CharacterMovedMessage : IReceiveMessage
@@ -168,6 +187,17 @@ namespace UFB.Network.RoomMessageTypes
         public int stackId;
         public int diceCount;
         public int enemyDiceCount;
+    }
+
+    public class EquipBonus : IReceiveMessage {
+        public int id;
+        public ResultItem[] items;
+        public ResultItem[] stacks;
+        public ResultItem[] randomItems;
+    }
+
+    public class GetTurnStartEquipBonusMessage : IReceiveMessage {
+        public EquipBonus[] bonuses;
     }
 
     public class GetQuestDataMessage: IReceiveMessage

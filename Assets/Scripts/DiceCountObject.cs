@@ -15,10 +15,10 @@ public class DiceCountObject : MonoBehaviour
 
     public Animator animator;
 
-    public void LanchDiceModel(int _diceCount)
+    public void LanchDiceModel(int _diceCount, bool isEnemy = false)
     {
+        rigidbody.AddForce((transform.forward ) * (isEnemy? -speed: speed));
         rigidbody.AddTorque(Random.insideUnitSphere * rotspeed);
-        rigidbody.AddForce((transform.forward + transform.up * upHeight) * speed);
         //transform.rotation = Random.rotation;
         isStoped = false;
         StartCoroutine(PlayAnimation(_diceCount));

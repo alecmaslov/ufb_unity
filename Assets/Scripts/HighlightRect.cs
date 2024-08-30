@@ -72,6 +72,7 @@ public class HighlightRect : MonoBehaviour
         }
 
         UIGameManager.instance.targetScreenPanel.SetTargetImage();
+        UIGameManager.instance.punchPanel.SetTargetImage();
     }
 
     public void OnSetOtherMonster()
@@ -82,6 +83,7 @@ public class HighlightRect : MonoBehaviour
             selectedMonster = monsters[selectedIdx];
         }
         UIGameManager.instance.targetScreenPanel.SetTargetImage();
+        UIGameManager.instance.punchPanel.SetTargetImage();
     }
 
     public void ClearHighLightRect()
