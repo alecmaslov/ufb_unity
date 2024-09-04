@@ -308,6 +308,24 @@ namespace UFB.Character
             );
         }
 
+        public void OnSetCharacterTilePosition(SetCharacterPositionMessage m)
+        {
+            var tileIds = m.path.Select(p => p.tileId);
+            tileIds.Reverse();
+            /// select all tiles from tiles using tileIds
+
+            var path = ServiceLocator.Current.Get<GameBoard>().GetTilesByIds(tileIds);
+
+            Debug.Log($"[CharacterManager] Moving character {m.characterId} along path");
+            var task = _characters[m.characterId].MoveAlongPath(path);
+            task.ContinueWith(
+                (t) =>
+                {
+                    EventBus.Publish(new CharacterPlacedEvent(_characters[m.characterId]));
+                }
+            );
+        }
+
         public void OnSelectCharacter(string key)
         {
             if(_selectedCharacterId == key)

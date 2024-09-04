@@ -28,6 +28,9 @@ public class GlobalDefine
         public static string SET_DICE_ROLL = "SET_DICE_ROLL";
         public static string ENEMY_DICE_ROLL = "ENEMY_DICE_ROLL";
         public static string GET_TURN_START_EQUIP = "GET_TURN_START_EQUIP";
+        public static string SET_CHARACTER_POSITION = "SET_CHARACTER_POSITION";
+        public static string GET_STACK_ON_TURN_START = "GET_STACK_ON_TURN_START";
+        public static string SET_STACK_ON_START = "SET_STACK_ON_START";
     }
 
     public static class CLIENT_MESSAGE
@@ -41,5 +44,8 @@ public class GlobalDefine
         public static string TURN_START_EQUIP = "TURN_START_EQUIP";
         public static string UN_EQUIP_POWER = "UN_EQUIP_POWER";
         public static string EQUIP_POWER = "EQUIP_POWER";
+        public static string GET_STACK_ON_TURN_START = "GET_STACK_ON_TURN_START";
+        public static string SET_STACK_ON_START = "SET_STACK_ON_START";
+        public static string SET_DICE_STACK_TURN_ROLL = "SET_DICE_STACK_TURN_ROLL";
     }
 }

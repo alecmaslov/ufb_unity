@@ -83,9 +83,10 @@ public class DiceArea : MonoBehaviour
             obj1.gameObject.SetActive(true);
         }
     }
-
+    public DiceData[] diceData;
     public void LaunchDice(DiceData[] dices, bool isEnemy = false)
     {
+        diceData = dices;
         isEnemyDiceTurn = isEnemy;
         diceResultCount = 0;
         foreach (DiceData dice in dices)
@@ -141,7 +142,14 @@ public class DiceArea : MonoBehaviour
                 }
                 else
                 {
-                    UIGameManager.instance.attackPanel.OnFinishDice();
+                    if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+                    {
+                        UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+                    }
+                    else
+                    {
+                        UIGameManager.instance.attackPanel.OnFinishDice();
+                    }
                 }
                 isLaunched = false;
             }

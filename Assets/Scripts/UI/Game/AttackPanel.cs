@@ -130,7 +130,7 @@ public class AttackPanel : MonoBehaviour
         enemyStackDiceRect.SetActive(false);
 
         //InitCostList();
-        //InitResultList();
+        InitResultList();
         InitOthers();
         totalDiceCount = 0;
         diceTimes = 0;
@@ -327,7 +327,7 @@ public class AttackPanel : MonoBehaviour
     {
         enemyMessage = e;
         powermoveImage.gameObject.SetActive(false);
-        diceRect.gameObject.SetActive(false);
+        diceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
         enemyStackImage.gameObject.SetActive(true);
@@ -353,10 +353,11 @@ public class AttackPanel : MonoBehaviour
     {
         DiceArea.instance.LaunchDice(message.diceData);
     }
-
+    public bool isVampired = false;
     public void InitDiceData()
     {
-        if(pm.result.dice > 0 && diceTimes == 0)
+        isVampired = false;
+        if (pm.result.dice > 0 && diceTimes == 0)
         {
             diceRect.SetActive(true);
             DiceArea.instance.SetDiceType((DICE_TYPE) pm.result.dice);
@@ -364,6 +365,7 @@ public class AttackPanel : MonoBehaviour
         }
         else if(pm.result.perkId == (int) PERK.VAMPIRE)
         {
+            isVampired = true;
             diceRect.SetActive(true);
             DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
             powermoveImage.sprite = GlobalResources.instance.perks[(int) PERK.VAMPIRE];
@@ -378,7 +380,16 @@ public class AttackPanel : MonoBehaviour
 
     public void OnFinishDice()
     {
-        totalDiceCount += DiceArea.instance.diceResultCount;
+        int vampireCount = 0;
+        if(isVampired)
+        {
+            totalDiceCount += DiceArea.instance.diceData[0].diceCount;
+            vampireCount = DiceArea.instance.diceData[1].diceCount;
+        }
+        else
+        {
+            totalDiceCount += DiceArea.instance.diceResultCount;
+        }
 
         Debug.Log($"dice times: {diceTimes}, {pm.getDiceTime()}");
 
@@ -397,7 +408,8 @@ public class AttackPanel : MonoBehaviour
                     enemyId = HighlightRect.Instance.selectedMonster == null? "" : HighlightRect.Instance.selectedMonster.Id,
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
-                    diceCount = totalDiceCount
+                    diceCount = totalDiceCount,
+                    vampireCount = vampireCount
                 }
             )
         );

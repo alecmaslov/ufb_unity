@@ -65,6 +65,9 @@ public class UIGameManager : MonoBehaviour
 
     public EquipBonusPanel equipBonusPanel;
 
+    public StackTurnStartPanel stackTurnStartPanel;
+
+
     #region public values
 
     public float curTurnTime = 120;
@@ -107,6 +110,9 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<SetDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.SET_DICE_ROLL, OnSetDiceRoll);
         gameService.SubscribeToRoomMessage<EnemyDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.ENEMY_DICE_ROLL, OnEnemyDiceRoll);
         gameService.SubscribeToRoomMessage<GetTurnStartEquipBonusMessage>(GlobalDefine.SERVER_MESSAGE.GET_TURN_START_EQUIP, GetTurnStartBonus);
+        gameService.SubscribeToRoomMessage<SetCharacterPositionMessage>(GlobalDefine.SERVER_MESSAGE.SET_CHARACTER_POSITION, OnSetCharacterPosition);
+        gameService.SubscribeToRoomMessage<GetStackOnStartMessage>(GlobalDefine.SERVER_MESSAGE.GET_STACK_ON_TURN_START, OnGetStackOnStartTurn);
+
 
     }
 
@@ -172,8 +178,25 @@ public class UIGameManager : MonoBehaviour
 
     }
 
+    private void OnSetCharacterPosition(SetCharacterPositionMessage e) 
+    {
+        Debug.Log(e.characterId);
+        Debug.Log(e.path);
+        CharacterManager.Instance.OnSetCharacterTilePosition(e);
+    }
+
+    private void OnGetStackOnStartTurn(GetStackOnStartMessage e) {
+        stackTurnStartPanel.InitData(e);
+    }
+
     private void OnSetDiceRoll(SetDiceRollMessage e) {
-        attackPanel.OnLanuchDiceRoll(e);
+        if (stackTurnStartPanel.isStackTurn) {
+            stackTurnStartPanel.OnLanuchDiceRoll(e);
+        } 
+        else
+        {
+            attackPanel.OnLanuchDiceRoll(e);
+        }
     }
 
     private void OnEnemyDiceRoll(EnemyDiceRollMessage e) 
