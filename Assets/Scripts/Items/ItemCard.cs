@@ -22,6 +22,11 @@ public class ItemCard : MonoBehaviour
         itemImage.sprite = sprite;
     }
 
+    public void InitText(string text) 
+    {
+        countText.text = text;
+    }
+
     public void InitDate(string count, Sprite sprite) 
     {
         if (countText != null) 

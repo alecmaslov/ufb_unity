@@ -22,6 +22,7 @@ public class TargetScreenPanel : MonoBehaviour
     public ItemCard resultItem;
     public Image targetImage;
 
+    public TargetSelectPanel targetSelectPanel;
 
     public void InitData(PowerMove _powermove)
     {
@@ -184,14 +185,14 @@ public class TargetScreenPanel : MonoBehaviour
             }
         }
 
-        if (result.perkId > 0) 
+        if (result.perkId >= 0) 
         {
             ItemCard itemCard = Instantiate(costItem, resultList);
             itemCard.InitDate("", GlobalResources.instance.perks[result.perkId]);
             itemCard.gameObject.SetActive(true);
         }
 
-        if (result.perkId1 > 0)
+        if (result.perkId1 >= 0)
         {
             ItemCard itemCard = Instantiate(costItem, resultList);
             itemCard.InitDate("", GlobalResources.instance.perks[result.perkId1]);
@@ -237,7 +238,21 @@ public class TargetScreenPanel : MonoBehaviour
                 }
                 else
                 {
-                    UIGameManager.instance.attackPanel.Init(pm);
+                    if(pm.id == 21 || pm.id == 24 || pm.id == 26 || pm.id == 27)
+                    {
+                        // Arrow Strike, Sniper, Crossbow Bolt, Hookshot,
+                        targetSelectPanel.InitData(false, pm);
+                    } 
+                    else if (pm.id == 31 || pm.id == 34) 
+                    {
+                        // Cannonball, Remote Bomb
+                        targetSelectPanel.InitData(true, pm);
+                    }
+                    else
+                    {
+                        UIGameManager.instance.attackPanel.Init(pm);
+                    }
+
                 }
             }
         }
@@ -250,6 +265,7 @@ public class TargetScreenPanel : MonoBehaviour
         HighlightRect.Instance.ClearHighLightRect();
         CameraManager.instance.SetEnemyTarget(UIGameManager.instance.controller.transform);
         UIGameManager.instance.powerMovePanel.gameObject.SetActive(true);
+        targetSelectPanel.gameObject.SetActive(false);
 
     }
 }

@@ -19,14 +19,23 @@ namespace UFB.StateSchema {
 		[Type(2, "ref", typeof(RangedValueState))]
 		public RangedValueState ultimate = new RangedValueState();
 
-		[Type(3, "int32")]
-		public int coin = default(int);
+		[Type(3, "boolean")]
+		public bool isRevive = default(bool);
 
 		[Type(4, "int32")]
-		public int range = default(int);
+		public int coin = default(int);
 
 		[Type(5, "int32")]
+		public int range = default(int);
+
+		[Type(6, "int32")]
 		public int bags = default(int);
+
+		[Type(7, "int16")]
+		public short arrowLimit = default(short);
+
+		[Type(8, "int16")]
+		public short bombLimit = default(short);
 
 		/*
 		 * Support for individual property change callbacks below...
@@ -68,6 +77,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<bool> __isReviveChange;
+		public Action OnIsReviveChange(PropertyChangeHandler<bool> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.isRevive));
+			__isReviveChange += __handler;
+			if (__immediate && this.isRevive != default(bool)) { __handler(this.isRevive, default(bool)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(isRevive));
+				__isReviveChange -= __handler;
+			};
+		}
+
 		protected event PropertyChangeHandler<int> __coinChange;
 		public Action OnCoinChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
@@ -104,14 +125,41 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<short> __arrowLimitChange;
+		public Action OnArrowLimitChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.arrowLimit));
+			__arrowLimitChange += __handler;
+			if (__immediate && this.arrowLimit != default(short)) { __handler(this.arrowLimit, default(short)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(arrowLimit));
+				__arrowLimitChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<short> __bombLimitChange;
+		public Action OnBombLimitChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.bombLimit));
+			__bombLimitChange += __handler;
+			if (__immediate && this.bombLimit != default(short)) { __handler(this.bombLimit, default(short)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(bombLimit));
+				__bombLimitChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(health): __healthChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(energy): __energyChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
 				case nameof(ultimate): __ultimateChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
+				case nameof(isRevive): __isReviveChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 				case nameof(coin): __coinChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(range): __rangeChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(arrowLimit): __arrowLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
+				case nameof(bombLimit): __bombLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				default: break;
 			}
 		}

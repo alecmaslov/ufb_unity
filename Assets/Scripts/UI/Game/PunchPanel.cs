@@ -148,6 +148,8 @@ public class PunchPanel : MonoBehaviour
     public void OnClosePunchPanel()
     {
         UIGameManager.instance.bottomDrawer.SetActive(true);
+        HighlightRect.Instance.ClearHighLightRect();
+        CameraManager.instance.SetEnemyTarget(UIGameManager.instance.controller.transform);
         gameObject.SetActive(false);
     }
 

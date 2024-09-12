@@ -173,6 +173,12 @@ namespace UFB.Items {
         DICE_6_4
     }
 
+    public enum END_TYPE 
+    {
+        VICTORY = 1,
+        DEFEAT
+    }
+
     public enum PowerType {
 
     }

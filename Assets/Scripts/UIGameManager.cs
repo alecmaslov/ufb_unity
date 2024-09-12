@@ -67,10 +67,13 @@ public class UIGameManager : MonoBehaviour
 
     public StackTurnStartPanel stackTurnStartPanel;
 
+    public ToastPanel toastPanel;
+
+    public EndPanel endPanel;
 
     #region public values
 
-    public float curTurnTime = 120;
+    public float curTurnTime = GlobalDefine.TURN_TIME;
     public bool isPlayerTurn = false;
 
     #endregion
@@ -113,6 +116,12 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<SetCharacterPositionMessage>(GlobalDefine.SERVER_MESSAGE.SET_CHARACTER_POSITION, OnSetCharacterPosition);
         gameService.SubscribeToRoomMessage<GetStackOnStartMessage>(GlobalDefine.SERVER_MESSAGE.GET_STACK_ON_TURN_START, OnGetStackOnStartTurn);
 
+        gameService.SubscribeToRoomMessage<ToastBanStackMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_BAN_STACK, OnReceiveBanStackMessage);
+        gameService.SubscribeToRoomMessage<ToastPerkMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_PERK_TOAST, OnReceivePerkMessage);
+        gameService.SubscribeToRoomMessage<ToastStackPerkMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_STACK_PERK_TOAST, OnReceiveStackPerkMessage);
+        gameService.SubscribeToRoomMessage<ToastBanStackMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_STACK_ITEM_TOAST, OnReceiveStackItemMessage);
+
+        gameService.SubscribeToRoomMessage<GameEndMessage>(GlobalDefine.SERVER_MESSAGE.GAME_END_STATUS, OnGameEndMessage);
 
     }
 
@@ -153,6 +162,12 @@ public class UIGameManager : MonoBehaviour
     {
         equipBonusPanel.InitData(e.bonuses);
     }
+
+    private void OnGameEndMessage( GameEndMessage e )
+    {
+        endPanel.InitData((END_TYPE) e.endType);
+    }
+
     private void InitSpawn(SpawnInitMessage m)
     {
         spawnPanel.isSpawn = !TopPanel.gameObject.activeSelf;
@@ -238,6 +253,26 @@ public class UIGameManager : MonoBehaviour
     private void OnUnEquipPowerReceived(BecomeZombieMessage e)
     {
         powerMovePanel.ClosePowerMovePanel();
+    }
+
+    private void OnReceiveBanStackMessage(ToastBanStackMessage e)
+    {
+        toastPanel.InitBanStackMessage(e);
+    }
+
+    private void OnReceivePerkMessage(ToastPerkMessage e)
+    {
+        toastPanel.InitPerkPopupMessage(e);
+    }
+
+    private void OnReceiveStackPerkMessage(ToastStackPerkMessage e)
+    {
+        toastPanel.InitStackPerkMessage(e);
+    }
+
+    private void OnReceiveStackItemMessage(ToastBanStackMessage e)
+    {
+        toastPanel.InitStackItemMessage(e);
     }
 
     private void OnReceiveExtraScore(AddExtraScoreMessage message)

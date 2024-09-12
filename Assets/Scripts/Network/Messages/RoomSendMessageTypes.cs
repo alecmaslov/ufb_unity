@@ -125,6 +125,7 @@ namespace UFB.Network.RoomMessageTypes
         public int powerMoveId;
         public int diceCount;
         public int vampireCount;
+        public int extraItemId = -1;
     }
 
     public class RequestStackOnStartMessage : RequestCharacterId {
@@ -135,12 +136,14 @@ namespace UFB.Network.RoomMessageTypes
     public class RequestEndPowerMoveItem : RequestSetPowerMoveItem 
     {
         public int enemyDiceCount;
+        public int stackId;
     }
 
     public class RequestSetDiceRoll : RequestCharacterId
     {
         public int powerMoveId;
         public int diceTimes = 0;
+        public int extraItemId = -1;
     }
 
     public class RequestSetDiceStackTurnRoll : RequestCharacterId {

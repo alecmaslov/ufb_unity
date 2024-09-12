@@ -33,8 +33,8 @@ namespace UFB.Network.RoomMessageTypes
         public int energy;
         public int health;
         public int coin;
-        public int perkId;
-        public int perkId1;
+        public int perkId = -1;
+        public int perkId1 = -1;
     }
 
     public class PowerMove : IReceiveMessage
@@ -48,6 +48,9 @@ namespace UFB.Network.RoomMessageTypes
         public int light;
         public int coin;
         public int range;
+
+        public int extraItemId = -1;
+
         public int getDiceTime()
         {
             int count = 0;
@@ -64,6 +67,12 @@ namespace UFB.Network.RoomMessageTypes
                 count++;
             }
             return count;
+        }
+
+        public bool IsDiceAttacked()
+        {
+
+            return range > 0;
         }
     }
 
@@ -161,6 +170,36 @@ namespace UFB.Network.RoomMessageTypes
         public string type;
         public int score;
         public int stackId = -1;
+    }
+
+    public class ToastBanStackMessage : IReceiveMessage
+    {
+        public string characterId;
+        public int stack1;
+        public int stack2;
+        public int count1;
+        public int count2;
+    }
+
+    public class GameEndMessage : IReceiveMessage 
+    {
+        public string characterId;
+        public int endType;
+    }
+
+    public class ToastStackPerkMessage : IReceiveMessage
+    {
+        public string characterId;
+        public int stackId;
+        public int perkId;
+        public int count;
+    }
+
+    public class ToastPerkMessage : IReceiveMessage
+    {
+        public string characterId;
+        public int perkId;
+        public string tileId;
     }
 
     public class GetResourceDataMessage : IReceiveMessage

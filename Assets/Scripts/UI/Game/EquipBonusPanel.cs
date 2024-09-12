@@ -11,6 +11,12 @@ public class EquipBonusPanel : MonoBehaviour
     public void InitData(EquipBonus[] bonuses)
     {
         InitList();
+        Debug.Log("equip bonus" + bonuses.Length);
+        if(bonuses.Length == 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
 
         foreach (var item in bonuses)
         {

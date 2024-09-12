@@ -14,12 +14,12 @@ public class AddExtraScore : MonoBehaviour
     public Image contentImage;
     public Text scoreText;
     private Color transColor = new Color(1, 1, 1, 0);
-    private float transValue = 1;
+    private float transValue = 0.1f;
     private float delay = 2;
 
     public void OnReceiveExtraScore(AddExtraScoreMessage message)
     {
-        Debug.Log($"message: {message.type}, type: {scoreType}, status: {message.type == scoreType}, score: {message.score}" );
+        // Debug.Log($"message: {message.type}, type: {scoreType}, status: {message.type == scoreType}, score: {message.score}" );
         if (message.type == scoreType)
         {
             Init(message.score);
@@ -55,7 +55,7 @@ public class AddExtraScore : MonoBehaviour
         if (transValue < 0) 
         { 
             transValue = 0;
-            return;
+            //return;
         }
         transColor.a = transValue;
         bgImage.color = transColor;

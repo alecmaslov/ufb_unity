@@ -148,7 +148,6 @@ namespace UFB.UI
                 if (stack != null)
                 {
                     int stackId = stack.id;
-                    Debug.Log($"stack id: {stackId}, count : {stack.count}");
                     if (stackId < stackItems.Length)
                     {
                         stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stackId];

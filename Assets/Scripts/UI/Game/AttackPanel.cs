@@ -120,7 +120,7 @@ public class AttackPanel : MonoBehaviour
         pm = _powermove;
         InitDiceData();
 
-        powermoveText.text = pm.name.ToString();
+        //powermoveText.text = pm.name.ToString();
         //powerText.text = UIGameManager.instance.powerMovePanel.powerItem.name;
 
         //panelDetail.SetActive(true);
@@ -130,7 +130,16 @@ public class AttackPanel : MonoBehaviour
         enemyStackDiceRect.SetActive(false);
 
         //InitCostList();
-        InitResultList();
+        //InitResultList();
+
+        if (pm.result.stacks != null)
+        {
+            foreach (var stack in pm.result.stacks)
+            {
+                addStackImage.sprite = GlobalResources.instance.stacks[stack.id];
+            }
+        }
+
         InitOthers();
         totalDiceCount = 0;
         diceTimes = 0;
@@ -287,21 +296,19 @@ public class AttackPanel : MonoBehaviour
 
     public void OnConfirmBtnClicked()
     {
+        powermoveImage.gameObject.SetActive(false);
         UFB.Events.EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "setPowerMove",
+                GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
                 new RequestSetPowerMoveItem
                 {
+                    enemyId = HighlightRect.Instance.selectedMonster == null ? "" : HighlightRect.Instance.selectedMonster.Id,
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
+                    extraItemId = pm.extraItemId,
                 }
             )
         );
-
-        //gameObject.SetActive(false);
-
-        panelDetail.SetActive(false);
-        resultPanelDetail.SetActive(true);
     }
 
     public void OnSelectDice()
@@ -314,6 +321,7 @@ public class AttackPanel : MonoBehaviour
                 {
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
+                    extraItemId = pm.extraItemId,
                     diceTimes = diceTimes,
                 }
             )
@@ -372,6 +380,7 @@ public class AttackPanel : MonoBehaviour
         }
         else
         {
+            powermoveImage.sprite = GlobalResources.instance.powers[(int) pm.powerImageId];
             diceRect.SetActive(false);
         }
         powermoveImage.gameObject.SetActive(true);
@@ -409,7 +418,8 @@ public class AttackPanel : MonoBehaviour
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
                     diceCount = totalDiceCount,
-                    vampireCount = vampireCount
+                    vampireCount = vampireCount,
+                    extraItemId = pm.extraItemId,
                 }
             )
         );
@@ -428,7 +438,9 @@ public class AttackPanel : MonoBehaviour
                     characterId = UIGameManager.instance.controller.Id,
                     powerMoveId = pm.id,
                     diceCount = enemyMessage.diceCount,
-                    enemyDiceCount = enemyMessage.enemyDiceCount
+                    enemyDiceCount = enemyMessage.enemyDiceCount,
+                    stackId = enemyMessage.stackId,
+                    extraItemId = pm.extraItemId,
                 }
             )
         );

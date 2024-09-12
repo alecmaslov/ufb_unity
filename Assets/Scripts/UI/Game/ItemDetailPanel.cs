@@ -22,34 +22,42 @@ public class ItemDetailPanel : MonoBehaviour
 
     public void Init(int type = 0)
     {
+        int total = 0;
+        int limit = 4;
+
         string header = "";
         if (type == 0)
         {
             header = "BOMBS";
+            limit = UIGameManager.instance.controller.State.stats.bombLimit;
         }
         else if (type == 1)
         {
             header = "ARROWS";
+            limit = UIGameManager.instance.controller.State.stats.arrowLimit;
         }
         else if(type == 2) 
         {
             header = "ITEMS";
         }
 
-        itemGroupText.text = header + "(0/4)";
-
         foreach (var item in itemCountTexts)
         {
             item.text = "0";
         }
 
-        if(type == 0)
+
+        foreach (ITEM_DETAIL item in itemDetails)
         {
-            foreach (ITEM_DETAIL item in itemDetails)
-            {
-                item.count.text = UIGameManager.instance.GetItemCount(item.type).ToString();
+            int count = UIGameManager.instance.GetItemCount(item.type);
+            if (type == 0 || type == 1) 
+            { 
+                total += count;
             }
+            item.count.text = count.ToString();
         }
+        
+        itemGroupText.text = header + $"({total}/{limit})";
 
         gameObject.SetActive(true);
     }

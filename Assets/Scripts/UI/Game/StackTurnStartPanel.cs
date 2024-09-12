@@ -25,6 +25,7 @@ public class StackTurnStartPanel : MonoBehaviour
         diceData = null;
         if (m.stackList.Length > 0 )
         {
+            UIGameManager.instance.bottomDrawer.gameObject.SetActive(false);
             foreach (var item in m.stackList)
             {
                 stackItems.Add(item);
@@ -106,6 +107,7 @@ public class StackTurnStartPanel : MonoBehaviour
         }
         else
         {
+            UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
             gameObject.SetActive (false);
         }
     }

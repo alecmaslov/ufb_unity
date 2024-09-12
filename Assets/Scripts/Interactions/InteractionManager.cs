@@ -173,7 +173,7 @@ namespace UFB.Interactions
                     {
                         if (resourcePanel != null && item.GetComponent<CharacterController>().Id == playerId)
                         {
-                            resourcePanel.gameObject.SetActive(true);
+                            //resourcePanel.gameObject.SetActive(true);
                         }
                     }
 
