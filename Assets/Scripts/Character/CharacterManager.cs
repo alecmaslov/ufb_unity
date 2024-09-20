@@ -135,7 +135,7 @@ namespace UFB.Character
                 }
             );
 
-            _characterStates.ForEach(
+            /*_characterStates.ForEach(
                 (key, character) =>
                 {
                     character.stats.OnChange(() =>
@@ -148,7 +148,7 @@ namespace UFB.Character
                         });
                     });
                 }
-            );
+            );*/
 
             _characterStates.OnChange(
                 (newState, oldState) => {
@@ -337,7 +337,7 @@ namespace UFB.Character
             CameraManager.instance.SetTarget(_characters[key].transform);
         }
 
-        public CharacterController GetMonsterFromId(string id)
+        public CharacterController GetCharacterFromId(string id)
         {
             if(_characters.ContainsKey(id))
             {

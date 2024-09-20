@@ -90,6 +90,10 @@ public class StackTurnStartPanel : MonoBehaviour
 
     public void OnFinishDice()
     {
+        if(!gameObject.activeSelf)
+        {
+            return;
+        }
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.SET_STACK_ON_START,
@@ -107,6 +111,7 @@ public class StackTurnStartPanel : MonoBehaviour
         }
         else
         {
+            isStackTurn = false;
             UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
             gameObject.SetActive (false);
         }

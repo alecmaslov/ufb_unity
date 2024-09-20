@@ -39,6 +39,7 @@ public class GlobalDefine
         public static string RECEIVE_STACK_ITEM_TOAST = "RECEIVE_STACK_ITEM_TOAST";
 
         public static string GAME_END_STATUS = "GAME_END_STATUS";
+        public static string STACK_REVIVE_ACTIVE = "STACK_REVIVE_ACTIVE";
     }
 
     public static class CLIENT_MESSAGE

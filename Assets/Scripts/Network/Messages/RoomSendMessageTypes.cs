@@ -65,6 +65,11 @@ namespace UFB.Network.RoomMessageTypes
         
     }
 
+    public class RequestTestMessage : RequestCharacterId 
+    { 
+        
+    }
+
     public class RequestSpawnMessage : ISendMessage
     {
         public Coordinates destination;

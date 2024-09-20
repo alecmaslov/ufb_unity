@@ -37,6 +37,12 @@ namespace UFB.StateSchema {
 		[Type(8, "int16")]
 		public short bombLimit = default(short);
 
+		[Type(9, "int8")]
+		public sbyte maxMelee = default(sbyte);
+
+		[Type(10, "int8")]
+		public sbyte maxMana = default(sbyte);
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -149,6 +155,30 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<sbyte> __maxMeleeChange;
+		public Action OnMaxMeleeChange(PropertyChangeHandler<sbyte> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.maxMelee));
+			__maxMeleeChange += __handler;
+			if (__immediate && this.maxMelee != default(sbyte)) { __handler(this.maxMelee, default(sbyte)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(maxMelee));
+				__maxMeleeChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<sbyte> __maxManaChange;
+		public Action OnMaxManaChange(PropertyChangeHandler<sbyte> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.maxMana));
+			__maxManaChange += __handler;
+			if (__immediate && this.maxMana != default(sbyte)) { __handler(this.maxMana, default(sbyte)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(maxMana));
+				__maxManaChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(health): __healthChange?.Invoke((RangedValueState) change.Value, (RangedValueState) change.PreviousValue); break;
@@ -160,6 +190,8 @@ namespace UFB.StateSchema {
 				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(arrowLimit): __arrowLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(bombLimit): __bombLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
+				case nameof(maxMelee): __maxMeleeChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;
+				case nameof(maxMana): __maxManaChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;
 				default: break;
 			}
 		}

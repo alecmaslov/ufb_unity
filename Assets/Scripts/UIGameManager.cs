@@ -71,6 +71,8 @@ public class UIGameManager : MonoBehaviour
 
     public EndPanel endPanel;
 
+    public FollowWorld reviveStack;
+
     #region public values
 
     public float curTurnTime = GlobalDefine.TURN_TIME;
@@ -122,6 +124,7 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<ToastBanStackMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_STACK_ITEM_TOAST, OnReceiveStackItemMessage);
 
         gameService.SubscribeToRoomMessage<GameEndMessage>(GlobalDefine.SERVER_MESSAGE.GAME_END_STATUS, OnGameEndMessage);
+        gameService.SubscribeToRoomMessage<GameEndMessage>(GlobalDefine.SERVER_MESSAGE.STACK_REVIVE_ACTIVE, OnReceiveReviveStackMessage);
 
     }
 
@@ -133,7 +136,7 @@ public class UIGameManager : MonoBehaviour
 
     private void InitTurn(TurnMessage e)
     {
-        isPlayerTurn = controller.Id == e.characterId;
+        isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
         turnPanel.InitData(e.curTime);
         curTurnTime = e.curTime;
     }
@@ -142,10 +145,12 @@ public class UIGameManager : MonoBehaviour
     {
         CharacterManager.Instance.OnSelectCharacter(e.characterId);
         curTurnTime = e.curTime;
-        isPlayerTurn = controller.Id == e.characterId;
+        isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
         turnPanel.InitData(curTurnTime);
         if (isPlayerTurn) 
         {
+            bottomDrawer.gameObject.SetActive(true);
+            reviveStack.gameObject.SetActive(false);
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     GlobalDefine.CLIENT_MESSAGE.TURN_START_EQUIP,
@@ -155,6 +160,10 @@ public class UIGameManager : MonoBehaviour
                     }
                 )
             );
+        } 
+        else
+        {
+            bottomDrawer.gameObject.SetActive(false);
         }
     }
 
@@ -166,6 +175,12 @@ public class UIGameManager : MonoBehaviour
     private void OnGameEndMessage( GameEndMessage e )
     {
         endPanel.InitData((END_TYPE) e.endType);
+    }
+
+    private void OnReceiveReviveStackMessage(GameEndMessage e)
+    {
+        reviveStack.lookAt = CharacterManager.Instance.GetCharacterFromId(e.characterId).transform;
+        reviveStack.gameObject.SetActive(true);
     }
 
     private void InitSpawn(SpawnInitMessage m)
@@ -319,14 +334,17 @@ public class UIGameManager : MonoBehaviour
         isPlayerTurn = false;
     }
 
-    public void OnDiceStop()
+    public void OnReduceHealthCharacter()
     {
-
-    }
-
-    public void OnDiceStart()
-    {
-
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "testHealth",
+                new RequestTestMessage
+                {
+                    characterId = controller.Id,
+                }
+            )
+        );
     }
 
     #region Unity Function
@@ -354,6 +372,7 @@ public class UIGameManager : MonoBehaviour
             turnPanel.SetTurnTime(curTurnTime);
             curTurnTime -= Time.deltaTime;
         }
+
     }
     #endregion
 }
