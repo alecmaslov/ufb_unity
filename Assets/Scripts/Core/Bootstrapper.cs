@@ -12,7 +12,7 @@ namespace UFB.Core
         {
             ServiceLocator.Initiailze();
 
-            var networkService = new NetworkService(new UfbApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT));
+            var networkService = new NetworkService(new UfbApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT, GlobalDefine.isHttps));
             var spawnerService = SpawnerService.Instance;
             var gameService = new GameService();
 

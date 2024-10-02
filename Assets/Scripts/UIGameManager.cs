@@ -10,6 +10,7 @@ using UFB.StateSchema;
 using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 
 public class UIGameManager : MonoBehaviour
@@ -73,6 +74,10 @@ public class UIGameManager : MonoBehaviour
 
     public FollowWorld reviveStack;
 
+    public DefencePanel defencePanel;
+
+    public RewardBonusPanel rewardBonusPanel;
+
     #region public values
 
     public float curTurnTime = GlobalDefine.TURN_TIME;
@@ -126,6 +131,15 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<GameEndMessage>(GlobalDefine.SERVER_MESSAGE.GAME_END_STATUS, OnGameEndMessage);
         gameService.SubscribeToRoomMessage<GameEndMessage>(GlobalDefine.SERVER_MESSAGE.STACK_REVIVE_ACTIVE, OnReceiveReviveStackMessage);
 
+        // DEFENCE PANEL PART - AI, other player's attack
+        gameService.SubscribeToRoomMessage<DefenceAttackMessage>(GlobalDefine.SERVER_MESSAGE.DEFENCE_ATTACK, OnReceiveDefenceAttackMessage);
+        gameService.SubscribeToRoomMessage<EndAttackMessage>(GlobalDefine.SERVER_MESSAGE.AI_END_ATTACK, OnReceiveAIDefenceEndAttackMessage);
+
+        // DEAD MONSTER PART
+        gameService.SubscribeToRoomMessage<DeadMonsterMessage>(GlobalDefine.SERVER_MESSAGE.DEAD_MONSTER, OnReceiveDeadMonsterMessage);
+
+        // REWARD BONUS...
+        gameService.SubscribeToRoomMessage<RewardBonusMessage>(GlobalDefine.SERVER_MESSAGE.REWARD_BONUS, OnReceiveRewardBonusMessage);
     }
 
     private void OnDisable()
@@ -220,9 +234,14 @@ public class UIGameManager : MonoBehaviour
     }
 
     private void OnSetDiceRoll(SetDiceRollMessage e) {
-        if (stackTurnStartPanel.isStackTurn) {
+        if (stackTurnStartPanel.isStackTurn)
+        {
             stackTurnStartPanel.OnLanuchDiceRoll(e);
-        } 
+        }
+        else if (defencePanel.gameObject.activeSelf) 
+        {
+            defencePanel.OnLanuchDiceRoll(e);
+        }
         else
         {
             attackPanel.OnLanuchDiceRoll(e);
@@ -230,8 +249,15 @@ public class UIGameManager : MonoBehaviour
     }
 
     private void OnEnemyDiceRoll(EnemyDiceRollMessage e) 
-    { 
-        attackPanel.OnEnemyStackDiceRoll(e);
+    {
+        if (isPlayerTurn) 
+        { 
+            attackPanel.OnEnemyStackDiceRoll(e);
+        }
+        else
+        {
+            defencePanel.OnEnemyStackDiceRoll(e);
+        }
     }
 
 
@@ -290,12 +316,52 @@ public class UIGameManager : MonoBehaviour
         toastPanel.InitStackItemMessage(e);
     }
 
+    // DEFENCE PANEL PART - AI ATTACK
+    private void OnReceiveDefenceAttackMessage(DefenceAttackMessage e)
+    {
+        CharacterState origin = CharacterManager.Instance.GetCharacterFromId(e.originId).State;
+        CharacterState target = CharacterManager.Instance.GetCharacterFromId(e.targetId).State;
+        defencePanel.Init(e.pm, origin, target);
+    }
+
+    private void OnReceiveAIDefenceEndAttackMessage(EndAttackMessage e)
+    {
+        defencePanel.OnClosePanel();
+    }
+
+    private void OnReceiveDeadMonsterMessage(DeadMonsterMessage e) 
+    {
+        UFB.Character.CharacterController obj = CharacterManager.Instance.GetCharacterFromId(e.characterId);
+
+        if (obj != null) 
+        {
+            obj.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnReceiveRewardBonusMessage(RewardBonusMessage e) 
+    {
+        Debug.Log("Receive reward item");
+        if (CharacterManager.Instance.SelectedCharacter.Id == e.characterId) 
+        { 
+            rewardBonusPanel.InitData(e);
+            if(attackPanel.gameObject.activeSelf)
+            {
+                attackPanel.OnCancelBtnClicked();
+                targetScreenPanel.OnClosePanel();
+            }
+        }
+    }
+
     private void OnReceiveExtraScore(AddExtraScoreMessage message)
     {
-        foreach (AddExtraScore item in scoreTexts)
+
+        EventBus.Publish(message);
+
+       /* foreach (AddExtraScore item in scoreTexts)
         {
             item.OnReceiveExtraScore(message);
-        }
+        }*/
         stackScoreText.OnReceiveMessageData(message);
 
         attackPanel.InitCharacterState(controller.State);
@@ -345,6 +411,14 @@ public class UIGameManager : MonoBehaviour
                 }
             )
         );
+    }
+
+    public bool IsCharacterCameraControl()
+    {
+        return !(spawnPanel.gameObject.activeSelf || ResourcePanel.gameObject.activeSelf || equipPanel.gameObject.activeSelf || powerMovePanel.gameObject.activeSelf || 
+            attackPanel.gameObject.activeSelf || merchantPanel.gameObject.activeSelf || wndPortalPanel.gameObject.activeSelf || /*turnPanel.gameObject.activeSelf ||*/ 
+            punchPanel.gameObject.activeSelf || errorPanel.gameObject.activeSelf || equipBonusPanel.gameObject.activeSelf || stackTurnStartPanel.gameObject.activeSelf ||
+            endPanel.gameObject.activeSelf || defencePanel.gameObject.activeSelf || rewardBonusPanel.gameObject.activeSelf);
     }
 
     #region Unity Function

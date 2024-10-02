@@ -38,6 +38,8 @@ namespace UFB.UI
         [SerializeField]
         private Text _tilePosText;
 
+        public string selectedId = "";
+
         private void OnEnable()
         {
             //EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
@@ -50,9 +52,10 @@ namespace UFB.UI
 
         public void OnSelectedCharacterEvent(CharacterState e)
         {
-            _healthBar.SetRangedValueState(e.stats.health);
-            _energyBar.SetRangedValueState(e.stats.energy);
-            _ultimateBar.SetRangedValueState(e.stats.ultimate);
+            selectedId = e.characterId;
+            _healthBar.SetRangedValueState(e.stats.health, e);
+            _energyBar.SetRangedValueState(e.stats.energy, e);
+            _ultimateBar.SetRangedValueState(e.stats.ultimate, e);
 
             _screenNameText.text = e.displayName;
             _stepEnergeText.text = e.stats.energy.current.ToString();
@@ -63,12 +66,15 @@ namespace UFB.UI
 
             e.OnChange(() => 
             {
-                _screenNameText.text = e.displayName;
-                _stepEnergeText.text = e.stats.energy.current.ToString();
+                if(e.characterId == selectedId)
+                {
+                    _screenNameText.text = e.displayName;
+                    _stepEnergeText.text = e.stats.energy.current.ToString();
 
-                string newTileId = e.currentTileId;
-                Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
-                _tilePosText.text = CurrentTile.TilePosText;
+                    string newTileId = e.currentTileId;
+                    Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+                    _tilePosText.text = CurrentTile.TilePosText;
+                }
             });
 
 

@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Character;
 using UFB.Events;
 using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
+using UI.ThreeDimensional;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -81,6 +83,10 @@ public class AttackPanel : MonoBehaviour
     public int diceTimes = 0;
 
     public int totalDiceCount = 0;
+    
+    public UIObject3D bottomCharacter3D;
+    public UIObject3D topCharacter3D;
+
 
     public void InitCharacterState(CharacterState e)
     {
@@ -107,6 +113,7 @@ public class AttackPanel : MonoBehaviour
                 }
             });
             
+            topCharacter3D.ObjectPrefab = HighlightRect.Instance.selectedMonster.transform;
         } 
         else
         {
@@ -118,6 +125,7 @@ public class AttackPanel : MonoBehaviour
     {
         InitEnemyState();
         pm = _powermove;
+        diceTimes = 0;
         InitDiceData();
 
         //powermoveText.text = pm.name.ToString();
@@ -142,7 +150,6 @@ public class AttackPanel : MonoBehaviour
 
         InitOthers();
         totalDiceCount = 0;
-        diceTimes = 0;
         gameObject.SetActive(true);
     }
 
@@ -268,9 +275,16 @@ public class AttackPanel : MonoBehaviour
     public void InitOthers()
     {
         CharacterState state = UIGameManager.instance.controller.State;
-        _healthBar.SetRangedValueState(state.stats.health);
-        _energyBar.SetRangedValueState(state.stats.energy);
-        _ultimateBar.SetRangedValueState(state.stats.ultimate);
+        _healthBar.SetRangedValueState(state.stats.health, state);
+        _energyBar.SetRangedValueState(state.stats.energy, state);
+        _ultimateBar.SetRangedValueState(state.stats.ultimate, state);
+
+        UFB.Character.CharacterController obj = UIGameManager.instance.controller;
+        Debug.Log(obj);
+        if (obj != null)
+        {
+            bottomCharacter3D.ObjectPrefab = obj.transform;
+        }
 
         state.items.ForEach(item =>
         {

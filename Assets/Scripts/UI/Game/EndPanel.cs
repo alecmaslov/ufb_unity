@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UFB.Items;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndPanel : MonoBehaviour
@@ -23,17 +24,11 @@ public class EndPanel : MonoBehaviour
             panelImage.sprite = sprites[0];
             desText.text = "You are Winner.";
         }
+        gameObject.SetActive(true);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnEndScene()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SceneManager.LoadScene(GlobalDefine.MAIN_SCENE);
     }
 }

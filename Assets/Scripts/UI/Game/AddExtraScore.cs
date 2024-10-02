@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Core;
+using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,16 @@ public class AddExtraScore : MonoBehaviour
     private Color transColor = new Color(1, 1, 1, 0);
     private float transValue = 0.1f;
     private float delay = 2;
+
+    private void Start()
+    {
+        EventBus.Subscribe<AddExtraScoreMessage> (OnReceiveExtraScore);
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<AddExtraScoreMessage> (OnReceiveExtraScore);
+    }
 
     public void OnReceiveExtraScore(AddExtraScoreMessage message)
     {

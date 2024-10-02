@@ -5,12 +5,17 @@ using UnityEngine;
 public class GlobalDefine
 {
     //public static string API_URL = "api.thig.io";
-    public static string API_URL = "localhost";
+    public static string API_URL = "16.171.121.162";
+    //public static string API_URL = "localhost";
     public static int API_PORT = 8080;
     public static bool isHttps = false;
-    public static string WebSocketHeader = "ws://";
+    public static string WebSocket_http_Header = "ws://";
+    public static string WebSocket_https_Header = "wss://";
 
     public static float TURN_TIME = 180;
+
+    public static string MAIN_SCENE = "MainMenu";
+    public static string GAME_SCENE = "Game";
 
     public static class SERVER_MESSAGE
     {
@@ -40,6 +45,13 @@ public class GlobalDefine
 
         public static string GAME_END_STATUS = "GAME_END_STATUS";
         public static string STACK_REVIVE_ACTIVE = "STACK_REVIVE_ACTIVE";
+        
+        public static string DEFENCE_ATTACK = "DEFENCE_ATTACK";
+        public static string AI_END_ATTACK = "AI_END_ATTACK";
+        public static string DEAD_MONSTER = "DEAD_MONSTER";
+
+        public static string REWARD_BONUS = "REWARD_BONUS";
+
     }
 
     public static class CLIENT_MESSAGE

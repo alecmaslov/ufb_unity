@@ -181,6 +181,23 @@ namespace UFB.Network.RoomMessageTypes
         public int count2;
     }
 
+    public class DefenceAttackMessage : IReceiveMessage 
+    {
+        public string originId;
+        public string targetId;
+        public string type;
+        public PowerMove pm;
+    }
+
+    public class EndAttackMessage : IReceiveMessage 
+    {
+        public string characterId;
+    }
+    public class DeadMonsterMessage : IReceiveMessage 
+    {
+        public string characterId;
+    }
+
     public class GameEndMessage : IReceiveMessage 
     {
         public string characterId;
@@ -244,6 +261,16 @@ namespace UFB.Network.RoomMessageTypes
         public ResultItem[] items;
         public ResultItem[] stacks;
         public ResultItem[] randomItems;
+    }
+
+    public class RewardBonusMessage : IReceiveMessage
+    {
+        public string characterId;
+        public int coin = 0;
+
+        public ResultItem[] items;
+        public ResultItem[] stacks;
+        public ResultItem[] powers;
     }
 
     public class GetTurnStartEquipBonusMessage : IReceiveMessage {

@@ -232,7 +232,7 @@ namespace UFB.Character
             {
                 if(characterState.type == (int)USER_TYPE.MONSTER)
                 {
-                    monsterKeys.Add(key);
+                    monsterKeys.Add(characterState.id);
                 }
 
                 UfbCharacter ufbCharacter = await LoadCharacter(characterState.characterClass);
@@ -347,6 +347,11 @@ namespace UFB.Character
             {
                 return null;
             }
+        }
+
+        public Dictionary<string, CharacterController> GetCharacterList()
+        {
+            return _characters; 
         }
     }
 }

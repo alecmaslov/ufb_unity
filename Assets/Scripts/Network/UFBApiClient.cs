@@ -38,8 +38,8 @@ namespace UFB.Network
         private string _clientId;
         private string _token;
 
-        public UfbApiClient(string apiBase, int port)
-            : base(apiBase, port) { }
+        public UfbApiClient(string apiBase, int port, bool isHttps = false)
+            : base(apiBase, port, isHttps) { }
 
         private async Task<bool> ValidateToken()
         {

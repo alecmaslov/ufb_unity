@@ -42,4 +42,8 @@ public class CameraManager : MonoBehaviour
         _cinemachineFreeLook.LookAt = target;
     }
 
+    private void Update()
+    {
+        _cinemachineFreeLook.enabled = UIGameManager.instance.IsCharacterCameraControl();
+    }
 }

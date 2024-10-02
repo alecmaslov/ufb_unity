@@ -55,7 +55,7 @@ public class HighlightRect : MonoBehaviour
 
             CharacterManager.Instance.monsterKeys.ForEach(key => {
                 UFB.Character.CharacterController monster = CharacterManager.Instance.GetCharacterFromId(key);
-                if (monster.CurrentTile.Id == tile.Id) 
+                if (monster.CurrentTile.Id == tile.Id && monster.State.stats.health.current > 0) 
                 {
                     highlightObjects[k].gameObject.SetActive(true);
                     monsters.Add(monster);
