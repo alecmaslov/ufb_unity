@@ -1,8 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.SceneManagement;
-using System;
-using UnityEditor.SceneManagement;
 
 namespace UFB.Project
 {
@@ -31,7 +28,7 @@ namespace UFB.Project
         [MenuItem("Build/Run Project")]
         public static void RunProject() 
         {
-            EditorSceneManager.OpenScene(GlobalDefine.MAIN_SCENE);
+            //EditorSceneManager.OpenScene(GlobalDefine.MAIN_SCENE);
         }
 
     }
