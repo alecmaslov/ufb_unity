@@ -5,8 +5,8 @@ using UnityEngine;
 public class GlobalDefine
 {
     //public static string API_URL = "api.thig.io";
-    //public static string API_URL = "16.171.121.162";
-    public static string API_URL = "localhost";
+    public static string API_URL = "52.12.44.167";
+    //public static string API_URL = "localhost";
     public static int API_PORT = 8080;
     public static bool isHttps = false;
     public static string WebSocket_http_Header = "ws://";
