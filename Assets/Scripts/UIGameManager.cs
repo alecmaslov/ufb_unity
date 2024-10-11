@@ -11,6 +11,7 @@ using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using UFB.Interactions;
 
 
 public class UIGameManager : MonoBehaviour
@@ -77,6 +78,8 @@ public class UIGameManager : MonoBehaviour
     public DefencePanel defencePanel;
 
     public RewardBonusPanel rewardBonusPanel;
+
+    public SpawnListPanel spawnListPanel;
 
     #region public values
 
@@ -153,6 +156,13 @@ public class UIGameManager : MonoBehaviour
         isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
         turnPanel.InitData(e.curTime);
         curTurnTime = e.curTime;
+
+        if (isPlayerTurn) 
+        { 
+            CameraManager.instance.isRotate = true;
+            CameraManager.instance.isCameraMove = false;
+        }
+
     }
 
     private void TurnChanged(TurnChangeMessage e) 

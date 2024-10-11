@@ -33,6 +33,31 @@ public class HighlightRect : MonoBehaviour
         }
     }
 
+    public void SetHighLightForSpawn(List<Tile> tiles)
+    {
+        int k = 0;
+        foreach (var tile in tiles)
+        {
+            TileState state = tile.GetTileState();
+            Debug.Log($"index : {k}, x : {tile.GetTileState().coordinates.x}, y : {tile.GetTileState().coordinates.y}");
+            highlightObjects[k].transform.position = tile.transform.position;
+
+            if (state.type == "Upper")
+            {
+                highlightObjects[k].transform.position += Vector3.up * 0.3f;
+            }
+            else
+            {
+                highlightObjects[k].transform.position += Vector3.up * 0.1f;
+            }
+
+            highlightObjects[k].gameObject.SetActive(true);
+
+            k++;
+        }
+
+    }
+
     public void SetHighLightRect(List<Tile> tiles)
     {
         ClearHighLightRect();

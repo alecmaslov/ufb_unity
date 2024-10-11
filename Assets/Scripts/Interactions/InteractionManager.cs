@@ -52,6 +52,7 @@ namespace UFB.Interactions
 
     public class InteractionManager : MonoBehaviour, IService
     {
+        public static InteractionManager Instance;
         public InteractionMode Mode { get; private set; }
         private GameInput _gameInput;
 
@@ -63,7 +64,7 @@ namespace UFB.Interactions
         [SerializeField]
         UIGameManager uiGameManager;
 
-        private bool isSpawn = true;
+        public bool isSpawn = true;
 
         private bool isMoveDirection = false;
 
@@ -77,6 +78,7 @@ namespace UFB.Interactions
 #endif
 
             _gameInput = new GameInput();
+            Instance = this;
         }
 
         private void OnEnable()
@@ -180,31 +182,35 @@ namespace UFB.Interactions
 
                     if (item.GetComponent<Chest>() != null && isSpawn)
                     {
-                        item.GetComponent<Chest>().OnClick();
+                        if(!item.GetComponent<Chest>().isItemBag)
+                        {
+                            item.GetComponent<Chest>().OnClick();
+                            HighlightRect.Instance.ClearHighLightRect();
+                            Events.EventBus.Publish(
+                                RoomSendMessageEvent.Create(
+                                    "initSpawnMove",
+                                    new RequestSpawnMessage
+                                    {
+                                        tileId = tile.Id,
+                                        destination = tile.Coordinates,
+                                        playerId = playerId,
+                                    }
+                                )
+                            );
+                            uiGameManager.controller.InitMovePos(tile);
 
-                        Events.EventBus.Publish(
-                            RoomSendMessageEvent.Create(
-                                "initSpawnMove",
-                                new RequestSpawnMessage
-                                {
-                                    tileId = tile.Id,
-                                    destination = tile.Coordinates,
-                                    playerId = playerId,
-                                }
-                            )
-                        );
-                        uiGameManager.controller.InitMovePos(tile);
+                            ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
+                            Events.EventBus.Publish(
+                                new CameraOrbitAroundEvent(
+                                    ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
+                                    0.3f
+                                )
+                            );
+                            CameraManager.instance.SetTarget(uiGameManager.controller.transform);
+                            CameraManager.instance.OnActiveInputAction();
+                            isSpawn = false;
+                        }
 
-                        ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
-                        Events.EventBus.Publish(
-                            new CameraOrbitAroundEvent(
-                                ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
-                                0.3f
-                            )
-                        );
-                        CameraManager.instance.SetTarget(uiGameManager.controller.transform);
-                        CameraManager.instance.OnActiveInputAction();
-                        isSpawn = false;
                     }
 
 

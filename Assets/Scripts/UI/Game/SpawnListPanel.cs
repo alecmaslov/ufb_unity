@@ -10,6 +10,7 @@ using UFB.Network.RoomMessageTypes;
 using UnityEngine.TextCore.Text;
 using UFB.Character;
 using UFB.Core;
+using UFB.Interactions;
 
 namespace UFB.Events
 {
@@ -27,9 +28,6 @@ namespace UFB.Events
 public class SpawnListPanel : MonoBehaviour
 {
     [SerializeField]
-    UIGameManager uiGameManager;
-
-    [SerializeField]
     Transform scrolView;
 
     [SerializeField]
@@ -38,6 +36,7 @@ public class SpawnListPanel : MonoBehaviour
     public string curTileId = "";
 
     public Dictionary<string, Tile> Tiles;
+    public List<Tile> itemTileList = new List<Tile>();
 
     private void OnEnable()
     {
@@ -56,7 +55,9 @@ public class SpawnListPanel : MonoBehaviour
 
     public void AddSpawnItem(UFB.StateSchema.SpawnEntity spawnEntity, int i)
     {
+
         var tile = Tiles[spawnEntity.tileId];
+        itemTileList.Add(tile);
 
         ItemSection item = Instantiate(section);
         item.transform.SetParent(scrolView);
@@ -80,12 +81,13 @@ public class SpawnListPanel : MonoBehaviour
             Debug.Log(
                 $"Spawning entity {entity.prefabAddress}"
             );
-            if(entity.prefabAddress == "Entities/chest")
+            if(entity.prefabAddress == "Entities/chest" /*|| entity.prefabAddress == "Entities/ItemBag"*/)
             {
                 AddSpawnItem(entity, i);
                 i++;
             }
         }
+        HighlightRect.Instance.SetHighLightForSpawn(itemTileList);
     }
 
     public void OnConfirmClick()
@@ -98,13 +100,13 @@ public class SpawnListPanel : MonoBehaviour
                 {
                     tileId = curTileId,
                     destination = Tiles[curTileId].Coordinates,
-                    playerId = uiGameManager.controller.Id,
+                    playerId = UIGameManager.instance.controller.Id,
                 }
             )
         );
 
         gameObject.SetActive( false );
-        uiGameManager.controller.InitMovePos(Tiles[curTileId]);
+        UIGameManager.instance.controller.InitMovePos(Tiles[curTileId]);
         ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive( true );
         EventBus.Publish(
             new CameraOrbitAroundEvent(
