@@ -149,7 +149,7 @@ public class CameraManager : MonoBehaviour
         {
             _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 300;
             _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 2;
-            handleRoate();
+            //handleRoate();
         }
         else
         {
