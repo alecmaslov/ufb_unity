@@ -145,17 +145,9 @@ public class CameraManager : MonoBehaviour
             handleMove();
         }
 
-        if (isRotate && isMoving)
-        {
-            _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 300;
-            _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 2;
-            //handleRoate();
-        }
-        else
-        {
-            _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 0;
-            _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 0;
-        }
+        handleRoate();
+
+
         handleZoom();
     }
 
@@ -218,7 +210,16 @@ public class CameraManager : MonoBehaviour
 
     void handleRoate()
     {
-
+/*        if (isRotate && isMoving)
+        {
+            _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 300;
+            _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 2;
+        }
+        else
+        {*/
+            _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 0;
+            _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 0;
+/*        }*/
     }
 
 }
