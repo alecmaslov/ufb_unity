@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class CameraManager : MonoBehaviour
 {
@@ -182,30 +183,55 @@ public class CameraManager : MonoBehaviour
         _cinemachineFreeLook.m_Lens.FieldOfView = Mathf.Lerp(_cinemachineFreeLook.m_Lens.FieldOfView, targetZoom, Time.deltaTime * zoomSpeed);
     }
 
+    private Vector2 touchStart;  // Start position of the touch
+
     void handleMove()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        /*        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
-        if (Input.touchCount > 0)
+                if (Input.touchCount > 0)
+                {
+                    Touch touch = Input.GetTouch(0);
+                    ray = Camera.main.ScreenPointToRay(touch.position);
+                }
+
+                Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
+
+                // Check if the ray hits an object in the scene
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    // Calculate the direction to the mouse position
+                    Vector3 targetPosition = hit.point;
+                    Vector3 direction = (targetPosition - cameraTarget.position).normalized;
+                    Debug.Log(direction + ", " + targetPosition);
+
+                    // Move the object towards the mouse position
+                    cameraTarget.position += direction * speed * Time.deltaTime;
+                }*/
+
+        if (Input.touchCount == 1)
         {
+            // One finger drag (move map)
             Touch touch = Input.GetTouch(0);
-            ray = Camera.main.ScreenPointToRay(touch.position);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                Debug.Log("touch begin");
+                touchStart = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                Debug.Log("touch start: " + touchStart);
+                Debug.Log("touch mouse: " + touch.position);
+
+                Vector2 direction = (touchStart - touch.position).normalized;
+                Debug.Log("touch move: " + direction);
+
+                cameraTarget.transform.position += new Vector3(-direction.x, 0, -direction.y) * speed;
+            }
         }
 
-        Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
-
-        // Check if the ray hits an object in the scene
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-        {
-            // Calculate the direction to the mouse position
-            Vector3 targetPosition = hit.point;
-            Vector3 direction = (targetPosition - cameraTarget.position).normalized;
-            Debug.Log(direction + ", " + targetPosition);
-
-            // Move the object towards the mouse position
-            cameraTarget.position += direction * speed * Time.deltaTime;
-        }
     }
 
     void handleRoate()

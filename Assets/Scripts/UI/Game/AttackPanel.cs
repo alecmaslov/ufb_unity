@@ -114,6 +114,22 @@ public class AttackPanel : MonoBehaviour
             });
             
             topCharacter3D.ObjectPrefab = HighlightRect.Instance.selectedMonster.transform;
+
+            Debug.Log("character class: " + HighlightRect.Instance.selectedMonster.State.characterClass);
+
+            if (HighlightRect.Instance.selectedMonster.State.characterClass.Contains("Earwig"))
+            {
+                Debug.Log("character class: is there" + HighlightRect.Instance.selectedMonster.State.characterClass);
+
+                topCharacter3D.TargetOffset = new Vector2(-0.1f, -0.3f);
+            }
+            else
+            {
+                Debug.Log("character class: is not there" + HighlightRect.Instance.selectedMonster.State.characterClass);
+
+                topCharacter3D.TargetOffset = new Vector2(-0.1f, 0);
+            }
+
         } 
         else
         {
