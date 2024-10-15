@@ -18,7 +18,7 @@ public class CameraManager : MonoBehaviour
     public float minZoom = 15f; // Minimum zoom level
     public float maxZoom = 60f; // Maximum zoom level
 
-    private float targetZoom; // Target zoom level
+    private float targetZoom = 60; // Target zoom level
 
     // FOR MOVEMENT
     public float speed = 0.1f; // Speed of the object movement
@@ -184,32 +184,36 @@ public class CameraManager : MonoBehaviour
     }
 
     private Vector2 touchStart;  // Start position of the touch
+    private Vector3 startPos;
+    private Vector3 endPos;
+    private Vector3 camStartPos;
 
     void handleMove()
     {
-        /*        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-                if (Input.touchCount > 0)
-                {
-                    Touch touch = Input.GetTouch(0);
-                    ray = Camera.main.ScreenPointToRay(touch.position);
-                }
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            ray = Camera.main.ScreenPointToRay(touch.position);
+        }
 
-                Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
+        Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
 
-                // Check if the ray hits an object in the scene
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-                {
-                    // Calculate the direction to the mouse position
-                    Vector3 targetPosition = hit.point;
-                    Vector3 direction = (targetPosition - cameraTarget.position).normalized;
-                    Debug.Log(direction + ", " + targetPosition);
+        /*// Check if the ray hits an object in the scene
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            // Calculate the direction to the mouse position
+            Vector3 targetPosition = hit.point;
+            Vector3 direction = (targetPosition - cameraTarget.position).normalized;
+            Debug.Log(direction + ", " + targetPosition);
 
-                    // Move the object towards the mouse position
-                    cameraTarget.position += direction * speed * Time.deltaTime;
-                }*/
+            // Move the object towards the mouse position
+            cameraTarget.position += direction * speed * Time.deltaTime;
+        }*/
 
+        // Handle zoom (pinch) and drag
         if (Input.touchCount == 1)
         {
             // One finger drag (move map)
@@ -219,16 +223,31 @@ public class CameraManager : MonoBehaviour
             {
                 Debug.Log("touch begin");
                 touchStart = touch.position;
+                camStartPos = cameraTarget.position;
+
+                ray = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    startPos = hit.point;
+                }
             }
             else if (touch.phase == TouchPhase.Moved)
             {
-                Debug.Log("touch start: " + touchStart);
-                Debug.Log("touch mouse: " + touch.position);
+                ray = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    endPos = hit.point;
 
-                Vector2 direction = (touchStart - touch.position).normalized;
-                Debug.Log("touch move: " + direction);
+                    Debug.Log("touch start: " + startPos);
+                    Debug.Log("touch mouse: " + endPos);
 
-                cameraTarget.transform.position += new Vector3(-direction.x, 0, -direction.y) * speed;
+                    Vector3 direction = endPos - startPos;
+                    Debug.Log("touch move: " + direction);
+
+                    cameraTarget.transform.position = camStartPos + new Vector3(direction.x, 0, direction.z) * speed;
+
+                }
+
             }
         }
 
