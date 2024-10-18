@@ -244,7 +244,7 @@ public class CameraManager : MonoBehaviour
                     Vector3 direction = endPos - startPos;
                     Debug.Log("touch move: " + direction);
 
-                    cameraTarget.transform.position = camStartPos + new Vector3(direction.x, 0, direction.z) * speed;
+                    cameraTarget.transform.position = camStartPos + new Vector3(-direction.x, 0, -direction.z) * speed;
 
                 }
 
