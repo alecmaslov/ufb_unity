@@ -122,22 +122,26 @@ MonoBehaviour:
   - m_GUID: dd8f63ba548616649838e89334dca6af
     m_Address: Entities/portal
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Entities
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8daa7b4d60a939e4ba09ce8377ec3a4a
     m_Address: maps/kraken1
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Map
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b5dfe9c70e57d64ca1da87445d2e41f
     m_Address: CharacterPrefabs/Avenger
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Character
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 41664ec29b0efdb4c91f0841f2e9f2bf
     m_Address: maps/kraken
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Map
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f65686e20e5f6714bb03cf55f53ce183
     m_Address: Entities/ItemBag
@@ -160,7 +164,8 @@ MonoBehaviour:
   - m_GUID: 62f170de49d75fb4aab8ab34621a210f
     m_Address: UfbCharacter/Centipede_blue
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a0787054504b9a048aa3af90f12e657d
     m_Address: CharacterPrefabs/Centipede_blue

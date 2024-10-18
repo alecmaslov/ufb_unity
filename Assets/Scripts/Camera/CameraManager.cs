@@ -180,7 +180,7 @@ public class CameraManager : MonoBehaviour
 
 
         // Smoothly interpolate the camera's field of view towards the target zoom
-        _cinemachineFreeLook.m_Lens.FieldOfView = Mathf.Lerp(_cinemachineFreeLook.m_Lens.FieldOfView, targetZoom, Time.deltaTime * zoomSpeed);
+        _cinemachineFreeLook.m_Lens.FieldOfView = Mathf.Lerp(_cinemachineFreeLook.m_Lens.FieldOfView, targetZoom, Time.deltaTime * 6f);
     }
 
     private Vector2 touchStart;  // Start position of the touch
