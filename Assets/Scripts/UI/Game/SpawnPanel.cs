@@ -42,9 +42,6 @@ public class SpawnPanel : MonoBehaviour
     GameObject posPanel;
 
     [SerializeField]
-    GlobalResources global;
-
-    [SerializeField]
     Text moveText;
 
     [HideInInspector]
@@ -110,9 +107,16 @@ public class SpawnPanel : MonoBehaviour
         //InitSpawnPanel()
         Sprite sprite = m.spawnId == "default"? spawnImages[0] : spawnImages[1];
 
-        InitSpawnPanel(sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
+        if(m.spawnId == "default")
+        {
+            InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.powers[powerIdx], coin.ToString());
+        }
+        else
+        {
+            InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.stacks[powerIdx], coin.ToString());
+        }
 
-        if(!isSpawn)
+        if (!isSpawn)
         {
             OnConfirmClick();
         }

@@ -65,6 +65,14 @@ public class DefencePanel : MonoBehaviour
         if (obj != null)
         {
             bottomCharacter3D.ObjectPrefab = obj.transform;
+            if (obj.State.characterClass.Contains("Earwig"))
+            {
+                bottomCharacter3D.TargetOffset = new Vector2(-0.1f, -0.3f);
+            }
+            else
+            {
+                bottomCharacter3D.TargetOffset = new Vector2(-0.1f, 0);
+            }
         }
     }
 

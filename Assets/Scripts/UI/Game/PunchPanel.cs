@@ -37,7 +37,7 @@ public class PunchPanel : MonoBehaviour
     public void InitData()
     {
         UIGameManager.instance.bottomDrawer.SetActive(false);
-
+        arrow = null;
         InitArrow();
 
         EventBus.Publish(
@@ -58,7 +58,6 @@ public class PunchPanel : MonoBehaviour
 
     public void InitArrow()
     {
-        arrow = null;
         foreach (var item in itemDetails)
         {
             item.count.text = UIGameManager.instance.GetItemCount(item.type).ToString();

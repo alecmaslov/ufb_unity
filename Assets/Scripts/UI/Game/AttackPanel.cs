@@ -87,6 +87,7 @@ public class AttackPanel : MonoBehaviour
     public UIObject3D bottomCharacter3D;
     public UIObject3D topCharacter3D;
 
+    public bool isEndAttack = false;
 
     public void InitCharacterState(CharacterState e)
     {
@@ -394,6 +395,8 @@ public class AttackPanel : MonoBehaviour
     public bool isVampired = false;
     public void InitDiceData()
     {
+        isEndAttack = false;
+
         isVampired = false;
         if (pm.result.dice > 0 && diceTimes == 0)
         {
@@ -453,6 +456,9 @@ public class AttackPanel : MonoBehaviour
                 }
             )
         );
+        isEndAttack = true;
+
+        StartCoroutine(EndAttackPanel());
     }
 
     public void OnFinishEnemy()
@@ -474,16 +480,27 @@ public class AttackPanel : MonoBehaviour
                 }
             )
         );
+
+        isEndAttack = true;
+        StartCoroutine(EndAttackPanel());
+
     }
 
     IEnumerator EndAttackPanel()
     {
-        yield return new WaitForSeconds(1f);
-        OnCancelBtnClicked();
+        yield return new WaitForSeconds(3f);
+        if(isEndAttack)
+        {
+            OnCancelBtnClicked();
+        }
     }
 
     public void OnCancelBtnClicked()
     {
         gameObject.SetActive(false);
+        if( UIGameManager.instance.punchPanel.gameObject.activeSelf)
+        {
+            UIGameManager.instance.punchPanel.InitArrow();
+        }
     }
 }
