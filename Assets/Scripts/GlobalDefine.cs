@@ -5,8 +5,8 @@ using UnityEngine;
 public class GlobalDefine
 {
     //public static string API_URL = "api.thig.io";
-    public static string API_URL = "52.12.44.167";
-    //public static string API_URL = "localhost";
+    //public static string API_URL = "52.12.44.167";
+    public static string API_URL = "localhost";
     public static int API_PORT = 8080;
     public static bool isHttps = false;
     public static string WebSocket_http_Header = "ws://";
@@ -42,6 +42,10 @@ public class GlobalDefine
         public static string RECEIVE_PERK_TOAST = "RECEIVE_PERK_TOAST";
         public static string RECEIVE_STACK_PERK_TOAST = "RECEIVE_STACK_PERK_TOAST";
         public static string RECEIVE_STACK_ITEM_TOAST = "RECEIVE_STACK_ITEM_TOAST";
+
+        public static string MERCHANT_ADDCRAFTITEM = "MERCHANT_ADDCRAFTITEM";
+        public static string MERCHANT_BUY_ITEM = "MERCHANT_BUY_ITEM";
+        public static string MERCHANT_SELL_ITEM = "MERCHANT_SELL_ITEM";
 
         public static string GAME_END_STATUS = "GAME_END_STATUS";
         public static string STACK_REVIVE_ACTIVE = "STACK_REVIVE_ACTIVE";

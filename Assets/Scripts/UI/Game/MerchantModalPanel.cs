@@ -135,7 +135,7 @@ public class MerchantModalPanel : MonoBehaviour
             {
                 EventBus.Publish(
                     RoomSendMessageEvent.Create(
-                        "buyItem",
+                        GlobalDefine.SERVER_MESSAGE.MERCHANT_BUY_ITEM,
                         new RequestBuyItem
                         {
                             characterId = UIGameManager.instance.controller.Id,
@@ -149,7 +149,7 @@ public class MerchantModalPanel : MonoBehaviour
             {
                 EventBus.Publish(
                     RoomSendMessageEvent.Create(
-                        "sellItem",
+                        GlobalDefine.SERVER_MESSAGE.MERCHANT_SELL_ITEM,
                         new RequestSellItem
                         {
                             characterId = UIGameManager.instance.controller.Id,
@@ -165,7 +165,7 @@ public class MerchantModalPanel : MonoBehaviour
             // SEND CRAFT DTAT TO SERVER
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
-                    "addCraftItem",
+                    GlobalDefine.SERVER_MESSAGE.MERCHANT_ADDCRAFTITEM,
                     new RequestAddCraftItem
                     {
                         characterId = UIGameManager.instance.controller.Id,
