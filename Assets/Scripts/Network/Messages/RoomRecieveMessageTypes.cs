@@ -92,6 +92,12 @@ namespace UFB.Network.RoomMessageTypes
         public PathStep[] path;
     }
 
+    public class SetMovePointMessage : IReceiveMessage 
+    {
+        public string characterId;
+        public PathStep[] path;
+    }
+
     public class GetStackOnStartMessage : IReceiveMessage {
         public string characterId;
         public ResultItem[] stackList;

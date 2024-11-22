@@ -143,6 +143,10 @@ public class UIGameManager : MonoBehaviour
 
         // REWARD BONUS...
         gameService.SubscribeToRoomMessage<RewardBonusMessage>(GlobalDefine.SERVER_MESSAGE.REWARD_BONUS, OnReceiveRewardBonusMessage);
+
+        // CLICK TILE WHEN MOVE
+        gameService.SubscribeToRoomMessage<SetMovePointMessage>(GlobalDefine.SERVER_MESSAGE.SET_MOVE_POINT, OnReceiveSetMovePointMessage);
+
     }
 
     private void OnDisable()
@@ -214,6 +218,11 @@ public class UIGameManager : MonoBehaviour
         TopPanel.SetActive(true);
         BottomStatusBar.SetActive(true);
         spawnPanel.InitSpawn(m);
+    }
+
+    private void OnReceiveSetMovePointMessage(SetMovePointMessage m)
+    {
+        movePanel.OnSetMovePointMessage(m);
     }
 
     private void OnSetHighLightRectReceived(SetHighLightRectMessage e)

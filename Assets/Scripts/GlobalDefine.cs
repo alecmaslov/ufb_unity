@@ -5,8 +5,8 @@ using UnityEngine;
 public class GlobalDefine
 {
     //public static string API_URL = "api.thig.io";
-    public static string API_URL = "52.12.44.167";
-    //public static string API_URL = "localhost";
+    //public static string API_URL = "52.12.44.167";
+    public static string API_URL = "localhost";
     public static int API_PORT = 8080;
     public static bool isHttps = false;
     public static string WebSocket_http_Header = "ws://";
@@ -56,6 +56,8 @@ public class GlobalDefine
 
         public static string REWARD_BONUS = "REWARD_BONUS";
 
+        public static string SET_MOVE_POINT = "SET_MOVE_POINT";
+
     }
 
     public static class CLIENT_MESSAGE
@@ -64,6 +66,7 @@ public class GlobalDefine
         public static string SET_POWER_MOVE_ITEM = "SET_POWER_MOVE_ITEM";
         public static string SET_DICE_ROLL = "SET_DICE_ROLL";
         public static string SET_MOVE_ITEM = "SET_MOVE_ITEM";
+        public static string SET_MOVE_POINT = "SET_MOVE_POINT";
         public static string END_POWER_MOVE_ITEM = "END_POWER_MOVE_ITEM";
         public static string END_REVENGER_STACK = "END_REVENGER_STACK";
         public static string END_TURN = "END_TURN";

@@ -38,6 +38,7 @@ namespace UFB.Network.RoomMessageTypes
     public class RequestMoveMessage : ISendMessage
     {
         public Coordinates destination;
+        public bool isPath = false;
         public string tileId;
         public string characterId;
         public float originEnergy;

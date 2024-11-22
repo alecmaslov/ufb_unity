@@ -12,6 +12,7 @@ using UFB.Entities;
 using UFB.Events;
 using UFB.Items;
 using Colyseus.Schema;
+using UFB.Character;
 
 public class MovePanel : MonoBehaviour
 {
@@ -63,6 +64,9 @@ public class MovePanel : MonoBehaviour
     Transform damageList;
 
     public Image damageMainItemImage;
+
+    public Text posText;
+    public Text energyText;
 
 
     private bool isLeft = true;
@@ -140,6 +144,8 @@ public class MovePanel : MonoBehaviour
     {
         gameObject.SetActive(true);
         explosionBtn.SetActive(false);
+        posText.text = "";
+        energyText.text = "";
         InitMoveBtns();
         currentTile = character.CurrentTile;
         originEnergy = character.State.stats.energy.current;
@@ -183,7 +189,16 @@ public class MovePanel : MonoBehaviour
         globalDirection.gameObject.SetActive(false) ;
 
         Tile tile = character.CurrentTile;
-        character.MoveToTile(tile);
+        if (selectedTile != null)
+        {
+            character.MoveToTile(selectedTile, true);
+        } 
+        else
+        {
+            character.MoveToTile(tile);
+        }
+        selectedTile = null;
+        HighlightRect.Instance.ClearHighLightRect();
     }
 
     public void OnCancel()
@@ -198,6 +213,8 @@ public class MovePanel : MonoBehaviour
             currentTile,
             originEnergy
         );
+        selectedTile = null;
+        HighlightRect.Instance.ClearHighLightRect();
     }
 
     public void OnMoveClick(string move)
@@ -456,6 +473,75 @@ public class MovePanel : MonoBehaviour
         }
 
         moveItemDetailPanel.gameObject.SetActive( false );
+    }
+
+    private Tile selectedTile = null;
+
+    public void OnClickTile(Tile tile)
+    {
+        if(!gameObject.activeSelf)
+        {
+            Show();
+        }
+        
+        if (gameObject.activeSelf)
+        {
+            selectedTile = tile;
+            posText.text = tile.TilePosText;
+            Debug.Log("send message: xxxxo onclick");
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.SET_MOVE_POINT,
+                    new RequestMoveItem
+                    {
+                        characterId = character.Id,
+                        tileId = tile.Id,
+                        itemId = -1,
+                    }
+                )
+            );
+
+            for (int i = 0; i < tile.transform.childCount; i++)
+            {
+                GameObject item = tile.transform.GetChild(i).gameObject;
+
+                if (item.GetComponent<Chest>() != null)
+                {
+                    if (!item.GetComponent<Chest>().isItemBag)
+                    {
+                        posText.text = "Treasure";
+                    } 
+                    else
+                    {
+                        posText.text = "Item Bag";
+                    }
+                } 
+                else if(item.GetComponent<Portal>() != null )
+                {
+                    posText.text = "Portal";
+                }
+                else if(item.GetComponent<Merchant>() != null )
+                {
+                    posText.text = "Merchant";
+                }
+            }
+
+        }
+    }
+
+    public void OnSetMovePointMessage( SetMovePointMessage m)
+    {
+        var gameBoard = ServiceLocator.Current.Get<GameBoard>();
+
+        List<Tile> tiles = new List<Tile>();
+        foreach (var p in m.path)
+        {
+            Tile tile = gameBoard.Tiles[p.tileId];
+            tiles.Add( tile );
+        }
+        energyText.text = $"-{tiles.Count}";
+        HighlightRect.Instance.ClearHighLightRect();
+        HighlightRect.Instance.SetHighLightForSpawn(tiles);
     }
 
     private void Update()

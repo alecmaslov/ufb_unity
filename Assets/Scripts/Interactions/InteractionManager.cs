@@ -149,7 +149,7 @@ namespace UFB.Interactions
             if (isMoveDirection) 
             { 
                 clickable.OnClick();
-                return;
+                //return;
             }
 
             string playerId = CharacterManager.Instance.SelectedCharacter.Id;
@@ -215,6 +215,8 @@ namespace UFB.Interactions
 
 
                 }
+                Debug.Log("xxxx: xx: xxx");
+                UIGameManager.instance.movePanel.OnClickTile(tile);
             }
 
 
