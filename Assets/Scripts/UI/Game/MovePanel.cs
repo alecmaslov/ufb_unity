@@ -67,7 +67,8 @@ public class MovePanel : MonoBehaviour
 
     public Text posText;
     public Text energyText;
-
+    public Text bombEngeryText;
+    public Image posImage;
 
     private bool isLeft = true;
     private bool isRight = true;
@@ -146,6 +147,8 @@ public class MovePanel : MonoBehaviour
         explosionBtn.SetActive(false);
         posText.text = "";
         energyText.text = "";
+        bombEngeryText.text = "";
+        posImage.enabled = true;
         InitMoveBtns();
         currentTile = character.CurrentTile;
         originEnergy = character.State.stats.energy.current;
@@ -163,7 +166,7 @@ public class MovePanel : MonoBehaviour
 
         character.MoveToTile(character.CurrentTile);
 
-        globalDirection.gameObject.SetActive(true);
+        // globalDirection.gameObject.SetActive(true);
         globalDirection.transform.position = character.transform.position;
     }
 
@@ -192,12 +195,53 @@ public class MovePanel : MonoBehaviour
         if (selectedTile != null)
         {
             character.MoveToTile(selectedTile, true);
-        } 
+
+            Tile tile1 = selectedTile;
+            for (int i = 0; i < tile1.transform.childCount; i++)
+            {
+                GameObject item = tile1.transform.GetChild(i).gameObject;
+                if (item.GetComponent<Chest>() != null)
+                {
+                    Debug.Log("Item position Destination...");
+                    EventBus.Publish(
+                        RoomSendMessageEvent.Create(
+                            "spawnMove",
+                            new RequestSpawnMessage
+                            {
+                                tileId = tile1.Id,
+                                destination = tile1.Coordinates,
+                                playerId = character.Id,
+                                isItemBag = item.GetComponent<Chest>().isItemBag,
+                            }
+                        )
+                    );
+
+                    gameObject.SetActive(false);
+                }
+                else if (item.GetComponent<Merchant>() != null)
+                {
+                    Debug.Log("Merchant position Destination...");
+                    EventBus.Publish(
+                        RoomSendMessageEvent.Create(
+                            "getMerchantData",
+                            new RequestTile
+                            {
+                                characterId = character.Id,
+                                tileId = tile1.Id,
+                            }
+                        )
+                    );
+                }
+            }
+
+
+        }
         else
         {
             character.MoveToTile(tile);
         }
         selectedTile = null;
+        bombPrevTile = null;
         HighlightRect.Instance.ClearHighLightRect();
     }
 
@@ -214,6 +258,7 @@ public class MovePanel : MonoBehaviour
             originEnergy
         );
         selectedTile = null;
+        bombPrevTile = null;
         HighlightRect.Instance.ClearHighLightRect();
     }
 
@@ -302,11 +347,11 @@ public class MovePanel : MonoBehaviour
                 Debug.Log("Feather sent : " + tile1.TilePosText);
                 OnSetMoveItem(tile1, selectedItemId);
             } 
-            else if((ITEM)selectedItemId == ITEM.Bomb)
+            /*else if((ITEM)selectedItemId == ITEM.Bomb)
             {
                 moveItemDetailPanel.tile = tile1;
                 moveItemDetailPanel.Init();
-            }
+            }*/
 
 
         }
@@ -372,6 +417,12 @@ public class MovePanel : MonoBehaviour
             message.top == 1? sprite : null,
             message.down == 1? sprite : null
         );
+
+        if ((ITEM)selectedItemId == ITEM.Bomb)
+        {
+            moveItemDetailPanel.tile = selectedTile;
+            moveItemDetailPanel.Init();
+        }
     }
 
     public void OnSetMoveItem(Tile tile, int itemId)
@@ -387,6 +438,16 @@ public class MovePanel : MonoBehaviour
                 }
             )
         );
+    }
+
+    public void OnBombMoveTile()
+    {
+        if (bombPrevTile != null)
+        {
+            Debug.Log("Bomb is moved.");
+            character.MoveToTile( bombPrevTile, true );
+            HighlightRect.Instance.ClearHighLightRect();
+        }
     }
 
     public void OnReceiveGetBombMessage(GetBombMessage message)
@@ -469,7 +530,7 @@ public class MovePanel : MonoBehaviour
         }
         else
         {
-            character.MoveToTile(character.CurrentTile);
+            //character.MoveToTile(character.CurrentTile);
         }
 
         moveItemDetailPanel.gameObject.SetActive( false );
@@ -486,8 +547,22 @@ public class MovePanel : MonoBehaviour
         
         if (gameObject.activeSelf)
         {
+
+            if (
+                tile.GetTileState().type == "Void" || 
+                tile.GetTileState().type == "VerticalBridge" || 
+                tile.GetTileState().type == "HorizontalBridge" || 
+                tile.GetTileState().type == "DoubleBridge" || 
+                tile.GetTileState().type == "StairsNS" || 
+                tile.GetTileState().type == "StairsSN" || 
+                tile.GetTileState().type == "StairsEW" ||
+                tile.GetTileState().type == "StairsWE"
+            ) return;
+
+
             selectedTile = tile;
             posText.text = tile.TilePosText;
+            posImage.enabled = true;
             Debug.Log("send message: xxxxo onclick");
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
@@ -501,27 +576,34 @@ public class MovePanel : MonoBehaviour
                 )
             );
 
+
             for (int i = 0; i < tile.transform.childCount; i++)
             {
                 GameObject item = tile.transform.GetChild(i).gameObject;
 
                 if (item.GetComponent<Chest>() != null)
                 {
+                    posImage.enabled = false;
+
                     if (!item.GetComponent<Chest>().isItemBag)
                     {
-                        posText.text = "Treasure";
+                        posText.text = "Item Box";
                     } 
                     else
                     {
-                        posText.text = "Item Bag";
+                        posText.text = "Item Box";
                     }
                 } 
                 else if(item.GetComponent<Portal>() != null )
                 {
+                    posImage.enabled = false;
+
                     posText.text = "Portal";
                 }
                 else if(item.GetComponent<Merchant>() != null )
                 {
+                    posImage.enabled = false;
+
                     posText.text = "Merchant";
                 }
             }
@@ -529,8 +611,12 @@ public class MovePanel : MonoBehaviour
         }
     }
 
+    private Tile bombPrevTile = null;
+
     public void OnSetMovePointMessage( SetMovePointMessage m)
     {
+        bombPrevTile = null;
+
         var gameBoard = ServiceLocator.Current.Get<GameBoard>();
 
         List<Tile> tiles = new List<Tile>();
@@ -540,8 +626,14 @@ public class MovePanel : MonoBehaviour
             tiles.Add( tile );
         }
         energyText.text = $"-{tiles.Count}";
+        bombEngeryText.text = $"-{tiles.Count - 1}";
         HighlightRect.Instance.ClearHighLightRect();
         HighlightRect.Instance.SetHighLightForSpawn(tiles);
+
+        if (tiles.Count > 1) 
+        {
+            bombPrevTile = tiles[tiles.Count - 2];
+        }
     }
 
     private void Update()

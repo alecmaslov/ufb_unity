@@ -216,7 +216,10 @@ namespace UFB.Interactions
 
                 }
                 Debug.Log("xxxx: xx: xxx");
-                UIGameManager.instance.movePanel.OnClickTile(tile);
+                if (!isSpawn && uiGameManager.isMoveTileStatus)
+                {
+                    UIGameManager.instance.movePanel.OnClickTile(tile);
+                }
             }
 
 

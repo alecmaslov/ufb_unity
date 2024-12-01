@@ -66,6 +66,7 @@ public class MoveItemDetailPanel : MonoBehaviour
         {
             ITEM type = (ITEM) itemPrefab[idx].item.id;
             UIGameManager.instance.movePanel.OnSetMoveItem(tile, itemPrefab[idx].item.id);
+            UIGameManager.instance.movePanel.OnBombMoveTile();
         } 
         else
         {

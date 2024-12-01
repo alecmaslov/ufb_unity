@@ -86,6 +86,8 @@ public class UIGameManager : MonoBehaviour
     public float curTurnTime = GlobalDefine.TURN_TIME;
     public bool isPlayerTurn = false;
 
+    public bool isMoveTileStatus = false;
+
     #endregion
 
     private void Awake()
@@ -164,7 +166,7 @@ public class UIGameManager : MonoBehaviour
         if (isPlayerTurn) 
         { 
             CameraManager.instance.isRotate = true;
-            CameraManager.instance.isCameraMove = false;
+            //CameraManager.instance.isCameraMove = false;
         }
 
     }
@@ -438,6 +440,11 @@ public class UIGameManager : MonoBehaviour
             attackPanel.gameObject.activeSelf || merchantPanel.gameObject.activeSelf || wndPortalPanel.gameObject.activeSelf || /*turnPanel.gameObject.activeSelf ||*/ 
             punchPanel.gameObject.activeSelf || errorPanel.gameObject.activeSelf || equipBonusPanel.gameObject.activeSelf || stackTurnStartPanel.gameObject.activeSelf ||
             endPanel.gameObject.activeSelf || defencePanel.gameObject.activeSelf || rewardBonusPanel.gameObject.activeSelf);
+    }
+
+    public void OnChangeMouseTileStatus()
+    {
+        isMoveTileStatus = !isMoveTileStatus;
     }
 
     #region Unity Function
