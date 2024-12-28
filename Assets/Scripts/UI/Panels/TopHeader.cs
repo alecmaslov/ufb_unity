@@ -57,23 +57,42 @@ namespace UFB.UI
             _energyBar.SetRangedValueState(e.stats.energy, e);
             _ultimateBar.SetRangedValueState(e.stats.ultimate, e);
 
-            _screenNameText.text = e.displayName;
-            _stepEnergeText.text = e.stats.energy.current.ToString();
+            if(_screenNameText != null)
+            {
+                _screenNameText.text = e.displayName;
+            }
+            if (_stepEnergeText != null) 
+            { 
+                _stepEnergeText.text = e.stats.energy.current.ToString();
+            }
 
             string newTileId = e.currentTileId;
             Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
-            _tilePosText.text = CurrentTile.TilePosText;
+
+            if(_tilePosText != null)
+            {
+                _tilePosText.text = CurrentTile.TilePosText;
+            }
 
             e.OnChange(() => 
             {
                 if(e.characterId == selectedId)
                 {
-                    _screenNameText.text = e.displayName;
-                    _stepEnergeText.text = e.stats.energy.current.ToString();
+                    if (_screenNameText != null)
+                    {
+                        _screenNameText.text = e.displayName;
+                    }
+                    if (_stepEnergeText != null)
+                    {
+                        _stepEnergeText.text = e.stats.energy.current.ToString();
+                    }
 
                     string newTileId = e.currentTileId;
                     Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
-                    _tilePosText.text = CurrentTile.TilePosText;
+                    if (_tilePosText != null)
+                    {
+                        _tilePosText.text = CurrentTile.TilePosText;
+                    }
                 }
             });
 

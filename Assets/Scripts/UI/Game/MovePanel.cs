@@ -13,6 +13,7 @@ using UFB.Events;
 using UFB.Items;
 using Colyseus.Schema;
 using UFB.Character;
+using UnityEditor;
 
 public class MovePanel : MonoBehaviour
 {
@@ -69,6 +70,11 @@ public class MovePanel : MonoBehaviour
     public Text energyText;
     public Text bombEngeryText;
     public Image posImage;
+
+    public RectTransform movePart;
+    public RectTransform bombPart;
+    public Image moveImage;
+    public Text tileTypeText;
 
     private bool isLeft = true;
     private bool isRight = true;
@@ -148,6 +154,7 @@ public class MovePanel : MonoBehaviour
         posText.text = "";
         energyText.text = "";
         bombEngeryText.text = "";
+        tileTypeText.text = "";
         posImage.enabled = true;
         InitMoveBtns();
         currentTile = character.CurrentTile;
@@ -549,19 +556,41 @@ public class MovePanel : MonoBehaviour
         {
 
             if (
-                tile.GetTileState().type == "Void" || 
-                tile.GetTileState().type == "VerticalBridge" || 
-                tile.GetTileState().type == "HorizontalBridge" || 
-                tile.GetTileState().type == "DoubleBridge" || 
-                tile.GetTileState().type == "StairsNS" || 
-                tile.GetTileState().type == "StairsSN" || 
+                tile.GetTileState().type == "Void" ||
+                tile.GetTileState().type == "VerticalBridge" ||
+                tile.GetTileState().type == "HorizontalBridge" ||
+                tile.GetTileState().type == "DoubleBridge" ||
+                tile.GetTileState().type == "StairsNS" ||
+                tile.GetTileState().type == "StairsSN" ||
                 tile.GetTileState().type == "StairsEW" ||
                 tile.GetTileState().type == "StairsWE"
-            ) return;
+            ) 
+            {
+                posImage.gameObject.SetActive(false);
+                moveImage.gameObject.SetActive(false);
+                bombPart.gameObject.SetActive(false);
+                movePart.gameObject.SetActive(false);
+
+                if (tile.GetTileState().type == "Void")
+                {
+                    tileTypeText.text = "VOID";
+                }
+                else if(tile.GetTileState().type == "VerticalBridge" || tile.GetTileState().type == "HorizontalBridge" || tile.GetTileState().type == "DoubleBridge")
+                {
+                    tileTypeText.text = "BRIDGE";
+                }
+                else if(tile.GetTileState().type == "StairsNS" || tile.GetTileState().type == "StairsSN" || tile.GetTileState().type == "StairsEW" || tile.GetTileState().type == "StairsWE")
+                {
+                    tileTypeText.text = "STAIRS";
+                }
+
+                return;
+            }
 
 
             selectedTile = tile;
             posText.text = tile.TilePosText;
+            posImage.gameObject.SetActive(true);
             posImage.enabled = true;
             Debug.Log("send message: xxxxo onclick");
             EventBus.Publish(
@@ -575,7 +604,16 @@ public class MovePanel : MonoBehaviour
                     }
                 )
             );
+            moveImage.gameObject.SetActive( false );
+            bombPart.gameObject.SetActive( true );
+            movePart.gameObject.SetActive( true );
+            tileTypeText.text = "";
+            //movePart.rect.Set(-150, movePart.rect.y, movePart.rect.width, movePart.rect.height);
+            movePart.localPosition = new Vector3(-150, movePart.localPosition.y, movePart.localPosition.z);
+            RectTransform posRect = posImage.gameObject.GetComponent<RectTransform>();
+            posRect.localPosition = new Vector3(0, posRect.localPosition.y, posRect.localPosition.z);
 
+            UIGameManager.instance.bottomAttackPanel.gameObject.SetActive( false );
 
             for (int i = 0; i < tile.transform.childCount; i++)
             {
@@ -587,24 +625,62 @@ public class MovePanel : MonoBehaviour
 
                     if (!item.GetComponent<Chest>().isItemBag)
                     {
-                        posText.text = "Item Box";
+                        posText.text = "ITEM BOX";
                     } 
                     else
                     {
-                        posText.text = "Item Box";
+                        posText.text = "ITEM BOX";
                     }
-                } 
+                    movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
+                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+
+                    moveImage.sprite = GlobalResources.instance.itemBag;
+                    moveImage.gameObject.SetActive(true);
+                    bombPart.gameObject.SetActive(false);
+                }
                 else if(item.GetComponent<Portal>() != null )
                 {
                     posImage.enabled = false;
 
-                    posText.text = "Portal";
+                    posText.text = "PORTAL";
+                    movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
+                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+
+                    moveImage.sprite = GlobalResources.instance.portal;
+                    moveImage.gameObject.SetActive(true);
+                    bombPart.gameObject.SetActive(false);
                 }
                 else if(item.GetComponent<Merchant>() != null )
                 {
                     posImage.enabled = false;
 
-                    posText.text = "Merchant";
+                    posText.text = "MERCHANT";
+                    movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
+                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+
+                    moveImage.sprite = GlobalResources.instance.merchant;
+                    moveImage.gameObject.SetActive(true);
+                    bombPart.gameObject.SetActive(false);
+                }
+                else if(item.GetComponent<UFB.Character.CharacterController>() != null)
+                {
+                    UFB.Character.CharacterController controller = item.GetComponent<UFB.Character.CharacterController>();
+                    //UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                    //UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
+                    UIGameManager.instance.movePanel.gameObject.SetActive(false);
+                    UIGameManager.instance.bottomAttackPanel.gameObject.SetActive(false);
+                    UIGameManager.instance.tapSelfPanel.gameObject.SetActive(false);
+
+                    if(controller.State.type == (int) USER_TYPE.MONSTER)
+                    {
+                        UIGameManager.instance.bottomAttackPanel.Init(controller.State);
+                    }
+                    else if(controller.State.type == (int)USER_TYPE.USER)
+                    {
+                        UIGameManager.instance.tapSelfPanel.InitPanel();
+                        /*UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                        UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);*/
+                    }
                 }
             }
 

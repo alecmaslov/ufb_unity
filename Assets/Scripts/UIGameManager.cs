@@ -81,6 +81,10 @@ public class UIGameManager : MonoBehaviour
 
     public SpawnListPanel spawnListPanel;
 
+    public BottomAttackPanel bottomAttackPanel;
+
+    public TapSelfPanel tapSelfPanel;
+
     #region public values
 
     public float curTurnTime = GlobalDefine.TURN_TIME;
@@ -259,9 +263,13 @@ public class UIGameManager : MonoBehaviour
         {
             stackTurnStartPanel.OnLanuchDiceRoll(e);
         }
-        else if (defencePanel.gameObject.activeSelf) 
+        else if (defencePanel.gameObject.activeSelf)
         {
             defencePanel.OnLanuchDiceRoll(e);
+        }
+        else if (bottomAttackPanel.gameObject.activeSelf) 
+        {
+            bottomAttackPanel.OnLanuchDiceRoll(e);
         }
         else
         {

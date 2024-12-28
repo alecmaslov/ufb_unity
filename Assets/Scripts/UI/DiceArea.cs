@@ -140,7 +140,14 @@ public class DiceArea : MonoBehaviour
                 {
                     if(UIGameManager.instance.isPlayerTurn)
                     {
-                        UIGameManager.instance.attackPanel.OnFinishEnemy();
+                        if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                        {
+                            UIGameManager.instance.bottomAttackPanel.OnFinishEnemy();
+                        }
+                        else
+                        {
+                            UIGameManager.instance.attackPanel.OnFinishEnemy();
+                        }
                     }
                     else
                     {
@@ -152,6 +159,10 @@ public class DiceArea : MonoBehaviour
                     if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
                     {
                         UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+                    }
+                    else if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf) 
+                    {
+                        UIGameManager.instance.bottomAttackPanel.OnFinishDice();
                     }
                     else
                     {

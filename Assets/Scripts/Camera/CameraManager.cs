@@ -51,15 +51,15 @@ public class CameraManager : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
-        _cinemachineFreeLook.LookAt = target;
-        _cinemachineFreeLook.Follow = target;
-        cameraTarget.position = target.position;
+        //_cinemachineFreeLook.LookAt = target;
+        //_cinemachineFreeLook.Follow = target;
+        //cameraTarget.position = target.position;
     }
 
     public void SetEnemyTarget(Transform target)
     {
-        _cinemachineFreeLook.LookAt = target;
-        cameraTarget.position = target.position;
+        //_cinemachineFreeLook.LookAt = target;
+        //cameraTarget.position = target.position;
     }
 
     private void Update()

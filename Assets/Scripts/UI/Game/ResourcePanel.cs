@@ -86,18 +86,6 @@ namespace UFB.UI
         [SerializeField]
         ItemDetailPanel itemsDetailPanel;
 
-
-        private void OnEnable()
-        {
-            InitResoureData();
-        }
-
-        private void OnDisable()
-        {
-            
-        }
-
-
         private void Awake()
         {
             if (instance == null)
@@ -127,17 +115,16 @@ namespace UFB.UI
                     );
             };
 
-            InitResoureData();
+            InitResoureData(e);
         }
 
-        public void InitResoureData()
+        public void InitResoureData(CharacterState characterState)
         {
             foreach(var si in stackItems)
             {
                 si.count.text = "0";
             }
 
-            CharacterState characterState = UIGameManager.instance.controller.State;
 
             coinText.text = characterState.stats.coin.ToString();
             itemBagText.text = characterState.stats.bags.ToString();
@@ -208,6 +195,9 @@ namespace UFB.UI
             int crystalPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
             crystalText.text = crystalPieceNum.ToString();
             crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
+
+            Debug.Log($"heartPieceNum: {heartPieceNum}, crystalPieceNum: {crystalPieceNum} ");
+
         }
 
         public void OnBombItemDetailClicked()

@@ -89,7 +89,35 @@ namespace UFB.Interactions
             _gameInput.OrbitView.TouchPress.started += OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
             //_gameInput.OrbitView.TapSelect.performed += OnTapSelect;
+            //_gameInput.OrbitView.MultitouchHold.started += MultitouchHold_started;
             _gameInput.Enable();
+        }
+
+        private float doubleTouchTime = 0.3f; // Time window for double touch
+        private float lastTouchTime = 0f;      // Time of the last touch
+
+        private void MultitouchHold_started(InputAction.CallbackContext obj)
+        {
+
+            Vector2 pointerPosition = _gameInput.OrbitView.PointerPosition.ReadValue<Vector2>();
+            Vector3 position3D = new Vector3(pointerPosition.x, pointerPosition.y, -4f);
+            Ray ray = CameraManager.instance.cam.ScreenPointToRay(position3D);
+            RaycastHit hit;
+
+            Debug.Log("Double clicked");
+
+            // Check if the click is on a UI element
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                    {
+                        OnRaycastDBClicked(hit.transform, clickable);
+                    }
+                }
+            }
+
         }
 
         private void OnDisable()
@@ -99,11 +127,24 @@ namespace UFB.Interactions
             _gameInput.OrbitView.TouchPress.started -= OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started -= OnMouseClickStarted;
             //_gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
+            //_gameInput.OrbitView.MultitouchHold.started -= OnTapSelect;
             _gameInput.Disable();
         }
 
         private void OnTapSelect(InputAction.CallbackContext ctx)
         {
+            // Check if the time since the last touch is within the double touch time window
+            if (Time.time - lastTouchTime < doubleTouchTime)
+            {
+                // Double touch detected
+                MultitouchHold_started(ctx);
+                lastTouchTime = Time.time;
+                return;
+            }
+
+            // Update the time of the last touch
+            lastTouchTime = Time.time;
+
             Debug.Log(
                 $"Tap select performed | {ctx.ReadValue<float>()} | {_gameInput.OrbitView.PointerPosition.ReadValue<Vector2>()}"
             );
@@ -266,6 +307,44 @@ namespace UFB.Interactions
                         }
                     )
                 );
+        }
+
+        private void OnRaycastDBClicked(Transform transform, IClickable clickable)
+        {
+            if (Mode != InteractionMode.SelectItem)
+            {
+                return;
+            }
+            if (isMoveDirection)
+            {
+                clickable.OnClick();
+                //return;
+            }
+
+            string playerId = CharacterManager.Instance.SelectedCharacter.Id;
+
+            string tileId = transform.GetComponent<Tile>().Id;
+            Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
+
+            if (tile != null)
+            {
+                Debug.Log("xxxx: xx: xxx");
+                if (!isSpawn)
+                {
+                    for (int i = 0; i < tile.transform.childCount; i++)
+                    {
+                        GameObject item = tile.transform.GetChild(i).gameObject;
+
+                        if (item.GetComponent<CharacterController>() != null)
+                        {
+                            CharacterController controller = item.GetComponent<CharacterController>();
+                            UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                            UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
+                        }
+                    }
+                }
+            }
+
         }
 
         public void ToggleLockOrbit()

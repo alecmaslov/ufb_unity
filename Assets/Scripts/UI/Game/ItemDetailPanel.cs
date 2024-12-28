@@ -57,7 +57,14 @@ public class ItemDetailPanel : MonoBehaviour
             item.count.text = count.ToString();
         }
         
-        itemGroupText.text = header + $"({total}/{limit})";
+        if(type == 2)
+        {
+            itemGroupText.text = header;
+        }
+        else
+        {
+            itemGroupText.text = header + $"({total}/{limit})";
+        }
 
         gameObject.SetActive(true);
     }

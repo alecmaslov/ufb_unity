@@ -29,7 +29,11 @@ public class PowerMoveItem : MonoBehaviour
         InitCostList();
 
         moveName.text = powerMove.name;
-        image.sprite = GlobalResources.instance.powers[powerMove.powerImageId];
+        if (image != null) 
+        { 
+            image.sprite = GlobalResources.instance.powers[powerMove.powerImageId];
+        }
+        
 
         foreach (var cost in powerMove.costList)
         {

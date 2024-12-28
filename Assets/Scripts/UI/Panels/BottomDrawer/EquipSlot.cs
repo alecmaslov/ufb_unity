@@ -38,7 +38,20 @@ namespace UFB.UI
         {
             if(_item != null)
             {
-                UIGameManager.instance.powerMovePanel.Init(_item, this, powerMoves);
+                if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf) 
+                {
+                    
+                    UIGameManager.instance.bottomAttackPanel.InitPowermove(_item, this, powerMoves);
+                }
+                else if(UIGameManager.instance.tapSelfPanel.gameObject.activeSelf)
+                {
+                    UIGameManager.instance.tapSelfPanel.InitPowermove(_item, this, powerMoves);
+                }
+                else
+                {
+                    UIGameManager.instance.powerMovePanel.Init(_item, this, powerMoves);
+                }
+            
             } 
             else
             {
