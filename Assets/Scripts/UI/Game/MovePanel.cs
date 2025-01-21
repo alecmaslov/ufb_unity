@@ -151,6 +151,7 @@ public class MovePanel : MonoBehaviour
     {
         gameObject.SetActive(true);
         explosionBtn.SetActive(false);
+        UIGameManager.instance.tapSelfPanel.gameObject.SetActive(false);
         posText.text = "";
         energyText.text = "";
         bombEngeryText.text = "";
@@ -193,6 +194,15 @@ public class MovePanel : MonoBehaviour
 
     public void OnConfirm()
     {
+        int energyNeededCount = Mathf.Abs(int.Parse(energyText.text));
+
+        if(character.State.stats.energy.current < energyNeededCount)
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "Energy is not enough.");
+            return;
+        }
+        
+
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
@@ -549,6 +559,7 @@ public class MovePanel : MonoBehaviour
     {
         if(!gameObject.activeSelf)
         {
+            UIGameManager.instance.OnOpenBottomPanel();
             Show();
         }
         

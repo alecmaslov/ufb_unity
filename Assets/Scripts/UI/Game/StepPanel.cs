@@ -19,6 +19,7 @@ public class StepPanel : MonoBehaviour
     GameObject resourcePanel;
 
     public GameObject[] punchBtns;
+    public Text[] textBtns;
 
     private void Awake()
     {
@@ -52,10 +53,10 @@ public class StepPanel : MonoBehaviour
             }
         }
 
-        foreach (var item in punchBtns)
+        /*foreach (var item in punchBtns)
         {
             item.SetActive(isPunch);
-        }
+        }*/
     }
 
     public void OnMoveBtn()
@@ -90,8 +91,24 @@ public class StepPanel : MonoBehaviour
 
             if(type == ITEM.Mana)
             {
-                
+                textBtns[0].text = item.count.ToString();
             }
+            else if(type == ITEM.Melee)
+            {
+                textBtns[1].text = item.count.ToString();
+            }
+
+            item.OnCountChange((short newCount, short oldCount) =>
+            {
+                if (type == ITEM.Mana)
+                {
+                    textBtns[0].text = item.count.ToString();
+                }
+                else if (type == ITEM.Melee)
+                {
+                    textBtns[1].text = item.count.ToString();
+                }
+            });
 
         });
     }

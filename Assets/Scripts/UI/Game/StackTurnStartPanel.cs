@@ -64,6 +64,8 @@ public class StackTurnStartPanel : MonoBehaviour
         }
 
         stackItems.Remove(stack);
+
+        StartCoroutine(StartDiceRoll());
     }
 
     public void OnSelectDice()
@@ -117,4 +119,9 @@ public class StackTurnStartPanel : MonoBehaviour
         }
     }
 
+    IEnumerator StartDiceRoll()
+    {
+        yield return new WaitForSeconds(1f);
+        OnSelectDice();
+    }
 }

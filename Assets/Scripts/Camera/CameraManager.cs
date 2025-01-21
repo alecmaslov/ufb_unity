@@ -2,12 +2,19 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UI;
 
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager instance;
     
+    public GraphicRaycaster ui_raycaster;
+    PointerEventData click_data;
+    List<RaycastResult> click_results;
+
+    [HideInInspector]
     public Camera cam;
     public CinemachineInputProvider _inputProvider;
     public CinemachineFreeLook _cinemachineFreeLook;
@@ -37,6 +44,8 @@ public class CameraManager : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        click_data = new PointerEventData(EventSystem.current);
+        click_results = new List<RaycastResult>();
     }
 
     public void OnActiveInputAction()
@@ -62,11 +71,38 @@ public class CameraManager : MonoBehaviour
         //cameraTarget.position = target.position;
     }
 
+    public bool IsUIClicked = false;
+
     private void Update()
     {
         _cinemachineFreeLook.enabled = UIGameManager.instance.IsCharacterCameraControl();
 
-        if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            click_data.position = touch.position;
+            click_results.Clear();
+
+            ui_raycaster.Raycast(click_data, click_results);
+
+            foreach (RaycastResult result in click_results)
+            {
+                Debug.Log($"UI element: {result.gameObject.name}");
+            }
+
+            if(click_results.Count > 0)
+            {
+                IsUIClicked = true;
+                return;
+            }
+            else
+            {
+                IsUIClicked = false;
+            }
+        }
+
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
             handleMobileControl();
         } 
@@ -197,9 +233,27 @@ public class CameraManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             ray = Camera.main.ScreenPointToRay(touch.position);
+            click_data.position = touch.position;
+            click_results.Clear();
+
+            ui_raycaster.Raycast(click_data, click_results);
+
+            foreach (RaycastResult result in click_results)
+            {
+                Debug.Log($"UI element: {result.gameObject.name}");                
+            }
+
         }
 
         Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Debug.Log(hit.collider.gameObject.name);
+        }
+
+
+
 
         /*// Check if the ray hits an object in the scene
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -212,6 +266,9 @@ public class CameraManager : MonoBehaviour
             // Move the object towards the mouse position
             cameraTarget.position += direction * speed * Time.deltaTime;
         }*/
+
+
+
 
         // Handle zoom (pinch) and drag
         if (Input.touchCount == 1)
@@ -265,6 +322,32 @@ public class CameraManager : MonoBehaviour
             _cinemachineFreeLook.m_XAxis.m_MaxSpeed = 0;
             _cinemachineFreeLook.m_YAxis.m_MaxSpeed = 0;
 /*        }*/
+    }
+
+
+    public void OnUIClicked()
+    {
+        Touch touch = Input.GetTouch(0);
+        Ray ray = Camera.main.ScreenPointToRay(touch.position);
+        click_data.position = touch.position;
+        click_results.Clear();
+
+        ui_raycaster.Raycast(click_data, click_results);
+
+        foreach (RaycastResult result in click_results)
+        {
+            Debug.Log($"UI element: {result.gameObject.name}");
+        }
+
+        if (click_results.Count > 0)
+        {
+            IsUIClicked = true;
+            return;
+        }
+        else
+        {
+            IsUIClicked = false;
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UFB.Character;
 using UFB.Events;
 using UFB.Items;
@@ -16,6 +17,7 @@ public class BottomAttackPanel : MonoBehaviour
     public Text monsterNameText;
 
     public GameObject detailPart;
+    public GameObject punchPart;
     public PowerMoveItem powerMoveItem;
 
     public int idx = 0;
@@ -34,6 +36,7 @@ public class BottomAttackPanel : MonoBehaviour
     public GameObject playerDiceRect;
 
     public Image addStackImage;
+    public GameObject addedStackPart;
 
     public int diceTimes = 0;
 
@@ -41,19 +44,29 @@ public class BottomAttackPanel : MonoBehaviour
 
     public bool isEndAttack = false;
 
+    public Text stackCountText;
+
+
     public void Init(CharacterState state)
     {
         target = state;
+        monsterInfo.OnSelectedCharacterEvent(state);
+        InitMonsterInfo();
+
+        idx = 0;
+    }
+
+    void InitMonsterInfo()
+    {
         detailPart.SetActive(false);
         monsterInfo.gameObject.SetActive(true);
-        monsterInfo.OnSelectedCharacterEvent(state);
         gameObject.SetActive(true);
 
         enemyDiceRect.SetActive(false);
         playerDiceRect.SetActive(false);
         powermoveImage.gameObject.SetActive(false);
-
-        idx = 0;
+        powermoveImage.transform.parent.gameObject.SetActive(false);
+        punchPart.SetActive(false);
     }
 
     public void InitPowermove(Item item, EquipSlot slt, PowerMove[] _moves)
@@ -95,7 +108,109 @@ public class BottomAttackPanel : MonoBehaviour
 
     public void InitPunch()
     {
+        punchPart.SetActive(true);
+        detailPart.SetActive(false);
+        monsterInfo.gameObject.SetActive(false);
 
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
+                new RequestGetHighlightRect
+                {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                    powerMoveId = -1
+                }
+            )
+        );
+
+    }
+
+    public void OnPunchBtn(int type)
+    {
+        if (punchPart.activeSelf)
+        {
+
+            PowerMove pm = new PowerMove();
+            if (type == 0)
+            {
+                pm.id = -1;
+            }
+            else if (type == 1)
+            {
+                pm.id = -100;
+            }
+            
+            pm.name = "";
+            pm.powerImageId = 33;
+            pm.powerIds = new int[1];
+
+            Item item = new Item();
+            item.name = "";
+            item.count = 1;
+
+            if (type == 0)
+            {
+                item.id = (int)ITEM.Melee;
+            }
+            else if (type == 1)
+            {
+                item.id = (int)ITEM.Mana;
+            }
+
+            pm.result = new PowerMoveResult();
+
+            /*if (arrow != null)
+            {
+                pm.costList = new Item[2] {
+                    item,
+                    arrow,
+                };
+
+                ResultItem resultItem = new ResultItem();
+                if (arrow.id == (int)ITEM.FireArrow)
+                {
+                    resultItem.id = (int)STACK.Burn;
+                    resultItem.count = 1;
+                    pm.result.stacks = new ResultItem[1] { resultItem };
+                }
+                else if (arrow.id == (int)ITEM.BombArrow)
+                {
+                    pm.result.perkId = (int)PERK.PULL;
+                }
+                else if (arrow.id == (int)ITEM.IceArrow)
+                {
+                    resultItem.id = (int)STACK.Freeze;
+                    resultItem.count = 1;
+                    pm.result.stacks = new ResultItem[1] { resultItem };
+                }
+                else if (arrow.id == (int)ITEM.VoidArrow)
+                {
+                    resultItem.id = (int)STACK.Void;
+                    resultItem.count = 1;
+                    pm.result.stacks = new ResultItem[1] { resultItem };
+                }
+
+                pm.id -= arrow.id;
+                Debug.Log(pm.id);
+
+            }
+            else
+            {*/
+            pm.costList = new Item[1] {
+                item
+            };
+            /*}*/
+
+            pm.result.dice = (int)DICE_TYPE.DICE_4;
+            pm.light = 2;
+            pm.coin = 0;
+            pm.range = 1;
+
+            selectedPowermove = pm;
+
+            ConfirmAttack();
+
+        }
     }
 
     public void ConfirmAttack()
@@ -111,17 +226,38 @@ public class BottomAttackPanel : MonoBehaviour
         enemyStackImage.gameObject.SetActive(false);
         enemyDiceRect.SetActive(false);
 
+        if (selectedPowermove.result.stacks != null)
+        {
+            foreach (var stack in selectedPowermove.result.stacks)
+            {
+                addStackImage.sprite = GlobalResources.instance.stacks[stack.id];
+                addedStackPart.SetActive(true);
+                StartCoroutine(ResetAddedStackPart());
+            }
+        }
+
         totalDiceCount = 0;
         gameObject.SetActive(true);
+        detailPart.SetActive(false); 
+        punchPart.SetActive(false);
+        monsterInfo.gameObject.SetActive(true);
     }
 
     public void CancelAttack()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        InitMonsterInfo();
         if (UIGameManager.instance.punchPanel.gameObject.activeSelf)
         {
             UIGameManager.instance.punchPanel.InitArrow();
         }
+    }
+
+    public void CancelPunch()
+    {
+        InitMonsterInfo();
+        selectedPowermove = null;
+
     }
 
     public void OnSelectDice()
@@ -149,14 +285,18 @@ public class BottomAttackPanel : MonoBehaviour
     private EnemyDiceRollMessage enemyMessage;
     public void OnEnemyStackDiceRoll(EnemyDiceRollMessage e)
     {
+        Debug.Log( "enemy dice attack start:::" );
         enemyMessage = e;
         //powermoveImage.gameObject.SetActive(false);
         playerDiceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
         enemyStackImage.gameObject.SetActive(true);
+        enemyStackImage.transform.parent.gameObject.SetActive(true);
 
-        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, true);
+        stackCountText.text = target.stacks[e.stackId].count.ToString();
+
+        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, false, true);
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
 
         enemyDiceRect.SetActive(true);
@@ -170,6 +310,7 @@ public class BottomAttackPanel : MonoBehaviour
         data[0].type = DICE_TYPE.DICE_4;
         data[0].diceCount = diceCount;
         enemyStackImage.gameObject.SetActive(false);
+        enemyStackImage.transform.parent.gameObject.SetActive(false);
         DiceArea.instance.LaunchDice(data, true);
     }
 
@@ -190,6 +331,7 @@ public class BottomAttackPanel : MonoBehaviour
             playerDiceRect.SetActive(true);
             DiceArea.instance.SetDiceType((DICE_TYPE)selectedPowermove.result.dice);
             powermoveImage.sprite = selectedPowermove.id < 0 ? GlobalResources.instance.punch : GlobalResources.instance.powers[selectedPowermove.powerImageId];
+            StartCoroutine(OnStartDiceRect(0.1f));
         }
         else if (selectedPowermove.result.perkId == (int)PERK.VAMPIRE)
         {
@@ -197,6 +339,7 @@ public class BottomAttackPanel : MonoBehaviour
             playerDiceRect.SetActive(true);
             DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
             powermoveImage.sprite = GlobalResources.instance.perks[(int)PERK.VAMPIRE];
+            StartCoroutine(OnStartDiceRect(0.1f));
         }
         else
         {
@@ -204,6 +347,7 @@ public class BottomAttackPanel : MonoBehaviour
             playerDiceRect.SetActive(false);
         }
         powermoveImage.gameObject.SetActive(true);
+        powermoveImage.transform.parent.gameObject.SetActive(false);
 
     }
 
@@ -251,6 +395,7 @@ public class BottomAttackPanel : MonoBehaviour
     public void OnFinishEnemy()
     {
         enemyStackImage.gameObject.SetActive(false);
+        enemyStackImage.transform.parent.gameObject.SetActive(false);
         int diceCount = DiceArea.instance.diceResultCount;
         EventBus.Publish(
             RoomSendMessageEvent.Create(
@@ -275,11 +420,22 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator EndAttackPanel()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         if (isEndAttack)
         {
             CancelAttack();
         }
     }
 
+    IEnumerator OnStartDiceRect(float delay = 2f)
+    {
+        yield return new WaitForSeconds(delay);
+        OnSelectDice();
+    }
+
+    IEnumerator ResetAddedStackPart()
+    {
+        yield return new WaitForSeconds(2f);
+        addedStackPart.SetActive(false);
+    }
 }

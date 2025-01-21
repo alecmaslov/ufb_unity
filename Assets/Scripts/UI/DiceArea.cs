@@ -20,12 +20,17 @@ public class DiceArea : MonoBehaviour
     public int diceResultCount = -1;
     private bool isEnemyDiceTurn = false;
 
+    public Color originDiceColor;
+    public Color enemyDiceColor;
+
+    public Material[] diceMaterials;
+
     private void Awake()
     {
         instance = this;
     }
 
-    public void SetDiceType(DICE_TYPE _diceType, bool isEnemyTurn = false)
+    public void SetDiceType(DICE_TYPE _diceType, bool isEnemyTurn = false, bool isEnemyColor = false)
     {
         foreach(var ob in diceObject) {
             ob.gameObject.SetActive(false);
@@ -35,11 +40,19 @@ public class DiceArea : MonoBehaviour
         Transform first = firstPosObject;
         Transform second = secondPosObject;
 
+
+        foreach (var item in diceMaterials)
+        {
+            item.color = isEnemyColor? enemyDiceColor : originDiceColor;
+        }
+
         if (isEnemyTurn) 
         { 
             first = thirdPosObject;
             second = fourthPosObject;
         }
+
+
 
         if(diceType == DICE_TYPE.DICE_6 || diceType == DICE_TYPE.DICE_4)
         {
@@ -136,49 +149,57 @@ public class DiceArea : MonoBehaviour
             bool isChecked = diceObject[0].isStoped && diceObject[1].isStoped && diceObject[2].isStoped;
             if (isChecked)
             {
-                if(isEnemyDiceTurn)
-                {
-                    if(UIGameManager.instance.isPlayerTurn)
-                    {
-                        if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
-                        {
-                            UIGameManager.instance.bottomAttackPanel.OnFinishEnemy();
-                        }
-                        else
-                        {
-                            UIGameManager.instance.attackPanel.OnFinishEnemy();
-                        }
-                    }
-                    else
-                    {
-                        // DEFENCE PANEL
-                    }
-                } 
-                else if(UIGameManager.instance.isPlayerTurn)
-                {
-                    if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
-                    {
-                        UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
-                    }
-                    else if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf) 
-                    {
-                        UIGameManager.instance.bottomAttackPanel.OnFinishDice();
-                    }
-                    else
-                    {
-                        UIGameManager.instance.attackPanel.OnFinishDice();
-                    }
-                }
-                else
-                {
-                    // DEFENCE PANEL
+                StartCoroutine(EndDiceAnim());
 
-                    //UIGameManager.instance.defencePanel.OnFinishDice();
-                }
                 isLaunched = false;
             }
         }
 
+    }
+
+    IEnumerator EndDiceAnim()
+    {
+        yield return new WaitForSeconds(2f);
+
+        if (isEnemyDiceTurn)
+        {
+            if (UIGameManager.instance.isPlayerTurn)
+            {
+                if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                {
+                    UIGameManager.instance.bottomAttackPanel.OnFinishEnemy();
+                }
+                else
+                {
+                    UIGameManager.instance.attackPanel.OnFinishEnemy();
+                }
+            }
+            else
+            {
+                // DEFENCE PANEL
+            }
+        }
+        else if (UIGameManager.instance.isPlayerTurn)
+        {
+            if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+            {
+                UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+            }
+            else if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+            {
+                UIGameManager.instance.bottomAttackPanel.OnFinishDice();
+            }
+            else
+            {
+                UIGameManager.instance.attackPanel.OnFinishDice();
+            }
+        }
+        else
+        {
+            // DEFENCE PANEL
+
+            //UIGameManager.instance.defencePanel.OnFinishDice();
+        }
     }
 
 }

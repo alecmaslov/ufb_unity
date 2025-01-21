@@ -12,12 +12,15 @@ using UFB.Entities;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UFB.Interactions;
+using System.Collections;
+using TMPro;
 
 
 public class UIGameManager : MonoBehaviour
 {
     public static UIGameManager instance;
 
+    [HideInInspector]
     public UFB.Character.CharacterController controller;
 
     public SpawnPanel spawnPanel;
@@ -83,7 +86,11 @@ public class UIGameManager : MonoBehaviour
 
     public BottomAttackPanel bottomAttackPanel;
 
+    public BottomDefeatPanel bottomDefeatPanel;
+
     public TapSelfPanel tapSelfPanel;
+
+    public RectTransform bottomPanel;
 
     #region public values
 
@@ -183,7 +190,8 @@ public class UIGameManager : MonoBehaviour
         turnPanel.InitData(curTurnTime);
         if (isPlayerTurn) 
         {
-            bottomDrawer.gameObject.SetActive(true);
+            bottomDefeatPanel.gameObject.SetActive(false);
+            bottomDrawer.SetActive(true);
             reviveStack.gameObject.SetActive(false);
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
@@ -197,7 +205,11 @@ public class UIGameManager : MonoBehaviour
         } 
         else
         {
-            bottomDrawer.gameObject.SetActive(false);
+            bottomAttackPanel.gameObject.SetActive(false);
+            movePanel.gameObject.SetActive(false);
+            tapSelfPanel.gameObject.SetActive(false);
+            equipBonusPanel.gameObject.SetActive(false);
+            // bottomDrawer.SetActive(false);
         }
     }
 
@@ -267,6 +279,10 @@ public class UIGameManager : MonoBehaviour
         {
             defencePanel.OnLanuchDiceRoll(e);
         }
+        else if (bottomDefeatPanel.gameObject.activeSelf) 
+        {
+            bottomDefeatPanel.OnLanuchDiceRoll(e);
+        }
         else if (bottomAttackPanel.gameObject.activeSelf) 
         {
             bottomAttackPanel.OnLanuchDiceRoll(e);
@@ -281,11 +297,14 @@ public class UIGameManager : MonoBehaviour
     {
         if (isPlayerTurn) 
         { 
-            attackPanel.OnEnemyStackDiceRoll(e);
+            //attackPanel.OnEnemyStackDiceRoll(e);
+            bottomAttackPanel.OnEnemyStackDiceRoll(e);
         }
         else
         {
-            defencePanel.OnEnemyStackDiceRoll(e);
+            //defencePanel.OnEnemyStackDiceRoll(e);
+            bottomDefeatPanel.OnEnemyStackDiceRoll(e);
+
         }
     }
 
@@ -350,12 +369,14 @@ public class UIGameManager : MonoBehaviour
     {
         CharacterState origin = CharacterManager.Instance.GetCharacterFromId(e.originId).State;
         CharacterState target = CharacterManager.Instance.GetCharacterFromId(e.targetId).State;
-        defencePanel.Init(e.pm, origin, target);
+        //defencePanel.Init(e.pm, origin, target);
+        bottomDefeatPanel.Init(e.pm, origin, target);
     }
 
     private void OnReceiveAIDefenceEndAttackMessage(EndAttackMessage e)
     {
-        defencePanel.OnClosePanel();
+        // defencePanel.OnClosePanel();
+        bottomDefeatPanel.OnClosePanel();
     }
 
     private void OnReceiveDeadMonsterMessage(DeadMonsterMessage e) 
@@ -394,10 +415,12 @@ public class UIGameManager : MonoBehaviour
         stackScoreText.OnReceiveMessageData(message);
 
         attackPanel.InitCharacterState(controller.State);
-        TopStatusBar.OnSelectedCharacterEvent(controller.State);
         ResourcePanel.OnCharacterValueEvent(controller.State);
         StepPanel.OnCharacterStateChanged(controller.State);
         equipPanel.InitEquipList(controller.State);
+
+        TopStatusBar.OnSelectedCharacterEvent(CharacterManager.Instance.PlayerCharacter.State);
+
     }
 
     public int GetItemCount(ITEM type)
@@ -454,6 +477,53 @@ public class UIGameManager : MonoBehaviour
     {
         isMoveTileStatus = !isMoveTileStatus;
     }
+
+    public void OnNotificationMessage(string title, string message)
+    {
+        NotificationMessage _message = new NotificationMessage();
+        _message.message = message;
+        _message.type = title;
+
+        EventBus.Publish(new RoomReceieveMessageEvent<NotificationMessage>(_message));
+    }
+
+    public void OnOpenBottomPanel()
+    {
+        if(bottomPanel.rect.yMin == 0)
+        {
+            StartCoroutine(TweenToPosition(0, 420, 2));
+        }
+    }
+
+    public void OnCloseBottomPanel() 
+    {
+        if(bottomPanel.rect.yMax == 420)
+        {
+            StartCoroutine(TweenToPosition(420, 0, 2));
+        }
+    }
+
+    private IEnumerator TweenToPosition(float start, float end, float duration)
+    {
+        float elapsedTime = 0f;
+
+        float top = start; // your desired top offset  
+        float bottom = start; // your desired bottom offset  
+
+        while (elapsedTime < duration)
+        {
+            float x = Mathf.Lerp(start, end, (elapsedTime / duration));
+
+            bottomPanel.offsetMin = new Vector2(bottomPanel.offsetMin.x, x);
+            bottomPanel.offsetMax = new Vector2(bottomPanel.offsetMax.x, -x);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        bottomPanel.offsetMin = new Vector2(bottomPanel.offsetMin.x, end);
+        bottomPanel.offsetMax = new Vector2(bottomPanel.offsetMax.x, -end);
+    }
+
 
     #region Unity Function
 

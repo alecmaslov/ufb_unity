@@ -133,6 +133,11 @@ namespace UFB.Interactions
 
         private void OnTapSelect(InputAction.CallbackContext ctx)
         {
+
+            CameraManager.instance.OnUIClicked();
+
+            if (CameraManager.instance.IsUIClicked) return;
+
             // Check if the time since the last touch is within the double touch time window
             if (Time.time - lastTouchTime < doubleTouchTime)
             {
@@ -257,7 +262,7 @@ namespace UFB.Interactions
 
                 }
                 Debug.Log("xxxx: xx: xxx");
-                if (!isSpawn && uiGameManager.isMoveTileStatus)
+                if (!isSpawn/* && uiGameManager.isMoveTileStatus*/ && uiGameManager.isPlayerTurn)
                 {
                     UIGameManager.instance.movePanel.OnClickTile(tile);
                 }
