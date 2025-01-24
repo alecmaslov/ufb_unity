@@ -15,6 +15,8 @@ namespace UFB.UI
         public Menu selectCharacterMenu;
         public Menu settingMenu;
 
+        public AccountMenuPanel accountMenuPanel;
+
         // public override async void Start()
         // {
         //     base.Start();
@@ -64,6 +66,11 @@ namespace UFB.UI
         {
             _menuManager.OpenMenu(selectCharacterMenu);
             ((SelectCharacterMenu)selectCharacterMenu).menuType = 1;
+        }
+
+        public void OnAccountGameButton()
+        {
+            accountMenuPanel.InitPanel();
         }
 
         public void OnSettingsButton()
