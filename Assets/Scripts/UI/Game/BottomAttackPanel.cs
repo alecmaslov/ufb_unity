@@ -246,6 +246,13 @@ public class BottomAttackPanel : MonoBehaviour
     public void CancelAttack()
     {
         //gameObject.SetActive(false);
+        if (UIGameManager.instance.bottomDrawer.IsExpanded)
+        {
+            UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+            HighlightRect.Instance.ClearHighLightRect();
+        }
+
+
         InitMonsterInfo();
         if (UIGameManager.instance.punchPanel.gameObject.activeSelf)
         {

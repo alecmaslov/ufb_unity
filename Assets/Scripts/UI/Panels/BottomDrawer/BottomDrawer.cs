@@ -23,6 +23,8 @@ namespace UFB.UI
         private Coroutine _animationCoroutine;
         private RectTransform _rectTransform;
 
+        public bool IsExpanded { get { return _isExpanded; } }
+
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
@@ -48,6 +50,7 @@ namespace UFB.UI
                     _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, closedPixelHeight);
                 }
             );
+            // HighlightRect.Instance.ClearHighLightRect();
         }
 
         public void OpenBottomDrawer()
@@ -69,5 +72,6 @@ namespace UFB.UI
                 }
             );
         }
+
     }
 }

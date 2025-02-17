@@ -33,7 +33,7 @@ public class TargetScreenPanel : MonoBehaviour
         InitResultList();
 
         gameObject.SetActive(true);
-        UIGameManager.instance.bottomDrawer.SetActive(false);
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(false);
     }
 
     public void SetTargetImage()
@@ -261,7 +261,7 @@ public class TargetScreenPanel : MonoBehaviour
     public void OnClosePanel()
     {
         gameObject.SetActive(false);
-        UIGameManager.instance.bottomDrawer.SetActive(true);
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
         HighlightRect.Instance.ClearHighLightRect();
         CameraManager.instance.SetEnemyTarget(UIGameManager.instance.controller.transform);
         UIGameManager.instance.powerMovePanel.gameObject.SetActive(true);

@@ -131,6 +131,9 @@ namespace UFB.Interactions
             _gameInput.Disable();
         }
 
+        bool isTileClicked = false;
+
+
         private void OnTapSelect(InputAction.CallbackContext ctx)
         {
 
@@ -150,6 +153,8 @@ namespace UFB.Interactions
             // Update the time of the last touch
             lastTouchTime = Time.time;
 
+            isTileClicked = false;
+
             Debug.Log(
                 $"Tap select performed | {ctx.ReadValue<float>()} | {_gameInput.OrbitView.PointerPosition.ReadValue<Vector2>()}"
             );
@@ -162,6 +167,11 @@ namespace UFB.Interactions
             Vector2 pointerPosition = _gameInput.OrbitView.PointerPosition.ReadValue<Vector2>();
             Debug.Log($"Touch position: {pointerPosition.x} {pointerPosition.y}");
             RaycastObjects(pointerPosition);
+
+            if (isTileClicked)
+            {
+                uiGameManager.bottomDrawer.OpenBottomDrawer();
+            }
         }
 
 
@@ -203,6 +213,7 @@ namespace UFB.Interactions
             string tileId = transform.GetComponent<Tile>().Id;
             Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
 
+
             if (tile != null)
             {
                 if(isSpawn)
@@ -231,42 +242,30 @@ namespace UFB.Interactions
                         if(!item.GetComponent<Chest>().isItemBag)
                         {
                             item.GetComponent<Chest>().OnClick();
-                            HighlightRect.Instance.ClearHighLightRect();
-                            Events.EventBus.Publish(
-                                RoomSendMessageEvent.Create(
-                                    "initSpawnMove",
-                                    new RequestSpawnMessage
-                                    {
-                                        tileId = tile.Id,
-                                        destination = tile.Coordinates,
-                                        playerId = playerId,
-                                    }
-                                )
-                            );
-                            uiGameManager.controller.InitMovePos(tile);
 
-                            ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
-                            Events.EventBus.Publish(
-                                new CameraOrbitAroundEvent(
-                                    ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
-                                    0.3f
-                                )
-                            );
-                            CameraManager.instance.SetTarget(uiGameManager.controller.transform);
-                            CameraManager.instance.OnActiveInputAction();
-                            isSpawn = false;
+                            UIGameManager.instance.selectSpawnPanel.InitSpawnData(tile, playerId);
+
                         }
-
                     }
-
 
                 }
                 Debug.Log("xxxx: xx: xxx");
                 if (!isSpawn/* && uiGameManager.isMoveTileStatus*/ && uiGameManager.isPlayerTurn)
                 {
-                    UIGameManager.instance.movePanel.OnClickTile(tile);
+                    if (UIGameManager.instance.bottomDrawer.IsExpanded) 
+                    { 
+                        UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+                        HighlightRect.Instance.ClearHighLightRect();
+                    }
+                    else
+                    {
+                        UIGameManager.instance.movePanel.OnClickTile(tile);
+                        isTileClicked = true;
+                    }
+
                 }
             }
+
 
 
             var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;

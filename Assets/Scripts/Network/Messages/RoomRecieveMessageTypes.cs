@@ -96,6 +96,7 @@ namespace UFB.Network.RoomMessageTypes
     {
         public string characterId;
         public PathStep[] path;
+        public int cost;
     }
 
     public class GetStackOnStartMessage : IReceiveMessage {

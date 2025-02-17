@@ -31,8 +31,8 @@ public class StackTurnStartPanel : MonoBehaviour
                 stackItems.Add(item);
             }
             isStackTurn = true;
-            InitDice();
             gameObject.SetActive(true);
+            InitDice();
         }
         else
         {

@@ -35,6 +35,8 @@ public class BottomDefeatPanel : MonoBehaviour
 
     public void Init(PowerMove _powermove, CharacterState origin, CharacterState target)
     {
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+
         //InitEnemyState(target);
         InitCharacterState(origin);
 
@@ -129,6 +131,13 @@ public class BottomDefeatPanel : MonoBehaviour
         enemyStackImage.transform.parent.gameObject.SetActive(false);
         redPanelImage.SetActive(false);
         gameObject.SetActive(false);
+
+        if (UIGameManager.instance.bottomDrawer.IsExpanded)
+        {
+            UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+            HighlightRect.Instance.ClearHighLightRect();
+        }
+
     }
 
     public void OnCancelBtnClicked()

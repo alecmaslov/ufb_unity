@@ -71,10 +71,16 @@ public class MovePanel : MonoBehaviour
     public Text bombEngeryText;
     public Image posImage;
 
+    public RectTransform energyPart;
     public RectTransform movePart;
     public RectTransform bombPart;
     public Image moveImage;
     public Text tileTypeText;
+
+    public GameObject defaultPart;
+    public GameObject lessPart;
+    public Text lessPartPosText;
+    public Text lessPartenergyText;
 
     private bool isLeft = true;
     private bool isRight = true;
@@ -250,8 +256,6 @@ public class MovePanel : MonoBehaviour
                     );
                 }
             }
-
-
         }
         else
         {
@@ -559,7 +563,7 @@ public class MovePanel : MonoBehaviour
     {
         if(!gameObject.activeSelf)
         {
-            UIGameManager.instance.OnOpenBottomPanel();
+            UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
             Show();
         }
         
@@ -581,6 +585,7 @@ public class MovePanel : MonoBehaviour
                 moveImage.gameObject.SetActive(false);
                 bombPart.gameObject.SetActive(false);
                 movePart.gameObject.SetActive(false);
+                energyPart.gameObject.SetActive(false);
 
                 if (tile.GetTileState().type == "Void")
                 {
@@ -601,6 +606,7 @@ public class MovePanel : MonoBehaviour
 
             selectedTile = tile;
             posText.text = tile.TilePosText;
+            lessPartPosText.text = tile.TilePosText;
             posImage.gameObject.SetActive(true);
             posImage.enabled = true;
             Debug.Log("send message: xxxxo onclick");
@@ -618,6 +624,7 @@ public class MovePanel : MonoBehaviour
             moveImage.gameObject.SetActive( false );
             bombPart.gameObject.SetActive( true );
             movePart.gameObject.SetActive( true );
+            energyPart.gameObject.SetActive( true );
             tileTypeText.text = "";
             //movePart.rect.Set(-150, movePart.rect.y, movePart.rect.width, movePart.rect.height);
             movePart.localPosition = new Vector3(-150, movePart.localPosition.y, movePart.localPosition.z);
@@ -636,16 +643,17 @@ public class MovePanel : MonoBehaviour
 
                     if (!item.GetComponent<Chest>().isItemBag)
                     {
-                        posText.text = "ITEM BOX";
+                        moveImage.sprite = GlobalResources.instance.treasureImage;
+                        posText.text = "TREASURE CHEST";
                     } 
                     else
                     {
+                        moveImage.sprite = GlobalResources.instance.itemBag;
                         posText.text = "ITEM BOX";
                     }
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
-                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+                    posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
 
-                    moveImage.sprite = GlobalResources.instance.itemBag;
                     moveImage.gameObject.SetActive(true);
                     bombPart.gameObject.SetActive(false);
                 }
@@ -655,9 +663,9 @@ public class MovePanel : MonoBehaviour
 
                     posText.text = "PORTAL";
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
-                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+                    posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
 
-                    moveImage.sprite = GlobalResources.instance.portal;
+                    moveImage.sprite = item.GetComponent<Portal>()._portalParameters.portalIndex == 0? GlobalResources.instance.blue_portal : GlobalResources.instance.green_portal;
                     moveImage.gameObject.SetActive(true);
                     bombPart.gameObject.SetActive(false);
                 }
@@ -667,7 +675,7 @@ public class MovePanel : MonoBehaviour
 
                     posText.text = "MERCHANT";
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
-                    posRect.localPosition = new Vector3(180, posRect.localPosition.y, posRect.localPosition.z);
+                    posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
 
                     moveImage.sprite = GlobalResources.instance.merchant;
                     moveImage.gameObject.SetActive(true);
@@ -712,14 +720,26 @@ public class MovePanel : MonoBehaviour
             Tile tile = gameBoard.Tiles[p.tileId];
             tiles.Add( tile );
         }
-        energyText.text = $"-{tiles.Count}";
-        bombEngeryText.text = $"-{tiles.Count - 1}";
+        energyText.text = $"-{m.cost}";
+        bombEngeryText.text = $"-{m.cost - 1}";
         HighlightRect.Instance.ClearHighLightRect();
         HighlightRect.Instance.SetHighLightForSpawn(tiles);
 
         if (tiles.Count > 1) 
         {
             bombPrevTile = tiles[tiles.Count - 2];
+        }
+
+        if (character.State.stats.energy.current < tiles.Count)
+        {
+            lessPartenergyText.text = $"{tiles.Count - character.State.stats.energy.current}";
+            lessPart.SetActive(true);
+            defaultPart.SetActive(false);
+        }
+        else
+        {
+            lessPart.SetActive(false);
+            defaultPart.SetActive(true);
         }
     }
 

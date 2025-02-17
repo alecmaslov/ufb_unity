@@ -29,9 +29,11 @@ public class GlobalResources : MonoBehaviour
     public Sprite punch;
 
     public Sprite itemBag;
+    public Sprite treasureImage;
     public Sprite merchant;
-    public Sprite portal;
-
+    public Sprite blue_portal;
+    public Sprite green_portal;
+    
     [Serializable]
     public class CraftPowerSystem
     {

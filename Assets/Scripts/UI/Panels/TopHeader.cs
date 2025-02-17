@@ -9,6 +9,7 @@ using UFB.Character;
 using UnityEngine.UI;
 using UFB.Map;
 using UFB.Items;
+using Unity.VisualScripting;
 
 namespace UFB.UI
 {

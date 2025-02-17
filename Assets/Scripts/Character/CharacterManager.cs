@@ -176,8 +176,7 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            //character.transform.position = new Vector3(-100, -100, 100);
-
+            character.transform.position = new Vector3(-100, -100, 100);
             EventBus.Publish(
                 new SetCameraPresetStateEvent
                 {
@@ -242,7 +241,8 @@ namespace UFB.Character
                 // if it's an NPC, don't play the intro
                 await character.Initialize(ufbCharacter, characterState, true);
                 _characters.Add(characterState.id, character);
-                
+
+                character.transform.localEulerAngles = new Vector3(0, 180, 0);
 
                 if (character.Id == _playerCharacterId)
                 {

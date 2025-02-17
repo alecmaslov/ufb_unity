@@ -4,6 +4,7 @@ using UFB.Character;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 public class TurnPanel : MonoBehaviour
@@ -12,15 +13,34 @@ public class TurnPanel : MonoBehaviour
     public Text topTurnTimeText;
 
     public Text desText;
+    public Image turnCharacterImage;
 
     public void InitData(float turnTime)
     {
         turnTimeText.text = Utility.GetTurnTimeString(turnTime);
         topTurnTimeText.text = Utility.GetTurnTimeString(turnTime);
-                
-        desText.text = UIGameManager.instance.isPlayerTurn? $"Your Turn!" : $"Monster Turn!";
-        
+
+        string characterName = UIGameManager.instance.controller.State.displayName;
+
+        desText.text = UIGameManager.instance.isPlayerTurn ? "YOUR TURN" : characterName;
+        Addressables
+        .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + UIGameManager.instance.controller.State.characterClass)
+        .Completed += (op) =>
+        {
+            if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+            {
+
+                turnCharacterImage.sprite = op.Result.avatar;
+            }
+            else
+            {
+                Debug.LogError("Failed to load character avatar: " + op.OperationException.Message);
+            }
+        };
         gameObject.SetActive(true);
+
+        StartCoroutine(ClosePanel());
+
     }
 
     public void SetTurnTime(float turnTime)
@@ -38,12 +58,20 @@ public class TurnPanel : MonoBehaviour
                     new RequestCharacterId
                     {
                         characterId = UIGameManager.instance.controller.Id,
-
                     }
                 )
             );
         }
 
         gameObject.SetActive(false);
+    }
+
+    IEnumerator ClosePanel()
+    {
+        yield return new WaitForSeconds(3f);
+        if (gameObject.activeSelf)
+        {
+            CloseTurnPanel();
+        }
     }
 }

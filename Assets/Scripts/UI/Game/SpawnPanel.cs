@@ -44,6 +44,10 @@ public class SpawnPanel : MonoBehaviour
     [SerializeField]
     Text moveText;
 
+    public Text healthText;
+    public Text energyText;
+
+
     [HideInInspector]
     [SerializeField]
     public UFB.Character.CharacterController character;
@@ -109,17 +113,18 @@ public class SpawnPanel : MonoBehaviour
 
         if(m.spawnId == "default")
         {
+            healthText.text = $"+3";
+            energyText.text = $"+3";
             InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.powers[powerIdx], coin.ToString());
         }
         else
         {
+            healthText.text = $"+2";
+            energyText.text = $"+2";
             InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.stacks[powerIdx], coin.ToString());
         }
 
-        if (!isSpawn)
-        {
-            OnConfirmClick();
-        }
+        OnConfirmClick();
 
         gameObject.SetActive(true);
     }
@@ -147,17 +152,45 @@ public class SpawnPanel : MonoBehaviour
         }
         else if(step == 1) 
         {
-            posPanel.SetActive(true);
+            // posPanel.SetActive(true);
             spawnConfirmPanel.SetActive(false);
             spawnImage.gameObject.SetActive(false);
             EventBus.Publish(
                 new SpawnItemEvent(tileId)
             );
+
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    "getSpawn",
+                    new RequestGetSpawnMessage
+                    {
+                        characterId = characterId,
+                        coinCount = coin,
+                        itemId = itemIdx,
+                        powerId = powerIdx,
+                        spawnId = _spawnId,
+                    }
+                )
+            );
+
+
+            if (!isSpawn)
+            {
+                movePanel.gameObject.SetActive(true);
+            }
+            else
+            {
+                sideStep.SetActive(true);
+            }
+            gameObject.SetActive(false);
+            Debug.Log("-----<<<<<<");
+            // moveText.text = "Move To";
+
         }
         else if(step == 2)
         {
             //spawnText.text = "MOVE TO";
-            EventBus.Publish(
+            /*EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     "getSpawn",
                     new RequestGetSpawnMessage
@@ -180,7 +213,7 @@ public class SpawnPanel : MonoBehaviour
                 sideStep.SetActive(true);
             }
             gameObject.SetActive(false);
-            moveText.text = "Move To";
+            moveText.text = "Move To";*/
         }
         step++;
     }

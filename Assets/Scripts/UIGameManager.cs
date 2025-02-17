@@ -14,6 +14,7 @@ using System.Net.NetworkInformation;
 using UFB.Interactions;
 using System.Collections;
 using TMPro;
+using UnityEngine.InputSystem;
 
 
 public class UIGameManager : MonoBehaviour
@@ -60,7 +61,7 @@ public class UIGameManager : MonoBehaviour
 
     public PunchPanel punchPanel;
 
-    public GameObject bottomDrawer;
+    public BottomDrawer bottomDrawer;
 
     public List<Portal> portals = new List<Portal> ();
 
@@ -89,6 +90,8 @@ public class UIGameManager : MonoBehaviour
     public BottomDefeatPanel bottomDefeatPanel;
 
     public TapSelfPanel tapSelfPanel;
+
+    public SelectSpawnPanel selectSpawnPanel;
 
     public RectTransform bottomPanel;
 
@@ -191,7 +194,7 @@ public class UIGameManager : MonoBehaviour
         if (isPlayerTurn) 
         {
             bottomDefeatPanel.gameObject.SetActive(false);
-            bottomDrawer.SetActive(true);
+            bottomDrawer.gameObject.SetActive(true);
             reviveStack.gameObject.SetActive(false);
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
@@ -333,10 +336,20 @@ public class UIGameManager : MonoBehaviour
     {
         CharacterState state = e.state;
         attackPanel.InitCharacterState(state);
-        TopStatusBar.OnSelectedCharacterEvent(state);
+        TopStatusBar.OnSelectedCharacterEvent(CharacterManager.Instance.PlayerCharacter.State);
         ResourcePanel.OnCharacterValueEvent(state);
         StepPanel.OnCharacterStateChanged(state);
         equipPanel.InitEquipList(state);
+
+        if(CharacterManager.Instance.PlayerCharacter.State.id == state.id)
+        {
+            CameraManager.instance.cameraTarget.parent = null;
+        } 
+        else
+        {
+            CameraManager.instance.cameraTarget.parent = CharacterManager.Instance.GetCharacterFromId(state.id).transform;
+        }
+        CameraManager.instance.cameraTarget.localPosition = Vector3.zero;
     }
 
     private void OnUnEquipPowerReceived(BecomeZombieMessage e)
@@ -419,7 +432,7 @@ public class UIGameManager : MonoBehaviour
         StepPanel.OnCharacterStateChanged(controller.State);
         equipPanel.InitEquipList(controller.State);
 
-        TopStatusBar.OnSelectedCharacterEvent(CharacterManager.Instance.PlayerCharacter.State);
+        //TopStatusBar.OnSelectedCharacterEvent(CharacterManager.Instance.PlayerCharacter.State);
 
     }
 
@@ -486,44 +499,6 @@ public class UIGameManager : MonoBehaviour
 
         EventBus.Publish(new RoomReceieveMessageEvent<NotificationMessage>(_message));
     }
-
-    public void OnOpenBottomPanel()
-    {
-        if(bottomPanel.rect.yMin == 0)
-        {
-            StartCoroutine(TweenToPosition(0, 420, 2));
-        }
-    }
-
-    public void OnCloseBottomPanel() 
-    {
-        if(bottomPanel.rect.yMax == 420)
-        {
-            StartCoroutine(TweenToPosition(420, 0, 2));
-        }
-    }
-
-    private IEnumerator TweenToPosition(float start, float end, float duration)
-    {
-        float elapsedTime = 0f;
-
-        float top = start; // your desired top offset  
-        float bottom = start; // your desired bottom offset  
-
-        while (elapsedTime < duration)
-        {
-            float x = Mathf.Lerp(start, end, (elapsedTime / duration));
-
-            bottomPanel.offsetMin = new Vector2(bottomPanel.offsetMin.x, x);
-            bottomPanel.offsetMax = new Vector2(bottomPanel.offsetMax.x, -x);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        bottomPanel.offsetMin = new Vector2(bottomPanel.offsetMin.x, end);
-        bottomPanel.offsetMax = new Vector2(bottomPanel.offsetMax.x, -end);
-    }
-
 
     #region Unity Function
 

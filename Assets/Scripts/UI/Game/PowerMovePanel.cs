@@ -67,7 +67,7 @@ public class PowerMovePanel : MonoBehaviour
             PowerMoveItem pm = Instantiate(moveitem, moveList);
             pm.Init(move);
             pm.gameObject.SetActive(true);
-            pm.GetComponent<Button>().onClick.AddListener(() =>
+            /*pm.GetComponent<Button>().onClick.AddListener(() =>
             {
                 UFB.Events.EventBus.Publish(
                     RoomSendMessageEvent.Create(
@@ -81,7 +81,7 @@ public class PowerMovePanel : MonoBehaviour
                 );
                 UIGameManager.instance.targetScreenPanel.InitData(pm.pm);
                 gameObject.SetActive(false);
-            });
+            });*/
         }
 
         gameObject.SetActive(true);

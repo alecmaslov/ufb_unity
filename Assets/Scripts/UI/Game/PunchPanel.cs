@@ -36,7 +36,7 @@ public class PunchPanel : MonoBehaviour
 
     public void InitData()
     {
-        UIGameManager.instance.bottomDrawer.SetActive(false);
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(false);
         arrow = null;
         InitArrow();
 
@@ -146,7 +146,7 @@ public class PunchPanel : MonoBehaviour
 
     public void OnClosePunchPanel()
     {
-        UIGameManager.instance.bottomDrawer.SetActive(true);
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
         HighlightRect.Instance.ClearHighLightRect();
         CameraManager.instance.SetEnemyTarget(UIGameManager.instance.controller.transform);
         gameObject.SetActive(false);
