@@ -46,6 +46,7 @@ namespace UFB.Network.RoomMessageTypes
         public string right;
         public string top;
         public string down;
+        public bool isFeather;
     }
 
     public class RequestCancelMoveMessage : ISendMessage
@@ -161,6 +162,7 @@ namespace UFB.Network.RoomMessageTypes
     {
         public int itemId;
         public string tileId;
+        public bool isFeather;
     }
 
     public class RequestGetSpawnMessage : RequestCharacterId

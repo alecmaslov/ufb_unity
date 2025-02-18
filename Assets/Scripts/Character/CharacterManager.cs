@@ -290,7 +290,7 @@ namespace UFB.Character
 
         private void OnCharacterMoved(CharacterMovedMessage m)
         {
-            movePanel.OnCharacterMoved(m);
+            // movePanel.OnCharacterMoved(m);
             // var coordinates = m.path.Select(p => p.coord.ToCoordinates());
             var tileIds = m.path.Select(p => p.tileId);
             tileIds.Reverse();

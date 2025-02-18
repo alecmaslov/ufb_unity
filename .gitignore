@@ -109,3 +109,5 @@ Scripts/Build/.env
 
 ProjectSettings/
 Assets/Materials/highlight.mat
+Assets/Models/Dice_d4/Materials/2k/New Material.mat
+Assets/Models/Dice_d6/Materials/2k/New Material.mat

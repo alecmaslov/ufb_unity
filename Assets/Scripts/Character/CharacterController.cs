@@ -174,7 +174,7 @@ namespace UFB.Character
             );
         }
 
-        public void MoveToTile(Tile tile, bool isPath = false)
+        public void MoveToTile(Tile tile, bool isPath = false, bool isFeather = false)
         {
 
             EventBus.Publish(
@@ -185,7 +185,8 @@ namespace UFB.Character
                         characterId = Id,
                         tileId = tile.Id,
                         destination = tile.Coordinates,
-                        isPath = isPath
+                        isPath = isPath,
+                        isFeather = isFeather
                     }
                 )
             );

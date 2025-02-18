@@ -70,7 +70,9 @@ public class MovePanel : MonoBehaviour
     public Text energyText;
     public Text bombEngeryText;
     public Image posImage;
-
+    public Text featherText;
+    public Text featherText1;
+    
     public RectTransform energyPart;
     public RectTransform movePart;
     public RectTransform bombPart;
@@ -81,7 +83,11 @@ public class MovePanel : MonoBehaviour
     public GameObject lessPart;
     public Text lessPartPosText;
     public Text lessPartenergyText;
+    public Text lessPartFeatherText;
 
+    public GameObject wrapBtn;
+    public Text wrapText;
+    
     private bool isLeft = true;
     private bool isRight = true;
     private bool isTop = true;
@@ -100,9 +106,9 @@ public class MovePanel : MonoBehaviour
 
     public void OnCharacterMoved(CharacterMovedMessage m)
     {
-        InitMoveBtns();
+        // InitMoveBtns();
 
-        Sprite leftSprite = sprites[0];
+        /*Sprite leftSprite = sprites[0];
         Sprite rightSprite = sprites[0];
         Sprite topprite = sprites[0];
         Sprite bottomSprite = sprites[0];
@@ -150,7 +156,7 @@ public class MovePanel : MonoBehaviour
         btnList[2].text = GlobalResources.instance.GetItemTotalCount(character.State.items, ITEM.WarpCrystal, new List<ITEM> { }, 1).ToString();
 
 
-        Debug.Log($"Tile Pos: {character.CurrentTile.TilePosText}, Tile State: {character.CurrentTile.GetTileState().type}");
+        Debug.Log($"Tile Pos: {character.CurrentTile.TilePosText}, Tile State: {character.CurrentTile.GetTileState().type}");*/
     }
 
     public void Show()
@@ -163,7 +169,11 @@ public class MovePanel : MonoBehaviour
         bombEngeryText.text = "";
         tileTypeText.text = "";
         posImage.enabled = true;
-        InitMoveBtns();
+        
+        wrapBtn.SetActive(false);
+        wrapText.text = "1";
+        
+        // InitMoveBtns();
         currentTile = character.CurrentTile;
         originEnergy = character.State.stats.energy.current;
         originItems.Clear();
@@ -178,7 +188,7 @@ public class MovePanel : MonoBehaviour
             originItems.Add(item1);
         });
 
-        character.MoveToTile(character.CurrentTile);
+        // character.MoveToTile(character.CurrentTile);
 
         // globalDirection.gameObject.SetActive(true);
         globalDirection.transform.position = character.transform.position;
@@ -201,10 +211,17 @@ public class MovePanel : MonoBehaviour
     public void OnConfirm()
     {
         int energyNeededCount = Mathf.Abs(int.Parse(energyText.text));
-
+        int wrapNeededCount = Mathf.Abs(int.Parse(wrapText.text));
+        
         if(character.State.stats.energy.current < energyNeededCount)
         {
             UIGameManager.instance.OnNotificationMessage("error", "Energy is not enough.");
+            return;
+        }
+
+        if (wrapNeededCount == 0)
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "WarpCrystal is empty.");
             return;
         }
         
@@ -217,7 +234,7 @@ public class MovePanel : MonoBehaviour
         Tile tile = character.CurrentTile;
         if (selectedTile != null)
         {
-            character.MoveToTile(selectedTile, true);
+            character.MoveToTile(selectedTile, true, isFeather);
 
             Tile tile1 = selectedTile;
             for (int i = 0; i < tile1.transform.childCount; i++)
@@ -618,16 +635,19 @@ public class MovePanel : MonoBehaviour
                         characterId = character.Id,
                         tileId = tile.Id,
                         itemId = -1,
+                        isFeather = CharacterManager.Instance.PlayerCharacter.State.items.ContainsKey(ITEM.Feather) && CharacterManager.Instance.PlayerCharacter.State.items[(int) ITEM.Feather].count > 0
                     }
                 )
             );
+            
+            wrapBtn.SetActive( false );
             moveImage.gameObject.SetActive( false );
             bombPart.gameObject.SetActive( true );
             movePart.gameObject.SetActive( true );
             energyPart.gameObject.SetActive( true );
             tileTypeText.text = "";
             //movePart.rect.Set(-150, movePart.rect.y, movePart.rect.width, movePart.rect.height);
-            movePart.localPosition = new Vector3(-150, movePart.localPosition.y, movePart.localPosition.z);
+            movePart.localPosition = new Vector3(-200, movePart.localPosition.y, movePart.localPosition.z);
             RectTransform posRect = posImage.gameObject.GetComponent<RectTransform>();
             posRect.localPosition = new Vector3(0, posRect.localPosition.y, posRect.localPosition.z);
 
@@ -668,6 +688,14 @@ public class MovePanel : MonoBehaviour
                     moveImage.sprite = item.GetComponent<Portal>()._portalParameters.portalIndex == 0? GlobalResources.instance.blue_portal : GlobalResources.instance.green_portal;
                     moveImage.gameObject.SetActive(true);
                     bombPart.gameObject.SetActive(false);
+
+                    wrapText.text = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
+                                    character.State.items[(int)ITEM.WarpCrystal].count > 0
+                        ? "1"
+                        : "0";
+                    wrapText.color = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
+                                     character.State.items[(int)ITEM.WarpCrystal].count > 0? Color.white : Color.red;
+                    wrapBtn.SetActive(true);
                 }
                 else if(item.GetComponent<Merchant>() != null )
                 {
@@ -707,7 +735,7 @@ public class MovePanel : MonoBehaviour
     }
 
     private Tile bombPrevTile = null;
-
+    private bool isFeather = false;
     public void OnSetMovePointMessage( SetMovePointMessage m)
     {
         bombPrevTile = null;
@@ -721,7 +749,11 @@ public class MovePanel : MonoBehaviour
             tiles.Add( tile );
         }
         energyText.text = $"-{m.cost}";
-        bombEngeryText.text = $"-{m.cost - 1}";
+        bombEngeryText.text = $"-{m.cost}";
+        featherText.text = $"-{m.featherCount}";
+        featherText1.text = $"-{m.featherCount}";
+        isFeather = m.featherCount > 0;
+        
         HighlightRect.Instance.ClearHighLightRect();
         HighlightRect.Instance.SetHighLightForSpawn(tiles);
 
@@ -730,9 +762,11 @@ public class MovePanel : MonoBehaviour
             bombPrevTile = tiles[tiles.Count - 2];
         }
 
-        if (character.State.stats.energy.current < tiles.Count)
+        if (character.State.stats.energy.current < m.cost || 
+            (character.State.items.ContainsKey(ITEM.Feather) && character.State.items[(int)ITEM.Feather].count < m.featherCount))
         {
-            lessPartenergyText.text = $"{tiles.Count - character.State.stats.energy.current}";
+            lessPartenergyText.text = $"{Mathf.Max(m.cost - character.State.stats.energy.current, 0)}";
+            lessPartFeatherText.text = $"{Mathf.Max(character.State.items.ContainsKey(ITEM.Feather)? (m.featherCount - character.State.items[(int)ITEM.Feather].count): 0, 0)}";
             lessPart.SetActive(true);
             defaultPart.SetActive(false);
         }
