@@ -7,11 +7,17 @@ namespace UFB.UI
 {
     public class MenuManager : MonoBehaviour
     {
+        public static MenuManager Instance;
         public Menu[] Menus => GetComponentsInChildren<Menu>();
         public Stack<Menu> menuStack = new Stack<Menu>();
         public Menu initialMenu;
 
         private Dictionary<string, object> _menuData = new Dictionary<string, object>();
+
+        private void Start()
+        {
+            Instance = this;
+        }
 
         // public void
         public void SetMenuData(string key, object value)
@@ -51,7 +57,7 @@ namespace UFB.UI
                 {
                     menu.gameObject.SetActive(false);
                 }
-                OpenMenu(initialMenu);
+                //OpenMenu(initialMenu);
             }
         }
 

@@ -87,6 +87,8 @@ namespace UFB.Character
             if (_moveAlongPathCoroutine != null)
                 StopCoroutine(_moveAlongPathCoroutine);
 
+            CameraManager.instance.setCameraTarget(transform);
+
             var tcs = new TaskCompletionSource<bool>();
 
             _moveAlongPathCoroutine = StartCoroutine(
@@ -97,6 +99,9 @@ namespace UFB.Character
             await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 1f);
             path.Last().AttachGameObject(gameObject, true);
             IsMoving = false;
+            
+            CameraManager.instance.setCameraTarget(null);
+
         }
 
         private IEnumerator MoveAlongPathCoroutine(

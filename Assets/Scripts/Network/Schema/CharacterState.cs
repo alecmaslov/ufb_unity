@@ -25,34 +25,37 @@ namespace UFB.StateSchema {
 		[Type(4, "string")]
 		public string characterClass = default(string);
 
-		[Type(5, "string")]
-		public string mapName = default(string);
+		[Type(5, "boolean")]
+		public bool connected = default(bool);
 
 		[Type(6, "string")]
+		public string mapName = default(string);
+
+		[Type(7, "string")]
 		public string currentTileId = default(string);
 
-		[Type(7, "int8")]
+		[Type(8, "int8")]
 		public sbyte type = default(sbyte);
 
-		[Type(8, "ref", typeof(CoordinatesState))]
+		[Type(9, "ref", typeof(CoordinatesState))]
 		public CoordinatesState coordinates = new CoordinatesState();
 
-		[Type(9, "ref", typeof(CharacterStatsState))]
+		[Type(10, "ref", typeof(CharacterStatsState))]
 		public CharacterStatsState stats = new CharacterStatsState();
 
-		[Type(10, "array", typeof(ArraySchema<Item>))]
+		[Type(11, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> items = new ArraySchema<Item>();
 
-		[Type(11, "array", typeof(ArraySchema<Item>))]
+		[Type(12, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> powers = new ArraySchema<Item>();
 
-		[Type(12, "array", typeof(ArraySchema<Item>))]
+		[Type(13, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> stacks = new ArraySchema<Item>();
 
-		[Type(13, "array", typeof(ArraySchema<Item>))]
+		[Type(14, "array", typeof(ArraySchema<Item>))]
 		public ArraySchema<Item> equipSlots = new ArraySchema<Item>();
 
-		[Type(14, "array", typeof(ArraySchema<Quest>))]
+		[Type(15, "array", typeof(ArraySchema<Quest>))]
 		public ArraySchema<Quest> quests = new ArraySchema<Quest>();
 
 		/*
@@ -116,6 +119,18 @@ namespace UFB.StateSchema {
 			return () => {
 				__callbacks.RemovePropertyCallback(nameof(characterClass));
 				__characterClassChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<bool> __connectedChange;
+		public Action OnConnectedChange(PropertyChangeHandler<bool> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.connected));
+			__connectedChange += __handler;
+			if (__immediate && this.connected != default(bool)) { __handler(this.connected, default(bool)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(connected));
+				__connectedChange -= __handler;
 			};
 		}
 
@@ -246,6 +261,7 @@ namespace UFB.StateSchema {
 				case nameof(sessionId): __sessionIdChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(characterId): __characterIdChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(characterClass): __characterClassChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
+				case nameof(connected): __connectedChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 				case nameof(mapName): __mapNameChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(currentTileId): __currentTileIdChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
 				case nameof(type): __typeChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;

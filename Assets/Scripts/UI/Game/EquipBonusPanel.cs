@@ -10,6 +10,7 @@ public class EquipBonusPanel : MonoBehaviour
 
     public void InitData(EquipBonus[] bonuses)
     {
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         InitList();
         Debug.Log("equip bonus" + bonuses.Length);
         if(bonuses.Length == 0)

@@ -85,11 +85,11 @@ namespace UFB.Network
             _colyseusClient = new ColyseusClient(ApiClient.GetUrlWithProtocol(GlobalDefine.isHttps? GlobalDefine.WebSocket_https_Header : GlobalDefine.WebSocket_http_Header));
         }
 
-        public async Task Connect()
+        public async Task Connect(string userId)
         {
             try
             {
-                await ApiClient.RegisterClient();
+                await ApiClient.RegisterClient(userId);
                 Status = NetworkServiceStatus.Ready;
                 EventBus.Publish(new NetworkServiceStatusEvent(Status));
             }
@@ -105,6 +105,13 @@ namespace UFB.Network
             }
         }
 
+        public async Task ReConnect(ReconnectionToken reconnectionToken, Action<ColyseusRoom<UfbRoomState>> onFirstStateChange)
+        {
+            var room = await _colyseusClient.Reconnect<UfbRoomState>(reconnectionToken);
+            RegisterHandlers(room, onFirstStateChange);
+            EventBus.Publish(new RoomJoinedEvent(room));
+        }
+        
         public async Task JoinRoom(
             string roomId,
             UfbRoomJoinOptions joinRoomOptions,
@@ -166,6 +173,18 @@ namespace UFB.Network
                 }
             };
             room.OnStateChange += onFirstStateChangeWrapper;
+        }
+
+        public async Task<UfbApiClient.RegisterUserResponse> SignUpHandler(string email, string password)
+        {
+            UfbApiClient.RegisterUserResponse result = await ApiClient.SignUpHandler(email, password);
+            return result;
+        }
+        
+        public async Task<UfbApiClient.RegisterUserResponse> LoginHandler(string email, string password)
+        {
+            UfbApiClient.RegisterUserResponse result = await ApiClient.LoginHandler(email, password);
+            return result;
         }
     }
 }

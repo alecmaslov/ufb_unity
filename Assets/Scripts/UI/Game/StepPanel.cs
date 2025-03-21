@@ -21,6 +21,9 @@ public class StepPanel : MonoBehaviour
     public GameObject[] punchBtns;
     public Text[] textBtns;
 
+    public Image meleeHighLight;
+    public Image manaHighLight;
+    
     private void Awake()
     {
         if (instance == null)
@@ -111,5 +114,22 @@ public class StepPanel : MonoBehaviour
             });
 
         });
+    }
+
+    public void SetHighLightBtn(bool isDefault = false)
+    {
+        int meleeCount = UIGameManager.instance.GetItemCount(ITEM.Melee);
+        int manaCount = UIGameManager.instance.GetItemCount(ITEM.Mana);
+
+        if (isDefault)
+        {
+            meleeHighLight.color = new Color(1, 1, 1, 0);
+            manaHighLight.color = new Color(1, 1, 1, 0);
+        }
+        else
+        {
+            meleeHighLight.color = meleeCount == 0 ? Color.red : Color.yellow;
+            manaHighLight.color = manaCount == 0 ? Color.red : Color.yellow;
+        }
     }
 }

@@ -124,8 +124,10 @@ public class SpawnPanel : MonoBehaviour
             InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.stacks[powerIdx], coin.ToString());
         }
 
-        OnConfirmClick();
-
+        // OnConfirmClick();
+        posPanel.SetActive(false);
+        cancelBtn.SetActive(false);
+        spawnConfirmPanel.SetActive(true);
         gameObject.SetActive(true);
     }
 
@@ -144,78 +146,39 @@ public class SpawnPanel : MonoBehaviour
 
     public void OnConfirmClick()
     {
-        if (step == 0)
+        // posPanel.SetActive(true);
+        EventBus.Publish(
+            new SpawnItemEvent(tileId)
+        );
+        
+        spawnConfirmPanel.SetActive(false);
+        spawnImage.gameObject.SetActive(false);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "getSpawn",
+                new RequestGetSpawnMessage
+                {
+                    characterId = characterId,
+                    coinCount = coin,
+                    itemId = itemIdx,
+                    powerId = powerIdx,
+                    spawnId = _spawnId,
+                }
+            )
+        );
+
+
+        if (!isSpawn)
         {
-            posPanel.SetActive(false);
-            cancelBtn.SetActive(false);
-            spawnConfirmPanel.SetActive(true);
+            movePanel.gameObject.SetActive(true);
         }
-        else if(step == 1) 
+        else
         {
-            // posPanel.SetActive(true);
-            spawnConfirmPanel.SetActive(false);
-            spawnImage.gameObject.SetActive(false);
-            EventBus.Publish(
-                new SpawnItemEvent(tileId)
-            );
-
-            EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "getSpawn",
-                    new RequestGetSpawnMessage
-                    {
-                        characterId = characterId,
-                        coinCount = coin,
-                        itemId = itemIdx,
-                        powerId = powerIdx,
-                        spawnId = _spawnId,
-                    }
-                )
-            );
-
-
-            if (!isSpawn)
-            {
-                movePanel.gameObject.SetActive(true);
-            }
-            else
-            {
-                sideStep.SetActive(true);
-            }
-            gameObject.SetActive(false);
-            Debug.Log("-----<<<<<<");
-            // moveText.text = "Move To";
-
+            sideStep.SetActive(true);
         }
-        else if(step == 2)
-        {
-            //spawnText.text = "MOVE TO";
-            /*EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "getSpawn",
-                    new RequestGetSpawnMessage
-                    {
-                        characterId = characterId,
-                        coinCount = coin,
-                        itemId = itemIdx,
-                        powerId = powerIdx,
-                        spawnId = _spawnId,
-                    }
-                )
-            );
-            
-
-            if(!isSpawn)
-            {
-                movePanel.gameObject.SetActive(true);
-            } else
-            {
-                sideStep.SetActive(true);
-            }
-            gameObject.SetActive(false);
-            moveText.text = "Move To";*/
-        }
-        step++;
+        gameObject.SetActive(false);
+        Debug.Log("-----<<<<<<");
+        // moveText.text = "Move To";
     }
 
     public void OnCancelClick()

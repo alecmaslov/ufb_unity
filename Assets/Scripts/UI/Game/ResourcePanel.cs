@@ -78,10 +78,10 @@ namespace UFB.UI
         Image crystalBackImage;
 
         [SerializeField]
-        ItemDetailPanel bombDetailPanel;
+        public ItemDetailPanel bombDetailPanel;
 
         [SerializeField]
-        ItemDetailPanel arrowDetailPanel;
+        public ItemDetailPanel arrowDetailPanel;
 
         [SerializeField]
         ItemDetailPanel itemsDetailPanel;
@@ -212,7 +212,7 @@ namespace UFB.UI
 
         public void OnItemsItemDetailClicked()
         {
-            itemsDetailPanel.Init(1);
+            itemsDetailPanel.Init(2);
         }
     }
 

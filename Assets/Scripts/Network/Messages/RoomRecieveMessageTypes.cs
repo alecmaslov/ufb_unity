@@ -18,6 +18,12 @@ namespace UFB.Network.RoomMessageTypes
         public int count;
     }
 
+    public class SlotItemData
+    {
+        public Item power;
+        public PowerMove[] powermoves;
+    }
+    
     public class DiceData
     {
         public DICE_TYPE type;
@@ -98,8 +104,14 @@ namespace UFB.Network.RoomMessageTypes
         public PathStep[] path;
         public int cost;
         public int featherCount;
+        public string portalNextTileId;
     }
 
+    public class GetEquipSlotMessage : IReceiveMessage
+    {
+        public SlotItemData[] data;
+    }
+    
     public class GetStackOnStartMessage : IReceiveMessage {
         public string characterId;
         public ResultItem[] stackList;

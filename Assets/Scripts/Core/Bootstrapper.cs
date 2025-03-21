@@ -21,8 +21,9 @@ namespace UFB.Core
             ServiceLocator.Current.Register(gameService);
 
 
+            return;
             // we must wait until we are connected to try and perform any other actions
-            await networkService.Connect();
+            //await networkService.Connect();
 
             var currentScene = SceneManager.GetActiveScene();
 

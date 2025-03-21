@@ -9,6 +9,7 @@ using UFB.Network;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Collections;
 using UFB.Map;
 using UFB.Network.RoomMessageTypes;
 using UFB.Core;
@@ -102,6 +103,14 @@ namespace UFB.Character
             }
         }
 
+        private void Start()
+        {
+            if (PlayerPrefs.GetInt("roomJoinOption") == 1)
+            {
+                StartCoroutine(GetRoomDataFromServer());
+            }
+        }
+
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
@@ -176,25 +185,16 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            character.transform.position = new Vector3(-100, -100, 100);
+            if (UIGameManager.instance.isPlayerTurn)
+            {
+                character.transform.position = new Vector3(-100, -100, 100);
+            }
             EventBus.Publish(
                 new SetCameraPresetStateEvent
                 {
                     presetState = CameraController.PresetState.TopDown
                 }
             );
-            /*            EventBus.Publish(
-                            RoomSendMessageEvent.Create(
-                                "spawnMove",
-                                new RequestSpawnMessage
-                                {
-                                    tileId = character.CurrentTile.Id,
-                                    destination = character.CurrentTile.Coordinates,
-                                    playerId = characterId
-                                }
-                            )
-                        );*/
-
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(
@@ -352,6 +352,22 @@ namespace UFB.Character
         public Dictionary<string, CharacterController> GetCharacterList()
         {
             return _characters; 
+        }
+
+        IEnumerator GetRoomDataFromServer()
+        {
+            yield return new WaitForSeconds(1);
+            
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.GET_ROOM_DATA,
+                    new RequestCharacterId
+                    {
+                        characterId = _playerCharacterId,
+                    }
+                )
+            );
+            
         }
     }
 }

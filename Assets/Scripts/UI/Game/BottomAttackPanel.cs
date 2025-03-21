@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UFB.Character;
+using UFB.Core;
 using UFB.Events;
 using UFB.Items;
+using UFB.Map;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
@@ -18,6 +20,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     public GameObject detailPart;
     public GameObject punchPart;
+    public GameObject powerListPart;
     public PowerMoveItem powerMoveItem;
 
     public int idx = 0;
@@ -46,6 +49,8 @@ public class BottomAttackPanel : MonoBehaviour
 
     public Text stackCountText;
 
+    public Transform powermoveListPanel;
+    public PowerMoveItem listItemPrefab;
 
     public void Init(CharacterState state)
     {
@@ -59,6 +64,7 @@ public class BottomAttackPanel : MonoBehaviour
     void InitMonsterInfo()
     {
         detailPart.SetActive(false);
+        powerListPart.SetActive(false);
         monsterInfo.gameObject.SetActive(true);
         gameObject.SetActive(true);
 
@@ -71,18 +77,55 @@ public class BottomAttackPanel : MonoBehaviour
 
     public void InitPowermove(Item item, EquipSlot slt, PowerMove[] _moves)
     {
-        detailPart.SetActive(true);
+        detailPart.SetActive(false);
+        powerListPart.SetActive(true);
+        punchPart.SetActive(false);
         monsterInfo.gameObject.SetActive(false);
-
         moves = _moves;
-        ResetPowermove();
+        // ResetPowermove();
+        
+        InitPowermoveList();
     }
 
+    void InitPowermoveList()
+    {
+        for (int i = 1; i < powermoveListPanel.childCount; i++)
+        {
+            Destroy(powermoveListPanel.GetChild(i).gameObject);
+        }
+
+        foreach (var item in moves)
+        {
+            var p = Instantiate(listItemPrefab, powermoveListPanel);
+            p.Init(item);
+            p.gameObject.SetActive(true);
+        }
+    }
+    
     public void ResetPowermove()
     {
         selectedPowermove = moves[idx];
 
         powerMoveItem.Init(selectedPowermove);
+        powerMoveItem.gameObject.SetActive(true);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
+                new RequestGetHighlightRect
+                {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                    powerMoveId = selectedPowermove.id
+                }
+            )
+        );
+    }
+
+    public void OnClickPowermoveItem(PowerMove pm)
+    {
+        powerListPart.SetActive(false);
+        selectedPowermove = pm;
+        powerMoveItem.Init(selectedPowermove);
+        powerMoveItem.InitResultList();
         powerMoveItem.gameObject.SetActive(true);
         EventBus.Publish(
             RoomSendMessageEvent.Create(
@@ -110,8 +153,11 @@ public class BottomAttackPanel : MonoBehaviour
     {
         punchPart.SetActive(true);
         detailPart.SetActive(false);
+        powerListPart.SetActive(false);
         monsterInfo.gameObject.SetActive(false);
 
+        UIGameManager.instance.StepPanel.SetHighLightBtn();
+        
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
@@ -129,7 +175,23 @@ public class BottomAttackPanel : MonoBehaviour
     {
         if (punchPart.activeSelf)
         {
+            // CHECK CONDITION
+            int count = 0;
+            if (type == 1) // MELEE
+            {
+                count = UIGameManager.instance.GetItemCount(ITEM.Melee);
+            }
+            else // MANA
+            {
+                count = UIGameManager.instance.GetItemCount(ITEM.Mana);
+            }
 
+            if (count == 0)
+            {
+                UIGameManager.instance.OnNotificationMessage("error", "You don't have enough Item to do that!");
+                return;
+            }
+            
             PowerMove pm = new PowerMove();
             if (type == 0)
             {
@@ -248,6 +310,7 @@ public class BottomAttackPanel : MonoBehaviour
         //gameObject.SetActive(false);
         if (UIGameManager.instance.bottomDrawer.IsExpanded)
         {
+            UIGameManager.instance.equipPanel.ClearHighLightItems();
             UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
             HighlightRect.Instance.ClearHighLightRect();
         }
@@ -264,9 +327,22 @@ public class BottomAttackPanel : MonoBehaviour
     {
         InitMonsterInfo();
         selectedPowermove = null;
-
+        UIGameManager.instance.StepPanel.SetHighLightBtn(true);
     }
 
+    public void CancelPowerMoveDetail()
+    {
+        InitMonsterInfo();
+    }
+
+    public void CancelPowerList()
+    {
+        UIGameManager.instance.equipPanel.ClearHighLightItems();
+        powerListPart.SetActive(false);
+        detailPart.SetActive(false);
+        monsterInfo.gameObject.SetActive(true);
+    }
+    
     public void OnSelectDice()
     {
         if (selectedPowermove != null && target != null)
@@ -399,6 +475,20 @@ public class BottomAttackPanel : MonoBehaviour
         StartCoroutine(EndAttackPanel());
     }
 
+    public int GetRange(CharacterState state)
+    {
+        if (target == null)
+        {
+            return 0;
+        }
+        
+        Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[state.currentTileId];
+        Tile TargetTile = ServiceLocator.Current.Get<GameBoard>().Tiles[target.currentTileId];
+
+        return Mathf.Abs(CurrentTile.Coordinates.X - TargetTile.Coordinates.X) + 
+               Mathf.Abs(CurrentTile.Coordinates.Y - TargetTile.Coordinates.Y);
+    }
+    
     public void OnFinishEnemy()
     {
         enemyStackImage.gameObject.SetActive(false);

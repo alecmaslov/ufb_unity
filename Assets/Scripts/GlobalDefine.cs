@@ -5,8 +5,8 @@ using UnityEngine;
 public class GlobalDefine
 {
     //public static string API_URL = "api.thig.io";
-    public static string API_URL = "52.12.44.167";
-    //public static string API_URL = "localhost";
+    //public static string API_URL = "52.12.44.167";
+    public static string API_URL = "localhost";
     public static int API_PORT = 8080;
     public static bool isHttps = false;
     public static string WebSocket_http_Header = "ws://";
@@ -57,7 +57,8 @@ public class GlobalDefine
         public static string REWARD_BONUS = "REWARD_BONUS";
 
         public static string SET_MOVE_POINT = "SET_MOVE_POINT";
-
+        public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
+        public static string RECONNECT_ROOM = "RECONNECT_ROOM";
     }
 
     public static class CLIENT_MESSAGE
@@ -76,5 +77,16 @@ public class GlobalDefine
         public static string GET_STACK_ON_TURN_START = "GET_STACK_ON_TURN_START";
         public static string SET_STACK_ON_START = "SET_STACK_ON_START";
         public static string SET_DICE_STACK_TURN_ROLL = "SET_DICE_STACK_TURN_ROLL";
+        public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
+        public static string GET_ROOM_DATA = "GET_ROOM_DATA";
+    }
+
+    public static class RESPONSE_MESSAGE
+    {
+        public static string ERROR = "ERROR";
+        public static string SUCCESS = "SUCCESS";
+        public static string ALREADY_EXIST = "ALREADY_EXIST";
+        public static string NOT_EXIST = "NOT_EXIST";
+        public static string WRONG_PASSWORD = "WRONG_PASSWORD";
     }
 }

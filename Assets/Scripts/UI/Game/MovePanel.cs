@@ -211,20 +211,12 @@ public class MovePanel : MonoBehaviour
     public void OnConfirm()
     {
         int energyNeededCount = Mathf.Abs(int.Parse(energyText.text));
-        int wrapNeededCount = Mathf.Abs(int.Parse(wrapText.text));
         
         if(character.State.stats.energy.current < energyNeededCount)
         {
             UIGameManager.instance.OnNotificationMessage("error", "Energy is not enough.");
             return;
         }
-
-        if (wrapNeededCount == 0)
-        {
-            UIGameManager.instance.OnNotificationMessage("error", "WarpCrystal is empty.");
-            return;
-        }
-        
 
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
@@ -281,6 +273,7 @@ public class MovePanel : MonoBehaviour
         selectedTile = null;
         bombPrevTile = null;
         HighlightRect.Instance.ClearHighLightRect();
+        UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
     }
 
     public void OnCancel()
@@ -642,12 +635,14 @@ public class MovePanel : MonoBehaviour
             
             wrapBtn.SetActive( false );
             moveImage.gameObject.SetActive( false );
-            bombPart.gameObject.SetActive( true );
             movePart.gameObject.SetActive( true );
             energyPart.gameObject.SetActive( true );
+
+            int bombTotalCount = UIGameManager.instance.ResourcePanel.bombDetailPanel.GetTotalItemCount();
+            bombPart.gameObject.SetActive(bombTotalCount > 0);
+            movePart.localPosition = new Vector3(bombTotalCount > 0? -200 : 0, movePart.localPosition.y, movePart.localPosition.z);
+
             tileTypeText.text = "";
-            //movePart.rect.Set(-150, movePart.rect.y, movePart.rect.width, movePart.rect.height);
-            movePart.localPosition = new Vector3(-200, movePart.localPosition.y, movePart.localPosition.z);
             RectTransform posRect = posImage.gameObject.GetComponent<RectTransform>();
             posRect.localPosition = new Vector3(0, posRect.localPosition.y, posRect.localPosition.z);
 
@@ -691,7 +686,7 @@ public class MovePanel : MonoBehaviour
 
                     wrapText.text = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
                                     character.State.items[(int)ITEM.WarpCrystal].count > 0
-                        ? "1"
+                        ? $"{character.State.items[(int)ITEM.WarpCrystal].count}"
                         : "0";
                     wrapText.color = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
                                      character.State.items[(int)ITEM.WarpCrystal].count > 0? Color.white : Color.red;
@@ -748,6 +743,13 @@ public class MovePanel : MonoBehaviour
             Tile tile = gameBoard.Tiles[p.tileId];
             tiles.Add( tile );
         }
+
+        if (m.portalNextTileId != "")
+        {
+            Tile tile = gameBoard.Tiles[m.portalNextTileId];
+            tiles.Add(tile);
+        }
+        
         energyText.text = $"-{m.cost}";
         bombEngeryText.text = $"-{m.cost}";
         featherText.text = $"-{m.featherCount}";
@@ -777,6 +779,36 @@ public class MovePanel : MonoBehaviour
         }
     }
 
+    public void OnWarpCrystalBtn()
+    {
+        int wrapNeededCount = Mathf.Abs(int.Parse(wrapText.text));
+
+        if (wrapNeededCount == 0)
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "WarpCrystal is empty.");
+            return;
+        }
+        
+        // send portal message...
+        if (selectedTile == null) return;
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.SET_MOVE_ITEM,
+                new RequestMoveItem
+                {
+                    characterId = UIGameManager.instance.controller.Id,
+                    tileId = selectedTile.Id,
+                    itemId = (int)ITEM.WarpCrystal,
+                }
+            )
+        );
+        selectedTile = null;
+        bombPrevTile = null;
+        gameObject.SetActive(false);
+        HighlightRect.Instance.ClearHighLightRect();
+        UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+    }
+    
     private void Update()
     {
         if (character == null || !gameObject.activeSelf) return;

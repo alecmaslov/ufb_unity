@@ -27,11 +27,13 @@ public class ItemCard : MonoBehaviour
         countText.text = text;
     }
 
-    public void InitDate(string count, Sprite sprite) 
+    public void InitDate(string count, Sprite sprite, bool isRed = false) 
     {
         if (countText != null) 
         {
             countText.text = count;
+            
+            countText.color = isRed? Color.red : Color.white;
         }
         if (itemImage != null)
         {

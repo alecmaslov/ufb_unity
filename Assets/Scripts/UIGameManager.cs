@@ -30,8 +30,7 @@ public class UIGameManager : MonoBehaviour
 
     public GameObject TopPanel;
 
-    [SerializeField]
-    GameObject BottomStatusBar;
+    public GameObject BottomStatusBar;
 
     public ResourcePanel ResourcePanel;
 
@@ -93,8 +92,6 @@ public class UIGameManager : MonoBehaviour
 
     public SelectSpawnPanel selectSpawnPanel;
 
-    public RectTransform bottomPanel;
-
     #region public values
 
     public float curTurnTime = GlobalDefine.TURN_TIME;
@@ -124,7 +121,7 @@ public class UIGameManager : MonoBehaviour
             return;
         }
         
-        gameService.SubscribeToRoomMessage<TurnMessage>(GlobalDefine.SERVER_MESSAGE.INIT_TURN,InitTurn);
+        gameService.SubscribeToRoomMessage<TurnMessage>(GlobalDefine.SERVER_MESSAGE.INIT_TURN, InitTurn);
         gameService.SubscribeToRoomMessage<TurnChangeMessage>(GlobalDefine.SERVER_MESSAGE.TURN_CHANGED,TurnChanged);
         gameService.SubscribeToRoomMessage<SpawnInitMessage>(GlobalDefine.SERVER_MESSAGE.SPAWN_INIT, InitSpawn);
         gameService.SubscribeToRoomMessage<PowerMoveListMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_POWERMOVE_LIST, equipPanel.OnReceivePowerMoveList);
@@ -163,6 +160,12 @@ public class UIGameManager : MonoBehaviour
         // CLICK TILE WHEN MOVE
         gameService.SubscribeToRoomMessage<SetMovePointMessage>(GlobalDefine.SERVER_MESSAGE.SET_MOVE_POINT, OnReceiveSetMovePointMessage);
 
+        //REQUEST SLOT ITEMS
+        gameService.SubscribeToRoomMessage<GetEquipSlotMessage>(GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST, OnGetEquipSlotList);
+        
+        gameService.SubscribeToRoomMessage<TurnChangeMessage>(GlobalDefine.SERVER_MESSAGE.RECONNECT_ROOM, GetRoomStateData);
+
+        
     }
 
     private void OnDisable()
@@ -185,12 +188,56 @@ public class UIGameManager : MonoBehaviour
 
     }
 
+    private void GetRoomStateData(TurnChangeMessage e)
+    {
+        
+        Debug.Log("GetRoomStateData: " + e.curTime + ", " + e.characterId);
+        curTurnTime = e.curTime;
+        CharacterManager.Instance.OnSelectCharacter(e.characterId);
+        isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
+
+        spawnPanel.isSpawn = !TopPanel.gameObject.activeSelf;
+        TopStatusBar.gameObject.SetActive(true);
+        TopPanel.SetActive(true);
+        bottomDrawer.gameObject.SetActive(true);
+
+        if (isPlayerTurn) 
+        {
+            bottomDefeatPanel.gameObject.SetActive(false);
+            reviveStack.gameObject.SetActive(false);
+        }
+        else
+        {
+            bottomAttackPanel.gameObject.SetActive(false);
+            movePanel.gameObject.SetActive(false);
+            tapSelfPanel.gameObject.SetActive(false);
+            equipBonusPanel.gameObject.SetActive(false);
+            bottomDrawer.CloseBottomDrawer();
+        }
+        
+        HighlightRect.Instance.ClearHighLightRect();
+        InteractionManager.Instance.isSpawn = false;
+        
+        //REQUEST EQUIP ITEM LIST
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST,
+                new RequestCharacterId
+                {
+                    characterId = controller.Id,
+                }
+            )
+        );
+    }
+    
     private void TurnChanged(TurnChangeMessage e) 
     {
         CharacterManager.Instance.OnSelectCharacter(e.characterId);
+        
         curTurnTime = e.curTime;
         isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
         turnPanel.InitData(curTurnTime);
+        
         if (isPlayerTurn) 
         {
             bottomDefeatPanel.gameObject.SetActive(false);
@@ -212,8 +259,22 @@ public class UIGameManager : MonoBehaviour
             movePanel.gameObject.SetActive(false);
             tapSelfPanel.gameObject.SetActive(false);
             equipBonusPanel.gameObject.SetActive(false);
+            bottomDrawer.CloseBottomDrawer();
             // bottomDrawer.SetActive(false);
         }
+        HighlightRect.Instance.ClearHighLightRect();
+        
+        //REQUEST EQUIP ITEM LIST
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST,
+                new RequestCharacterId
+                {
+                    characterId = controller.Id,
+                }
+            )
+        );
+
     }
 
     private void GetTurnStartBonus(GetTurnStartEquipBonusMessage e)
@@ -264,8 +325,8 @@ public class UIGameManager : MonoBehaviour
 
     private void OnSetCharacterPosition(SetCharacterPositionMessage e) 
     {
-        Debug.Log(e.characterId);
-        Debug.Log(e.path);
+        Debug.LogError("move set position: " + e.characterId);
+        Debug.LogError(e.path);
         CharacterManager.Instance.OnSetCharacterTilePosition(e);
     }
 
@@ -436,6 +497,11 @@ public class UIGameManager : MonoBehaviour
 
     }
 
+    private void OnGetEquipSlotList(GetEquipSlotMessage message)
+    {
+        equipPanel.GetSlotDataList(message);
+    }
+    
     public int GetItemCount(ITEM type)
     {
         int count = 0;
@@ -500,6 +566,21 @@ public class UIGameManager : MonoBehaviour
         EventBus.Publish(new RoomReceieveMessageEvent<NotificationMessage>(_message));
     }
 
+    public int GetItemCount(ITEM type, CharacterState characterState)
+    {
+        int k = 0;
+
+        characterState.items.ForEach(item =>
+        {
+            if (item.id == (int)type)
+            {
+                k = item.count;
+            }
+        });
+        
+        return k;
+    }
+    
     #region Unity Function
 
     private void Update()

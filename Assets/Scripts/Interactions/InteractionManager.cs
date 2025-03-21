@@ -61,9 +61,6 @@ namespace UFB.Interactions
         [SerializeField]
         private GameObject resourcePanel;
 
-        [SerializeField]
-        UIGameManager uiGameManager;
-
         public bool isSpawn = true;
 
         private bool isMoveDirection = false;
@@ -86,7 +83,7 @@ namespace UFB.Interactions
             Events.EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             Events.EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
             ServiceLocator.Current.Register(this);
-            _gameInput.OrbitView.TouchPress.started += OnTapSelect;
+            _gameInput.OrbitView.TouchPress.canceled += OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
             //_gameInput.OrbitView.TapSelect.performed += OnTapSelect;
             //_gameInput.OrbitView.MultitouchHold.started += MultitouchHold_started;
@@ -139,7 +136,7 @@ namespace UFB.Interactions
 
             CameraManager.instance.OnUIClicked();
 
-            if (CameraManager.instance.IsUIClicked) return;
+            if (CameraManager.instance.IsUIClicked || CameraManager.instance.isMovingCamera) return;
 
             // Check if the time since the last touch is within the double touch time window
             if (Time.time - lastTouchTime < doubleTouchTime)
@@ -170,7 +167,7 @@ namespace UFB.Interactions
 
             if (isTileClicked)
             {
-                uiGameManager.bottomDrawer.OpenBottomDrawer();
+                UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
             }
         }
 
@@ -216,19 +213,11 @@ namespace UFB.Interactions
 
             if (tile != null)
             {
-                if(isSpawn)
-                {
-                    Events.EventBus.Publish(
-                        new CameraOrbitAroundEvent(transform, 0.3f)
-                    );
-                }
-
-
                 for (int i = 0; i < tile.transform.childCount; i++)
                 {
                     GameObject item = tile.transform.GetChild(i).gameObject;
                     
-                    if (item.GetComponent<CharacterController>() != null && !isSpawn && uiGameManager.TopPanel.activeSelf)
+                    if (item.GetComponent<CharacterController>() != null && !isSpawn && UIGameManager.instance.TopPanel.activeSelf)
                     {
                         if (resourcePanel != null && item.GetComponent<CharacterController>().Id == playerId)
                         {
@@ -250,10 +239,13 @@ namespace UFB.Interactions
 
                 }
                 Debug.Log("xxxx: xx: xxx");
-                if (!isSpawn/* && uiGameManager.isMoveTileStatus*/ && uiGameManager.isPlayerTurn)
+                if (!isSpawn/* && uiGameManager.isMoveTileStatus*/ && UIGameManager.instance.isPlayerTurn)
                 {
                     if (UIGameManager.instance.bottomDrawer.IsExpanded) 
-                    { 
+                    {
+                        UIGameManager.instance.StepPanel.SetHighLightBtn(true);
+                        UIGameManager.instance.equipPanel.ClearHighLightItems();
+                        
                         UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
                         HighlightRect.Instance.ClearHighLightRect();
                     }
@@ -265,52 +257,6 @@ namespace UFB.Interactions
 
                 }
             }
-
-
-
-            var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
-            Debug.Log(turnOrder.Serialize());
-
-            ServiceLocator.Current
-                .Get<UIManager>()
-                .OnPopupMenuEvent(
-                    new PopupMenuEvent(
-                        transform.name,
-                        transform,
-                        () => Debug.Log("Calling Cancel"),
-                        new PopupMenuEvent.CreateButton[]
-                        {
-                            new(
-                                "Move To",
-                                () => {
-                                    Events.EventBus.Publish(
-                                        new RoomSendMessageEvent(
-                                            "move",
-                                            new RequestMoveMessage
-                                            {
-                                                tileId = transform.GetComponent<Tile>().Id,
-                                                destination = transform
-                                                    .GetComponent<Tile>()
-                                                    .Coordinates
-                                            }
-                                        )
-                                    );
-                                    Events.EventBus.Publish(new CancelPopupMenuEvent());
-                                }
-                            ),
-                            new(
-                                "Focus",
-                                () =>
-                                    Events.EventBus.Publish(
-                                        new CameraOrbitAroundEvent(transform, 0.3f)
-                                    )
-                            )
-                            // we should make CreateButton a bit more feature rich, so
-                            // we can have certain types of buttons with certain icons
-                            // new("Move To", () => UFB.Events.EventBus.Publish<)
-                        }
-                    )
-                );
         }
 
         private void OnRaycastDBClicked(Transform transform, IClickable clickable)

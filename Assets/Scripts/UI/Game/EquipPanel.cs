@@ -124,4 +124,27 @@ public class EquipPanel : MonoBehaviour
 
         gameObject.SetActive(false);
     }
+
+    public void GetSlotDataList(GetEquipSlotMessage message)
+    {
+        foreach (var item in equipItems)
+        {
+            item.ResetImage();
+        }
+        
+        int k = 0;
+        foreach (SlotItemData slotdata in message.data)
+        {
+            equipItems[k].Init(slotdata.power, slotdata.powermoves);
+            k++;
+        }
+    }
+    
+    public void ClearHighLightItems()
+    {
+        foreach (var item in equipItems)
+        {
+            item.highlight.SetActive(false);
+        }
+    }
 }

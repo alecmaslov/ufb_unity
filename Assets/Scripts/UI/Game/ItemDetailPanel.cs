@@ -68,4 +68,16 @@ public class ItemDetailPanel : MonoBehaviour
 
         gameObject.SetActive(true);
     }
+
+    public int GetTotalItemCount()
+    {
+        int total = 0;
+
+        foreach (ITEM_DETAIL item in itemDetails)
+        {
+            total += UIGameManager.instance.GetItemCount(item.type);
+        }
+        
+        return total;
+    }
 }

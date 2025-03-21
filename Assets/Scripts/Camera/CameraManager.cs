@@ -71,6 +71,15 @@ public class CameraManager : MonoBehaviour
         //cameraTarget.position = target.position;
     }
 
+    public void setCameraTarget(Transform target)
+    {
+        cameraTarget.parent = target;
+        if (target != null)
+        {
+            cameraTarget.localPosition = Vector3.zero;
+        }
+    }
+    
     public bool IsUIClicked = false;
 
     private void Update()
@@ -252,9 +261,6 @@ public class CameraManager : MonoBehaviour
             Debug.Log(hit.collider.gameObject.name);
         }
 
-
-
-
         /*// Check if the ray hits an object in the scene
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
@@ -281,6 +287,7 @@ public class CameraManager : MonoBehaviour
                 Debug.Log("touch begin");
                 touchStart = touch.position;
                 camStartPos = cameraTarget.position;
+                isMovingCamera = false;
 
                 ray = Camera.main.ScreenPointToRay(touch.position);
                 if (Physics.Raycast(ray, out hit))
@@ -301,15 +308,17 @@ public class CameraManager : MonoBehaviour
                     Vector3 direction = endPos - startPos;
                     Debug.Log("touch move: " + direction);
 
+                    isMovingCamera = true;
                     cameraTarget.transform.position = camStartPos + new Vector3(-direction.x, 0, -direction.z) * speed;
 
                 }
 
             }
         }
-
     }
 
+    public bool isMovingCamera = false;
+    
     void handleRoate()
     {
 /*        if (isRotate && isMoving)
@@ -334,11 +343,6 @@ public class CameraManager : MonoBehaviour
 
         ui_raycaster.Raycast(click_data, click_results);
 
-        foreach (RaycastResult result in click_results)
-        {
-            Debug.Log($"UI element: {result.gameObject.name}");
-        }
-
         if (click_results.Count > 0)
         {
             IsUIClicked = true;
@@ -348,6 +352,7 @@ public class CameraManager : MonoBehaviour
         {
             IsUIClicked = false;
         }
+        
     }
 
 }
