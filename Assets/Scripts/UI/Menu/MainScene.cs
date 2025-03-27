@@ -29,6 +29,12 @@ public class MainScene : MonoBehaviour
         
         loginEmailField.text = email;
         passwordField.text = password;
+        
+        if (email != "" && password != "")
+        {
+            Debug.Log("Please fill all the fields");
+            SignIn();
+        }
     }
 
     public async void SignUp()
@@ -82,6 +88,7 @@ public class MainScene : MonoBehaviour
         }
         else if (result == GlobalDefine.RESPONSE_MESSAGE.ERROR)
         {
+            
             ShowNotificationMessage("error", "An error occured.");
         }
         else if (result == GlobalDefine.RESPONSE_MESSAGE.SUCCESS)
@@ -92,6 +99,10 @@ public class MainScene : MonoBehaviour
             Debug.Log(data.clientId);
             ConnectServer(data.clientId);
         }
+        else
+        {
+            ShowNotificationMessage("error", "Server error occured.");
+        }
     }
 
     public async void ConnectServer(string userId)
@@ -101,6 +112,7 @@ public class MainScene : MonoBehaviour
         MenuManager.Instance.OpenMenu(MenuManager.Instance.initialMenu);
         
         gameObject.SetActive(false);
+        OnReconnectRoom();
     }
 
     public void ShowNotificationMessage(string title, string message)
@@ -110,7 +122,27 @@ public class MainScene : MonoBehaviour
         _message.type = title;
 
         EventBus.Publish(new RoomReceieveMessageEvent<NotificationMessage>(_message));
-        
+    }
+    
+    public void OnReconnectRoom()
+    {
+        string roomId = PlayerPrefs.GetString("roomId");
+        string token = PlayerPrefs.GetString("sessionId");
+            
+        Debug.Log(roomId);
+        Debug.Log(token);
+            
+        if (string.IsNullOrEmpty(roomId))
+        {
+            ShowNotificationMessage("error", "Room id is empty");
+        }
+
+        if (string.IsNullOrEmpty(token))
+        {
+            ShowNotificationMessage("error", "Token is empty");
+        }
+            
+        ServiceLocator.Current.Get<GameService>().ReConnectRoom(roomId, token);
     }
 
 }

@@ -517,14 +517,14 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator EndAttackPanel()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         if (isEndAttack)
         {
             CancelAttack();
         }
     }
 
-    IEnumerator OnStartDiceRect(float delay = 2f)
+    IEnumerator OnStartDiceRect(float delay = 1f)
     {
         yield return new WaitForSeconds(delay);
         OnSelectDice();
@@ -532,7 +532,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator ResetAddedStackPart()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         addedStackPart.SetActive(false);
     }
 }

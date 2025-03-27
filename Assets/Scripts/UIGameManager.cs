@@ -17,6 +17,8 @@ using TMPro;
 using UnityEngine.InputSystem;
 
 
+
+
 public class UIGameManager : MonoBehaviour
 {
     public static UIGameManager instance;
@@ -48,15 +50,11 @@ public class UIGameManager : MonoBehaviour
 
     public AddStackScore stackScoreText;
 
-    public AttackPanel attackPanel;
-
     public MerchantPanel merchantPanel;
 
     public WndPortalPanel wndPortalPanel;
 
     public TurnPanel turnPanel;
-
-    public TargetScreenPanel targetScreenPanel;
 
     public PunchPanel punchPanel;
 
@@ -81,8 +79,6 @@ public class UIGameManager : MonoBehaviour
     public DefencePanel defencePanel;
 
     public RewardBonusPanel rewardBonusPanel;
-
-    public SpawnListPanel spawnListPanel;
 
     public BottomAttackPanel bottomAttackPanel;
 
@@ -295,6 +291,8 @@ public class UIGameManager : MonoBehaviour
 
     private void InitSpawn(SpawnInitMessage m)
     {
+        Debug.LogError("InitSpawn: " + m.characterId);
+        
         spawnPanel.isSpawn = !TopPanel.gameObject.activeSelf;
         TopStatusBar.gameObject.SetActive(true);
         TopPanel.SetActive(true);
@@ -351,10 +349,6 @@ public class UIGameManager : MonoBehaviour
         {
             bottomAttackPanel.OnLanuchDiceRoll(e);
         }
-        else
-        {
-            attackPanel.OnLanuchDiceRoll(e);
-        }
     }
 
     private void OnEnemyDiceRoll(EnemyDiceRollMessage e) 
@@ -396,7 +390,6 @@ public class UIGameManager : MonoBehaviour
     private void OnChangeCharacterStateEvent(ChangeCharacterStateEvent e)
     {
         CharacterState state = e.state;
-        attackPanel.InitCharacterState(state);
         TopStatusBar.OnSelectedCharacterEvent(CharacterManager.Instance.PlayerCharacter.State);
         ResourcePanel.OnCharacterValueEvent(state);
         StepPanel.OnCharacterStateChanged(state);
@@ -469,11 +462,6 @@ public class UIGameManager : MonoBehaviour
         if (CharacterManager.Instance.SelectedCharacter.Id == e.characterId) 
         { 
             rewardBonusPanel.InitData(e);
-            if(attackPanel.gameObject.activeSelf)
-            {
-                attackPanel.OnCancelBtnClicked();
-                targetScreenPanel.OnClosePanel();
-            }
         }
     }
 
@@ -487,8 +475,6 @@ public class UIGameManager : MonoBehaviour
             item.OnReceiveExtraScore(message);
         }*/
         stackScoreText.OnReceiveMessageData(message);
-
-        attackPanel.InitCharacterState(controller.State);
         ResourcePanel.OnCharacterValueEvent(controller.State);
         StepPanel.OnCharacterStateChanged(controller.State);
         equipPanel.InitEquipList(controller.State);
@@ -544,10 +530,35 @@ public class UIGameManager : MonoBehaviour
         );
     }
 
+    public void InitSpawnItems(MapState mapState)
+    {
+        int i = 0;
+        foreach (UFB.StateSchema.SpawnEntity entity in mapState.spawnEntities.items.Values)
+        {
+            // var tile = Tiles[entity.tileId];
+            Debug.Log(
+                $"Spawning entity {entity.prefabAddress}"
+            );
+            if(entity.prefabAddress == "Entities/chest" /*|| entity.prefabAddress == "Entities/ItemBag"*/)
+            {
+                AddSpawnItem(entity, i);
+                i++;
+            }
+        }
+        HighlightRect.Instance.SetHighLightForSpawn(itemTileList);
+    }
+    
+    public List<Tile> itemTileList = new List<Tile>();
+    public void AddSpawnItem(UFB.StateSchema.SpawnEntity spawnEntity, int i)
+    {
+        var tile = ServiceLocator.Current.Get<GameBoard>().Tiles[spawnEntity.tileId];
+        itemTileList.Add(tile);
+    }
+    
     public bool IsCharacterCameraControl()
     {
         return !(spawnPanel.gameObject.activeSelf || ResourcePanel.gameObject.activeSelf || equipPanel.gameObject.activeSelf || powerMovePanel.gameObject.activeSelf || 
-            attackPanel.gameObject.activeSelf || merchantPanel.gameObject.activeSelf || wndPortalPanel.gameObject.activeSelf || /*turnPanel.gameObject.activeSelf ||*/ 
+            merchantPanel.gameObject.activeSelf || wndPortalPanel.gameObject.activeSelf || /*turnPanel.gameObject.activeSelf ||*/ 
             punchPanel.gameObject.activeSelf || errorPanel.gameObject.activeSelf || equipBonusPanel.gameObject.activeSelf || stackTurnStartPanel.gameObject.activeSelf ||
             endPanel.gameObject.activeSelf || defencePanel.gameObject.activeSelf || rewardBonusPanel.gameObject.activeSelf);
     }

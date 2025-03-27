@@ -172,6 +172,7 @@ namespace UFB.Network.RoomMessageTypes
         public int powerId;
         public int coinCount;
         public string spawnId;
+        public string tileId;
     }
 
     public class RequestGetResourceMessage : ISendMessage

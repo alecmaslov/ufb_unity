@@ -96,7 +96,6 @@ public class HighlightRect : MonoBehaviour
             selectedMonster = monsters[selectedIdx];
         }
 
-        UIGameManager.instance.targetScreenPanel.SetTargetImage();
         UIGameManager.instance.punchPanel.SetTargetImage();
     }
 
@@ -107,7 +106,6 @@ public class HighlightRect : MonoBehaviour
             selectedIdx = (++selectedIdx) % monsters.Count;
             selectedMonster = monsters[selectedIdx];
         }
-        UIGameManager.instance.targetScreenPanel.SetTargetImage();
         UIGameManager.instance.punchPanel.SetTargetImage();
     }
 

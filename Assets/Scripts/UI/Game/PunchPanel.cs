@@ -212,7 +212,6 @@ public class PunchPanel : MonoBehaviour
         pm.light = 2;
         pm.coin = 0;
         pm.range = 1;
-        UIGameManager.instance.attackPanel.Init(pm);
     }
 
     public void OnManaBtn()
@@ -272,19 +271,6 @@ public class PunchPanel : MonoBehaviour
         pm.light = 2;
         pm.coin = 0;
         pm.range = 1;
-        UIGameManager.instance.attackPanel.Init(pm);
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // UIGameManager.instance.attackPanel.Init(pm);
     }
 }

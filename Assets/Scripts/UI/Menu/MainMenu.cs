@@ -71,23 +71,7 @@ namespace UFB.UI
 
         public void OnJoinRoomButton()
         {
-            string roomId = PlayerPrefs.GetString("roomId");
-            string token = PlayerPrefs.GetString("sessionId");
-            
-            Debug.Log(roomId);
-            Debug.Log(token);
-            
-            if (string.IsNullOrEmpty(roomId))
-            {
-                MainScene.instance.ShowNotificationMessage("error", "Room id is empty");
-            }
-
-            if (string.IsNullOrEmpty(token))
-            {
-                MainScene.instance.ShowNotificationMessage("error", "Token is empty");
-            }
-            
-            ServiceLocator.Current.Get<GameService>().ReConnectRoom(roomId, token);
+            MainScene.instance.OnReconnectRoom();
         }
         
         public void OnAccountGameButton()

@@ -163,6 +163,7 @@ public class SpawnPanel : MonoBehaviour
                     itemId = itemIdx,
                     powerId = powerIdx,
                     spawnId = _spawnId,
+                    tileId = tileId
                 }
             )
         );

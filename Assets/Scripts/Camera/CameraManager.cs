@@ -247,18 +247,10 @@ public class CameraManager : MonoBehaviour
 
             ui_raycaster.Raycast(click_data, click_results);
 
-            foreach (RaycastResult result in click_results)
+            /*foreach (RaycastResult result in click_results)
             {
                 Debug.Log($"UI element: {result.gameObject.name}");                
-            }
-
-        }
-
-        Debug.DrawRay(ray.origin, ray.direction, new Color(1, 0, 0));
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            Debug.Log(hit.collider.gameObject.name);
+            }*/
         }
 
         /*// Check if the ray hits an object in the scene
@@ -274,8 +266,6 @@ public class CameraManager : MonoBehaviour
         }*/
 
 
-
-
         // Handle zoom (pinch) and drag
         if (Input.touchCount == 1)
         {
@@ -284,7 +274,6 @@ public class CameraManager : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                Debug.Log("touch begin");
                 touchStart = touch.position;
                 camStartPos = cameraTarget.position;
                 isMovingCamera = false;
@@ -301,16 +290,9 @@ public class CameraManager : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     endPos = hit.point;
-
-                    Debug.Log("touch start: " + startPos);
-                    Debug.Log("touch mouse: " + endPos);
-
                     Vector3 direction = endPos - startPos;
-                    Debug.Log("touch move: " + direction);
-
                     isMovingCamera = true;
                     cameraTarget.transform.position = camStartPos + new Vector3(-direction.x, 0, -direction.z) * speed;
-
                 }
 
             }

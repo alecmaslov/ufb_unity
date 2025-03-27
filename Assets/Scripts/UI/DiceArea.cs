@@ -169,10 +169,6 @@ public class DiceArea : MonoBehaviour
                 {
                     UIGameManager.instance.bottomAttackPanel.OnFinishEnemy();
                 }
-                else
-                {
-                    UIGameManager.instance.attackPanel.OnFinishEnemy();
-                }
             }
             else
             {
@@ -188,10 +184,6 @@ public class DiceArea : MonoBehaviour
             else if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
             {
                 UIGameManager.instance.bottomAttackPanel.OnFinishDice();
-            }
-            else
-            {
-                UIGameManager.instance.attackPanel.OnFinishDice();
             }
         }
         else
