@@ -6,6 +6,8 @@ using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 public class TapSelfPanel : MonoBehaviour
 {
@@ -19,6 +21,8 @@ public class TapSelfPanel : MonoBehaviour
     public PowerMove[] moves;
 
     public PowerMove selectedPowermove;
+    
+    public Image avatarImage;
 
     private void Awake()
     {
@@ -30,6 +34,23 @@ public class TapSelfPanel : MonoBehaviour
         PowerMoveItem.gameObject.SetActive(false);
         SelfItemPanel.SetActive(true);
         gameObject.SetActive(true);
+        
+        Addressables
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + UIGameManager.instance.controller.State.characterClass)
+            .Completed += (op) =>
+        {
+            if (
+                op.Status
+                == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+            )
+            {
+                avatarImage.sprite = op.Result.avatar;
+            }
+            else
+                Debug.LogError(
+                    "Failed to load character avatar: " + op.OperationException.Message
+                );
+        };
     }
 
     public void InitPowermove(Item item, EquipSlot slt, PowerMove[] _moves)
@@ -46,6 +67,7 @@ public class TapSelfPanel : MonoBehaviour
         selectedPowermove = moves[idx];
 
         PowerMoveItem.Init(selectedPowermove);
+        PowerMoveItem.InitResultList();
         PowerMoveItem.gameObject.SetActive(true);
     }
 

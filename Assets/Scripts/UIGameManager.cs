@@ -372,7 +372,7 @@ public class UIGameManager : MonoBehaviour
         Debug.Log("===> respawn event");
         
         Tile target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId];
-        SpawnItemEvent sEvent = new SpawnItemEvent(message.oldTileId);
+        SpawnItemEvent sEvent = new SpawnItemEvent();
         sEvent.tileId = message.oldTileId;
         sEvent.target = target.transform;
         sEvent.targetTileId = message.tileId;

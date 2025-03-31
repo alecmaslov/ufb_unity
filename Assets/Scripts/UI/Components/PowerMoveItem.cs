@@ -90,36 +90,44 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.health);
+                itemCard.countText.gameObject.SetActive(false);
                 itemCard.gameObject.SetActive(true);
 
                 if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_4)
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.dice[1]);
+                    cd.countText.gameObject.SetActive(false);
                     cd.gameObject.SetActive(true);
                 } 
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6)
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.dice[0]);
+                    cd.countText.gameObject.SetActive(false);
                     cd.gameObject.SetActive(true);
                 }
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_4)
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.dice[0]);
+                    cd.countText.gameObject.SetActive(false);
+
                     cd.gameObject.SetActive(true);
                     var cd1 = Instantiate(card, resultList);
                     cd1.InitImage(GlobalResources.instance.dice[1]);
+                    cd1.countText.gameObject.SetActive(false);
                     cd1.gameObject.SetActive(true);
                 }
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_6)
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.dice[0]);
+                    cd.countText.gameObject.SetActive(false);
                     cd.gameObject.SetActive(true);
                     var cd1 = Instantiate(card, resultList);
                     cd1.InitImage(GlobalResources.instance.dice[0]);
+                    cd1.countText.gameObject.SetActive(false);
                     cd1.gameObject.SetActive(true);
                 }
             }
@@ -130,6 +138,7 @@ public class PowerMoveItem : MonoBehaviour
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.items[item.id]);
+                    cd.InitText(item.count.ToString());
                     cd.gameObject.SetActive(true);
                 }
             }
@@ -140,6 +149,7 @@ public class PowerMoveItem : MonoBehaviour
                 {
                     var cd = Instantiate(card, resultList);
                     cd.InitImage(GlobalResources.instance.stacks[item.id]);
+                    cd.InitText(item.count.ToString());
                     cd.gameObject.SetActive(true);
                 }
             }
@@ -148,6 +158,7 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.coin);
+                itemCard.InitText(pm.result.coin.ToString());
                 itemCard.gameObject.SetActive(true);
             }
 
@@ -155,12 +166,14 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.energy);
+                itemCard.InitText(pm.result.energy.ToString());
                 itemCard.gameObject.SetActive(true);
             }
             
             if (pm.result.health > 0)
             {
                 ItemCard itemCard = Instantiate(card, resultList);
+                itemCard.InitText(pm.result.health.ToString());
                 itemCard.InitImage(GlobalResources.instance.health);
                 itemCard.gameObject.SetActive(true);
             }
@@ -169,6 +182,7 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.ultimate);
+                itemCard.InitText(pm.result.ultimate.ToString());
                 itemCard.gameObject.SetActive(true);
             }
             
@@ -176,6 +190,7 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.perks[pm.result.perkId]);
+                itemCard.countText.gameObject.SetActive(false);
                 itemCard.gameObject.SetActive(true);
             }
             
@@ -183,6 +198,7 @@ public class PowerMoveItem : MonoBehaviour
             {
                 ItemCard itemCard = Instantiate(card, resultList);
                 itemCard.InitImage(GlobalResources.instance.perks[pm.result.perkId1]);
+                itemCard.countText.gameObject.SetActive(false);
                 itemCard.gameObject.SetActive(true);
             }
         }

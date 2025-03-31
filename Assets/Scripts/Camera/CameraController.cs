@@ -33,16 +33,6 @@ namespace UFB.Events
         public Transform target = null;
         public string targetTileId = "";
         public Tile tile = null;
-        public SpawnItemEvent(string tileId)
-        {
-            this.tileId = tileId;
-        }
-        public SpawnItemEvent(string tileId, string targetTileId, Transform target) 
-        { 
-            this.tileId = tileId;
-            this.target = target;
-            this.targetTileId = targetTileId;
-        }
     }
 
     public class SetCameraStateEvent

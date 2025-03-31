@@ -148,7 +148,10 @@ public class SpawnPanel : MonoBehaviour
     {
         // posPanel.SetActive(true);
         EventBus.Publish(
-            new SpawnItemEvent(tileId)
+            new SpawnItemEvent
+            {
+                tileId = tileId,
+            }
         );
         
         spawnConfirmPanel.SetActive(false);

@@ -112,7 +112,7 @@ public class MainScene : MonoBehaviour
         MenuManager.Instance.OpenMenu(MenuManager.Instance.initialMenu);
         
         gameObject.SetActive(false);
-        OnReconnectRoom();
+        // OnReconnectRoom();
     }
 
     public void ShowNotificationMessage(string title, string message)

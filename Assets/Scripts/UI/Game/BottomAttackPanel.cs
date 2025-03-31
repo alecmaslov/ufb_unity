@@ -387,7 +387,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator LanchEnemyDiceRoll(int diceCount)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.7f);
         DiceData[] data = new DiceData[1];
         data[0] = new DiceData();
         data[0].type = DICE_TYPE.DICE_4;
@@ -426,7 +426,7 @@ public class BottomAttackPanel : MonoBehaviour
         }
         else
         {
-            powermoveImage.sprite = GlobalResources.instance.powers[(int)selectedPowermove.powerImageId];
+            powermoveImage.sprite = GlobalResources.instance.powers[selectedPowermove.powerImageId];
             playerDiceRect.SetActive(false);
         }
         powermoveImage.gameObject.SetActive(true);
@@ -517,14 +517,14 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator EndAttackPanel()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         if (isEndAttack)
         {
             CancelAttack();
         }
     }
 
-    IEnumerator OnStartDiceRect(float delay = 1f)
+    IEnumerator OnStartDiceRect(float delay)
     {
         yield return new WaitForSeconds(delay);
         OnSelectDice();

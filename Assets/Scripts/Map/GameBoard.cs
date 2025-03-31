@@ -113,7 +113,11 @@ namespace UFB.Map
                 // SpawnEntity(entity.prefabAddress, tile);
                 SpawnEntity(entity);
             }
-            UIGameManager.instance.InitSpawnItems(state);
+
+            if (PlayerPrefs.GetInt("roomJoinOption") != 1)
+            {
+                UIGameManager.instance.InitSpawnItems(state);
+            }
         }
 
         public async void SpawnEntity(StateSchema.SpawnEntity spawnEntity)

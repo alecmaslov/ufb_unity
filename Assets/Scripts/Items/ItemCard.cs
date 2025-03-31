@@ -9,8 +9,7 @@ public class ItemCard : MonoBehaviour
     [SerializeField]
     private Image itemImage;
 
-    [SerializeField]
-    private Text countText;
+    public Text countText;
 
     public Text itemCountText;
 

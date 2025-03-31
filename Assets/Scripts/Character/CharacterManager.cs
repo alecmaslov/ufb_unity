@@ -16,8 +16,8 @@ using UFB.Core;
 using System.Threading.Tasks;
 using Colyseus.Schema;
 using UFB.Camera;
+using UFB.Interactions;
 using UFB.Items;
-using UnityEngine.TextCore.Text;
 
 namespace UFB.Events
 {
@@ -185,7 +185,7 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            if (UIGameManager.instance.isPlayerTurn)
+            if (InteractionManager.Instance.isSpawn && character.State.type == (int)USER_TYPE.USER && PlayerPrefs.GetInt("roomJoinOption") != 1)
             {
                 character.transform.position = new Vector3(-100, -100, 100);
             }
