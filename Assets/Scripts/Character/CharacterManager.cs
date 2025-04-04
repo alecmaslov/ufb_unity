@@ -15,7 +15,6 @@ using UFB.Network.RoomMessageTypes;
 using UFB.Core;
 using System.Threading.Tasks;
 using Colyseus.Schema;
-using UFB.Camera;
 using UFB.Interactions;
 using UFB.Items;
 
@@ -189,12 +188,12 @@ namespace UFB.Character
             {
                 character.transform.position = new Vector3(-100, -100, 100);
             }
-            EventBus.Publish(
+            /*EventBus.Publish(
                 new SetCameraPresetStateEvent
                 {
                     presetState = CameraController.PresetState.TopDown
                 }
-            );
+            );*/
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(

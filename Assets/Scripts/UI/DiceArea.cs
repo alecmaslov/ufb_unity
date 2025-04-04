@@ -159,7 +159,7 @@ public class DiceArea : MonoBehaviour
 
     IEnumerator EndDiceAnim()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         if (isEnemyDiceTurn)
         {

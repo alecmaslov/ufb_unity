@@ -168,6 +168,10 @@ namespace UFB.Interactions
             if (isTileClicked)
             {
                 UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+                if (pointerPosition.y < Screen.height / 2 - 80)
+                {
+                    CameraManager.instance.cameraTarget.position = hitTilePos;
+                }
             }
         }
 
@@ -252,6 +256,7 @@ namespace UFB.Interactions
                     else
                     {
                         UIGameManager.instance.movePanel.OnClickTile(tile);
+                        hitTilePos = tile.Position;
                         isTileClicked = true;
                     }
 
@@ -259,6 +264,8 @@ namespace UFB.Interactions
             }
         }
 
+        Vector3 hitTilePos = Vector3.zero;
+        
         private void OnRaycastDBClicked(Transform transform, IClickable clickable)
         {
             if (Mode != InteractionMode.SelectItem)

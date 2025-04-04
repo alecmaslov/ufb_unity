@@ -94,7 +94,8 @@ public class UIGameManager : MonoBehaviour
     public bool isPlayerTurn = false;
 
     public bool isMoveTileStatus = false;
-
+    public float delayNextTurnTime = 2f;
+    public float curNextTurnTime = 0f;
     #endregion
 
     private void Awake()
@@ -127,7 +128,7 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<GetBombMessage>( GlobalDefine.SERVER_MESSAGE.GET_BOMB_DAMAGE, movePanel.OnReceiveGetBombMessage );
         gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(GlobalDefine.SERVER_MESSAGE.GET_MERCHANT_DATA, merchantPanel.InitMerchantData);
         gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>( GlobalDefine.SERVER_MESSAGE.RESPAWN_MERCHANT , OnReSpawnMerchant);
-        gameService.SubscribeToRoomMessage<BecomeZombieMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
+        gameService.SubscribeToRoomMessage<UnEquipItemMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
         gameService.SubscribeToRoomMessage<SetHighLightRectMessage>(GlobalDefine.SERVER_MESSAGE.SET_HIGHLIGHT_RECT, OnSetHighLightRectReceived);
         gameService.SubscribeToRoomMessage<SetDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.SET_DICE_ROLL, OnSetDiceRoll);
         gameService.SubscribeToRoomMessage<EnemyDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.ENEMY_DICE_ROLL, OnEnemyDiceRoll);
@@ -160,6 +161,9 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<GetEquipSlotMessage>(GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST, OnGetEquipSlotList);
         
         gameService.SubscribeToRoomMessage<TurnChangeMessage>(GlobalDefine.SERVER_MESSAGE.RECONNECT_ROOM, GetRoomStateData);
+        
+        // Request Equip Bonus Detail
+        gameService.SubscribeToRoomMessage<GetTurnStartEquipBonusMessage>(GlobalDefine.SERVER_MESSAGE.EQUIP_BONUS_LIST, OnShowEquipBonusReceived);
 
         
     }
@@ -406,11 +410,16 @@ public class UIGameManager : MonoBehaviour
         CameraManager.instance.cameraTarget.localPosition = Vector3.zero;
     }
 
-    private void OnUnEquipPowerReceived(BecomeZombieMessage e)
+    private void OnUnEquipPowerReceived(UnEquipItemMessage e)
     {
         powerMovePanel.ClosePowerMovePanel();
     }
 
+    private void OnShowEquipBonusReceived(GetTurnStartEquipBonusMessage e)
+    {
+        powerMovePanel.ShowEquipBonus(e.bonuses);
+    }
+    
     private void OnReceiveBanStackMessage(ToastBanStackMessage e)
     {
         toastPanel.InitBanStackMessage(e);
@@ -618,6 +627,29 @@ public class UIGameManager : MonoBehaviour
             curTurnTime -= Time.deltaTime;
         }
 
+        if (CharacterManager.Instance.PlayerCharacter.State.stats.energy.current == 0 && isPlayerTurn)
+        {
+            curNextTurnTime += Time.deltaTime;
+            if (curNextTurnTime > delayNextTurnTime)
+            {
+                curNextTurnTime = 0;
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        GlobalDefine.CLIENT_MESSAGE.END_TURN,
+                        new RequestEndTurnMessage
+                        {
+                            characterId = controller.Id,
+                        }
+                    )
+                );
+                isPlayerTurn = false;
+            }
+        }
+        else
+        {
+            curNextTurnTime = 0;
+        }
+        
     }
     #endregion
 }

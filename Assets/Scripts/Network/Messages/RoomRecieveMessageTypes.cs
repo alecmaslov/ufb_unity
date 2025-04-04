@@ -312,4 +312,10 @@ namespace UFB.Network.RoomMessageTypes
     {
         public string playerId; // the playerId the zombie will takeover
     }
+
+    public class UnEquipItemMessage : IReceiveMessage
+    {
+        public string playerId;
+        public int powerId;
+    }
 }

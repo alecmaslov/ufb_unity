@@ -59,6 +59,7 @@ public class GlobalDefine
         public static string SET_MOVE_POINT = "SET_MOVE_POINT";
         public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
         public static string RECONNECT_ROOM = "RECONNECT_ROOM";
+        public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
     }
 
     public static class CLIENT_MESSAGE
@@ -79,6 +80,7 @@ public class GlobalDefine
         public static string SET_DICE_STACK_TURN_ROLL = "SET_DICE_STACK_TURN_ROLL";
         public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
         public static string GET_ROOM_DATA = "GET_ROOM_DATA";
+        public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
     }
 
     public static class RESPONSE_MESSAGE

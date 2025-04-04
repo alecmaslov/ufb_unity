@@ -33,6 +33,8 @@ public class BottomDefeatPanel : MonoBehaviour
 
     public GameObject redPanelImage;
 
+    public Text titleText;
+    
     public void Init(PowerMove _powermove, CharacterState origin, CharacterState target)
     {
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
@@ -40,6 +42,8 @@ public class BottomDefeatPanel : MonoBehaviour
         //InitEnemyState(target);
         InitCharacterState(origin);
 
+        titleText.text = $"{origin.displayName.ToUpper()} ATTACKS!";
+        
         pm = _powermove;
         InitDiceData();
 

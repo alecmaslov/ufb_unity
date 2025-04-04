@@ -97,7 +97,7 @@ public class CameraManager : MonoBehaviour
 
             foreach (RaycastResult result in click_results)
             {
-                Debug.Log($"UI element: {result.gameObject.name}");
+                // Debug.Log($"UI element: {result.gameObject.name}");
             }
 
             if(click_results.Count > 0)

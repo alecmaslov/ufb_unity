@@ -27,12 +27,21 @@ public class PowerMovePanel : MonoBehaviour
     Text powerLevelText;
 
     [SerializeField]
+    Text equipbonusText;
+    
+    [SerializeField]
     Transform moveList;
 
     public EquipSlot slot;
 
     public Item powerItem;
 
+
+    public Transform equipBonusList;
+    public ItemCard bonusItem;
+    public Image bonusPowerImage;
+    public GameObject equipBonusPanel;
+    
     private void Awake()
     {
         if (instance == null)
@@ -88,7 +97,7 @@ public class PowerMovePanel : MonoBehaviour
         UIGameManager.instance.equipPanel.gameObject.SetActive(false);
 
     }
-
+    
     public void UnEquipPower()
     {
 
@@ -104,6 +113,67 @@ public class PowerMovePanel : MonoBehaviour
         );
     }
 
+    public void OnEquipBonus()
+    {
+        UFB.Events.EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.EQUIP_BONUS_LIST,
+                new RequestGetPowerMoveList
+                {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                    powerId = powerItem.id,
+                }
+            )
+        );
+    }
+
+    public void ShowEquipBonus(EquipBonus[] bonuses)
+    {
+        if(bonuses.Length == 0)
+        {
+            equipbonusText.text = "NO EQUIP BONUS";
+            return;
+        }
+        
+        equipbonusText.text = "EQUIP BONUS";
+        
+        for (int i = 1; i < equipBonusList.childCount; i++)
+        {
+            Destroy(equipBonusList.GetChild(i).gameObject);
+        }
+        
+        bonusPowerImage.sprite = GlobalResources.instance.powers[bonuses[0].id];
+
+        if (bonuses[0].items != null)
+        {
+            foreach (var item in bonuses[0].items)
+            {
+                ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
+                card.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id], false);
+            }
+        }
+        
+        if (bonuses[0].stacks != null)
+        {
+            foreach (var item in bonuses[0].stacks)
+            {
+                ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
+                card.InitDate(item.count.ToString(), GlobalResources.instance.stacks[item.id], false);
+            }
+        }
+        
+        if (bonuses[0].randomItems != null)
+        {
+            foreach (var item in bonuses[0].randomItems)
+            {
+                ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
+                card.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id], false);
+            }
+        }
+        
+        equipBonusPanel.SetActive(true);
+    }
+    
     public void ClosePowerMovePanel()
     {
         slot.ResetImage();

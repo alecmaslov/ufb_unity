@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 using UFB.Character;
 using UFB.Core;
 using UFB.Events;
@@ -9,7 +7,6 @@ using UFB.Map;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
-using UI.ThreeDimensional;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -175,9 +172,20 @@ public class BottomAttackPanel : MonoBehaviour
     {
         if (punchPart.activeSelf)
         {
+            Coordinates currentPos = UIGameManager.instance.controller.CurrentTile.Coordinates;
+            Coordinates targetPos = target.coordinates.ToCoordinates();
+            
+            bool isAdjusted = (Mathf.Abs(currentPos.X - targetPos.X) + Mathf.Abs(currentPos.Y - targetPos.Y)) == 1;
+
+            if (!isAdjusted)
+            {
+                UIGameManager.instance.OnNotificationMessage("error", "You don't attack punch because of position.");
+                return;
+            }
+            
             // CHECK CONDITION
             int count = 0;
-            if (type == 1) // MELEE
+            if (type == 0) // MELEE
             {
                 count = UIGameManager.instance.GetItemCount(ITEM.Melee);
             }
@@ -185,7 +193,7 @@ public class BottomAttackPanel : MonoBehaviour
             {
                 count = UIGameManager.instance.GetItemCount(ITEM.Mana);
             }
-
+            
             if (count == 0)
             {
                 UIGameManager.instance.OnNotificationMessage("error", "You don't have enough Item to do that!");
@@ -311,7 +319,7 @@ public class BottomAttackPanel : MonoBehaviour
         if (UIGameManager.instance.bottomDrawer.IsExpanded)
         {
             UIGameManager.instance.equipPanel.ClearHighLightItems();
-            UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+            // UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
             HighlightRect.Instance.ClearHighLightRect();
         }
 
@@ -517,9 +525,10 @@ public class BottomAttackPanel : MonoBehaviour
 
     IEnumerator EndAttackPanel()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         if (isEndAttack)
         {
+            UIGameManager.instance.StepPanel.SetHighLightBtn(true);
             CancelAttack();
         }
     }
