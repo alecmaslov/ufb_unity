@@ -133,6 +133,8 @@ public class MerchantModalPanel : MonoBehaviour
         {
             if (isBuyStatus)
             {
+                UIGameManager.instance.merchantPanel.buyPanel.AddBoughtItemId(itemType, selectedItem.id);
+                
                 EventBus.Publish(
                     RoomSendMessageEvent.Create(
                         GlobalDefine.SERVER_MESSAGE.MERCHANT_BUY_ITEM,

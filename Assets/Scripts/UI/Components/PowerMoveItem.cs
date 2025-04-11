@@ -40,8 +40,17 @@ public class PowerMoveItem : MonoBehaviour
 
         foreach (var cost in powerMove.costList)
         {
+            if(((ITEM) cost.id == ITEM.RandomArrow || (ITEM) cost.id == ITEM.RandomBomb) && powerMove.extraItemId >= 0) continue;
+            
             ItemCard itemCard = Instantiate(card, costList);
             itemCard.InitDate(cost.count.ToString(), GlobalResources.instance.items[cost.id], UIGameManager.instance.GetItemCount((ITEM) cost.id) < cost.count);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if (powerMove.extraItemId >= 0)
+        {
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitDate(1.ToString(), GlobalResources.instance.items[powerMove.extraItemId], UIGameManager.instance.GetItemCount((ITEM) powerMove.extraItemId) < 1);
             itemCard.gameObject.SetActive(true);
         }
 
@@ -88,47 +97,25 @@ public class PowerMoveItem : MonoBehaviour
         {
             if (pm.result.dice > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.health);
-                itemCard.countText.gameObject.SetActive(false);
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(0, GlobalResources.instance.health, false);
 
                 if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_4)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.dice[1]);
-                    cd.countText.gameObject.SetActive(false);
-                    cd.gameObject.SetActive(true);
+                    AddResultItem(0, GlobalResources.instance.dice[1], false);
                 } 
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.dice[0]);
-                    cd.countText.gameObject.SetActive(false);
-                    cd.gameObject.SetActive(true);
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
                 }
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_4)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.dice[0]);
-                    cd.countText.gameObject.SetActive(false);
-
-                    cd.gameObject.SetActive(true);
-                    var cd1 = Instantiate(card, resultList);
-                    cd1.InitImage(GlobalResources.instance.dice[1]);
-                    cd1.countText.gameObject.SetActive(false);
-                    cd1.gameObject.SetActive(true);
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                    AddResultItem(0, GlobalResources.instance.dice[1], false);
                 }
                 else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_6)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.dice[0]);
-                    cd.countText.gameObject.SetActive(false);
-                    cd.gameObject.SetActive(true);
-                    var cd1 = Instantiate(card, resultList);
-                    cd1.InitImage(GlobalResources.instance.dice[0]);
-                    cd1.countText.gameObject.SetActive(false);
-                    cd1.gameObject.SetActive(true);
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
                 }
             }
             
@@ -136,10 +123,7 @@ public class PowerMoveItem : MonoBehaviour
             {
                 foreach (var item in pm.result.items)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.items[item.id]);
-                    cd.InitText(item.count.ToString());
-                    cd.gameObject.SetActive(true);
+                    AddResultItem(item.count, GlobalResources.instance.items[item.id]);
                 }
             }
 
@@ -147,61 +131,106 @@ public class PowerMoveItem : MonoBehaviour
             {
                 foreach (var item in pm.result.stacks)
                 {
-                    var cd = Instantiate(card, resultList);
-                    cd.InitImage(GlobalResources.instance.stacks[item.id]);
-                    cd.InitText(item.count.ToString());
-                    cd.gameObject.SetActive(true);
+                    AddResultItem(item.count, GlobalResources.instance.stacks[item.id]);
                 }
             }
 
             if (pm.result.coin > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.coin);
-                itemCard.InitText(pm.result.coin.ToString());
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(pm.result.coin, GlobalResources.instance.coin);
             }
 
+            if (pm.extraItemId >= 0)
+            {
+                ITEM _type = (ITEM) pm.extraItemId;
+
+                if (_type == ITEM.Arrow)
+                {
+                    AddResultItem(2, GlobalResources.instance.health);
+                }
+                else if (_type == ITEM.BombArrow)
+                {
+                    AddResultItem(6, GlobalResources.instance.health);
+                    AddResultItem(0, GlobalResources.instance.perks[(int)PERK.PUSH], false);
+                }
+                else if (_type == ITEM.FireArrow)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Burn]);
+                }
+                else if (_type == ITEM.IceArrow)
+                {
+                    AddResultItem(3, GlobalResources.instance.energy);
+                    AddResultItem(3, GlobalResources.instance.ultimate);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Freeze]);
+                }
+                else if (_type == ITEM.VoidArrow)
+                {
+                    AddResultItem(4, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Void]);
+                }
+                else if (_type == ITEM.Bomb)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                }
+                else if (_type == ITEM.caltropBomb)
+                {
+                    AddResultItem(4, GlobalResources.instance.energy);
+                    AddResultItem(4, GlobalResources.instance.ultimate);
+                }
+                else if (_type == ITEM.FireBomb)
+                {
+                    AddResultItem(4, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Burn]);
+                }
+                else if (_type == ITEM.IceBomb)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                    AddResultItem(2, GlobalResources.instance.energy);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Freeze]);
+                }
+                else if (_type == ITEM.VoidBomb)
+                {
+                    AddResultItem(5, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Void]); 
+                }
+            }
+            
             if (pm.result.energy > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.energy);
-                itemCard.InitText(pm.result.energy.ToString());
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(pm.result.energy, GlobalResources.instance.energy);
             }
             
             if (pm.result.health > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitText(pm.result.health.ToString());
-                itemCard.InitImage(GlobalResources.instance.health);
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(pm.result.health, GlobalResources.instance.health);
             }
             
             if (pm.result.ultimate > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.ultimate);
-                itemCard.InitText(pm.result.ultimate.ToString());
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(pm.result.ultimate, GlobalResources.instance.ultimate);
             }
             
             if (pm.result.perkId > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.perks[pm.result.perkId]);
-                itemCard.countText.gameObject.SetActive(false);
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId], false);
             }
             
             if (pm.result.perkId1 > 0)
             {
-                ItemCard itemCard = Instantiate(card, resultList);
-                itemCard.InitImage(GlobalResources.instance.perks[pm.result.perkId1]);
-                itemCard.countText.gameObject.SetActive(false);
-                itemCard.gameObject.SetActive(true);
+                AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId1], false);
             }
+            
         }
+    }
+
+    public void AddResultItem(int count, Sprite sprite, bool isText = true)
+    {
+        ItemCard itemCard = Instantiate(card, resultList);
+        itemCard.InitText(count.ToString());
+        itemCard.InitImage(sprite);
+        itemCard.countText.gameObject.SetActive(isText);
+        itemCard.gameObject.SetActive(true);
     }
     
     public void OnClickPowermove()
@@ -223,8 +252,19 @@ public class PowerMoveItem : MonoBehaviour
         
         foreach (var cost in pm.costList)
         {
-            int count = UIGameManager.instance.GetItemCount((ITEM)cost.id);
-            if (count < cost.cost)
+            if (!((ITEM)cost.id == ITEM.RandomArrow || (ITEM)cost.id == ITEM.RandomBomb))
+            {
+                int count = UIGameManager.instance.GetItemCount((ITEM)cost.id);
+                if (count < cost.cost)
+                {
+                    isPowermoveEnabled = false;
+                }
+            }
+        }
+
+        if (pm.extraItemId >= 0)
+        {
+            if (UIGameManager.instance.GetItemCount((ITEM)pm.extraItemId) < 1)
             {
                 isPowermoveEnabled = false;
             }
@@ -238,5 +278,66 @@ public class PowerMoveItem : MonoBehaviour
         }
         
         return isPowermoveEnabled;
+    }
+
+    public void OnPowermoveItem()
+    {
+        int selectPanelIdx = -1;
+        foreach (var item in pm.costList)
+        {
+            if (item.id == (int)ITEM.RandomArrow)
+            {
+                selectPanelIdx = 0;
+            }
+            else if (item.id == (int)ITEM.RandomBomb)
+            {
+                selectPanelIdx = 1;
+            }
+        }
+
+        if (selectPanelIdx == 0)
+        {
+            UIGameManager.instance.arrowsAddPanel.Init(1);
+        }
+        else if (selectPanelIdx == 1)
+        {
+            UIGameManager.instance.bombsAddPanel.Init(0);
+        }
+    }
+
+    public void OnAddArrow(int itemId)
+    {
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            UIGameManager.instance.arrowsAddPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough arrow item.");
+        }
+    }
+
+    public void OnAddBomb(int itemId)
+    {
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            UIGameManager.instance.bombsAddPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough bomb item.");
+        }
     }
 }

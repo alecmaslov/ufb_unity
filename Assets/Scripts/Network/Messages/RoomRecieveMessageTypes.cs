@@ -247,6 +247,8 @@ namespace UFB.Network.RoomMessageTypes
     public class GetMerchantDataMessage: IReceiveMessage
     {
         public Item[] items;
+        public Item[] items1;
+        public Item[] items2;
         public Item[] stacks;
         public Item[] powers;
         public Quest[] quests;

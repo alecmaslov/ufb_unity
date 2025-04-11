@@ -29,12 +29,16 @@ public class BuyPanel : MonoBehaviour
     private List<Item> powers = new List<Item>();
     private List<Item> stacks = new List<Item>();
 
+    public List<int> boughtItemIds = new List<int>();
+    public List<int> boughtPowerIds = new List<int>();
+    public List<int> boughtStackIds = new List<int>();
+    
     public void InitData()
     {
         Debug.Log("=====>Buy model");
-        if(UIGameManager.instance.merchantPanel.itemData != null)
+        if(UIGameManager.instance.merchantPanel.itemData1 != null)
         {
-            Debug.Log(UIGameManager.instance.merchantPanel.itemData.Length);
+            Debug.Log(UIGameManager.instance.merchantPanel.itemData1.Length);
         }
         else
         {
@@ -50,14 +54,21 @@ public class BuyPanel : MonoBehaviour
         }, true);
 
 
-        InitItem(UIGameManager.instance.merchantPanel.itemData);
-        InitItem1(UIGameManager.instance.merchantPanel.itemData);
+        InitItem(UIGameManager.instance.merchantPanel.itemData1);
+        InitItem1(UIGameManager.instance.merchantPanel.itemData2);
         InitPower(UIGameManager.instance.merchantPanel.powerData);
         InitStack(UIGameManager.instance.merchantPanel.stackData);
 
         isLoadData = true;
     }
 
+    public void ClearBoughtItems()
+    {
+        boughtItemIds.Clear();
+        boughtPowerIds.Clear();
+        boughtStackIds.Clear();
+    }
+    
     public void InitItem(Item[] items)
     {
         if (items == null || items.Length == 0) return;
@@ -69,16 +80,20 @@ public class BuyPanel : MonoBehaviour
 
         for (int i = 0; i < items.Length; i++)
         {
-            Item item = items[i];
-            if (item.level == 1 && item.cost > 0) 
+            if (!boughtItemIds.Exists(item => item == items[i].id))
             {
-                ItemCard it = Instantiate(itemCard, itemList);
-                it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
-                it.gameObject.SetActive(true);
-                it.GetComponent<Button>().onClick.AddListener(() =>
+                Item item = items[i];
+                if (item.level == 1 && item.cost > 0)
                 {
-                    UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(item, "item");
-                });
+                    ItemCard it = Instantiate(itemCard, itemList);
+                    it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
+                    it.gameObject.SetActive(true);
+                    it.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(item, "item");
+                        it.gameObject.SetActive(false);
+                    });
+                }
             }
         }
     }
@@ -94,16 +109,19 @@ public class BuyPanel : MonoBehaviour
 
         for (int i = 0; i < items.Length; i++)
         {
-            Item item = items[i];
-            if (item.level == 2 && item.cost > 0)
+            if (!boughtItemIds.Exists(item => item == items[i].id))
             {
-                ItemCard it = Instantiate(itemCard1, itemList1);
-                it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
-                it.gameObject.SetActive(true);
-                it.GetComponent<Button>().onClick.AddListener(() =>
+                Item item = items[i];
+                if (item.level == 2 && item.cost > 0)
                 {
-                    UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(item, "item");
-                });
+                    ItemCard it = Instantiate(itemCard1, itemList1);
+                    it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
+                    it.gameObject.SetActive(true);
+                    it.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(item, "item");
+                    });
+                }
             }
         }
     }
@@ -119,16 +137,19 @@ public class BuyPanel : MonoBehaviour
 
         for (int i = 0; i < powers.Length; i++)
         {
-            Item power = powers[i];
-            if (power.level == 1 && power.cost > 0)
+            if (!boughtPowerIds.Exists(item => item == powers[i].id))
             {
-                ItemCard it = Instantiate(powerCard, powerList);
-                it.InitDate(power.cost.ToString(), GlobalResources.instance.powers[power.id]);
-                it.gameObject.SetActive(true);
-                it.GetComponent<Button>().onClick.AddListener(() =>
+                Item power = powers[i];
+                if (power.level == 1 && power.cost > 0)
                 {
-                    UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(power, "power");
-                });
+                    ItemCard it = Instantiate(powerCard, powerList);
+                    it.InitDate(power.cost.ToString(), GlobalResources.instance.powers[power.id]);
+                    it.gameObject.SetActive(true);
+                    it.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(power, "power");
+                    });
+                }
             }
         }
 
@@ -145,18 +166,39 @@ public class BuyPanel : MonoBehaviour
 
         for(int i = 0; i < stacks.Length; i++)
         {
-            Item stack = stacks[i];
-            if (stack.cost > 0 && !(stack.id == (int)STACK.Slow || stack.id == (int)STACK.Void)) 
+            if (!boughtStackIds.Exists(item => item == stacks[i].id))
             {
-                ItemCard card = Instantiate(stackCard, stackList);
-                card.InitDate(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
-                card.gameObject.SetActive(true);
-                card.GetComponent<Button>().onClick.AddListener(() =>
+                Item stack = stacks[i];
+                if (stack.cost > 0 && !(stack.id == (int)STACK.Slow || stack.id == (int)STACK.Void))
                 {
-                    UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(stack, "stack");
-                });
+                    ItemCard card = Instantiate(stackCard, stackList);
+                    card.InitDate(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
+                    card.gameObject.SetActive(true);
+                    card.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        UIGameManager.instance.merchantPanel.merchantModalPanel.InitData(stack, "stack");
+                    });
+                }
             }
         }
-
     }
+
+    public void AddBoughtItemId(string itemType, int selectedItemId)
+    {
+        if (itemType == "item")
+        {
+            UIGameManager.instance.merchantPanel.buyPanel.boughtItemIds.Add(selectedItemId);
+        }
+        else if(itemType == "power")
+        {
+            UIGameManager.instance.merchantPanel.buyPanel.boughtPowerIds.Add(selectedItemId);
+        }
+        else if(itemType == "stack")
+        {
+            UIGameManager.instance.merchantPanel.buyPanel.boughtStackIds.Add(selectedItemId);
+        }
+        
+        InitData();
+    }
+    
 }

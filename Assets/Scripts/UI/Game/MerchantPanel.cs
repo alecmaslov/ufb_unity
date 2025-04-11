@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Events;
@@ -20,14 +21,16 @@ public class MerchantPanel : MonoBehaviour
 
     public string tileId;
 
-    public Animator animator;
-
     public Vector3[] panelAngles;
 
     public int panelIdx = 0;
 
     [HideInInspector]
     public Item[] itemData;
+    [HideInInspector]
+    public Item[] itemData1;
+    [HideInInspector]
+    public Item[] itemData2;
     [HideInInspector]
     public Item[] powerData;
     [HideInInspector]
@@ -50,8 +53,9 @@ public class MerchantPanel : MonoBehaviour
     {
         Debug.Log( "========>>>>" );
         Debug.Log(message);
-        Debug.Log(message.items.Length);
         itemData = message.items;
+        itemData1 = message.items1;
+        itemData2 = message.items2;
         powerData = message.powers;
         stackData = message.stacks;
         questData = message.quests;
@@ -63,6 +67,7 @@ public class MerchantPanel : MonoBehaviour
     public void InitData()
     {
         ui3DModel.TargetRotation = panelAngles[0];
+        buyPanel.ClearBoughtItems();
         questPanel.InitData();
         buyPanel.InitData();
         sellPanel.InitData();
@@ -79,15 +84,9 @@ public class MerchantPanel : MonoBehaviour
         { 
             panelIdx = 0;
         }
-        panelIdx %= 5;
+        panelIdx %= 4;
 
         OnOpenPanel();
-
-        animator.SetInteger("panelIdx", panelIdx);
-        if(panelIdx == 4)
-        {
-            StartCoroutine(resetValue());
-        }
     }
 
     public void OnOpenPanel()
@@ -105,6 +104,7 @@ public class MerchantPanel : MonoBehaviour
         }
         else if (panelIdx == 1)
         {
+            buyPanel.ClearBoughtItems();
             buyPanel.InitData();
             buyPanel.gameObject.SetActive(true);
         }
@@ -120,13 +120,6 @@ public class MerchantPanel : MonoBehaviour
         }
     }
 
-    IEnumerator resetValue()
-    {
-        yield return new WaitForSeconds(0.5f);
-        panelIdx = 0;
-        animator.SetInteger("panelIdx", panelIdx);
-    }
-
     public void CloseMerchant()
     {
         EventBus.Publish(
@@ -139,5 +132,12 @@ public class MerchantPanel : MonoBehaviour
             )
         );
         gameObject.SetActive( false );
+    }
+
+    private float targetAngle = -180;
+    private void Update()
+    {
+        targetAngle = Mathf.Lerp(targetAngle, panelAngles[panelIdx].y, Time.deltaTime * 0.5f);
+        ui3DModel.TargetRotation = new Vector3(ui3DModel.TargetRotation.x, targetAngle, ui3DModel.TargetRotation.z);
     }
 }

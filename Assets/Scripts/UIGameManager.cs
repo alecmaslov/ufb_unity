@@ -36,6 +36,8 @@ public class UIGameManager : MonoBehaviour
 
     public ResourcePanel ResourcePanel;
 
+    public ResourceDetailPanel resourceDetailPanel;
+    
     public EquipPanel equipPanel;
 
     public StepPanel StepPanel;
@@ -87,6 +89,10 @@ public class UIGameManager : MonoBehaviour
     public TapSelfPanel tapSelfPanel;
 
     public SelectSpawnPanel selectSpawnPanel;
+
+    public ItemDetailPanel arrowsAddPanel;
+    
+    public ItemDetailPanel bombsAddPanel;
 
     #region public values
 
@@ -252,9 +258,12 @@ public class UIGameManager : MonoBehaviour
                     }
                 )
             );
+            CameraManager.instance.setCameraTarget(CharacterManager.Instance.PlayerCharacter.transform);
         } 
         else
         {
+            resourceDetailPanel.gameObject.SetActive(false);
+            merchantPanel.CloseMerchant();
             bottomAttackPanel.gameObject.SetActive(false);
             movePanel.gameObject.SetActive(false);
             tapSelfPanel.gameObject.SetActive(false);

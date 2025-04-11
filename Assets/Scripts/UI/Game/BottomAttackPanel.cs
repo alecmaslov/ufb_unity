@@ -436,6 +436,23 @@ public class BottomAttackPanel : MonoBehaviour
         {
             powermoveImage.sprite = GlobalResources.instance.powers[selectedPowermove.powerImageId];
             playerDiceRect.SetActive(false);
+            // tap self item....
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
+                    new RequestSetPowerMoveItem
+                    {
+                        enemyId = HighlightRect.Instance.selectedMonster == null ? "" : HighlightRect.Instance.selectedMonster.Id,
+                        characterId = UIGameManager.instance.controller.Id,
+                        powerMoveId = selectedPowermove.id,
+                        diceCount = 0,
+                        vampireCount = 0,
+                        extraItemId = selectedPowermove.extraItemId,
+                    }
+                )
+            );
+            isEndAttack = true;
+            StartCoroutine(EndAttackPanel());
         }
         powermoveImage.gameObject.SetActive(true);
         powermoveImage.transform.parent.gameObject.SetActive(false);

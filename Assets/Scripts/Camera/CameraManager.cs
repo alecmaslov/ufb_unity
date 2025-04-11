@@ -25,7 +25,7 @@ public class CameraManager : MonoBehaviour
     public float minZoom = 15f; // Minimum zoom level
     public float maxZoom = 60f; // Maximum zoom level
 
-    private float targetZoom = 60; // Target zoom level
+    public float targetZoom = 60; // Target zoom level
 
     // FOR MOVEMENT
     public float speed = 0.1f; // Speed of the object movement

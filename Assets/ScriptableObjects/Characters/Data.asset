@@ -15,8 +15,8 @@ MonoBehaviour:
   id: data
   characterClass: data
   characterName: Data Avenger
-  avatar: {fileID: 21300000, guid: ddc1e26fea49d694d92e688d18a60284, type: 3}
-  card: {fileID: 21300000, guid: 3c30d8ab1bc0c5c45a5fa28bbe765957, type: 3}
+  avatar: {fileID: 21300000, guid: 88d12718f482f4f4c9f6288eff962c6e, type: 3}
+  card: {fileID: 21300000, guid: 861fe8a085948a74da586e007f482c45, type: 3}
   description: 
   mesh: {fileID: 0}
   modelPrefab:

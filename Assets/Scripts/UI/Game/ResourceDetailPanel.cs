@@ -54,8 +54,11 @@ public class ResourceDetailPanel : MonoBehaviour
 
     public string type;
 
+    public int selectedPanelIdx = -1;
+
     public void OnItemDetailClicked(int idx)
     {
+        selectedPanelIdx = idx;
         gameObject.SetActive(true);
 
         itemImage.sprite = detailImages[idx];
@@ -72,6 +75,10 @@ public class ResourceDetailPanel : MonoBehaviour
                 if (item.id == detailItem.id)
                 {
                     itemCountText.text = item.count.ToString();
+                    item.OnCountChange(((value, previousValue) =>
+                    {
+                        itemCountText.text = value.ToString();
+                    }));
                 }
             });
         }
@@ -127,8 +134,6 @@ public class ResourceDetailPanel : MonoBehaviour
             itemCountText.text = UIGameManager.instance.controller.State.stats.bags.ToString();
         }
 
-
-
         foreach (var item in itemDetails)
         {
             item.gameObject.SetActive(false);
@@ -139,6 +144,15 @@ public class ResourceDetailPanel : MonoBehaviour
 
     public void OnSetItemClicked(int type)
     {
+        if (UIGameManager.instance.GetItemCount((ITEM)type) == 0)
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "you do not have enough resources to set the item.");
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("success", "You have set the item.");
+        }
+        
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.SET_MOVE_ITEM,

@@ -96,6 +96,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 388ab900dea3a85418977c582ac85149, type: 3}
   - {fileID: 21300000, guid: 66f730cc3f87f5144a7948fa151376f3, type: 3}
   - {fileID: 21300000, guid: 8251c4d8bb6bc9e42a9e2614877c5136, type: 3}
+  - {fileID: 21300000, guid: da6a14f23c152e24583e530a463af6ca, type: 3}
+  - {fileID: 21300000, guid: 703b7836ee460a4448cbd5e73d383c4d, type: 3}
   powers:
   - {fileID: 21300000, guid: 3a558facb2af1bf40af79c3f8f89b528, type: 3}
   - {fileID: 21300000, guid: 1afa21b325154f1489d6547e7c22717d, type: 3}
@@ -186,6 +188,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: af9afb9ee3dc3df46a445f28cfe96661, type: 3}
   - {fileID: 21300000, guid: b1d26c0eb51bb384f9d882d298d69a57, type: 3}
   punch: {fileID: 21300000, guid: ce5164c6550d15c46b26f6ccac37d8e7, type: 3}
+  itemBag: {fileID: 21300000, guid: 1505b3c0a56fddc4b88c40d3b1ab515d, type: 3}
+  treasureImage: {fileID: 21300000, guid: 9b87d6ffb616fb74785a5400c35481c7, type: 3}
+  merchant: {fileID: 21300000, guid: 994677f0cbf23a8409f520e243a9d84f, type: 3}
+  blue_portal: {fileID: 21300000, guid: eea2167c7a19d394cae3d29e0626f051, type: 3}
+  green_portal: {fileID: 21300000, guid: c8b741864274ff343978e231f80f27cb, type: 3}
   itemCraftSystem:
   - item1: 23
     item2: 4

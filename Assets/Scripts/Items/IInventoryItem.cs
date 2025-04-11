@@ -70,6 +70,10 @@ namespace UFB.Items {
         IceBomb2,
         VoidBomb2,
         caltropBomb2,
+        
+        //Random Item
+        RandomArrow,
+        RandomBomb
     }
 
     public enum POWER
