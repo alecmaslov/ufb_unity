@@ -144,15 +144,14 @@ public class ResourceDetailPanel : MonoBehaviour
 
     public void OnSetItemClicked(int type)
     {
-        if (UIGameManager.instance.GetItemCount((ITEM)type) == 0)
+        if (UIGameManager.instance.GetItemCount((ITEM)type) <= 0)
         {
             UIGameManager.instance.OnNotificationMessage("error", "you do not have enough resources to set the item.");
+            return;
         }
-        else
-        {
-            UIGameManager.instance.OnNotificationMessage("success", "You have set the item.");
-        }
-        
+
+        UIGameManager.instance.OnNotificationMessage("success", "You have set the item.");
+
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.SET_MOVE_ITEM,
