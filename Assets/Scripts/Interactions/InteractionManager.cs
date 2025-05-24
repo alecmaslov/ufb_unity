@@ -237,7 +237,7 @@ namespace UFB.Interactions
                             item.GetComponent<Chest>().OnClick();
 
                             UIGameManager.instance.selectSpawnPanel.InitSpawnData(tile, playerId);
-
+                            
                         }
                     }
 
@@ -315,17 +315,17 @@ namespace UFB.Interactions
             switch (Mode)
             {
                 case InteractionMode.FocusEntity:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.SelectItem)
                     );
                     break;
                 case InteractionMode.SelectItem:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.CameraControl)
                     );
                     break;
                 case InteractionMode.CameraControl:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.FocusEntity)
                     );
                     break;

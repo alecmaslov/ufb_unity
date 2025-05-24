@@ -211,12 +211,12 @@ public class PowerMoveItem : MonoBehaviour
                 AddResultItem(pm.result.ultimate, GlobalResources.instance.ultimate);
             }
             
-            if (pm.result.perkId > 0)
+            if (pm.result.perkId >= 0)
             {
                 AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId], false);
             }
             
-            if (pm.result.perkId1 > 0)
+            if (pm.result.perkId1 >= 0)
             {
                 AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId1], false);
             }

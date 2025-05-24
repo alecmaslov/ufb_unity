@@ -74,15 +74,10 @@ public class EquipPanel : MonoBehaviour
             if (power != null && power.count > 0)
             {
                 EquipItem go = Instantiate(item, scrollView);
-                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
+                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{1}");
                 go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
                 go.gameObject.SetActive(true);
             }
-        });
-
-        state.powers.OnChange((idx, p) =>
-        {
-            Debug.Log($"{idx} ---- power: {p} -> {p.count}");
         });
     }
 

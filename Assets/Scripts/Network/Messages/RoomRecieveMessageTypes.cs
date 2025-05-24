@@ -144,7 +144,7 @@ namespace UFB.Network.RoomMessageTypes
         public int ultimate;
         public int stackId = -1;
         public int powerId = -1;
-        public int perkId;
+        public int perkId = -1;
     }
 
     public class QuestItem: IReceiveMessage
@@ -159,6 +159,7 @@ namespace UFB.Network.RoomMessageTypes
     {
         public string playerId;
         public ItemResult itemResult;
+        public int itemId = -1;
     }
 
     public class TurnMessage : IReceiveMessage
@@ -227,15 +228,15 @@ namespace UFB.Network.RoomMessageTypes
     public class ToastStackPerkMessage : IReceiveMessage
     {
         public string characterId;
-        public int stackId;
-        public int perkId;
+        public int stackId = -1;
+        public int perkId = -1;
         public int count;
     }
 
     public class ToastPerkMessage : IReceiveMessage
     {
         public string characterId;
-        public int perkId;
+        public int perkId = -1;
         public string tileId;
     }
 

@@ -1,20 +1,16 @@
+using System.Collections;
 using UFB.Core;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.UI;
 using UnityEngine;
 using UFB.Character;
-using UnityEngine.TextCore.Text;
 using UFB.Items;
 using UFB.StateSchema;
 using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UFB.Interactions;
-using System.Collections;
-using TMPro;
-using UnityEngine.InputSystem;
 
 
 
@@ -94,6 +90,14 @@ public class UIGameManager : MonoBehaviour
     
     public ItemDetailPanel bombsAddPanel;
 
+    public SelectNamePanel selectNamePanel;
+
+    public AttackResultPanel attackResultPanel;
+
+    public EnemyBombPanel enemyBombPanel;
+    
+    public ParticleSystem particleSystem;
+    
     #region public values
 
     public float curTurnTime = GlobalDefine.TURN_TIME;
@@ -131,7 +135,7 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<MoveItemMessage>(GlobalDefine.SERVER_MESSAGE.RECEIVE_MOVEITEM, movePanel.OnReceiveMoveItem);
         gameService.SubscribeToRoomMessage<SetMoveItemMessage>(GlobalDefine.SERVER_MESSAGE.SET_MOVEITEM, movePanel.OnSetMoveItemReceived);
         gameService.SubscribeToRoomMessage<AddExtraScoreMessage>(GlobalDefine.SERVER_MESSAGE.ADD_EXTRA_SCORE, OnReceiveExtraScore);
-        gameService.SubscribeToRoomMessage<GetBombMessage>( GlobalDefine.SERVER_MESSAGE.GET_BOMB_DAMAGE, movePanel.OnReceiveGetBombMessage );
+        gameService.SubscribeToRoomMessage<GetBombMessage>( GlobalDefine.SERVER_MESSAGE.GET_BOMB_DAMAGE, OnReceiveBombAttack );
         gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(GlobalDefine.SERVER_MESSAGE.GET_MERCHANT_DATA, merchantPanel.InitMerchantData);
         gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>( GlobalDefine.SERVER_MESSAGE.RESPAWN_MERCHANT , OnReSpawnMerchant);
         gameService.SubscribeToRoomMessage<UnEquipItemMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
@@ -269,6 +273,7 @@ public class UIGameManager : MonoBehaviour
             tapSelfPanel.gameObject.SetActive(false);
             equipBonusPanel.gameObject.SetActive(false);
             bottomDrawer.CloseBottomDrawer();
+            enemyBombPanel.Init(CharacterManager.Instance.SelectedCharacter.State);
             // bottomDrawer.SetActive(false);
         }
         HighlightRect.Instance.ClearHighLightRect();
@@ -432,6 +437,8 @@ public class UIGameManager : MonoBehaviour
     private void OnReceiveBanStackMessage(ToastBanStackMessage e)
     {
         toastPanel.InitBanStackMessage(e);
+        attackResultPanel.InitBanStack(e);
+        enemyBombPanel.InitBanStack(e);
     }
 
     private void OnReceivePerkMessage(ToastPerkMessage e)
@@ -483,6 +490,18 @@ public class UIGameManager : MonoBehaviour
         }
     }
 
+    private void OnReceiveBombAttack(GetBombMessage message)
+    {
+        if (isPlayerTurn)
+        {
+            movePanel.OnReceiveGetBombMessage(message);
+        }
+        else
+        {
+            StartCoroutine(CheckBombAttack(message));
+        }
+    }
+    
     private void OnReceiveExtraScore(AddExtraScoreMessage message)
     {
 
@@ -505,6 +524,12 @@ public class UIGameManager : MonoBehaviour
     {
         equipPanel.GetSlotDataList(message);
     }
+
+    IEnumerator CheckBombAttack(GetBombMessage message)
+    {
+        yield return new WaitForSeconds(2f);
+        enemyBombPanel.InitGetBombItem(message);
+    }
     
     public int GetItemCount(ITEM type)
     {
@@ -521,6 +546,21 @@ public class UIGameManager : MonoBehaviour
         return count;
     }
 
+    public int GetStackCount(STACK type)
+    {
+        int count = 0;
+
+        controller.State.stacks.ForEach(item => {
+            if(item.id == (int) type)
+            {
+                count = item.count;
+                return;
+            }
+        });
+
+        return count;
+    }
+    
     public void OnChangeMonsterControl()
     {
         EventBus.Publish(
@@ -608,6 +648,39 @@ public class UIGameManager : MonoBehaviour
         });
         
         return k;
+    }
+    
+    public int GetStackCount(STACK type, CharacterState characterState)
+    {
+        int k = 0;
+
+        characterState.stacks.ForEach(item =>
+        {
+            if (item.id == (int)type)
+            {
+                k = item.count;
+            }
+        });
+        
+        return k;
+    }
+
+    public void SetSelectedTileEffect(Transform target)
+    {
+        if (target == null)
+        {
+            CloseSelectedTileEffect();
+            return;
+        }
+        particleSystem.transform.position = new Vector3(target.position.x, particleSystem.transform.position.y, target.position.z); ;
+        particleSystem.gameObject.SetActive(true);
+        particleSystem.Play();
+    }
+
+    public void CloseSelectedTileEffect()
+    {
+        particleSystem.Stop();
+        particleSystem.gameObject.SetActive(false);
     }
     
     #region Unity Function

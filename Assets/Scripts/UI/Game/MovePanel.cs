@@ -64,6 +64,8 @@ public class MovePanel : MonoBehaviour
     [SerializeField]
     Transform damageList;
 
+    public GameObject bombDamagePanel;
+    
     public Image damageMainItemImage;
 
     public Text posText;
@@ -481,20 +483,13 @@ public class MovePanel : MonoBehaviour
         }
     }
 
-    public void OnReceiveGetBombMessage(GetBombMessage message)
+    public void InitBomBList(ItemResult result, bool isBanStack = false, bool isPerk = false)
     {
-        ItemResult result = message.itemResult;
-
         for (int i = 1; i < damageList.childCount; i++) 
         { 
-            Destroy(damageList.GetChild(i));
+            Destroy(damageList.GetChild(i).gameObject);
         }
-
-        if (selectedItemId > -1)
-        {
-            damageMainItemImage.sprite = GlobalResources.instance.items[selectedItemId];
-        }
-
+        
         if (result.energy != 0)
         {
             ItemCard itemCard = Instantiate(damageItem, damageList);
@@ -520,23 +515,53 @@ public class MovePanel : MonoBehaviour
         {
             ItemCard itemCard = Instantiate(damageItem, damageList);
             itemCard.InitDate("+1", GlobalResources.instance.stacks[result.stackId]);
+            if (isBanStack)
+            {
+                itemCard.InitBanImage();
+            }
             itemCard.gameObject.SetActive(true);
         }
 
-        if(result.perkId > 0)
+        if(result.perkId >= 0)
         {
-
+            ItemCard itemCard = Instantiate(damageItem, damageList);
+            itemCard.InitDate("", GlobalResources.instance.perks[result.perkId]);
+            if (isPerk)
+            {
+                itemCard.InitBanImage();
+            }
+            itemCard.gameObject.SetActive(true);
         }
-
-        if(result.powerId > 0)
+        
+        if(result.powerId >= 0)
         {
             ItemCard itemCard = Instantiate(damageItem, damageList);
             itemCard.InitDate("+1", GlobalResources.instance.powers[result.powerId]);
             itemCard.gameObject.SetActive(true);
         }
+    }
+    
+    public void OnReceiveGetBombMessage(GetBombMessage message)
+    {
+        ItemResult result = message.itemResult;
+        
+        if (message.itemId > -1)
+        {
+            damageMainItemImage.sprite = GlobalResources.instance.items[message.itemId];
+        }
 
-        explosionBtn.gameObject.SetActive( true );
+        InitBomBList(result);
+        
+        //explosionBtn.gameObject.SetActive( true );
         globalDirection.gameObject.SetActive(false);
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+
+        if (UIGameManager.instance.isPlayerTurn)
+        {
+            bombDamagePanel.gameObject.SetActive(true);
+            bombDamagePanel.transform.GetChild(0).gameObject.SetActive(true);
+            UIGameManager.instance.attackResultPanel.InitBombResult(result);
+        }
     }
 
     public void OnSetMoveItemReceived(SetMoveItemMessage message)
@@ -600,6 +625,7 @@ public class MovePanel : MonoBehaviour
                 if (tile.GetTileState().type == "Void")
                 {
                     tileTypeText.text = "VOID";
+                    UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "VOID");
                 }
                 else if(tile.GetTileState().type == "VerticalBridge" || tile.GetTileState().type == "HorizontalBridge" || tile.GetTileState().type == "DoubleBridge")
                 {
@@ -615,6 +641,7 @@ public class MovePanel : MonoBehaviour
 
 
             selectedTile = tile;
+            posText.gameObject.SetActive(true);
             posText.text = tile.TilePosText;
             lessPartPosText.text = tile.TilePosText;
             posImage.gameObject.SetActive(true);
@@ -659,12 +686,16 @@ public class MovePanel : MonoBehaviour
                     if (!item.GetComponent<Chest>().isItemBag)
                     {
                         moveImage.sprite = GlobalResources.instance.treasureImage;
+                        posText.gameObject.SetActive(false);
                         posText.text = "TREASURE CHEST";
+                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "TREASURE CHEST");
                     } 
                     else
                     {
                         moveImage.sprite = GlobalResources.instance.itemBag;
-                        posText.text = "ITEM BOX";
+                        posText.gameObject.SetActive(false);
+                        posText.text = "LOOT BAG";
+                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "LOOT BAG");
                     }
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
                     posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
@@ -675,8 +706,9 @@ public class MovePanel : MonoBehaviour
                 else if(item.GetComponent<Portal>() != null )
                 {
                     posImage.enabled = false;
-
+                    posText.gameObject.SetActive(false);
                     posText.text = "PORTAL";
+                    UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "PORTAL");
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
                     posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
 
@@ -695,8 +727,9 @@ public class MovePanel : MonoBehaviour
                 else if(item.GetComponent<Merchant>() != null )
                 {
                     posImage.enabled = false;
-
+                    posText.gameObject.SetActive(false);
                     posText.text = "MERCHANT";
+                    UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "MERCHANT");
                     movePart.localPosition = new Vector3(200, movePart.localPosition.y, movePart.localPosition.z);
                     posRect.localPosition = new Vector3(111, posRect.localPosition.y, posRect.localPosition.z);
 
@@ -716,10 +749,12 @@ public class MovePanel : MonoBehaviour
                     if(controller.State.type == (int) USER_TYPE.MONSTER)
                     {
                         UIGameManager.instance.bottomAttackPanel.Init(controller.State);
+                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
                     }
                     else if(controller.State.type == (int)USER_TYPE.USER)
                     {
                         UIGameManager.instance.tapSelfPanel.InitPanel();
+                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
                         /*UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
                         UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);*/
                     }

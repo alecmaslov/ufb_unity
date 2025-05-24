@@ -49,6 +49,11 @@ public class BottomAttackPanel : MonoBehaviour
     public Transform powermoveListPanel;
     public PowerMoveItem listItemPrefab;
 
+    public Transform topButtonPart;
+    
+    public Transform enemyStackPanel;
+    public ItemCard enemyStackItem;
+    
     public void Init(CharacterState state)
     {
         target = state;
@@ -64,6 +69,7 @@ public class BottomAttackPanel : MonoBehaviour
         powerListPart.SetActive(false);
         monsterInfo.gameObject.SetActive(true);
         gameObject.SetActive(true);
+        enemyStackPanel.gameObject.SetActive(false);
 
         enemyDiceRect.SetActive(false);
         playerDiceRect.SetActive(false);
@@ -304,15 +310,36 @@ public class BottomAttackPanel : MonoBehaviour
                 addedStackPart.SetActive(true);
                 StartCoroutine(ResetAddedStackPart());
             }
+            InitEnemyStack(selectedPowermove.result.stacks);
         }
 
         totalDiceCount = 0;
         gameObject.SetActive(true);
         detailPart.SetActive(false); 
         punchPart.SetActive(false);
-        monsterInfo.gameObject.SetActive(true);
+        monsterInfo.gameObject.SetActive(false);
+        enemyStackPanel.gameObject.SetActive(true);
+        
+        topButtonPart.gameObject.SetActive(false);
+        UIGameManager.instance.attackResultPanel.InitPowerMoveResult(selectedPowermove);
     }
 
+    public void InitEnemyStack(ResultItem[] stacks)
+    {
+        for (int i = 1; i < enemyStackPanel.childCount; i++)
+        {
+            Destroy(enemyStackPanel.GetChild(i).gameObject);
+        }
+
+        foreach (var resultItem in stacks)
+        {
+            int itemCount = UIGameManager.instance.GetStackCount((STACK) resultItem.id, target);
+            ItemCard itemCard = Instantiate(enemyStackItem, enemyStackPanel);
+            itemCard.InitDate(itemCount.ToString(), GlobalResources.instance.stacks[resultItem.id]);
+            itemCard.gameObject.SetActive(true);
+        }
+    }
+    
     public void CancelAttack()
     {
         //gameObject.SetActive(false);
@@ -321,8 +348,9 @@ public class BottomAttackPanel : MonoBehaviour
             UIGameManager.instance.equipPanel.ClearHighLightItems();
             // UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
             HighlightRect.Instance.ClearHighLightRect();
+            UIGameManager.instance.attackResultPanel.CloseAttackResult();
+            topButtonPart.gameObject.SetActive(true);
         }
-
 
         InitMonsterInfo();
         if (UIGameManager.instance.punchPanel.gameObject.activeSelf)
@@ -391,6 +419,7 @@ public class BottomAttackPanel : MonoBehaviour
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
 
         enemyDiceRect.SetActive(true);
+        UIGameManager.instance.attackResultPanel.InitEnemyDice(e.enemyDiceCount, GlobalResources.instance.stacks[e.stackId]);
     }
 
     IEnumerator LanchEnemyDiceRoll(int diceCount)
@@ -408,6 +437,7 @@ public class BottomAttackPanel : MonoBehaviour
     public void OnLanuchDiceRoll(SetDiceRollMessage message)
     {
         DiceArea.instance.LaunchDice(message.diceData);
+        UIGameManager.instance.attackResultPanel.InitDiceData(message.diceData, GlobalResources.instance.powers[selectedPowermove.powerImageId]);
     }
 
     public bool isVampired = false;

@@ -51,6 +51,7 @@ namespace UFB.UI
                 }
             );
             // HighlightRect.Instance.ClearHighLightRect();
+            UIGameManager.instance.selectNamePanel.UpdateTarget(null, "");
         }
 
         public void OpenBottomDrawer()

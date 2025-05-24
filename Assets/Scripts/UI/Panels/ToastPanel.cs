@@ -13,6 +13,7 @@ public class ToastPanel : MonoBehaviour
 
     public void InitBanStackMessage(ToastBanStackMessage m)
     {
+        return;
         BanStackItem item = Instantiate(banStackItem, toastParent);
         item.InitData(m);
     }

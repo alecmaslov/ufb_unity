@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UFB.Items;
 using UFB.Network.RoomMessageTypes;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DiceArea : MonoBehaviour

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.StateSchema;
@@ -13,26 +14,45 @@ public class ItemCard : MonoBehaviour
 
     public Text itemCountText;
 
+    public Image banImage;
+    
     [HideInInspector]
     public Item item;
 
+    private void OnEnable()
+    {
+        
+    }
+
     public void InitImage(Sprite sprite)
     {
-        itemImage.sprite = sprite;
+        if(itemImage != null)
+            itemImage.sprite = sprite;
     }
 
     public void InitText(string text) 
     {
-        countText.text = text;
+        if(countText != null)
+            countText.text = text;
     }
 
-    public void InitDate(string count, Sprite sprite, bool isRed = false) 
+    public void InitTextBG(Color bgColor)
+    {
+        if(countText != null)
+            countText.transform.parent.GetComponent<Image>().color = bgColor;
+    }
+
+    public void InitDate(string count, Sprite sprite, bool isRed = false, bool isBlack = false) 
     {
         if (countText != null) 
         {
             countText.text = count;
             
             countText.color = isRed? Color.red : Color.white;
+            if (isBlack)
+            {
+                countText.color = Color.black;
+            }
         }
         if (itemImage != null)
         {
@@ -55,5 +75,13 @@ public class ItemCard : MonoBehaviour
                 itemCountText.text = newCount.ToString();
             }
         }, true);
+    }
+
+    public void InitBanImage()
+    {
+        if (banImage != null)
+        {
+            banImage.gameObject.SetActive(true);
+        }
     }
 }
