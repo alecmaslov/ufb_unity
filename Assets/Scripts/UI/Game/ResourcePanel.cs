@@ -86,6 +86,11 @@ namespace UFB.UI
         [SerializeField]
         ItemDetailPanel itemsDetailPanel;
 
+        public GameObject bottomPart;
+        public GameObject bottomCloseBtn;
+
+        private CharacterState characterState;
+        
         private void Awake()
         {
             if (instance == null)
@@ -115,16 +120,32 @@ namespace UFB.UI
                     );
             };
 
-            InitResoureData(e);
+            InitResourceData(e);
         }
 
-        public void InitResoureData(CharacterState characterState)
+        public void InitButtonStatus()
         {
+            if ((USER_TYPE) characterState.type == USER_TYPE.USER)
+            {
+                bottomPart.SetActive(true);
+                UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+                bottomCloseBtn.SetActive(false);
+            }
+            else
+            {
+                bottomPart.SetActive(false);
+                bottomCloseBtn.SetActive(true);
+            }
+        }
+        
+        public void InitResourceData(CharacterState _characterState)
+        {
+            characterState = _characterState;
+            
             foreach(var si in stackItems)
             {
                 si.count.text = "0";
             }
-
 
             coinText.text = characterState.stats.coin.ToString();
             itemBagText.text = characterState.stats.bags.ToString();

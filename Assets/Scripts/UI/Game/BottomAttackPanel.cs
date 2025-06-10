@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UFB.Character;
 using UFB.Core;
 using UFB.Events;
@@ -419,7 +421,13 @@ public class BottomAttackPanel : MonoBehaviour
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
 
         enemyDiceRect.SetActive(true);
-        UIGameManager.instance.attackResultPanel.InitEnemyDice(e.enemyDiceCount, GlobalResources.instance.stacks[e.stackId]);
+
+        List<DiceData> data = new List<DiceData>();
+        DiceData dd = new DiceData();
+        dd.diceCount = e.enemyDiceCount;
+        dd.type = DICE_TYPE.DICE_4;
+        data.Add(dd);
+        UIGameManager.instance.attackResultPanel.InitEnemyDice(data.ToArray(), GlobalResources.instance.stacks[e.stackId]);
     }
 
     IEnumerator LanchEnemyDiceRoll(int diceCount)
@@ -437,7 +445,10 @@ public class BottomAttackPanel : MonoBehaviour
     public void OnLanuchDiceRoll(SetDiceRollMessage message)
     {
         DiceArea.instance.LaunchDice(message.diceData);
-        UIGameManager.instance.attackResultPanel.InitDiceData(message.diceData, GlobalResources.instance.powers[selectedPowermove.powerImageId]);
+        Sprite sp = selectedPowermove.id < 0
+            ? GlobalResources.instance.punch
+            : GlobalResources.instance.powers[selectedPowermove.powerImageId];
+        UIGameManager.instance.attackResultPanel.InitDiceData(message.diceData, sp);
     }
 
     public bool isVampired = false;

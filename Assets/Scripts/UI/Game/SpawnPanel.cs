@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -106,7 +108,7 @@ public class SpawnPanel : MonoBehaviour
         characterId = m.characterId;
         tileId = m.tileId;
         _spawnId = m.spawnId;
-
+        
         Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
         //InitSpawnPanel()
         Sprite sprite = m.spawnId == "default"? spawnImages[0] : spawnImages[1];
@@ -146,13 +148,16 @@ public class SpawnPanel : MonoBehaviour
 
     public void OnConfirmClick()
     {
+        List<ResultItem> items = new List<ResultItem>();
+        List<ResultItem> stacks = new List<ResultItem>();
+        List<ResultItem> powers = new List<ResultItem>();
+        
+        items.Add(new ResultItem(itemIdx, 1));
+        powers.Add(new ResultItem(powerIdx, 1));
+        UIGameManager.instance.itemResultPanel.InitPanel(items, stacks, powers, coin);
+
         // posPanel.SetActive(true);
-        EventBus.Publish(
-            new SpawnItemEvent
-            {
-                tileId = tileId,
-            }
-        );
+
         
         spawnConfirmPanel.SetActive(false);
         spawnImage.gameObject.SetActive(false);
@@ -181,6 +186,14 @@ public class SpawnPanel : MonoBehaviour
             sideStep.SetActive(true);
         }
         gameObject.SetActive(false);
+        
+        EventBus.Publish(
+            new SpawnItemEvent
+            {
+                tileId = tileId,
+            }
+        );
+        
         Debug.Log("-----<<<<<<");
         // moveText.text = "Move To";
     }

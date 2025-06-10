@@ -65,6 +65,11 @@ public class BottomDefeatPanel : MonoBehaviour
         diceTimes = 0;
         gameObject.SetActive(true);
         redPanelImage.SetActive(true);
+        
+        UIGameManager.instance.bottomAttackPanel.topButtonPart.gameObject.SetActive(false);
+
+        UIGameManager.instance.attackResultPanel.InitPowerMoveResult(pm);
+
     }
 
     public void InitCharacterState(CharacterState state)
@@ -135,6 +140,8 @@ public class BottomDefeatPanel : MonoBehaviour
         enemyStackImage.transform.parent.gameObject.SetActive(false);
         redPanelImage.SetActive(false);
         gameObject.SetActive(false);
+        UIGameManager.instance.attackResultPanel.CloseAttackResult();
+        UIGameManager.instance.bottomAttackPanel.topButtonPart.gameObject.SetActive(true);
 
         if (UIGameManager.instance.bottomDrawer.IsExpanded)
         {
@@ -183,6 +190,10 @@ public class BottomDefeatPanel : MonoBehaviour
     {
         //Debug.Log(message.diceData);
         DiceArea.instance.LaunchDice(message.diceData);
+        Sprite sp = pm.id < 0
+            ? GlobalResources.instance.punch
+            : GlobalResources.instance.powers[pm.powerImageId];
+        UIGameManager.instance.attackResultPanel.InitEnemyDice(message.diceData, sp);
         powermoveImage.gameObject.SetActive(false);
     }
 

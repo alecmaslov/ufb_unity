@@ -296,6 +296,7 @@ namespace UFB.Interactions
                         {
                             CharacterController controller = item.GetComponent<CharacterController>();
                             UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                            UIGameManager.instance.ResourcePanel.InitButtonStatus();
                             UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
                         }
                     }

@@ -16,6 +16,14 @@ namespace UFB.Network.RoomMessageTypes
     {
         public int id;
         public int count;
+        public ResultItem(int _id, int _count){
+            this.id = _id;
+            this.count = _count;
+        }
+        public ResultItem(){
+            this.id = -1;
+            this.count = 0;
+        }
     }
 
     public class SlotItemData
@@ -115,6 +123,7 @@ namespace UFB.Network.RoomMessageTypes
     public class GetStackOnStartMessage : IReceiveMessage {
         public string characterId;
         public ResultItem[] stackList;
+        public SetDiceRollMessage[] diceResult;
     }
 
     public class PowerMoveListMessage : IReceiveMessage
@@ -320,5 +329,14 @@ namespace UFB.Network.RoomMessageTypes
     {
         public string playerId;
         public int powerId;
+    }
+
+    public class MerchantResultMessage : IReceiveMessage
+    {
+        public string characterId;
+        public ResultItem[] items;
+        public ResultItem[] stacks;
+        public ResultItem[] powers;
+        public int coin;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Colyseus.Schema;
 using UFB.Character;
 using UFB.Events;
 using UFB.Network.RoomMessageTypes;
@@ -24,6 +25,14 @@ public class TapSelfPanel : MonoBehaviour
     
     public Image avatarImage;
 
+    public Transform questList;
+    public ItemCard questCard;
+    public QuestItem questItem;
+
+    public ItemCard[] lootCard;
+
+    public EnemyPanel enemyPanel;
+    
     private void Awake()
     {
         Instance = this;
@@ -112,4 +121,62 @@ public class TapSelfPanel : MonoBehaviour
         SelfItemPanel.SetActive(true);
         PowerMoveItem.gameObject.SetActive(false);
     }
+
+    public void OnQuestBtn()
+    {
+        InitQuest();
+    }
+
+    public void OnLootBtn()
+    {
+        InitLoot();
+    }
+
+    public void OnEnemyBtn()
+    {
+        enemyPanel.InitEnemy();
+    }
+    
+    //Init Quest
+    public void InitQuest()
+    {
+        questItem.gameObject.SetActive(false);
+        
+        for (int i = 1; i < questList.childCount; i++)
+        {
+            Destroy(questList.GetChild(i).gameObject);
+        }
+        
+        ArraySchema<Quest> quests = CharacterManager.Instance.PlayerCharacter.State.quests;
+        if (quests == null) return;
+        
+        quests.ForEach(quest =>
+        {
+            ItemCard q = Instantiate(questCard, questList);
+
+            q.InitImage(GlobalResources.instance.quests[quest.id]);
+            q.InitText($"1/1");
+            
+            q.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OnQuestClicked(quest);
+            });
+            q.gameObject.SetActive(true);
+        });
+    }
+
+    void OnQuestClicked(Quest quest)
+    {
+        questItem.InitDate(quest);
+    }
+    
+    public void InitLoot()
+    {
+        var state = CharacterManager.Instance.PlayerCharacter.State;
+        
+        lootCard[0].InitText(state.stats.itemBox.ToString());
+        lootCard[1].InitText(state.stats.bags.ToString());
+        lootCard[2].InitText(state.stats.coin.ToString());
+    }
+    
 }

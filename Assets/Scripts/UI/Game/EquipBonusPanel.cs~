@@ -1,0 +1,123 @@
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Character;
+using UFB.Items;
+using UFB.Network.RoomMessageTypes;
+using UnityEngine;
+
+public class EquipBonusPanel : MonoBehaviour
+{
+    public Transform equipPanel;
+    public ItemCard bonusItem;
+    
+    public void InitData(EquipBonus[] bonuses, bool isOldCount = true)
+    {
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+        InitList();
+        Debug.Log("equip bonus" + bonuses.Length);
+        if(bonuses.Length == 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        foreach (var bItem in bonuses)
+        {
+            Debug.Log("bonus: " + bItem);
+            
+            if (bItem.items != null) 
+            {
+                foreach (var item in bItem.items)
+                {
+                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, CharacterManager.Instance.PlayerCharacter.State);
+
+                    ItemCard it = Instantiate(bonusItem, equipPanel);
+
+                    if (isOldCount)
+                    {
+                        itemCount -= item.count;
+                        itemCount = Mathf.Max(0, itemCount);
+                        it.InitTextBG(Color.white);
+                    }
+                    else
+                    {
+                        it.InitTextBG(Color.green);
+                    }
+                    it.InitDate(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
+                    it.gameObject.SetActive(true);
+                    
+
+                }
+            }
+
+            if (bItem.stacks != null) 
+            {
+                foreach (var item in bItem.stacks)
+                {
+                    int stackCount = UIGameManager.instance.GetStackCount((STACK) item.id, CharacterManager.Instance.PlayerCharacter.State);
+
+                    
+                    ItemCard it = Instantiate(bonusItem, equipPanel);
+                    
+                    if (isOldCount)
+                    {
+                        stackCount -= item.count;
+                        stackCount = Mathf.Max(0, stackCount);
+                        it.InitTextBG(Color.white);
+                    }
+                    else
+                    {
+                        it.InitTextBG(Color.green);
+                    }
+                    
+                    it.InitDate(stackCount.ToString(), GlobalResources.instance.stacks[item.id], false, true);
+                    it.gameObject.SetActive(true);
+                }
+            }
+
+            if(bItem.randomItems != null)
+            {
+                foreach (var item in bItem.randomItems)
+                {
+                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, CharacterManager.Instance.PlayerCharacter.State);
+
+                    ItemCard it = Instantiate(bonusItem, equipPanel);
+                    
+                    if (isOldCount)
+                    {
+                        itemCount -= item.count;
+                        itemCount = Mathf.Max(0, itemCount);
+                        it.InitTextBG(Color.white);
+                    }
+                    else
+                    {
+                        it.InitTextBG(Color.green);
+                    }
+                    
+                    it.InitDate(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
+                    it.gameObject.SetActive(true);
+                }
+            }
+            
+        }
+
+        gameObject.SetActive(true);
+
+        if(isOldCount)
+            StartCoroutine(InitDataShow(bonuses));
+    }
+
+    IEnumerator InitDataShow(EquipBonus[] bonuses)
+    {
+        yield return new WaitForSeconds(2f);
+        InitData(bonuses, false);
+    }
+    
+    void InitList()
+    {
+        for (int i = 1; i < equipPanel.childCount; i++) 
+        {
+            Destroy( equipPanel.GetChild(i).gameObject );
+        }
+    }
+}

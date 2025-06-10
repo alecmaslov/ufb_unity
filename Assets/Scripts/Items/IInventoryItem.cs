@@ -132,6 +132,7 @@ namespace UFB.Items {
         Freeze,
         Burn,
         Void,
+        PUMP,
 
         Dodge2,
         Cure2,
@@ -139,7 +140,8 @@ namespace UFB.Items {
         Barrier2,
         Steady2,
         Revenge2,
-        Block2
+        Block2,
+        
     }
 
     public enum PERK

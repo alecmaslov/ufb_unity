@@ -31,16 +31,19 @@ namespace UFB.StateSchema {
 		[Type(6, "int32")]
 		public int bags = default(int);
 
-		[Type(7, "int16")]
-		public short arrowLimit = default(short);
+		[Type(7, "int32")]
+		public int itemBox = default(int);
 
 		[Type(8, "int16")]
+		public short arrowLimit = default(short);
+
+		[Type(9, "int16")]
 		public short bombLimit = default(short);
 
-		[Type(9, "int8")]
+		[Type(10, "int8")]
 		public sbyte maxMelee = default(sbyte);
 
-		[Type(10, "int8")]
+		[Type(11, "int8")]
 		public sbyte maxMana = default(sbyte);
 
 		/*
@@ -131,6 +134,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<int> __itemBoxChange;
+		public Action OnItemBoxChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.itemBox));
+			__itemBoxChange += __handler;
+			if (__immediate && this.itemBox != default(int)) { __handler(this.itemBox, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(itemBox));
+				__itemBoxChange -= __handler;
+			};
+		}
+
 		protected event PropertyChangeHandler<short> __arrowLimitChange;
 		public Action OnArrowLimitChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
@@ -188,6 +203,7 @@ namespace UFB.StateSchema {
 				case nameof(coin): __coinChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(range): __rangeChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(itemBox): __itemBoxChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(arrowLimit): __arrowLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(bombLimit): __bombLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(maxMelee): __maxMeleeChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;

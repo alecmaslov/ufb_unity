@@ -164,7 +164,7 @@ public class MerchantModalPanel : MonoBehaviour
         }
         else if (selectedCraftItem != null)
         {
-            // SEND CRAFT DTAT TO SERVER
+            // SEND CRAFT DATA TO SERVER
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     GlobalDefine.SERVER_MESSAGE.MERCHANT_ADDCRAFTITEM,

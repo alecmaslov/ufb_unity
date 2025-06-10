@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AttackResultPanel : MonoBehaviour
 {
+    public Transform enemyDiceList;
     public ItemCard enemyDice;
 
     public Transform playerDiceList;
@@ -32,11 +33,15 @@ public class AttackResultPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void InitEnemyDice(int diceCount, Sprite pSprite)
+    public void InitEnemyDice(DiceData[] diceData, Sprite pSprite)
     {
-        enemyDice.InitText(diceCount.ToString());
-        enemyDice.InitImage(pSprite);
-        enemyDice.gameObject.SetActive(true);
+        foreach (var data in diceData)
+        {
+            ItemCard tempCard = Instantiate(enemyDice, enemyDiceList);
+            tempCard.InitDate(data.diceCount.ToString(), pSprite, true);
+            tempCard.gameObject.SetActive(true);
+        }
+        gameObject.SetActive(true);
     }
     
     public void InitPowerMoveResult(PowerMove pm)
@@ -126,8 +131,12 @@ public class AttackResultPanel : MonoBehaviour
         ItemCard itemCard = Instantiate(stackItem, stackItemList);
         itemCard.InitText(count.ToString());
         itemCard.InitImage(sprite);
-        if(itemCard.countText != null)
+        if (itemCard.countText != null)
+        {
             itemCard.countText.gameObject.SetActive(isText);
+            if(itemCard.countText.transform.parent != null)
+                itemCard.countText.transform.parent.gameObject.SetActive(isText);
+        }
 
         if (color != null)
         {
@@ -147,6 +156,7 @@ public class AttackResultPanel : MonoBehaviour
     {
         enemyDice.gameObject.SetActive(false);
         ClearDiceList();
+        ClearEnemyList();
         ClearStack();
     }
 
@@ -155,6 +165,14 @@ public class AttackResultPanel : MonoBehaviour
         for (int i = 1; i < playerDiceList.childCount; i++)
         {
             Destroy(playerDiceList.GetChild(i).gameObject);
+        }
+    }
+
+    public void ClearEnemyList()
+    {
+        for (int i = 1; i < enemyDiceList.childCount; i++)
+        {
+            Destroy(enemyDiceList.GetChild(i).gameObject);
         }
     }
 
@@ -180,12 +198,12 @@ public class AttackResultPanel : MonoBehaviour
 
         CheckBombStack(result);
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         
         ClearStack();
         CheckBombStack(result, false);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         ClearStack();
         banStackMessages.Clear();
         gameObject.SetActive(false);

@@ -60,6 +60,8 @@ public class GlobalDefine
         public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
         public static string RECONNECT_ROOM = "RECONNECT_ROOM";
         public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
+        
+        public static string MERCHANT_RESULT = "MERCHANT_RESULT";
     }
 
     public static class CLIENT_MESSAGE

@@ -109,7 +109,7 @@ public class EquipBonusPanel : MonoBehaviour
 
     IEnumerator InitDataShow(EquipBonus[] bonuses)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         InitData(bonuses, false);
     }
     

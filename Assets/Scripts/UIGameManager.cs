@@ -10,10 +10,8 @@ using UFB.StateSchema;
 using UFB.Map;
 using UFB.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using UFB.Interactions;
-
-
-
 
 public class UIGameManager : MonoBehaviour
 {
@@ -96,6 +94,8 @@ public class UIGameManager : MonoBehaviour
 
     public EnemyBombPanel enemyBombPanel;
     
+    public ItemResultPanel itemResultPanel;
+    
     public ParticleSystem particleSystem;
     
     #region public values
@@ -175,7 +175,9 @@ public class UIGameManager : MonoBehaviour
         // Request Equip Bonus Detail
         gameService.SubscribeToRoomMessage<GetTurnStartEquipBonusMessage>(GlobalDefine.SERVER_MESSAGE.EQUIP_BONUS_LIST, OnShowEquipBonusReceived);
 
-        
+        // Merchant result...
+        gameService.SubscribeToRoomMessage<MerchantResultMessage>(GlobalDefine.SERVER_MESSAGE.MERCHANT_RESULT, OnReceiveMerchantResult);
+
     }
 
     private void OnDisable()
@@ -353,7 +355,7 @@ public class UIGameManager : MonoBehaviour
     private void OnSetDiceRoll(SetDiceRollMessage e) {
         if (stackTurnStartPanel.isStackTurn)
         {
-            stackTurnStartPanel.OnLanuchDiceRoll(e);
+            //stackTurnStartPanel.OnLanuchDiceRoll(e);
         }
         else if (defencePanel.gameObject.activeSelf)
         {
@@ -432,6 +434,11 @@ public class UIGameManager : MonoBehaviour
     private void OnShowEquipBonusReceived(GetTurnStartEquipBonusMessage e)
     {
         powerMovePanel.ShowEquipBonus(e.bonuses);
+    }
+
+    private void OnReceiveMerchantResult(MerchantResultMessage e)
+    {
+        itemResultPanel.InitPanel(e.items.ToList(), e.stacks.ToList(), e.powers.ToList(), e.coin);
     }
     
     private void OnReceiveBanStackMessage(ToastBanStackMessage e)
@@ -520,6 +527,8 @@ public class UIGameManager : MonoBehaviour
 
     }
 
+    
+    
     private void OnGetEquipSlotList(GetEquipSlotMessage message)
     {
         equipPanel.GetSlotDataList(message);
@@ -529,6 +538,21 @@ public class UIGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         enemyBombPanel.InitGetBombItem(message);
+    }
+
+    public int GetPowerCount(POWER type)
+    {
+        int count = 0;
+
+        controller.State.powers.ForEach(item => {
+            if(item.id == (int) type)
+            {
+                count = item.count;
+                return;
+            }
+        });
+
+        return count;
     }
     
     public int GetItemCount(ITEM type)

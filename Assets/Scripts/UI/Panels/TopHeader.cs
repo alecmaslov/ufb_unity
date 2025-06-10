@@ -97,8 +97,6 @@ namespace UFB.UI
                 }
             });
 
-
-
             Addressables
                 .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
                 .Completed += (op) =>

@@ -37,8 +37,7 @@ public class MerchantPanel : MonoBehaviour
     public Item[] stackData;
     [HideInInspector]
     public Quest[] questData;
-
-
+    
     private void Awake()
     {
         instance = this;
@@ -60,6 +59,7 @@ public class MerchantPanel : MonoBehaviour
         stackData = message.stacks;
         questData = message.quests;
 
+        panelIdx = 0;
         tileId = message.tileId;
         InitData();
     }
@@ -74,6 +74,8 @@ public class MerchantPanel : MonoBehaviour
         craftPanel.InitData();
         questPanel.gameObject.SetActive(true);
         merchantModalPanel.gameObject.SetActive(false);
+
+        UpdateIdx(0);
         gameObject.SetActive(true);
     }
 
@@ -137,7 +139,7 @@ public class MerchantPanel : MonoBehaviour
     private float targetAngle = -180;
     private void Update()
     {
-        targetAngle = Mathf.Lerp(targetAngle, panelAngles[panelIdx].y, Time.deltaTime * 0.5f);
+        targetAngle = Mathf.Lerp(targetAngle, panelAngles[panelIdx].y, Time.deltaTime * 8f);
         ui3DModel.TargetRotation = new Vector3(ui3DModel.TargetRotation.x, targetAngle, ui3DModel.TargetRotation.z);
     }
 }
