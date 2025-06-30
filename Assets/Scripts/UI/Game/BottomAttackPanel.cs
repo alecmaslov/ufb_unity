@@ -144,16 +144,6 @@ public class BottomAttackPanel : MonoBehaviour
         );
     }
 
-    public void OnNextPowermove()
-    {
-        idx++;
-        if (idx >= moves.Length)
-        {
-            idx = 0;
-        }
-        ResetPowermove();
-    }
-
     public void InitPunch()
     {
         punchPart.SetActive(true);
@@ -352,6 +342,7 @@ public class BottomAttackPanel : MonoBehaviour
             HighlightRect.Instance.ClearHighLightRect();
             UIGameManager.instance.attackResultPanel.CloseAttackResult();
             topButtonPart.gameObject.SetActive(true);
+            UIGameManager.instance.SetSelectedTileEffect(null);
         }
 
         InitMonsterInfo();
@@ -475,6 +466,7 @@ public class BottomAttackPanel : MonoBehaviour
         }
         else
         {
+            Debug.Log("dice extraItem : " + selectedPowermove.extraItemId);
             powermoveImage.sprite = GlobalResources.instance.powers[selectedPowermove.powerImageId];
             playerDiceRect.SetActive(false);
             // tap self item....

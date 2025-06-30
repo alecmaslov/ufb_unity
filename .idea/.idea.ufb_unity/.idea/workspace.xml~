@@ -5,7 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c07b0a48-a686-4c1a-8a0b-59874737640d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AttackResultPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AttackResultPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AttackResultPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AttackResultPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/UI_blur.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/UI_blur.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantModalPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantModalPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantModalPanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MoveItemDetailPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MoveItemDetailPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SpawnPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SpawnPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SpawnPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SpawnPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +53,37 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c5ed782439084ef1bc2ad85eec89e9fe175a00/38/12261413/Camera.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Boomerang/Boomerang_fu_update/Assets/Scripts/UIFpsPanel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Boomerang/Boomerang_fu_update/Assets/Scripts/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/DiceCountObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Entities/Merchant.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GlobalResources.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/IInventoryItem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomRecieveMessageTypes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network/Schema/CharacterStatsState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DiceArea.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DiceArea1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DisableAfterTime.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/EnemyPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantModalPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/QuestPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ResourcePanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/SpawnPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Panels/TopHeader.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Utilities/Utility.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.21.21/Runtime/ResourceManager/Util/MonoBehaviourCallbackHooks.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.7.0/InputSystem/Actions/InputAction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.7.0/InputSystem/Utilities/DelegateHelpers.cs" root0="SKIP_HIGHLIGHTING" />
@@ -101,15 +157,13 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="16368">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="16368" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
@@ -155,7 +209,15 @@
       <workItem from="1747807677248" duration="33501000" />
       <workItem from="1748677026962" duration="18608000" />
       <workItem from="1748930132386" duration="17952000" />
-      <workItem from="1749147352632" duration="27783000" />
+      <workItem from="1749147352632" duration="37497000" />
+      <workItem from="1750436697592" duration="3139000" />
+      <workItem from="1750500305689" duration="4951000" />
+      <workItem from="1750528637425" duration="2523000" />
+      <workItem from="1750544500227" duration="11301000" />
+      <workItem from="1750691406253" duration="19671000" />
+      <workItem from="1750883603428" duration="1043000" />
+      <workItem from="1750972723113" duration="5033000" />
+      <workItem from="1751053483633" duration="2953000" />
     </task>
     <servers />
   </component>
@@ -171,5 +233,24 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs</url>
+          <line>28</line>
+          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\UI\Game\ItemResultPanel.cs" containingFunctionPresentation="Method 'InitPanel'">
+            <startOffsets>
+              <option value="867" />
+            </startOffsets>
+            <endOffsets>
+              <option value="884" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

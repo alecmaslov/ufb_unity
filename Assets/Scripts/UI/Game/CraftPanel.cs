@@ -20,7 +20,9 @@ public class CraftPanel : MonoBehaviour
         coinText.text = state.stats.coin.ToString();
         state.stats.OnCoinChange((int newCoin, int preCoin) =>
         {
-            coinText.text = newCoin.ToString();
+            if(preCoin == 0) return;
+            //coinText.text = newCoin.ToString();
+            StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
         });
 
         InitList();
@@ -111,4 +113,20 @@ public class CraftPanel : MonoBehaviour
         UIGameManager.instance.merchantPanel.merchantModalPanel.InitCraft(item);
     }
 
+    IEnumerator ChangeCoinAnimation(int newCoin, int preCoin)
+    {
+        float count = Mathf.Abs(newCoin - preCoin);
+        float duration = 1f;
+        float delta = duration / count;
+        for (int i = 1; i <= count; i++)
+        {
+            yield return new WaitForSeconds(delta);
+            coinText.text = (preCoin - i).ToString();
+            coinText.color = (newCoin - preCoin) < 0 ? Color.red : Color.green;
+        }
+        yield return new WaitForSeconds(1f);
+        coinText.color = Color.white;
+        coinText.text = newCoin.ToString();
+    }
+    
 }

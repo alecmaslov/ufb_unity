@@ -42,9 +42,48 @@ public class PowerMoveItem : MonoBehaviour
         {
             if(((ITEM) cost.id == ITEM.RandomArrow || (ITEM) cost.id == ITEM.RandomBomb) && powerMove.extraItemId >= 0) continue;
             
-            ItemCard itemCard = Instantiate(card, costList);
-            itemCard.InitDate(cost.count.ToString(), GlobalResources.instance.items[cost.id], UIGameManager.instance.GetItemCount((ITEM) cost.id) < cost.count);
-            itemCard.gameObject.SetActive(true);
+            if (cost.id == (int)ITEM.RandomArrow)
+            {
+                List<ITEM> arrows = new List<ITEM>
+                {
+                    ITEM.IceArrow,
+                    ITEM.BombArrow,
+                    ITEM.FireArrow,
+                    ITEM.VoidArrow,
+                    ITEM.Arrow
+                };
+
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.Quiver, arrows, 1);
+                        
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitDate(itemCount.ToString(), GlobalResources.instance.items[(int)ITEM.Quiver], itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+                
+            }
+            else if(cost.id == (int) ITEM.RandomBomb)
+            {
+                        
+                List<ITEM> bombs = new List<ITEM>
+                {
+                    ITEM.Bomb,
+                    ITEM.IceBomb,
+                    ITEM.VoidBomb,
+                    ITEM.FireBomb,
+                    ITEM.caltropBomb,
+                };
+
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombs, 1);
+                        
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitDate(itemCount.ToString(), GlobalResources.instance.items[(int) ITEM.BombBag], itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
+            else
+            {
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitDate(cost.count.ToString(), GlobalResources.instance.items[cost.id], UIGameManager.instance.GetItemCount((ITEM) cost.id) < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
         }
 
         if (powerMove.extraItemId >= 0)
@@ -88,6 +127,8 @@ public class PowerMoveItem : MonoBehaviour
 
     public void InitResultList()
     {
+        CharacterState state = UIGameManager.instance.controller.State;
+        
         for (int i = 0; i < resultList.childCount; i++)
         {
             Destroy(resultList.GetChild(i).gameObject);
@@ -123,7 +164,42 @@ public class PowerMoveItem : MonoBehaviour
             {
                 foreach (var item in pm.result.items)
                 {
-                    AddResultItem(item.count, GlobalResources.instance.items[item.id]);
+                    if (item.id == (int)ITEM.RandomArrow)
+                    {
+                        
+                        List<ITEM> arrows = new List<ITEM>
+                        {
+                            ITEM.IceArrow,
+                            ITEM.BombArrow,
+                            ITEM.FireArrow,
+                            ITEM.VoidArrow,
+                            ITEM.Arrow
+                        };
+
+                        var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.Quiver, arrows, 1);
+                        
+                        AddResultItem(itemCount, GlobalResources.instance.items[(int) ITEM.Quiver]);
+                    }
+                    else if(item.id == (int) ITEM.RandomBomb)
+                    {
+                        
+                        List<ITEM> bombs = new List<ITEM>
+                        {
+                            ITEM.Bomb,
+                            ITEM.IceBomb,
+                            ITEM.VoidBomb,
+                            ITEM.FireBomb,
+                            ITEM.caltropBomb,
+                        };
+
+                        var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombs, 1);
+                        
+                        AddResultItem(itemCount, GlobalResources.instance.items[(int) ITEM.BombBag]);
+                    }
+                    else
+                    {
+                        AddResultItem(item.count, GlobalResources.instance.items[item.id]);
+                    }
                 }
             }
 
@@ -237,7 +313,12 @@ public class PowerMoveItem : MonoBehaviour
     {
         if (IsPowermoveEnabled())
         {
-            UIGameManager.instance.bottomAttackPanel.OnClickPowermoveItem(pm);
+            if(UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                UIGameManager.instance.bottomAttackPanel.OnClickPowermoveItem(pm);
+            else if (UIGameManager.instance.tapSelfPanel.gameObject.activeSelf)
+            {
+                UIGameManager.instance.tapSelfPanel.OnClickPowermoveItem(pm);
+            }
         }
         else
         {

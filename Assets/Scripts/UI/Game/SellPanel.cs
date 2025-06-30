@@ -25,7 +25,8 @@ public class SellPanel : MonoBehaviour
         coinText.text = state.stats.coin.ToString();
         state.stats.OnCoinChange((int newCoin, int preCoin) =>
         {
-            coinText.text = newCoin.ToString();
+            StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
+            //coinText.text = newCoin.ToString();
         });
 
         InitItem(state);
@@ -114,5 +115,21 @@ public class SellPanel : MonoBehaviour
                 });
             }
         });
+    }
+
+    IEnumerator ChangeCoinAnimation(int newCoin, int preCoin)
+    {
+        float count = Mathf.Abs(newCoin - preCoin);
+        float duration = 1f;
+        float delta = duration / count;
+        for (int i = 1; i <= count; i++)
+        {
+            yield return new WaitForSeconds(delta);
+            coinText.text = (preCoin + (newCoin - preCoin) / count * i).ToString();
+            coinText.color = (newCoin - preCoin) < 0 ? Color.red : Color.green;
+        }
+        yield return new WaitForSeconds(1f);
+        coinText.color = Color.white;
+        coinText.text = newCoin.ToString();
     }
 }

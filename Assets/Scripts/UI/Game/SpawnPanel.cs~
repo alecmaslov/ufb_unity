@@ -157,12 +157,7 @@ public class SpawnPanel : MonoBehaviour
         UIGameManager.instance.itemResultPanel.InitPanel(items, stacks, powers, coin);
 
         // posPanel.SetActive(true);
-        EventBus.Publish(
-            new SpawnItemEvent
-            {
-                tileId = tileId,
-            }
-        );
+
         
         spawnConfirmPanel.SetActive(false);
         spawnImage.gameObject.SetActive(false);
@@ -191,6 +186,14 @@ public class SpawnPanel : MonoBehaviour
             sideStep.SetActive(true);
         }
         gameObject.SetActive(false);
+        
+        EventBus.Publish(
+            new SpawnItemEvent
+            {
+                tileId = tileId,
+            }
+        );
+        
         Debug.Log("-----<<<<<<");
         // moveText.text = "Move To";
     }

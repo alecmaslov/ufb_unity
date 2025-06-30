@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Colyseus.Schema;
 using UFB.Character;
 using UFB.Events;
@@ -15,6 +16,12 @@ public class TapSelfPanel : MonoBehaviour
     public static TapSelfPanel Instance;
 
     public GameObject SelfItemPanel;
+
+    public GameObject powerListPart;
+    public GameObject powerBuffPart;
+    public Transform powermoveListPanel;
+    public PowerMoveItem listItemPrefab;
+    
     public PowerMoveItem PowerMoveItem;
 
     public int idx = 0;
@@ -65,31 +72,50 @@ public class TapSelfPanel : MonoBehaviour
     public void InitPowermove(Item item, EquipSlot slt, PowerMove[] _moves)
     {
         SelfItemPanel.SetActive(false);
-        PowerMoveItem.gameObject.SetActive(true);
+        PowerMoveItem.gameObject.SetActive(false);
 
         moves = _moves;
-        ResetPowermove();
+        //ResetPowermove();
+        InitPowerMoveList();
+        powerBuffPart.SetActive(true);
     }
 
-    public void ResetPowermove()
+    public void InitPowerMoveList()
     {
-        selectedPowermove = moves[idx];
+        for (int i = 1; i < powermoveListPanel.childCount; i++)
+        {
+            Destroy(powermoveListPanel.GetChild(i).gameObject);
+        }
 
+        foreach (var power in moves)
+        {
+            var p = Instantiate(listItemPrefab, powermoveListPanel);
+            p.Init(power);
+            p.gameObject.SetActive(true);
+        }
+        PowerMoveItem.gameObject.SetActive(false);
+        powerListPart.SetActive(true);
+    }
+
+    public void OnClickPowermoveItem(PowerMove pm)
+    {
+        powerListPart.SetActive(false);
+        selectedPowermove = pm;
         PowerMoveItem.Init(selectedPowermove);
         PowerMoveItem.InitResultList();
         PowerMoveItem.gameObject.SetActive(true);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
+                new RequestGetHighlightRect
+                {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                    powerMoveId = selectedPowermove.id
+                }
+            )
+        );
     }
-
-    public void OnNextPowermove()
-    {
-        idx++;
-        if (idx >= moves.Length)
-        {
-            idx = 0;
-        }
-        ResetPowermove();
-    }
-
+    
     public void OnConfirmBuff()
     {
         if (selectedPowermove != null)
@@ -108,6 +134,8 @@ public class TapSelfPanel : MonoBehaviour
                         }
                     )
                 );
+                
+                UIGameManager.instance.itemResultPanel.InitPanel(selectedPowermove.result.items.ToList(), selectedPowermove.result.stacks.ToList(), new List<ResultItem>(), selectedPowermove.result.coin);
             }
             else
             {
@@ -119,7 +147,7 @@ public class TapSelfPanel : MonoBehaviour
     public void OnCancelBuff() 
     {
         SelfItemPanel.SetActive(true);
-        PowerMoveItem.gameObject.SetActive(false);
+        powerBuffPart.gameObject.SetActive(false);
     }
 
     public void OnQuestBtn()

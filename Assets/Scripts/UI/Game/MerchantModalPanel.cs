@@ -180,7 +180,7 @@ public class MerchantModalPanel : MonoBehaviour
                     }
                 )
             );
-
+            UIGameManager.instance.merchantPanel.craftPanel.InitData();
         }
         gameObject.SetActive(false);
 
