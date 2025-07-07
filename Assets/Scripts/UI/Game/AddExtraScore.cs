@@ -18,6 +18,8 @@ public class AddExtraScore : MonoBehaviour
     private float transValue = 0.1f;
     private float delay = 2;
 
+    private int totalScore = 0;
+    
     private void Start()
     {
         EventBus.Subscribe<AddExtraScoreMessage> (OnReceiveExtraScore);
@@ -33,7 +35,8 @@ public class AddExtraScore : MonoBehaviour
         // Debug.Log($"message: {message.type}, type: {scoreType}, status: {message.type == scoreType}, score: {message.score}" );
         if (message.type == scoreType)
         {
-            Init(message.score);
+            totalScore += message.score;
+            Init(totalScore);
         }
     }
 
@@ -66,6 +69,7 @@ public class AddExtraScore : MonoBehaviour
         if (transValue < 0) 
         { 
             transValue = 0;
+            totalScore = 0;
             //return;
         }
         transColor.a = transValue;

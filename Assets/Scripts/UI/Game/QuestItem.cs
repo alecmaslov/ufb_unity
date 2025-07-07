@@ -28,6 +28,7 @@ public class QuestItem : MonoBehaviour
         powerImage.sprite = GlobalResources.instance.powers[quest.powerId];
         meleeImage.gameObject.SetActive(quest.melee != 0);
         manaImage.gameObject.SetActive(quest.mana != 0);
+        gameObject.SetActive(true);
     }
 
     // Start is called before the first frame update
