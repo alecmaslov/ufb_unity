@@ -34,7 +34,7 @@ public class EnemyPanel : MonoBehaviour
         {
             CharacterState state = CharacterManager.Instance.GetCharacterFromId(character.Value.Id).State;
             
-            if ((type == 0 && state.stats.health.current > 0 && state.id != CharacterManager.Instance.PlayerCharacter.Id) || (type == 1 && state.stats.health.current == 0))
+            if ((type == 0 && state.stats.health.current > 0) || (type == 1 && state.stats.health.current == 0))
             {
                 AddEnemyItem(state, character.Value.transform.position);
             }

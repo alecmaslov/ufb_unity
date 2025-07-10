@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UFB.Character;
 using UFB.Items;
 using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
 using UnityEngine;
 
 public class EquipBonusPanel : MonoBehaviour
@@ -10,9 +11,13 @@ public class EquipBonusPanel : MonoBehaviour
     public Transform equipPanel;
     public ItemCard bonusItem;
     
+    public CharacterState state;
     public void InitData(EquipBonus[] bonuses, bool isOldCount = true)
     {
+        state = CharacterManager.Instance.SelectedCharacter.State;
+        
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+        
         InitList();
         Debug.Log("equip bonus" + bonuses.Length);
         if(bonuses.Length == 0)
@@ -29,7 +34,7 @@ public class EquipBonusPanel : MonoBehaviour
             {
                 foreach (var item in bItem.items)
                 {
-                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, CharacterManager.Instance.PlayerCharacter.State);
+                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, state);
 
                     ItemCard it = Instantiate(bonusItem, equipPanel);
 
@@ -54,7 +59,7 @@ public class EquipBonusPanel : MonoBehaviour
             {
                 foreach (var item in bItem.stacks)
                 {
-                    int stackCount = UIGameManager.instance.GetStackCount((STACK) item.id, CharacterManager.Instance.PlayerCharacter.State);
+                    int stackCount = UIGameManager.instance.GetStackCount((STACK) item.id, state);
 
                     
                     ItemCard it = Instantiate(bonusItem, equipPanel);
@@ -79,7 +84,7 @@ public class EquipBonusPanel : MonoBehaviour
             {
                 foreach (var item in bItem.randomItems)
                 {
-                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, CharacterManager.Instance.PlayerCharacter.State);
+                    int itemCount = UIGameManager.instance.GetItemCount((ITEM) item.id, state);
 
                     ItemCard it = Instantiate(bonusItem, equipPanel);
                     
@@ -111,6 +116,8 @@ public class EquipBonusPanel : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         InitData(bonuses, false);
+        yield return new WaitForSeconds(1f);
+        gameObject.SetActive(false);
     }
     
     void InitList()

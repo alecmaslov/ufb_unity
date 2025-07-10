@@ -687,8 +687,8 @@ public class MovePanel : MonoBehaviour
                     {
                         moveImage.sprite = GlobalResources.instance.treasureImage;
                         posText.gameObject.SetActive(false);
-                        posText.text = "TREASURE CHEST";
-                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "TREASURE CHEST");
+                        posText.text = "LOOT BOX";
+                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, "LOOT BOX");
                     } 
                     else
                     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Character;
 using UFB.Events;
 using UFB.Items;
 using UFB.Network.RoomMessageTypes;
@@ -24,9 +25,16 @@ public class StackTurnStartPanel : MonoBehaviour
     public bool isStackTurn = false;
 
     private SetDiceRollMessage[] diceResult;
+
+    public Image stackPanel;
+    
+    public Color mineColor;
+    public Color enemyColor;
     
     public void InitData(GetStackOnStartMessage m)
     {
+        stackPanel.color = UIGameManager.instance.isPlayerTurn ? mineColor : mineColor;
+        
         stackResultPanel.SetActive(false);
         stackItems.Clear();
         foreach (var dr in diceRects)
@@ -67,7 +75,7 @@ public class StackTurnStartPanel : MonoBehaviour
 
         foreach (var result in stackItems)
         {
-            int count = UIGameManager.instance.GetStackCount((STACK)result.id);
+            int count = UIGameManager.instance.GetStackCount((STACK)result.id, CharacterManager.Instance.SelectedCharacter.State);
             
             count = isOld ? count - 1 : count;
             
@@ -180,14 +188,19 @@ public class StackTurnStartPanel : MonoBehaviour
                 OnLaunchDiceRoll(i, i);
             }            
         }
+
+        diceFinished = false;
     }
 
+    private bool diceFinished = false;
     public void OnFinishDice()
     {
-        if(!gameObject.activeSelf)
+        Debug.Log("OnFinishDice");
+        if(!gameObject.activeSelf || diceFinished)
         {
             return;
         }
+        Debug.Log("OnFinishDice after finish");
 
         int i = 0;
         foreach (var result in stackItems)
@@ -197,7 +210,7 @@ public class StackTurnStartPanel : MonoBehaviour
                     GlobalDefine.CLIENT_MESSAGE.SET_STACK_ON_START,
                     new RequestStackOnStartMessage
                     {
-                        characterId = UIGameManager.instance.controller.Id,
+                        characterId = CharacterManager.Instance.SelectedCharacter.Id,
                         stackId = result.id,
                         diceData = diceResult[i].diceData
                     }
@@ -207,17 +220,26 @@ public class StackTurnStartPanel : MonoBehaviour
         }
 
         InitStackResult();
-        
+        Debug.Log("stack finished");
         StartCoroutine(CheckStackCount());
-
+        diceFinished = true;
     }
 
     private void InitStackResult()
     {
+        for (int j = 1; j < banStackList.childCount; j++)
+        {
+            Destroy(banStackList.GetChild(j).gameObject);
+        }
+
+        for (int k = 0; k < goodStackList.childCount; k++)
+        {
+            Destroy(goodStackList.GetChild(k).gameObject);
+        }
+        
         int i = 0;
         foreach (var result in stackItems)
         {
-            
             if (GetIsBanStack((STACK)result.id))
             {
                 var item = Instantiate(banStackCard, banStackList);
@@ -248,7 +270,7 @@ public class StackTurnStartPanel : MonoBehaviour
     
     IEnumerator StartDiceRoll()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         OnSelectDice();
     }
 
@@ -258,6 +280,7 @@ public class StackTurnStartPanel : MonoBehaviour
         InitStackList(false);
         yield return new WaitForSeconds(0.5f);
         
+        Debug.LogError("finished stack count");
         isStackTurn = false;
         UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
         gameObject.SetActive (false);

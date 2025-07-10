@@ -160,6 +160,7 @@ public class DiceArea : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        Debug.Log("end dice anim" + isEnemyDiceTurn + UIGameManager.instance.isPlayerTurn + UIGameManager.instance.stackTurnStartPanel.isStackTurn);
         if (isEnemyDiceTurn)
         {
             if (UIGameManager.instance.isPlayerTurn)
@@ -188,7 +189,10 @@ public class DiceArea : MonoBehaviour
         else
         {
             // DEFENCE PANEL
-
+            if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+            {
+                UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+            }
             //UIGameManager.instance.defencePanel.OnFinishDice();
         }
     }

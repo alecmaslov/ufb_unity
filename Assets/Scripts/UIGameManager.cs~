@@ -274,7 +274,8 @@ public class UIGameManager : MonoBehaviour
             movePanel.gameObject.SetActive(false);
             tapSelfPanel.gameObject.SetActive(false);
             equipBonusPanel.gameObject.SetActive(false);
-            bottomDrawer.CloseBottomDrawer();
+            //bottomDrawer.CloseBottomDrawer();
+            //stackTurnStartPanel.gameObject.SetActive(false);
             enemyBombPanel.Init(CharacterManager.Instance.SelectedCharacter.State);
             // bottomDrawer.SetActive(false);
         }
@@ -355,7 +356,7 @@ public class UIGameManager : MonoBehaviour
     private void OnSetDiceRoll(SetDiceRollMessage e) {
         if (stackTurnStartPanel.isStackTurn)
         {
-            stackTurnStartPanel.OnLanuchDiceRoll(e);
+            //stackTurnStartPanel.OnLanuchDiceRoll(e);
         }
         else if (defencePanel.gameObject.activeSelf)
         {

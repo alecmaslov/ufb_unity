@@ -274,7 +274,15 @@ public class UIGameManager : MonoBehaviour
             movePanel.gameObject.SetActive(false);
             tapSelfPanel.gameObject.SetActive(false);
             equipBonusPanel.gameObject.SetActive(false);
-            bottomDrawer.CloseBottomDrawer();
+            if (stackTurnStartPanel.gameObject.activeSelf)
+            {
+                bottomDrawer.OpenBottomDrawer();
+            }
+            else
+            {
+                bottomDrawer.CloseBottomDrawer();
+            }
+            //stackTurnStartPanel.gameObject.SetActive(false);
             enemyBombPanel.Init(CharacterManager.Instance.SelectedCharacter.State);
             // bottomDrawer.SetActive(false);
         }

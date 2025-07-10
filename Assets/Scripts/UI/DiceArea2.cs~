@@ -160,6 +160,8 @@ public class DiceArea2 : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        yield break;
+        
         if (isEnemyDiceTurn)
         {
             if (UIGameManager.instance.isPlayerTurn)

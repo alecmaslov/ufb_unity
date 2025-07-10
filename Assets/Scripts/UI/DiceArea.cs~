@@ -4,9 +4,9 @@ using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine;
 
-public class DiceArea1 : MonoBehaviour
+public class DiceArea : MonoBehaviour
 {
-    public static DiceArea1 instance;
+    public static DiceArea instance;
 
     public DiceCountObject[] diceObject;
     public Transform firstPosObject;
@@ -188,7 +188,10 @@ public class DiceArea1 : MonoBehaviour
         else
         {
             // DEFENCE PANEL
-
+            if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+            {
+                UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+            }
             //UIGameManager.instance.defencePanel.OnFinishDice();
         }
     }

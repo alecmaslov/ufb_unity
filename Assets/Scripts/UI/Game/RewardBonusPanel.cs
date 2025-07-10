@@ -21,6 +21,7 @@ public class RewardBonusPanel : MonoBehaviour
 
     void InitData(bool isOld = false)
     {
+        InitList();
         if (bonus.items != null)
         {
             foreach (var item in bonus.items)
@@ -81,7 +82,7 @@ public class RewardBonusPanel : MonoBehaviour
     void AddResultItem(string count, Sprite icon, Color? color)
     {
         ItemCard it = Instantiate(bonusItem, bonusList);
-        it.InitDate(count, icon);
+        it.InitDate(count, icon, false, true);
         it.InitTextBG(color.Value);
         it.gameObject.SetActive(true);
     }

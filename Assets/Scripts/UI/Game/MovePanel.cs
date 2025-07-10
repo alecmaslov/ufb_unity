@@ -737,27 +737,31 @@ public class MovePanel : MonoBehaviour
                     moveImage.gameObject.SetActive(true);
                     bombPart.gameObject.SetActive(false);
                 }
-                else if(item.GetComponent<UFB.Character.CharacterController>() != null)
+                else if(item.GetComponent<UFB.Character.CharacterController>() != null && item.gameObject.activeSelf)
                 {
                     UFB.Character.CharacterController controller = item.GetComponent<UFB.Character.CharacterController>();
-                    //UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
-                    //UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
-                    UIGameManager.instance.movePanel.gameObject.SetActive(false);
-                    UIGameManager.instance.bottomAttackPanel.gameObject.SetActive(false);
-                    UIGameManager.instance.tapSelfPanel.gameObject.SetActive(false);
+                    if (controller.State.stats.health.current != 0)
+                    {
+                        //UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                        //UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
+                        UIGameManager.instance.movePanel.gameObject.SetActive(false);
+                        UIGameManager.instance.bottomAttackPanel.gameObject.SetActive(false);
+                        UIGameManager.instance.tapSelfPanel.gameObject.SetActive(false);
 
-                    if(controller.State.type == (int) USER_TYPE.MONSTER)
-                    {
-                        UIGameManager.instance.bottomAttackPanel.Init(controller.State);
-                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
+                        if(controller.State.type == (int) USER_TYPE.MONSTER)
+                        {
+                            UIGameManager.instance.bottomAttackPanel.Init(controller.State);
+                            UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
+                        }
+                        else if(controller.State.type == (int)USER_TYPE.USER)
+                        {
+                            UIGameManager.instance.tapSelfPanel.InitPanel();
+                            UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
+                            /*UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                            UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);*/
+                        }
                     }
-                    else if(controller.State.type == (int)USER_TYPE.USER)
-                    {
-                        UIGameManager.instance.tapSelfPanel.InitPanel();
-                        UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);
-                        /*UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
-                        UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);*/
-                    }
+
                 }
             }
 
