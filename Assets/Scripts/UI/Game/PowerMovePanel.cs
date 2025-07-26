@@ -149,7 +149,7 @@ public class PowerMovePanel : MonoBehaviour
             foreach (var item in bonuses[0].items)
             {
                 ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
-                card.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id], false);
+                card.InitData(item.count.ToString(), GlobalResources.instance.items[item.id], false);
             }
         }
         
@@ -158,7 +158,7 @@ public class PowerMovePanel : MonoBehaviour
             foreach (var item in bonuses[0].stacks)
             {
                 ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
-                card.InitDate(item.count.ToString(), GlobalResources.instance.stacks[item.id], false);
+                card.InitData(item.count.ToString(), GlobalResources.instance.stacks[item.id], false);
             }
         }
         
@@ -167,7 +167,7 @@ public class PowerMovePanel : MonoBehaviour
             foreach (var item in bonuses[0].randomItems)
             {
                 ItemCard card = Instantiate(bonusItem, equipBonusList.transform);
-                card.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id], false);
+                card.InitData(item.count.ToString(), GlobalResources.instance.items[item.id], false);
             }
         }
         

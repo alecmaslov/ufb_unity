@@ -16,12 +16,7 @@ public class EquipBonusPanel : MonoBehaviour
     {
         state = CharacterManager.Instance.SelectedCharacter.State;
         
-        if(UIGameManager.instance.isPlayerTurn)
-            UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
-        else
-        {
-            UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
-        }
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         
         InitList();
         Debug.Log("equip bonus" + bonuses.Length);

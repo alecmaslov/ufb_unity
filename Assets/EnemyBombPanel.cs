@@ -61,28 +61,28 @@ public class EnemyBombPanel : MonoBehaviour
         if (result.energy != 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate(result.energy.ToString(), GlobalResources.instance.energy);
+            itemCard.InitData(result.energy.ToString(), GlobalResources.instance.energy);
             itemCard.gameObject.SetActive(true);
         }
 
         if (result.heart != 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate(result.heart.ToString(), GlobalResources.instance.health);
+            itemCard.InitData(result.heart.ToString(), GlobalResources.instance.health);
             itemCard.gameObject.SetActive(true);
         }
 
         if (result.ultimate != 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate(result.ultimate.ToString(), GlobalResources.instance.ultimate);
+            itemCard.InitData(result.ultimate.ToString(), GlobalResources.instance.ultimate);
             itemCard.gameObject.SetActive(true);
         }
 
         if (result.stackId > -1)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate("+1", GlobalResources.instance.stacks[result.stackId]);
+            itemCard.InitData("+1", GlobalResources.instance.stacks[result.stackId]);
             if (isBanStack)
             {
                 itemCard.InitBanImage();
@@ -93,7 +93,7 @@ public class EnemyBombPanel : MonoBehaviour
         if(result.perkId >= 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate("", GlobalResources.instance.perks[result.perkId]);
+            itemCard.InitData("", GlobalResources.instance.perks[result.perkId]);
             if (isPerk)
             {
                 itemCard.InitBanImage();
@@ -104,7 +104,7 @@ public class EnemyBombPanel : MonoBehaviour
         if(result.powerId >= 0)
         {
             ItemCard itemCard = Instantiate(resultItem, resultList);
-            itemCard.InitDate("+1", GlobalResources.instance.powers[result.powerId]);
+            itemCard.InitData("+1", GlobalResources.instance.powers[result.powerId]);
             itemCard.gameObject.SetActive(true);
         }
     }

@@ -62,6 +62,8 @@ public class GlobalDefine
         public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
         
         public static string MERCHANT_RESULT = "MERCHANT_RESULT";
+
+        public static string COMPLETE_QUEST = "COMPLETE_QUEST";
     }
 
     public static class CLIENT_MESSAGE

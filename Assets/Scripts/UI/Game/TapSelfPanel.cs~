@@ -1,0 +1,210 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Colyseus.Schema;
+using UFB.Character;
+using UFB.Events;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UFB.UI;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
+
+public class TapSelfPanel : MonoBehaviour
+{
+    public static TapSelfPanel Instance;
+
+    public GameObject SelfItemPanel;
+
+    public GameObject powerListPart;
+    public GameObject powerBuffPart;
+    public Transform powermoveListPanel;
+    public PowerMoveItem listItemPrefab;
+    
+    public PowerMoveItem PowerMoveItem;
+
+    public int idx = 0;
+
+    public PowerMove[] moves;
+
+    public PowerMove selectedPowermove;
+    
+    public Image avatarImage;
+
+    public Transform questList;
+    public ItemCard questCard;
+    public QuestItem questItem;
+
+    public ItemCard[] lootCard;
+
+    public EnemyPanel enemyPanel;
+    
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public void InitPanel()
+    {
+        PowerMoveItem.gameObject.SetActive(false);
+        SelfItemPanel.SetActive(true);
+        gameObject.SetActive(true);
+        
+        Addressables
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + UIGameManager.instance.controller.State.characterClass)
+            .Completed += (op) =>
+        {
+            if (
+                op.Status
+                == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+            )
+            {
+                avatarImage.sprite = op.Result.avatar;
+            }
+            else
+                Debug.LogError(
+                    "Failed to load character avatar: " + op.OperationException.Message
+                );
+        };
+    }
+
+    public void InitPowermove(Item item, EquipSlot slt, PowerMove[] _moves)
+    {
+        SelfItemPanel.SetActive(false);
+        PowerMoveItem.gameObject.SetActive(false);
+
+        moves = _moves;
+        //ResetPowermove();
+        InitPowerMoveList();
+        powerBuffPart.SetActive(true);
+    }
+
+    public void InitPowerMoveList()
+    {
+        for (int i = 1; i < powermoveListPanel.childCount; i++)
+        {
+            Destroy(powermoveListPanel.GetChild(i).gameObject);
+        }
+
+        foreach (var power in moves)
+        {
+            var p = Instantiate(listItemPrefab, powermoveListPanel);
+            p.Init(power);
+            p.gameObject.SetActive(true);
+        }
+        PowerMoveItem.gameObject.SetActive(false);
+        powerListPart.SetActive(true);
+    }
+
+    public void OnClickPowermoveItem(PowerMove pm)
+    {
+        powerListPart.SetActive(false);
+        selectedPowermove = pm;
+        PowerMoveItem.Init(selectedPowermove);
+        PowerMoveItem.InitResultList();
+        PowerMoveItem.gameObject.SetActive(true);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.CLIENT_MESSAGE.GET_HIGHLIGHT_RECT,
+                new RequestGetHighlightRect
+                {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                    powerMoveId = selectedPowermove.id
+                }
+            )
+        );
+    }
+    
+    public void OnConfirmBuff()
+    {
+        if (selectedPowermove != null)
+        {
+            if (selectedPowermove.range == 0)
+            {
+                EventBus.Publish(
+                    RoomSendMessageEvent.Create(
+                        GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
+                        new RequestSetPowerMoveItem
+                        {
+                            enemyId = "",
+                            characterId = UIGameManager.instance.controller.Id,
+                            powerMoveId = selectedPowermove.id,
+                            diceCount = 1
+                        }
+                    )
+                );
+                
+                UIGameManager.instance.itemResultPanel.InitPanel(selectedPowermove.result.items.ToList(), selectedPowermove.result.stacks.ToList(), new List<ResultItem>(), selectedPowermove.result.coin);
+            }
+            else
+            {
+                UIGameManager.instance.errorPanel.InitData("This power move is not buff.");
+            }
+
+        }
+    }
+    public void OnCancelBuff() 
+    {
+        SelfItemPanel.SetActive(true);
+        powerBuffPart.gameObject.SetActive(false);
+    }
+
+    public void OnQuestBtn()
+    {
+        InitQuest();
+    }
+
+    public void OnLootBtn()
+    {
+        InitLoot();
+    }
+
+    public void OnEnemyBtn()
+    {
+        enemyPanel.InitEnemy();
+    }
+    
+    //Init Quest
+    public void InitQuest()
+    {
+        questItem.gameObject.SetActive(false);
+        
+        for (int i = 1; i < questList.childCount; i++)
+        {
+            Destroy(questList.GetChild(i).gameObject);
+        }
+        
+        ArraySchema<Quest> quests = CharacterManager.Instance.PlayerCharacter.State.quests;
+        if (quests == null) return;
+        
+        quests.ForEach(quest =>
+        {
+            ItemCard q = Instantiate(questCard, questList);
+
+            q.InitImage(GlobalResources.instance.quests[quest.id]);
+            q.InitText($"1/1");
+            
+            q.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OnQuestClicked(quest);
+            });
+            q.gameObject.SetActive(true);
+        });
+    }
+
+    void OnQuestClicked(Quest quest)
+    {
+        questItem.InitDate(quest);
+    }
+    
+    public void InitLoot()
+    {
+        var state = CharacterManager.Instance.PlayerCharacter.State;
+        
+        lootCard[0].InitText(state.stats.itemBox.ToString());
+        lootCard[1].InitText(state.stats.bags.ToString());
+        lootCard[2].InitText(state.stats.coin.ToString());
+    }
+    
+}

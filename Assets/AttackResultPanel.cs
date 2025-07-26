@@ -26,7 +26,7 @@ public class AttackResultPanel : MonoBehaviour
         foreach (var data in diceData)
         {
             ItemCard tempCard = Instantiate(playerDice, playerDiceList);
-            tempCard.InitDate(data.diceCount.ToString(), pSprite);
+            tempCard.InitData(data.diceCount.ToString(), pSprite);
             tempCard.gameObject.SetActive(true);
         }
         
@@ -38,7 +38,7 @@ public class AttackResultPanel : MonoBehaviour
         foreach (var data in diceData)
         {
             ItemCard tempCard = Instantiate(enemyDice, enemyDiceList);
-            tempCard.InitDate(data.diceCount.ToString(), pSprite, true);
+            tempCard.InitData(data.diceCount.ToString(), pSprite, true);
             tempCard.gameObject.SetActive(true);
         }
         gameObject.SetActive(true);

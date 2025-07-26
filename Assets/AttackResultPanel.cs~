@@ -194,7 +194,7 @@ public class AttackResultPanel : MonoBehaviour
     IEnumerator CheckBombResult(ItemResult result)
     {
         ClearStack();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         CheckBombStack(result);
         

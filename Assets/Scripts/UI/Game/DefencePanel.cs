@@ -88,7 +88,7 @@ public class DefencePanel : MonoBehaviour
             if (stack.count > 0)
             {
                 ItemCard ic = Instantiate(enemyStackItem, enemyStackList);
-                ic.InitDate(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
+                ic.InitData(stack.count.ToString(), GlobalResources.instance.stacks[stack.id]);
                 ic.gameObject.SetActive(true);
             }
         });

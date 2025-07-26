@@ -63,7 +63,7 @@ public class ItemDetailPanel : MonoBehaviour
         }
         else
         {
-            itemGroupText.text = header + $"({total}/{limit})";
+            itemGroupText.text = header + $"({total})";
         }
 
         gameObject.SetActive(true);

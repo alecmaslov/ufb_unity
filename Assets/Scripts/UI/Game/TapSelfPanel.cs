@@ -183,7 +183,7 @@ public class TapSelfPanel : MonoBehaviour
             ItemCard q = Instantiate(questCard, questList);
 
             q.InitImage(GlobalResources.instance.quests[quest.id]);
-            q.InitText($"1/1");
+            q.InitText($"{quest.complete} / {quest.target}");
             
             q.GetComponent<Button>().onClick.AddListener(() =>
             {

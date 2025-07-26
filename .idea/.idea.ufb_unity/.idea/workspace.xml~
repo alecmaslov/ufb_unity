@@ -5,29 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c07b0a48-a686-4c1a-8a0b-59874737640d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AttackResultPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AttackResultPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AttackResultPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AttackResultPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/EnemyBombPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBombPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Loading.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Loading.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea1.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EnemyPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EnemyPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomRecieveMessageTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomRecieveMessageTypes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/Quest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/Quest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/EquipBonusItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/EquipBonusItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MoveItemDetailPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MoveItemDetailPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MoveItemDetailPanel.cs~" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/PowerMovePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/PowerMovePanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/QuestItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/QuestItem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs~" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs~" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +72,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/IInventoryItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomRecieveMessageTypes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network/Schema/CharacterStatsState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DiceArea.cs" root0="FORCE_HIGHLIGHTING" />
@@ -67,17 +81,21 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DisableAfterTime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/AddExtraScore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/EnemyPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemResultPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantModalPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/QuestItem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/QuestPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ResourceDetailPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/ResourcePanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/RewardBonusPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -86,6 +104,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/StepPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Game/TapSelfPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Panels/BottomDrawer/BottomDrawer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Panels/TopHeader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -163,10 +182,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="25308">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="26820">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="25308" />
+      <option name="pid" value="26820" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
         <list>
@@ -232,7 +251,15 @@
       <workItem from="1751904039058" duration="2438000" />
       <workItem from="1752048447180" duration="666000" />
       <workItem from="1752075842216" duration="11346000" />
-      <workItem from="1752174220990" duration="2473000" />
+      <workItem from="1752174220990" duration="8220000" />
+      <workItem from="1752626945722" duration="2295000" />
+      <workItem from="1752704540053" duration="339000" />
+      <workItem from="1752964325026" duration="1386000" />
+      <workItem from="1753057231951" duration="5781000" />
+      <workItem from="1753309062064" duration="1893000" />
+      <workItem from="1753385519641" duration="496000" />
+      <workItem from="1753387297622" duration="4556000" />
+      <workItem from="1753486122579" duration="2673000" />
     </task>
     <servers />
   </component>
@@ -248,5 +275,37 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs</url>
+          <line>97</line>
+          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\UI\Components\PowerMoveItem.cs" containingFunctionPresentation="Method 'Init'">
+            <startOffsets>
+              <option value="3275" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3323" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/Components/PowerMoveItem.cs</url>
+          <line>95</line>
+          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\UI\Components\PowerMoveItem.cs" containingFunctionPresentation="Method 'Init'">
+            <startOffsets>
+              <option value="3206" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3252" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

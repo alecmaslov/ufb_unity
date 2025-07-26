@@ -714,6 +714,23 @@ public class UIGameManager : MonoBehaviour
         particleSystem.Stop();
         particleSystem.gameObject.SetActive(false);
     }
+
+    public bool CanAttackPowermove(PowerMove powerMove, CharacterState characterState)
+    {
+        var isResult = true;
+
+        if (powerMove.coin > 0)
+        {
+            isResult = characterState.stats.coin >= powerMove.coin;
+        }
+
+        if (powerMove.light > 0)
+        {
+            
+        }
+        
+        return isResult;
+    }
     
     #region Unity Function
 

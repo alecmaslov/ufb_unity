@@ -243,13 +243,13 @@ public class StackTurnStartPanel : MonoBehaviour
             if (GetIsBanStack((STACK)result.id))
             {
                 var item = Instantiate(banStackCard, banStackList);
-                item.InitDate(GetDiceResult(diceResult[i].diceData).ToString(), GlobalResources.instance.stacks[result.id], true);
+                item.InitData(GetDiceResult(diceResult[i].diceData).ToString(), GlobalResources.instance.stacks[result.id], true);
                 item.gameObject.SetActive(true);
             }
             else
             {
                 var item = Instantiate(goodStackCard, goodStackList);
-                item.InitDate(GetDiceResult(diceResult[i].diceData).ToString(), GlobalResources.instance.stacks[result.id], false);
+                item.InitData(GetDiceResult(diceResult[i].diceData).ToString(), GlobalResources.instance.stacks[result.id], false);
                 item.gameObject.SetActive(true);
             }
 

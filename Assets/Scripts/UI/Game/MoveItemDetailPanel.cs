@@ -31,27 +31,27 @@ public class MoveItemDetailPanel : MonoBehaviour
             ITEM type = (ITEM)item.id;
             if (type == ITEM.Bomb) 
             {
-                itemPrefab[0].InitDate(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
+                itemPrefab[0].InitData(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
                 itemPrefab[0].item = item;
             }
             else if (type == ITEM.caltropBomb)
             {
-                itemPrefab[1].InitDate(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
+                itemPrefab[1].InitData(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
                 itemPrefab[1].item = item;
             }
             else if (type == ITEM.FireBomb)
             {
-                itemPrefab[2].InitDate(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
+                itemPrefab[2].InitData(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
                 itemPrefab[2].item = item;
             }
             else if (type == ITEM.IceBomb)
             {
-                itemPrefab[3].InitDate(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
+                itemPrefab[3].InitData(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
                 itemPrefab[3].item = item;
             }
             else if (type == ITEM.VoidBomb)
             {
-                itemPrefab[4].InitDate(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
+                itemPrefab[4].InitData(item.count.ToString(), GlobalResources.instance.items[item.id],false,true);
                 itemPrefab[4].item = item;
             }
 

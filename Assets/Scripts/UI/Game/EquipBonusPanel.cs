@@ -48,7 +48,7 @@ public class EquipBonusPanel : MonoBehaviour
                     {
                         it.InitTextBG(Color.green);
                     }
-                    it.InitDate(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
+                    it.InitData(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
                     it.gameObject.SetActive(true);
                     
 
@@ -75,7 +75,7 @@ public class EquipBonusPanel : MonoBehaviour
                         it.InitTextBG(Color.green);
                     }
                     
-                    it.InitDate(stackCount.ToString(), GlobalResources.instance.stacks[item.id], false, true);
+                    it.InitData(stackCount.ToString(), GlobalResources.instance.stacks[item.id], false, true);
                     it.gameObject.SetActive(true);
                 }
             }
@@ -99,7 +99,7 @@ public class EquipBonusPanel : MonoBehaviour
                         it.InitTextBG(Color.green);
                     }
                     
-                    it.InitDate(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
+                    it.InitData(itemCount.ToString(), GlobalResources.instance.items[item.id], false, true);
                     it.gameObject.SetActive(true);
                 }
             }

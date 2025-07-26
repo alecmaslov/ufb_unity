@@ -42,7 +42,7 @@ public class ItemCard : MonoBehaviour
             countText.transform.parent.GetComponent<Image>().color = bgColor;
     }
 
-    public void InitDate(string count, Sprite sprite, bool isRed = false, bool isBlack = false) 
+    public void InitData(string count, Sprite sprite, bool isRed = false, bool isBlack = false) 
     {
         if (countText != null) 
         {

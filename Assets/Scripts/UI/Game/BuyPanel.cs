@@ -88,7 +88,7 @@ public class BuyPanel : MonoBehaviour
                 if (item.level == 1 && item.cost > 0)
                 {
                     ItemCard it = Instantiate(itemCard, itemList);
-                    it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
+                    it.InitData(item.cost.ToString(), GlobalResources.instance.items[item.id]);
                     it.gameObject.SetActive(true);
                     it.GetComponent<Button>().onClick.AddListener(() =>
                     {
@@ -117,7 +117,7 @@ public class BuyPanel : MonoBehaviour
                 if (item.level == 2 && item.cost > 0)
                 {
                     ItemCard it = Instantiate(itemCard1, itemList1);
-                    it.InitDate(item.cost.ToString(), GlobalResources.instance.items[item.id]);
+                    it.InitData(item.cost.ToString(), GlobalResources.instance.items[item.id]);
                     it.gameObject.SetActive(true);
                     it.GetComponent<Button>().onClick.AddListener(() =>
                     {
@@ -145,7 +145,7 @@ public class BuyPanel : MonoBehaviour
                 if (power.level == 1 && power.cost > 0)
                 {
                     ItemCard it = Instantiate(powerCard, powerList);
-                    it.InitDate(power.cost.ToString(), GlobalResources.instance.powers[power.id]);
+                    it.InitData(power.cost.ToString(), GlobalResources.instance.powers[power.id]);
                     it.gameObject.SetActive(true);
                     it.GetComponent<Button>().onClick.AddListener(() =>
                     {
@@ -174,7 +174,7 @@ public class BuyPanel : MonoBehaviour
                 if (stack.cost > 0 && !(stack.id == (int)STACK.Slow || stack.id == (int)STACK.Void))
                 {
                     ItemCard card = Instantiate(stackCard, stackList);
-                    card.InitDate(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
+                    card.InitData(stack.cost.ToString(), GlobalResources.instance.stacks[stack.id]);
                     card.gameObject.SetActive(true);
                     card.GetComponent<Button>().onClick.AddListener(() =>
                     {

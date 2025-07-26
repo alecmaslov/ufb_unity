@@ -296,12 +296,6 @@ public class BottomAttackPanel : MonoBehaviour
 
         if (selectedPowermove.result.stacks != null)
         {
-            foreach (var stack in selectedPowermove.result.stacks)
-            {
-                addStackImage.sprite = GlobalResources.instance.stacks[stack.id];
-                addedStackPart.SetActive(true);
-                StartCoroutine(ResetAddedStackPart());
-            }
             InitEnemyStack(selectedPowermove.result.stacks);
         }
 
@@ -327,7 +321,7 @@ public class BottomAttackPanel : MonoBehaviour
         {
             int itemCount = UIGameManager.instance.GetStackCount((STACK) resultItem.id, target);
             ItemCard itemCard = Instantiate(enemyStackItem, enemyStackPanel);
-            itemCard.InitDate(itemCount.ToString(), GlobalResources.instance.stacks[resultItem.id]);
+            itemCard.InitData(itemCount.ToString(), GlobalResources.instance.stacks[resultItem.id]);
             itemCard.gameObject.SetActive(true);
         }
     }
@@ -580,6 +574,11 @@ public class BottomAttackPanel : MonoBehaviour
         {
             UIGameManager.instance.StepPanel.SetHighLightBtn(true);
             CancelAttack();
+            if (target.stats.health.current == 0)
+            {
+                UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+                gameObject.SetActive(false);
+            }
         }
     }
 
@@ -587,11 +586,5 @@ public class BottomAttackPanel : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         OnSelectDice();
-    }
-
-    IEnumerator ResetAddedStackPart()
-    {
-        yield return new WaitForSeconds(1f);
-        addedStackPart.SetActive(false);
     }
 }

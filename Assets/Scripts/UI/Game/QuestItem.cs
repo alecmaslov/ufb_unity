@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Character;
+using UFB.Events;
+using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +19,8 @@ public class QuestItem : MonoBehaviour
     public Image meleeImage;
     public Image manaImage;
 
+    public GameObject completedImage;
+    
     public Quest selectedQuest;
     public void InitDate(Quest quest)
     {
@@ -28,9 +33,48 @@ public class QuestItem : MonoBehaviour
         powerImage.sprite = GlobalResources.instance.powers[quest.powerId];
         meleeImage.gameObject.SetActive(quest.melee != 0);
         manaImage.gameObject.SetActive(quest.mana != 0);
+        
+        if(completedImage != null)
+            completedImage.SetActive(quest.complete >= quest.target);
+        
         gameObject.SetActive(true);
     }
 
+    public void OnCompleteQuest()
+    {
+        if (selectedQuest.complete >= selectedQuest.target)
+        {
+            List<ResultItem> items = new List<ResultItem>();
+            List<ResultItem> stacks = new List<ResultItem>();
+            List<ResultItem> powers = new List<ResultItem>();
+            
+            items.Add(new ResultItem(selectedQuest.itemId, 1));
+            powers.Add(new ResultItem(selectedQuest.powerId, 1));
+            if (selectedQuest.melee > 0)
+            {
+                items.Add(new ResultItem(selectedQuest.melee, 1));
+            }
+
+            if (selectedQuest.mana > 0)
+            {
+                items.Add(new ResultItem(selectedQuest.mana, 1));
+            }
+            
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.SERVER_MESSAGE.COMPLETE_QUEST,
+                    new RequestQuestCompleteMessage
+                    {
+                        characterId = CharacterManager.Instance.PlayerCharacter.Id,
+                        questId = selectedQuest.id,
+                    }
+                )
+            );
+            
+            UIGameManager.instance.itemResultPanel.InitPanel(items, stacks, powers, selectedQuest.coin);
+        }
+    }
+    
     // Start is called before the first frame update
     void Start()
     {

@@ -58,6 +58,7 @@ namespace UFB.Network.RoomMessageTypes
         public int powerImageId;
         public int[] powerIds;
         public Item[] costList;
+        public Item[] stackCostList;
         public PowerMoveResult result;
         public int light;
         public int coin;

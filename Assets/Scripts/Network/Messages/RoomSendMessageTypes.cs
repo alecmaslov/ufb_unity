@@ -175,6 +175,11 @@ namespace UFB.Network.RoomMessageTypes
         public string tileId;
     }
 
+    public class RequestQuestCompleteMessage : RequestCharacterId
+    {
+        public int questId;
+    }
+    
     public class RequestGetResourceMessage : ISendMessage
     {
         public string playerId;

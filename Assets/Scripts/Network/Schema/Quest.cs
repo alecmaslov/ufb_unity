@@ -37,6 +37,12 @@ namespace UFB.StateSchema {
 		[Type(8, "int32")]
 		public int coin = default(int);
 
+		[Type(9, "int32")]
+		public int target = default(int);
+
+		[Type(10, "int32")]
+		public int complete = default(int);
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -149,6 +155,30 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<int> __targetChange;
+		public Action OnTargetChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.target));
+			__targetChange += __handler;
+			if (__immediate && this.target != default(int)) { __handler(this.target, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(target));
+				__targetChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __completeChange;
+		public Action OnCompleteChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.complete));
+			__completeChange += __handler;
+			if (__immediate && this.complete != default(int)) { __handler(this.complete, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(complete));
+				__completeChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
@@ -160,6 +190,8 @@ namespace UFB.StateSchema {
 				case nameof(melee): __meleeChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(mana): __manaChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(coin): __coinChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(target): __targetChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(complete): __completeChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				default: break;
 			}
 		}

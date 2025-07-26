@@ -24,7 +24,7 @@ public class EquipBonusItem : MonoBehaviour
             foreach (var item in bonus.items)
             {
                 ItemCard it = Instantiate(bonusItem, bonusList);
-                it.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id]);
+                it.InitData(item.count.ToString(), GlobalResources.instance.items[item.id]);
                 it.gameObject.SetActive(true);
             }
         }
@@ -34,7 +34,7 @@ public class EquipBonusItem : MonoBehaviour
             foreach (var item in bonus.stacks)
             {
                 ItemCard it = Instantiate(bonusItem, bonusList);
-                it.InitDate(item.count.ToString(), GlobalResources.instance.stacks[item.id]);
+                it.InitData(item.count.ToString(), GlobalResources.instance.stacks[item.id]);
                 it.gameObject.SetActive(true);
             }
         }
@@ -44,7 +44,7 @@ public class EquipBonusItem : MonoBehaviour
             foreach (var item in bonus.randomItems)
             {
                 ItemCard it = Instantiate(bonusItem, bonusList);
-                it.InitDate(item.count.ToString(), GlobalResources.instance.items[item.id]);
+                it.InitData(item.count.ToString(), GlobalResources.instance.items[item.id]);
                 it.gameObject.SetActive(true);
             }
         }
