@@ -52,25 +52,60 @@ public class ItemResultPanel : MonoBehaviour
                 ResultItem item = GetResultItemFromId(result.id);
                 
                 int count = UIGameManager.instance.GetItemCount((ITEM) item.id);
-                if(isOld) count -= item.count;
-                if ((ITEM)item.id == ITEM.HeartPiece || (ITEM)item.id == ITEM.EnergyShard)
+
+                if ((ITEM)item.id == ITEM.HeartPiece)
                 {
-                    bottomPanel.SetActive(true);
-                    UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
-                    heartBtn.sprite = GlobalResources.instance.divideTo4[count % 5];
-                    crystalBtn.sprite = GlobalResources.instance.divideTo3[count % 4];
-                    
-                    int heartCount = UIGameManager.instance.GetItemCount(ITEM.HeartCrystal);
-                    heartText.text = heartCount.ToString();
-                    
-                    int crysticalCount = UIGameManager.instance.GetItemCount(ITEM.EnergyCrystal);
-                    crystalText.text = crysticalCount.ToString();
-                    
-                    crystalResultPart.SetActive((ITEM)item.id == ITEM.EnergyShard && crysticalCount % 3 == 0);
-                    heartResultPart.SetActive((ITEM)item.id == ITEM.HeartPiece && heartCount % 4 == 0);
+                    if (isOld)
+                    {
+                        InitBottomItem(0,-item.count, 0, 0);
+                    }
+                    else
+                    {
+                        InitBottomItem();
+                        crystalResultPart.SetActive(false);
+                    }
+                }
+                else if ((ITEM)item.id == ITEM.HeartCrystal)
+                {
+                    if (isOld)
+                    {
+                        InitBottomItem(-item.count, 0, 0, 0);
+                    }
+                    else
+                    {
+                        InitBottomItem();
+                        heartResultPart.SetActive(true);
+                        crystalResultPart.SetActive(false);
+                    }
+                }
+                else if ((ITEM)item.id == ITEM.EnergyShard)
+                {
+                    if (isOld)
+                    {
+                        InitBottomItem(0,0, 0, -item.count);
+                    }
+                    else
+                    {
+                        InitBottomItem();
+                        heartResultPart.SetActive(false);
+                    }
+                }   
+                else if ((ITEM)item.id == ITEM.EnergyCrystal)
+                {
+                    if (isOld)
+                    {
+                        InitBottomItem(0,0, -item.count, 0);
+                    }
+                    else
+                    {
+                        InitBottomItem();
+                        heartResultPart.SetActive(false);
+                        crystalResultPart.SetActive(true);
+                    }
                 }
                 else
                 {
+                    if(isOld) count -= item.count;
                     bottomPanel.SetActive(false);
                     AddResultItem(count, GlobalResources.instance.items[item.id], true, isOld? new Color(0.67f,0.67f,0.67f) : (item.count > 0? Color.green : Color.red));
                 }
@@ -103,6 +138,42 @@ public class ItemResultPanel : MonoBehaviour
             if(isOld) count -= coin;
             AddResultItem(count, GlobalResources.instance.coin, true, isOld? new Color(0.67f,0.67f,0.67f) : (coin > 0 ? Color.green : Color.red));
         }
+    }
+
+    void InitBottomItem(int hCount = 0, int hPiece = 0, int eCount = 0, int ePiece = 0)
+    {
+        int heartCount = UIGameManager.instance.GetItemCount(ITEM.HeartCrystal);
+        int heartPieceCount = UIGameManager.instance.GetItemCount(ITEM.HeartPiece);
+        int energyCrystalCount = UIGameManager.instance.GetItemCount(ITEM.EnergyCrystal);
+        int energyShardCount = UIGameManager.instance.GetItemCount(ITEM.EnergyShard);
+
+        int presentHeart = Mathf.CeilToInt(heartPieceCount / 4);
+        int presentEnergy = Mathf.CeilToInt(energyCrystalCount / 3);
+        
+        heartCount += hCount;
+        heartPieceCount += hPiece;
+        energyCrystalCount += eCount;
+        energyShardCount += ePiece;
+        
+        int beforeHeart = Mathf.CeilToInt(heartPieceCount / 4);
+        int beforeEnergy = Mathf.CeilToInt(energyShardCount / 3);
+        
+        heartCount = Mathf.Max(0, heartCount);
+        heartPieceCount = Mathf.Max(0, heartPieceCount);
+        energyCrystalCount = Mathf.Max(0, energyCrystalCount);
+        energyShardCount = Mathf.Max(0, energyShardCount);
+
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+        heartBtn.sprite = GlobalResources.instance.divideTo4[heartPieceCount % 5];
+        crystalBtn.sprite = GlobalResources.instance.divideTo3[energyShardCount % 4];
+                    
+        heartText.text = heartCount.ToString();
+        crystalText.text = energyCrystalCount.ToString();
+                    
+        heartResultPart.SetActive(presentHeart != beforeHeart);
+        crystalResultPart.SetActive(presentEnergy != beforeEnergy);
+        
+        bottomPanel.SetActive(true);
     }
     
     IEnumerator CheckResult()
