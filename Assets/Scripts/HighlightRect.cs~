@@ -33,11 +33,6 @@ public class HighlightRect : MonoBehaviour
         }
     }
 
-    public CharacterState GetCharacterState()
-    {
-        return selectedMonster == null ? null : selectedMonster.State;
-    }
-    
     public void SetHighLightForSpawn(List<Tile> tiles)
     {
         int k = 0;

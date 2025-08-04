@@ -49,7 +49,11 @@ public class TapSelfPanel : MonoBehaviour
     {
         PowerMoveItem.gameObject.SetActive(false);
         SelfItemPanel.SetActive(true);
+        powerBuffPart.SetActive(false);
+        enemyPanel.gameObject.SetActive(false);
+        
         gameObject.SetActive(true);
+        
         
         Addressables
             .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + UIGameManager.instance.controller.State.characterClass)
@@ -127,7 +131,7 @@ public class TapSelfPanel : MonoBehaviour
                         GlobalDefine.CLIENT_MESSAGE.SET_POWER_MOVE_ITEM,
                         new RequestSetPowerMoveItem
                         {
-                            enemyId = "",
+                            enemyId = UIGameManager.instance.controller.Id,
                             characterId = UIGameManager.instance.controller.Id,
                             powerMoveId = selectedPowermove.id,
                             diceCount = 1

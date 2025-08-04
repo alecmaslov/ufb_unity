@@ -563,10 +563,7 @@ public class BottomAttackPanel : MonoBehaviour
     IEnumerator EndAttackPanel()
     {
         yield return new WaitForSeconds(0.5f);
-        if (selectedPowermove?.result.stacks != null)
-        {
-            InitEnemyStack(selectedPowermove.result.stacks);
-        }
+        InitEnemyStack(selectedPowermove.result.stacks);
         yield return new WaitForSeconds(0.5f);
         if (isEndAttack)
         {

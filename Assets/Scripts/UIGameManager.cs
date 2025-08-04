@@ -715,22 +715,20 @@ public class UIGameManager : MonoBehaviour
         particleSystem.gameObject.SetActive(false);
     }
 
-    public bool CanAttackPowermove(PowerMove powerMove, CharacterState characterState)
+    public int GetRange(CharacterState state, CharacterState target)
     {
-        var isResult = true;
-
-        if (powerMove.coin > 0)
+        if (target == null)
         {
-            isResult = characterState.stats.coin >= powerMove.coin;
-        }
-
-        if (powerMove.light > 0)
-        {
-            
+            return 0;
         }
         
-        return isResult;
+        Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[state.currentTileId];
+        Tile TargetTile = ServiceLocator.Current.Get<GameBoard>().Tiles[target.currentTileId];
+
+        return Mathf.Abs(CurrentTile.Coordinates.X - TargetTile.Coordinates.X) + 
+               Mathf.Abs(CurrentTile.Coordinates.Y - TargetTile.Coordinates.Y);
     }
+
     
     #region Unity Function
 

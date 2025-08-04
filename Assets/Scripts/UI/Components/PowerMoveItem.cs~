@@ -367,7 +367,7 @@ public class PowerMoveItem : MonoBehaviour
             }
         }
 
-        int currectRange = UIGameManager.instance.tapSelfPanel.gameObject.activeSelf? 0 : UIGameManager.instance.GetRange(state, HighlightRect.Instance.GetCharacterState());
+        int currectRange = UIGameManager.instance.GetRange(state, HighlightRect.Instance.GetCharacterState());
 
         if(state.stats.coin < pm.coin || state.stats.energy.current < pm.light || (currectRange > pm.range && pm.range > 0) || (pm.range == 0 && currectRange > 1))
         {
