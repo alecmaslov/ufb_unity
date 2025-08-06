@@ -22,6 +22,7 @@ public class BottomDefeatPanel : MonoBehaviour
     // ENEMY DICE
     public Image enemyStackImage;
     public GameObject enemyStackDiceRect;
+    public Text enemyStackText;
     public Image addStackImage;
     public GameObject addedStackPart;
 
@@ -165,6 +166,7 @@ public class BottomDefeatPanel : MonoBehaviour
         diceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
+        enemyStackText.text = UIGameManager.instance.GetStackCount((STACK)e.stackId);
         enemyStackImage.gameObject.SetActive(true);
         enemyStackImage.transform.parent.gameObject.SetActive(true);
 
@@ -193,7 +195,7 @@ public class BottomDefeatPanel : MonoBehaviour
         Sprite sp = pm.id < 0
             ? GlobalResources.instance.punch
             : GlobalResources.instance.powers[pm.powerImageId];
-        UIGameManager.instance.attackResultPanel.InitDiceData(message.diceData, sp);
+        UIGameManager.instance.attackResultPanel.InitEnemyDice(message.diceData, sp);
         powermoveImage.gameObject.SetActive(false);
     }
 

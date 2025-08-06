@@ -34,6 +34,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     // ENEMY DICE
     public Image enemyStackImage;
+    public Text enemyStackText;
     public GameObject enemyDiceRect;
     public GameObject playerDiceRect;
 
@@ -298,6 +299,13 @@ public class BottomAttackPanel : MonoBehaviour
         {
             StartCoroutine(CheckEnemyStack(selectedPowermove.result.stacks));
         }
+        else
+        {
+            for (int i = 1; i < enemyStackPanel.childCount; i++)
+            {
+                Destroy(enemyStackPanel.GetChild(i).gameObject);
+            }
+        }
 
         totalDiceCount = 0;
         gameObject.SetActive(true);
@@ -405,6 +413,7 @@ public class BottomAttackPanel : MonoBehaviour
         playerDiceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
+        enemyStackText.text = UIGameManager.instance.GetStackCount((STACK) e.stackId, target).ToString();
         enemyStackImage.gameObject.SetActive(true);
         enemyStackImage.transform.parent.gameObject.SetActive(true);
 

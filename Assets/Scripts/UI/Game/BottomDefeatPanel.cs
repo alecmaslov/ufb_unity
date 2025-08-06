@@ -22,6 +22,7 @@ public class BottomDefeatPanel : MonoBehaviour
     // ENEMY DICE
     public Image enemyStackImage;
     public GameObject enemyStackDiceRect;
+    public Text enemyStackText;
     public Image addStackImage;
     public GameObject addedStackPart;
 
@@ -165,6 +166,7 @@ public class BottomDefeatPanel : MonoBehaviour
         diceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
+        enemyStackText.text = UIGameManager.instance.GetStackCount((STACK) e.stackId).ToString();
         enemyStackImage.gameObject.SetActive(true);
         enemyStackImage.transform.parent.gameObject.SetActive(true);
 
