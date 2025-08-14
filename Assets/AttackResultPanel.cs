@@ -190,6 +190,83 @@ public class AttackResultPanel : MonoBehaviour
         Debug.LogError($"init ban stack message: sssss");
         banStackMessages.Add(e);
     }
+
+    public void InitStab(ITEM type)
+    {
+        gameObject.SetActive(true);
+        ItemResult itemResult = new ItemResult();
+        if (type == ITEM.Arrow)
+        {
+            itemResult.heart = -2;
+        }
+        else if (type == ITEM.BombArrow)
+        {
+            itemResult.heart = -6;
+            itemResult.perkId = (int) PERK.PUSH;
+        }
+        else if (type == ITEM.FireArrow)
+        {
+            itemResult.heart = -3;
+            itemResult.stackId = (int) STACK.Burn;
+        }
+        else if (type == ITEM.IceArrow)
+        {
+            itemResult.heart = -3;
+            itemResult.ultimate = -3;
+            itemResult.stackId = (int) STACK.Freeze;
+        }
+        else if (type == ITEM.VoidArrow)
+        {
+            itemResult.heart = -4;
+            itemResult.stackId = (int) STACK.Void;
+        }
+        else if (type == ITEM.Bomb)
+        {
+            itemResult.heart = -3;
+        }
+        else if (type == ITEM.caltropBomb)
+        {
+            itemResult.energy = -4;
+            itemResult.ultimate = -4;
+            itemResult.stackId = (int) STACK.Slow;
+        }
+        else if (type == ITEM.FireBomb)
+        {
+            itemResult.heart = -4;
+            itemResult.stackId = (int) STACK.Burn;
+        }
+        else if (type == ITEM.IceBomb)
+        {
+            itemResult.heart = -3;
+            itemResult.energy = -2;
+            itemResult.stackId = (int) STACK.Freeze;
+        }
+        else if (type == ITEM.VoidBomb)
+        {
+            itemResult.heart = -5;
+            itemResult.stackId = (int) STACK.Void;
+        }
+        
+        StartCoroutine(CheckStabResult(itemResult));
+    }
+
+    IEnumerator CheckStabResult(ItemResult result)
+    {
+        ClearStack();
+        yield return new WaitForSeconds(0.5f);
+
+        CheckStabStack(result);
+        
+        yield return new WaitForSeconds(0.5f);
+        
+        ClearStack();
+        CheckStabStack(result, false);
+
+        yield return new WaitForSeconds(0.5f);
+        ClearStack();
+        banStackMessages.Clear();
+        gameObject.SetActive(false);
+    }
     
     IEnumerator CheckBombResult(ItemResult result)
     {
@@ -230,6 +307,32 @@ public class AttackResultPanel : MonoBehaviour
             if (result.stackId > -1)
             {
                 int count = UIGameManager.instance.GetStackCount((STACK) result.stackId);
+                AddResultItem(isOld ? Mathf.Max(0, count - 1) : count , GlobalResources.instance.stacks[result.stackId], true, isOld? Color.gray : Color.green);
+            }
+        }
+    }
+    
+    void CheckStabStack(ItemResult result, bool isOld = true)
+    {
+        bool isBanStack = false;
+        banStackMessages.ForEach(msg =>
+        {
+            if (result.stackId == msg.stack1)
+            {
+                isBanStack = true;
+                int banStackId = msg.stack2;
+                int count = UIGameManager.instance.GetStackCount((STACK) banStackId, UIGameManager.instance.bottomAttackPanel.target);
+                AddResultItem(isOld ? count + 1 : count, GlobalResources.instance.stacks[banStackId], true, isOld? Color.gray : new Color(0.735849f, 0, 0));
+                
+                UIGameManager.instance.movePanel.InitBomBList(result, true);
+            }
+        });
+        
+        if (!isBanStack)
+        {
+            if (result.stackId > -1)
+            {
+                int count = UIGameManager.instance.GetStackCount((STACK) result.stackId, UIGameManager.instance.bottomAttackPanel.target);
                 AddResultItem(isOld ? Mathf.Max(0, count - 1) : count , GlobalResources.instance.stacks[result.stackId], true, isOld? Color.gray : Color.green);
             }
         }

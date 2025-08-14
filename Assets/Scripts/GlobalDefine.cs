@@ -85,6 +85,7 @@ public class GlobalDefine
         public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
         public static string GET_ROOM_DATA = "GET_ROOM_DATA";
         public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
+        public static string SET_STAB_ATTACK = "SET_STAB_ATTACK";
     }
 
     public static class RESPONSE_MESSAGE

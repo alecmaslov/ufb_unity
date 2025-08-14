@@ -145,6 +145,38 @@ public class BottomAttackPanel : MonoBehaviour
         );
     }
 
+    public void InitStab()
+    {
+        UIGameManager.instance.arrowsStabPanel.Init(1);
+    }
+
+    public void OnStabBtn(int itemType)
+    {
+        int count = UIGameManager.instance.GetItemCount((ITEM)itemType);
+
+        if (count > 0)
+        {
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.SET_STAB_ATTACK,
+                    new RequestSetStabAttack
+                    {
+                        characterId = CharacterManager.Instance.SelectedCharacter.Id,
+                        itemId = itemType,
+                        enemyId = target.id
+                    }
+                )
+            );
+            UIGameManager.instance.arrowsStabPanel.gameObject.SetActive(false);
+            
+            UIGameManager.instance.attackResultPanel.InitStab((ITEM) itemType);
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You don't have enough items.");
+        }
+    }
+    
     public void InitPunch()
     {
         punchPart.SetActive(true);

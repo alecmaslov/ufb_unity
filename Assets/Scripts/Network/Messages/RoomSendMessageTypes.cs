@@ -90,6 +90,12 @@ namespace UFB.Network.RoomMessageTypes
         public int powerMoveId;
     }
 
+    public class RequestSetStabAttack : RequestCharacterId
+    {
+        public string enemyId;
+        public int itemId;
+    }
+    
     public class RequestGetMerchantList: ISendMessage
     {
 

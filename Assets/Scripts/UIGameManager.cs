@@ -87,6 +87,8 @@ public class UIGameManager : MonoBehaviour
     public ItemDetailPanel arrowsAddPanel;
     
     public ItemDetailPanel bombsAddPanel;
+    
+    public ItemDetailPanel arrowsStabPanel;
 
     public SelectNamePanel selectNamePanel;
 
