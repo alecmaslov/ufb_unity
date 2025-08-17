@@ -31,9 +31,9 @@ public class ItemResultPanel : MonoBehaviour
         powerList.Clear();
         ClearResultList();
         
-        itemList = items;
-        stackList = stacks;
-        powerList = powers;
+        itemList = items ?? new List<ResultItem>();
+        stackList = stacks ?? new List<ResultItem>();
+        powerList = powers ?? new List<ResultItem>();
         coin = _coin;
 
         bottomPanel.SetActive(false);
@@ -49,7 +49,7 @@ public class ItemResultPanel : MonoBehaviour
         {
             foreach (var result in itemList)
             {
-                ResultItem item = GetResultItemFromId(result.id);
+                ResultItem item = GetResultItemFromId(result.id, result.count);
                 
                 int count = UIGameManager.instance.GetItemCount((ITEM) item.id);
 
@@ -215,7 +215,7 @@ public class ItemResultPanel : MonoBehaviour
         itemCard.gameObject.SetActive(true);
     }
 
-    public ResultItem GetResultItemFromId(int type)
+    public ResultItem GetResultItemFromId(int type, int value)
     {
         ITEM id = (ITEM)type;
         ITEM realId = id;
@@ -307,7 +307,7 @@ public class ItemResultPanel : MonoBehaviour
         return new ResultItem
         {
             id = (int)realId,
-            count = count
+            count = count * value
         };
     }
     

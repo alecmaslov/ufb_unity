@@ -78,6 +78,19 @@ public class PowerMoveItem : MonoBehaviour
                 itemCard.InitData(itemCount.ToString(), GlobalResources.instance.items[(int) ITEM.BombBag], itemCount < cost.count);
                 itemCard.gameObject.SetActive(true);
             }
+            else if (cost.id == (int)ITEM.RandomArrowOrBomb)
+            {
+                List<ITEM> bombArrow = new List<ITEM>
+                {
+                    ITEM.Bomb,
+                    ITEM.Arrow,
+                };
+                
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombArrow, 1);
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitData(itemCount.ToString(), GlobalResources.instance.randomBombOrArrow, itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
             else
             {
                 ItemCard itemCard = Instantiate(card, costList);
@@ -340,7 +353,7 @@ public class PowerMoveItem : MonoBehaviour
         
         foreach (var cost in pm.costList)
         {
-            if (!((ITEM)cost.id == ITEM.RandomArrow || (ITEM)cost.id == ITEM.RandomBomb))
+            if (!((ITEM)cost.id == ITEM.RandomArrow || (ITEM)cost.id == ITEM.RandomBomb || (ITEM)cost.id == ITEM.RandomArrowOrBomb))
             {
                 int count = UIGameManager.instance.GetItemCount((ITEM)cost.id);
                 if (count < cost.count)
@@ -390,6 +403,10 @@ public class PowerMoveItem : MonoBehaviour
             {
                 selectPanelIdx = 1;
             }
+            else if (item.id == (int)ITEM.RandomArrowOrBomb)
+            {
+                selectPanelIdx = 2;
+            }
         }
 
         if (selectPanelIdx == 0)
@@ -400,8 +417,65 @@ public class PowerMoveItem : MonoBehaviour
         {
             UIGameManager.instance.bombsAddPanel.Init(0);
         }
+        else if (selectPanelIdx == 2)
+        {
+            UIGameManager.instance.arrowOrBombPanel.Init(0);
+        }
     }
 
+    public void OnAddExtraItem(int itemId)
+    {
+        if(!gameObject.activeSelf) return;
+        
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            pm.costList = new[]
+            {
+                new Item
+                {
+                    id = itemId,
+                    count = 1
+                },
+                new Item
+                {
+                    id = (int) ITEM.RandomArrowOrBomb,
+                    count = 1
+                }
+            };
+            var resultItemId = pm.powerImageId switch
+            {
+                (int)POWER.Fire2 => itemId == (int)ITEM.Arrow ? ITEM.FireArrow : ITEM.FireBomb,
+                (int)POWER.Ice2 => itemId == (int)ITEM.Arrow ? ITEM.IceArrow : ITEM.IceBomb,
+                (int)POWER.Void2 => itemId == (int)ITEM.Arrow ? ITEM.VoidArrow : ITEM.VoidBomb,
+                _ => ITEM.FireArrow
+            };
+            pm.result.items = new []
+            {
+                new ResultItem
+                {
+                    id = (int) resultItemId,
+                    count = 1
+                }
+            };
+            UIGameManager.instance.arrowOrBombPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            if(UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+            else if (UIGameManager.instance.tapSelfPanel.gameObject.activeSelf)
+            {
+                UIGameManager.instance.tapSelfPanel.OnConfirmBuff();
+            }
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough arrow item.");
+        }
+    }
+    
     public void OnAddArrow(int itemId)
     {
         if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)

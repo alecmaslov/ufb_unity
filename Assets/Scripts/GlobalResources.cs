@@ -33,6 +33,8 @@ public class GlobalResources : MonoBehaviour
     public Sprite merchant;
     public Sprite blue_portal;
     public Sprite green_portal;
+
+    public Sprite randomBombOrArrow;
     
     [Serializable]
     public class CraftPowerSystem

@@ -73,7 +73,8 @@ namespace UFB.Items {
         
         //Random Item
         RandomArrow,
-        RandomBomb
+        RandomBomb,
+        RandomArrowOrBomb
     }
 
     public enum POWER

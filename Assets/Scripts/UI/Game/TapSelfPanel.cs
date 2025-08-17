@@ -4,6 +4,7 @@ using System.Linq;
 using Colyseus.Schema;
 using UFB.Character;
 using UFB.Events;
+using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 using UFB.UI;
@@ -134,12 +135,28 @@ public class TapSelfPanel : MonoBehaviour
                             enemyId = UIGameManager.instance.controller.Id,
                             characterId = UIGameManager.instance.controller.Id,
                             powerMoveId = selectedPowermove.id,
+                            extraItemId = selectedPowermove.extraItemId,
                             diceCount = 1
                         }
                     )
                 );
                 
-                UIGameManager.instance.itemResultPanel.InitPanel(selectedPowermove.result.items.ToList(), selectedPowermove.result.stacks.ToList(), new List<ResultItem>(), selectedPowermove.result.coin);
+                List<ResultItem> items = new List<ResultItem>();
+                foreach (var item in selectedPowermove.costList)
+                {
+                    if (!(item.id == (int)ITEM.RandomArrowOrBomb || item.id == (int)ITEM.RandomArrow ||
+                          item.id == (int)ITEM.RandomBomb))
+                    {
+                        items.Add(new ResultItem(item.id, -item.count));
+                    }
+                }
+
+                foreach (var item in selectedPowermove.result.items)
+                {
+                    items.Add(new ResultItem(item.id, item.count));
+                }
+                
+                UIGameManager.instance.itemResultPanel.InitPanel(items, selectedPowermove.result.stacks?.ToList(), new List<ResultItem>(), selectedPowermove.result.coin);
             }
             else
             {
