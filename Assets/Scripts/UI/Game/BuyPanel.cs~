@@ -52,8 +52,7 @@ public class BuyPanel : MonoBehaviour
         state.stats.OnCoinChange((int newCoin, int preCoin) => {
             // coinText.text = newCoin.ToString();
             if(preCoin == 0) return;
-            if(gameObject.activeSelf)
-                StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
+            StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
         }, true);
 
 

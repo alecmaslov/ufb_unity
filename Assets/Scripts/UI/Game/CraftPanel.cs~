@@ -82,11 +82,6 @@ public class CraftPanel : MonoBehaviour
             {
                 isStatus2 = true;
             }
-
-            if (powerCraft.power1 == powerCraft.power2)
-            {
-                isStatus1 = p.count > 1;
-            }
         });
 
         return isStatus1 && isStatus2;
@@ -108,11 +103,6 @@ public class CraftPanel : MonoBehaviour
             if (p.id == (int)craftItemSystem.item2 && p.count > 0)
             {
                 isStatus2 = true;
-            }
-
-            if (craftItemSystem.item1 == craftItemSystem.item2)
-            {
-                isStatus1 = p.count > 1;
             }
         });
 

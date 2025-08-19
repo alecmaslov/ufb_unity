@@ -120,9 +120,9 @@ public class SellPanel : MonoBehaviour
     IEnumerator ChangeCoinAnimation(int newCoin, int preCoin)
     {
         float count = Mathf.Abs(newCoin - preCoin);
-        float duration = 2f;
+        float duration = 1f;
         float delta = duration / count;
-        for (int i = 0; i < count; i++)
+        for (int i = 1; i <= count; i++)
         {
             yield return new WaitForSeconds(delta);
             coinText.text = (preCoin + (newCoin - preCoin) / count * i).ToString();
