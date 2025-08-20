@@ -101,6 +101,7 @@ public class DiceArea2 : MonoBehaviour
         diceData = dices;
         isEnemyDiceTurn = isEnemy;
         diceResultCount = 0;
+        if(dices.Length == 0) return;
         foreach (DiceData dice in dices)
         {
             diceResultCount += dice.diceCount;

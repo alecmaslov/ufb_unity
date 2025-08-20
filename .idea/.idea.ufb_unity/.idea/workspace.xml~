@@ -6,15 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c07b0a48-a686-4c1a-8a0b-59874737640d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,13 +156,15 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="31848">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="31848" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -248,6 +247,8 @@
       <workItem from="1755398418460" duration="4944000" />
       <workItem from="1755439907049" duration="3262000" />
       <workItem from="1755540800037" duration="5488000" />
+      <workItem from="1755581943561" duration="1977000" />
+      <workItem from="1755654292666" duration="3725000" />
     </task>
     <servers />
   </component>
@@ -305,6 +306,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs</url>
+          <line>103</line>
+          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\UI\Game\StackTurnStartPanel.cs" containingFunctionPresentation="Method 'InitDice'">
+            <startOffsets>
+              <option value="2988" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3021" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/DiceArea2.cs</url>
+          <line>114</line>
+          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\UI\DiceArea2.cs" containingFunctionPresentation="Method 'LaunchDice'">
+            <startOffsets>
+              <option value="3684" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3740" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

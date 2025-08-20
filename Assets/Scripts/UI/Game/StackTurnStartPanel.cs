@@ -176,6 +176,9 @@ public class StackTurnStartPanel : MonoBehaviour
     
     public void OnSelectDice()
     {
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+        
         if (stackItems.Count == 2)
         {
             OnLaunchDiceRoll(1, 0);
@@ -188,7 +191,6 @@ public class StackTurnStartPanel : MonoBehaviour
                 OnLaunchDiceRoll(i, i);
             }            
         }
-
         diceFinished = false;
     }
 
@@ -232,7 +234,7 @@ public class StackTurnStartPanel : MonoBehaviour
             Destroy(banStackList.GetChild(j).gameObject);
         }
 
-        for (int k = 0; k < goodStackList.childCount; k++)
+        for (int k = 1; k < goodStackList.childCount; k++)
         {
             Destroy(goodStackList.GetChild(k).gameObject);
         }
@@ -276,6 +278,8 @@ public class StackTurnStartPanel : MonoBehaviour
 
     IEnumerator CheckStackCount()
     {
+        UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         yield return new WaitForSeconds(0.5f);
         InitStackList(false);
         yield return new WaitForSeconds(0.5f);
@@ -283,6 +287,7 @@ public class StackTurnStartPanel : MonoBehaviour
         Debug.LogError("finished stack count");
         isStackTurn = false;
         UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
+        UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         gameObject.SetActive (false);
     }
 }
