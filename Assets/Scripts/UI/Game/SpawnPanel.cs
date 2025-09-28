@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -42,10 +44,11 @@ public class SpawnPanel : MonoBehaviour
     GameObject posPanel;
 
     [SerializeField]
-    GlobalResources global;
-
-    [SerializeField]
     Text moveText;
+
+    public Text healthText;
+    public Text energyText;
+
 
     [HideInInspector]
     [SerializeField]
@@ -105,18 +108,28 @@ public class SpawnPanel : MonoBehaviour
         characterId = m.characterId;
         tileId = m.tileId;
         _spawnId = m.spawnId;
-
+        
         Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
         //InitSpawnPanel()
         Sprite sprite = m.spawnId == "default"? spawnImages[0] : spawnImages[1];
 
-        InitSpawnPanel(sprite, tile.TilePosText, global.items[itemIdx], global.powers[powerIdx], coin.ToString());
-
-        if(!isSpawn)
+        if(m.spawnId == "default")
         {
-            OnConfirmClick();
+            healthText.text = $"+3";
+            energyText.text = $"+3";
+            InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.powers[powerIdx], coin.ToString());
+        }
+        else
+        {
+            healthText.text = $"+2";
+            energyText.text = $"+2";
+            InitSpawnPanel(sprite, tile.TilePosText, GlobalResources.instance.items[itemIdx], GlobalResources.instance.stacks[powerIdx], coin.ToString());
         }
 
+        // OnConfirmClick();
+        posPanel.SetActive(false);
+        cancelBtn.SetActive(false);
+        spawnConfirmPanel.SetActive(true);
         gameObject.SetActive(true);
     }
 
@@ -135,49 +148,61 @@ public class SpawnPanel : MonoBehaviour
 
     public void OnConfirmClick()
     {
-        if (step == 0)
+        List<ResultItem> items = new List<ResultItem>();
+        List<ResultItem> stacks = new List<ResultItem>();
+        List<ResultItem> powers = new List<ResultItem>();
+        
+        items.Add(new ResultItem(itemIdx, 1));
+        if (_spawnId == "default")
         {
-            posPanel.SetActive(false);
-            cancelBtn.SetActive(false);
-            spawnConfirmPanel.SetActive(true);
+            powers.Add(new ResultItem(powerIdx, 1));
         }
-        else if(step == 1) 
+        else
         {
-            posPanel.SetActive(true);
-            spawnConfirmPanel.SetActive(false);
-            spawnImage.gameObject.SetActive(false);
-            EventBus.Publish(
-                new SpawnItemEvent(tileId)
-            );
+            stacks.Add(new ResultItem(powerIdx, 1));
         }
-        else if(step == 2)
-        {
-            //spawnText.text = "MOVE TO";
-            EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "getSpawn",
-                    new RequestGetSpawnMessage
-                    {
-                        coinCount = coin,
-                        itemId = itemIdx,
-                        powerId = powerIdx,
-                        spawnId = _spawnId,
-                    }
-                )
-            );
-            
+        UIGameManager.instance.itemResultPanel.InitPanel(items, stacks, powers, coin);
 
-            if(!isSpawn)
-            {
-                movePanel.gameObject.SetActive(true);
-            } else
-            {
-                sideStep.SetActive(true);
-            }
-            gameObject.SetActive(false);
-            moveText.text = "Move To";
+        // posPanel.SetActive(true);
+
+        
+        spawnConfirmPanel.SetActive(false);
+        spawnImage.gameObject.SetActive(false);
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                "getSpawn",
+                new RequestGetSpawnMessage
+                {
+                    characterId = characterId,
+                    coinCount = coin,
+                    itemId = itemIdx,
+                    powerId = powerIdx,
+                    spawnId = _spawnId,
+                    tileId = tileId
+                }
+            )
+        );
+
+
+        if (!isSpawn)
+        {
+            movePanel.gameObject.SetActive(true);
         }
-        step++;
+        else
+        {
+            sideStep.SetActive(true);
+        }
+        gameObject.SetActive(false);
+        
+        EventBus.Publish(
+            new SpawnItemEvent
+            {
+                tileId = tileId,
+            }
+        );
+        
+        Debug.Log("-----<<<<<<");
+        // moveText.text = "Move To";
     }
 
     public void OnCancelClick()

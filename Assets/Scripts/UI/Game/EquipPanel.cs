@@ -66,26 +66,17 @@ public class EquipPanel : MonoBehaviour
 
     public void InitEquipList(CharacterState state)
     {
-        Debug.Log($"power count: {state.powers.Count}");
         InitScrollView();
 
         state.powers.ForEach(power =>
         {
+            Debug.Log($"power: {power.count}");
             if (power != null && power.count > 0)
             {
                 EquipItem go = Instantiate(item, scrollView);
-                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{power.cost}");
+                go.Init(GlobalResources.instance.powers[power.id], power.name, $"LEVEL {power.level}", $"-{1}");
                 go.GetComponent<Button>().onClick.AddListener(() => OnClickEquip(power));
                 go.gameObject.SetActive(true);
-
-                power.OnChange(() =>
-                {
-                    Debug.Log($"power count: {power.count}");
-                    if(power.count == 0)
-                    {
-                        Destroy(go.gameObject);
-                    }
-                });
             }
         });
     }
@@ -104,9 +95,10 @@ public class EquipPanel : MonoBehaviour
 
         EventBus.Publish(
             RoomSendMessageEvent.Create(
-                "getPowerMoveList",
+                GlobalDefine.CLIENT_MESSAGE.EQUIP_POWER,
                 new RequestGetPowerMoveList
                 {
+                    characterId = CharacterManager.Instance.SelectedCharacter.Id,
                     powerId = equip.id
                 }
             )
@@ -122,5 +114,28 @@ public class EquipPanel : MonoBehaviour
         equipItems[slotIdx].Init(seletedItem, message.powermoves);
 
         gameObject.SetActive(false);
+    }
+
+    public void GetSlotDataList(GetEquipSlotMessage message)
+    {
+        foreach (var item in equipItems)
+        {
+            item.ResetImage();
+        }
+        
+        int k = 0;
+        foreach (SlotItemData slotdata in message.data)
+        {
+            equipItems[k].Init(slotdata.power, slotdata.powermoves);
+            k++;
+        }
+    }
+    
+    public void ClearHighLightItems()
+    {
+        foreach (var item in equipItems)
+        {
+            item.highlight.SetActive(false);
+        }
     }
 }

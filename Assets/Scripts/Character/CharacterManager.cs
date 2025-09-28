@@ -9,12 +9,14 @@ using UFB.Network;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Collections;
 using UFB.Map;
 using UFB.Network.RoomMessageTypes;
 using UFB.Core;
 using System.Threading.Tasks;
 using Colyseus.Schema;
-using UFB.Camera;
+using UFB.Interactions;
+using UFB.Items;
 
 namespace UFB.Events
 {
@@ -72,6 +74,7 @@ namespace UFB.Character
         public CharacterController SelectedCharacter => _characters[_selectedCharacterId];
 
         // public MapSchema<CharacterState> State { get; private set; }
+        public List<string> monsterKeys = new List<string>();
 
         [SerializeField]
         private GameObject _characterPrefab;
@@ -99,6 +102,14 @@ namespace UFB.Character
             }
         }
 
+        private void Start()
+        {
+            if (PlayerPrefs.GetInt("roomJoinOption") == 1)
+            {
+                StartCoroutine(GetRoomDataFromServer());
+            }
+        }
+
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
@@ -120,7 +131,7 @@ namespace UFB.Character
             _characterStates.OnRemove(OnCharacterRemoved);
 
             gameService.SubscribeToRoomMessage<CharacterMovedMessage>(
-                "characterMoved",
+                GlobalDefine.SERVER_MESSAGE.CHARACTER_MOVED,
                 OnCharacterMoved
             );
 
@@ -132,29 +143,11 @@ namespace UFB.Character
                 }
             );
 
-            _characterStates.ForEach(
-                (key, character) =>
-                {
-                    character.stats.OnChange(() =>
-                    {
-                        Debug.Log($"key: {key}, coin: {character.stats.coin}");
-                        EventBus.Publish(new ChangeCharacterStateEvent
-                        {
-                            state = character,
-                            isPlayer = character.id == _selectedCharacterId
-                        });
-                    });
-                }
-            );
-
             _characterStates.OnChange(
                 (newState, oldState) => {
                     /// subscribe to changes in player stats
                 }
             );
-
-            // message can be scoped on the server to send only to specific client
-            // EventBus.Subscribe<RequestCharacterMoveEvent>(OnRequestCharacterMove);
 
             // for now, do this for default behavior, but eventually this will be triggered by some UI handler
             EventBus.Subscribe<TileClickedEvent>(
@@ -173,25 +166,10 @@ namespace UFB.Character
 
             movePanel.character = character;
             spawnPanel.character = character;
-            character.transform.position = new Vector3(-100, -100, 100);
-            EventBus.Publish(
-                new SetCameraPresetStateEvent
-                {
-                    presetState = CameraController.PresetState.TopDown
-                }
-            );
-            /*            EventBus.Publish(
-                            RoomSendMessageEvent.Create(
-                                "spawnMove",
-                                new RequestSpawnMessage
-                                {
-                                    tileId = character.CurrentTile.Id,
-                                    destination = character.CurrentTile.Coordinates,
-                                    playerId = characterId
-                                }
-                            )
-                        );*/
-
+            if (InteractionManager.Instance.isSpawn && character.State.type == (int)USER_TYPE.USER && PlayerPrefs.GetInt("roomJoinOption") != 1)
+            {
+                character.transform.position = new Vector3(-100, -100, 100);
+            }
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(
@@ -222,10 +200,15 @@ namespace UFB.Character
             EventBus.Publish(
                 new ToastMessageEvent($"Player {characterState.id} has joined the game!")
             );
-            Debug.Log($"[CharacterManager] Player {characterState.id} has joined the game!");
+            Debug.Log($"[CharacterManager] Player {characterState.id} has joined the game! class : {characterState.characterClass}, type : class : {characterState.type}");
 
             try
             {
+                if(characterState.type == (int)USER_TYPE.MONSTER)
+                {
+                    monsterKeys.Add(characterState.id);
+                }
+
                 UfbCharacter ufbCharacter = await LoadCharacter(characterState.characterClass);
                 GameObject templateCharacter = Instantiate(_characterPrefab, transform);
                 var character = templateCharacter.GetComponent<CharacterController>();
@@ -233,14 +216,15 @@ namespace UFB.Character
                 // if it's an NPC, don't play the intro
                 await character.Initialize(ufbCharacter, characterState, true);
                 _characters.Add(characterState.id, character);
-                
+
+                character.transform.localEulerAngles = new Vector3(0, 180, 0);
 
                 if (character.Id == _playerCharacterId)
                 {
                     SetSelectedCharacter(character.Id);
                 } else
                 {
-                    character.gameObject.SetActive(false);
+                    //character.gameObject.SetActive(false);
                 }
             }
             catch (Exception e)
@@ -281,7 +265,7 @@ namespace UFB.Character
 
         private void OnCharacterMoved(CharacterMovedMessage m)
         {
-            movePanel.OnCharacterMoved(m);
+            // movePanel.OnCharacterMoved(m);
             // var coordinates = m.path.Select(p => p.coord.ToCoordinates());
             var tileIds = m.path.Select(p => p.tileId);
             tileIds.Reverse();
@@ -299,53 +283,66 @@ namespace UFB.Character
             );
         }
 
-        // private async void OnRequestCharacterMove(RequestCharacterMoveEvent e)
-        // {
-        //     Debug.Log($"[PlayerManager] Requesting move to {e.Destination.ToString()}");
-        //     await _room.Send(
-        //         "move",
-        //         new Dictionary<string, object>() { { "destination", e.Destination.ToDictionary() } }
-        //     );
-        // }
+        public void OnSetCharacterTilePosition(SetCharacterPositionMessage m)
+        {
+            var tileIds = m.path.Select(p => p.tileId);
+            tileIds.Reverse();
+            /// select all tiles from tiles using tileIds
 
-        // public void SavePlayerConfiguration(string fileName)
-        // {
+            var path = ServiceLocator.Current.Get<GameBoard>().GetTilesByIds(tileIds);
 
-        //     // this will eventually be handled by the Player object, which PlayerEntity has a reference
-        //     // to. It will handle loading/unloading the JSON into the player state. For now, quick solution
-        //     var json = JsonConvert.SerializeObject(_players.Select(p => new PlayerConfiguration
-        //     {
-        //         CharacterName = p.CharacterName,
-        //         TileCoordinates = p.CurrentTile.Coordinates
-        //     }).ToList());
+            Debug.Log($"[CharacterManager] Moving character {m.characterId} along path");
+            var task = _characters[m.characterId].MoveAlongPath(path);
+            task.ContinueWith(
+                (t) =>
+                {
+                    EventBus.Publish(new CharacterPlacedEvent(_characters[m.characterId]));
+                }
+            );
+        }
 
-        //     // save the json
-        //     ApplicationData.SaveJSON(json, "gamestate/player-config", fileName + ".json");
-        // }
+        public void OnSelectCharacter(string key)
+        {
+            if(_selectedCharacterId == key)
+            {
+                key = _playerCharacterId;
+            }
+            SetSelectedCharacter(key);
 
+            CameraManager.instance.SetTarget(_characters[key].transform);
+        }
 
-        //         public void LoadPlayerConfiguration(string fileName)
-        // {
-        //     // load the json
-        //     var playerConfigurations = ApplicationData.LoadJSON<List<PlayerConfiguration>>("gamestate/player-config", fileName + ".json");
+        public CharacterController GetCharacterFromId(string id)
+        {
+            if(_characters.ContainsKey(id))
+            {
+                return _characters[id];
+            } 
+            else
+            {
+                return null;
+            }
+        }
 
-        //     // iterate through the players and set their tile coordinates
-        //     foreach (var playerConfiguration in playerConfigurations)
-        //     {
-        //         var player = _players.FirstOrDefault(p => p.CharacterName == playerConfiguration.CharacterName);
-        //         if (player == null)
-        //         {
-        //             Debug.LogError($"Player with character name {playerConfiguration.CharacterName} not found");
-        //             continue;
-        //         }
-        //         var tile = GameManager.Instance.GameBoard.GetTileByCoordinates(playerConfiguration.TileCoordinates);
-        //         if (tile == null)
-        //         {
-        //             Debug.LogError($"Tile with coordinates {playerConfiguration.TileCoordinates} not found");
-        //             continue;
-        //         }
-        //         player.ForceMoveToTile(tile);
-        //     }
-        // }
+        public Dictionary<string, CharacterController> GetCharacterList()
+        {
+            return _characters; 
+        }
+
+        IEnumerator GetRoomDataFromServer()
+        {
+            yield return new WaitForSeconds(1);
+            
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.GET_ROOM_DATA,
+                    new RequestCharacterId
+                    {
+                        characterId = _playerCharacterId,
+                    }
+                )
+            );
+            
+        }
     }
 }

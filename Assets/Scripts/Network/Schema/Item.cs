@@ -28,6 +28,9 @@ namespace UFB.StateSchema {
 		[Type(5, "int16")]
 		public short cost = default(short);
 
+		[Type(6, "int16")]
+		public short sell = default(short);
+
 		/*
 		 * Support for individual property change callbacks below...
 		 */
@@ -104,6 +107,18 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<short> __sellChange;
+		public Action OnSellChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.sell));
+			__sellChange += __handler;
+			if (__immediate && this.sell != default(short)) { __handler(this.sell, default(short)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(sell));
+				__sellChange -= __handler;
+			};
+		}
+
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
 				case nameof(id): __idChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
@@ -112,6 +127,7 @@ namespace UFB.StateSchema {
 				case nameof(count): __countChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(level): __levelChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(cost): __costChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
+				case nameof(sell): __sellChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				default: break;
 			}
 		}

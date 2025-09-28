@@ -8,12 +8,31 @@ namespace UFB.Map {
 
     public enum TileType
     {
-        Bridge,
-        Floor,
+        VerticalBridge,
+        HorizontalBridge,
+        DoubleBridge,
         Void,
-        Chest,
-        Enemy,
-        Portal
+        StairsNS,
+        StairsSN,
+        StairsEW,
+        StairsWE,
+        Upper,
+        Lower,
+        OpenTile,
+        BlockNorth,
+        BlockEast,
+        BlockSouth,
+        BlockWest,
+        BlockNS,
+        BlockEW,
+        BlockNE,
+        BlockES,
+        BlockSW,
+        BlockNW,
+        BlockESW,
+        BlockSWN,
+        BlockWNE,
+        BlockNES,
     }
 
     public class TileColor
@@ -40,8 +59,14 @@ namespace UFB.Map {
 
     public enum EdgeProperty
     {
-        Wall,
-        Bridge
+        NULL = -1,
+        BASIC,
+        WALL,
+        RAVINE,
+        VOID,
+        CLIFF,
+        BRIDGE,
+        STAIR,
     }
 
     public class TileEdge

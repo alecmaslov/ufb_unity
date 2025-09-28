@@ -12,7 +12,7 @@ namespace UFB.Core
         {
             ServiceLocator.Initiailze();
 
-            var networkService = new NetworkService(new UfbApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT));
+            var networkService = new NetworkService(new UfbApiClient(GlobalDefine.API_URL, GlobalDefine.API_PORT, GlobalDefine.isHttps));
             var spawnerService = SpawnerService.Instance;
             var gameService = new GameService();
 
@@ -21,8 +21,9 @@ namespace UFB.Core
             ServiceLocator.Current.Register(gameService);
 
 
+            return;
             // we must wait until we are connected to try and perform any other actions
-            await networkService.Connect();
+            //await networkService.Connect();
 
             var currentScene = SceneManager.GetActiveScene();
 

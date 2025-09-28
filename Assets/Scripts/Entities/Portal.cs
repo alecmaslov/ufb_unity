@@ -29,7 +29,7 @@ namespace UFB.Entities
     {
         public SpawnEntity SpawnEntity { get; private set; }
         public SpawnEntityParameters Parameters { get => _portalParameters; }
-        private PortalSpawnEntityParameters _portalParameters;
+        public PortalSpawnEntityParameters _portalParameters;
 
         [SerializeField]
         private GameObject _bluePortalPrefab;
@@ -52,6 +52,8 @@ namespace UFB.Entities
             }
             Debug.Log($"Portal initialized with parameters {_portalParameters.ToDetailedString()}");
             // Addressables.InstantiateAsync(spawnEntity.resourceAddress).Completed += OnPortalLoaded;
+
+            UIGameManager.instance.portals.Add(this);
         }
 
         public PortalSpawnEntityParameters ParseSpawnParameters(string parameters)

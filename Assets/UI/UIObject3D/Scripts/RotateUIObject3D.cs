@@ -49,6 +49,8 @@ namespace UI.ThreeDimensional
 
         private float timeSinceLastUpdate = 0f;
 
+        public bool isRotated = true;
+
         void Awake()
         {
             UIObject3D = this.GetComponent<UIObject3D>();
@@ -70,7 +72,10 @@ namespace UI.ThreeDimensional
             {
                 case eRotationMode.Constant:
                     {
-                        UpdateRotation();
+                        if(isRotated)
+                        {
+                            UpdateRotation();
+                        }
                     }
                     break;
                 case eRotationMode.WhenMouseIsOver:
@@ -149,6 +154,18 @@ namespace UI.ThreeDimensional
             }
 
             UIObject3D.TargetRotation = initialRotation;
+        }
+
+        public void OnSnapBackObject()
+        {
+            isRotated = false;
+            StartCoroutine(SnapBack(snapbackTime));
+        }
+
+        public void OnStartRotate()
+        {
+            timeSinceLastUpdate = 0;
+            isRotated = true;
         }
 
         void OnValidate()

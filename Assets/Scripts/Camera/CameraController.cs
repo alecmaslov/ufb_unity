@@ -3,6 +3,7 @@ using UFB.Core;
 using UFB.Events;
 using Newtonsoft.Json;
 using UFB.Camera;
+using UFB.Map;
 
 namespace UFB.Events
 {
@@ -29,10 +30,9 @@ namespace UFB.Events
     public class SpawnItemEvent
     {
         public string tileId = "";
-        public SpawnItemEvent(string tileId)
-        {
-            this.tileId = tileId;
-        }
+        public Transform target = null;
+        public string targetTileId = "";
+        public Tile tile = null;
     }
 
     public class SetCameraStateEvent
@@ -62,6 +62,7 @@ namespace UFB.Camera
         public ZoomController Zoom { get; private set; }
         public OrbitCamera Orbit { get; private set; }
         public CameraState topDownState;
+        public CameraState frontState;
 
         public enum PresetState
         {
@@ -165,6 +166,7 @@ namespace UFB.Camera
                     LoadCameraState(topDownState);
                     break;
                 case PresetState.Front:
+                    LoadCameraState(frontState);
                     break;
                 case PresetState.Back:
                     break;

@@ -66,6 +66,38 @@ MonoBehaviour:
   - {fileID: 21300000, guid: fdda93e79a7ace64784f873ff1767089, type: 3}
   - {fileID: 21300000, guid: 3b341cbfdbde89c4a9bce7d5b70556e5, type: 3}
   - {fileID: 21300000, guid: 94fb06aa7a00a4a4a84771162b9225ca, type: 3}
+  - {fileID: 21300000, guid: ca5f72f935512ca4c84b663a3a336e39, type: 3}
+  - {fileID: 21300000, guid: a25b8912b51aa5d4288aa83901afef46, type: 3}
+  - {fileID: 21300000, guid: 80793e8996829e44aa254d222dfd8203, type: 3}
+  - {fileID: 21300000, guid: 6d5c24e7406e6df4087f619607f77a10, type: 3}
+  - {fileID: 21300000, guid: 958f4c875e9c56e448d25f06f11b320f, type: 3}
+  - {fileID: 21300000, guid: a7c1e339e1dcece4b8e2c56c87557d4a, type: 3}
+  - {fileID: 21300000, guid: 96c1d02cd3ee7874abc5d1df79af4a49, type: 3}
+  - {fileID: 21300000, guid: 05989000f3adfdb4aa031280a1044a26, type: 3}
+  - {fileID: 21300000, guid: 8f065b87573fc2347b88b54914dc2438, type: 3}
+  - {fileID: 21300000, guid: f23cc9d91811c8a4c844059d4ecc3ecd, type: 3}
+  - {fileID: 21300000, guid: cd8967d0ac3451645ba8ee23c89a5a33, type: 3}
+  - {fileID: 21300000, guid: feda5d05dfd821846b06e372f311dfb3, type: 3}
+  - {fileID: 21300000, guid: b65984331899fb14090dfee12ab0d64a, type: 3}
+  - {fileID: 21300000, guid: 41f769597eed51a4297e55306736a6a5, type: 3}
+  - {fileID: 21300000, guid: 00af69b95e82fa94bbcdb24bb18f4c34, type: 3}
+  - {fileID: 21300000, guid: e13af15564d869642a9f82917f33bf58, type: 3}
+  - {fileID: 21300000, guid: 1d48259fa1908f64bab97565f921c315, type: 3}
+  - {fileID: 21300000, guid: 85255433af7aedf4bacaf07aec9d9c75, type: 3}
+  - {fileID: 21300000, guid: ef15dc467cb987b43b5796f2b506e282, type: 3}
+  - {fileID: 21300000, guid: 24f560f74cd592546abdaf05ef262649, type: 3}
+  - {fileID: 21300000, guid: cce0590f345c9f54fb68271a742262bc, type: 3}
+  - {fileID: 21300000, guid: 872bb4c7a12202c489874bc1d1e76617, type: 3}
+  - {fileID: 21300000, guid: f872e20f2dfa9f847b0541700b19b4bb, type: 3}
+  - {fileID: 21300000, guid: dfef13bf9c08b604cb20746e169483d0, type: 3}
+  - {fileID: 21300000, guid: b2169c89944bd2b418910a673c900a76, type: 3}
+  - {fileID: 21300000, guid: 31aa1235b7fef09478900989c2bbb6dd, type: 3}
+  - {fileID: 21300000, guid: 68f5f62bb0767ae44a19380188767179, type: 3}
+  - {fileID: 21300000, guid: 388ab900dea3a85418977c582ac85149, type: 3}
+  - {fileID: 21300000, guid: 66f730cc3f87f5144a7948fa151376f3, type: 3}
+  - {fileID: 21300000, guid: 8251c4d8bb6bc9e42a9e2614877c5136, type: 3}
+  - {fileID: 21300000, guid: da6a14f23c152e24583e530a463af6ca, type: 3}
+  - {fileID: 21300000, guid: 703b7836ee460a4448cbd5e73d383c4d, type: 3}
   powers:
   - {fileID: 21300000, guid: 3a558facb2af1bf40af79c3f8f89b528, type: 3}
   - {fileID: 21300000, guid: 1afa21b325154f1489d6547e7c22717d, type: 3}
@@ -104,17 +136,47 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 85409a57704f941448c58d3acf82af9c, type: 3}
   - {fileID: 21300000, guid: ecf70c30a3272684b9eaca2feb46655f, type: 3}
   stacks:
-  - {fileID: 21300000, guid: 424690ea2a5dad643aba82fb2bb87b29, type: 3}
-  - {fileID: 21300000, guid: b95e4170134bd3441a2c8129f50d5355, type: 3}
-  - {fileID: 21300000, guid: 0dc62c372a5ffa948a3791503bd05b0a, type: 3}
-  - {fileID: 21300000, guid: 5fdbed25d724cd44cb05d200ae2cc824, type: 3}
-  - {fileID: 21300000, guid: fc5c3fe9f391cbd41a42f62a6b874e11, type: 3}
-  - {fileID: 21300000, guid: 0cff194171bc05c40bd1b67efd4aa057, type: 3}
-  - {fileID: 21300000, guid: 59353bde1729c044596026a4c4f388bd, type: 3}
-  - {fileID: 21300000, guid: 01506a3489d542a4b87ffa2ecde3508e, type: 3}
+  - {fileID: 21300000, guid: 60ac9f1e2a323614dacedd16da112be1, type: 3}
+  - {fileID: 21300000, guid: 4b97d2b647933f744a5abb998b9cf8cf, type: 3}
+  - {fileID: 21300000, guid: 77106536b9a02d141a413b8dc0925290, type: 3}
+  - {fileID: 21300000, guid: cf7347b59e9288346bac78303ee39176, type: 3}
+  - {fileID: 21300000, guid: cb996e9011ffda045bc96689cb79d9f6, type: 3}
+  - {fileID: 21300000, guid: 406cba156bac63042a32493af8599d9e, type: 3}
+  - {fileID: 21300000, guid: 27f77a49f2f378444871b023163afc2a, type: 3}
+  - {fileID: 21300000, guid: d55ec0e0aac2e6e4ca8dc5bd77bc504c, type: 3}
+  - {fileID: 21300000, guid: d6fc016089b92364f84ef129f9b971be, type: 3}
+  - {fileID: 21300000, guid: d35649657ad5217448127a3f96372a0f, type: 3}
+  - {fileID: 21300000, guid: 2926211a47d841e4a81822aa8a24250e, type: 3}
+  - {fileID: 21300000, guid: 6b0038387e2367e4dbd7f27826cbbdb3, type: 3}
+  - {fileID: 21300000, guid: 61e1673602f287546869959939fcce24, type: 3}
+  - {fileID: 21300000, guid: 42a0220f01b7efd419fdcd2c1e4fc9f1, type: 3}
+  - {fileID: 21300000, guid: 699b2422968bc87469e9ee83b6aad126, type: 3}
+  - {fileID: 21300000, guid: aa0b9fd8f44af3d4cb84f0f8a5c3b4b0, type: 3}
+  - {fileID: 21300000, guid: 7f8716c3ed9d89c449ebc348c6d05662, type: 3}
+  - {fileID: 21300000, guid: 736f4f9a515e28c44932fbb968047c87, type: 3}
+  - {fileID: 21300000, guid: 4c7f11262933e2d48af38470a20faace, type: 3}
+  - {fileID: 21300000, guid: 69f7d6255e437e748970e6325b31a19f, type: 3}
+  perks:
+  - {fileID: 21300000, guid: 2df72dcc056a4af4794ca43abaf6a456, type: 3}
+  - {fileID: 21300000, guid: c5f3f9e8c36ce2a4da6aa4e18b1cfe34, type: 3}
+  - {fileID: 21300000, guid: 09d534f38fadfb54e89c00eaaa7e27b5, type: 3}
+  - {fileID: 21300000, guid: d74a13c8276336d41a04c083571367d6, type: 3}
+  - {fileID: 21300000, guid: f335722a3c36e4449b8107845bff6e93, type: 3}
+  quests:
+  - {fileID: 21300000, guid: 3e3fa920907ec7b4da27f7bb33396b1c, type: 3}
+  - {fileID: 21300000, guid: dd5b0af42657d2e449941af75f970622, type: 3}
+  - {fileID: 21300000, guid: d9c0df41062204f43a462a6f02948064, type: 3}
+  - {fileID: 21300000, guid: a934e6f43cb4ef445ae2c775231fad92, type: 3}
+  - {fileID: 21300000, guid: 070d630ac2735f648a7fdf28962b4550, type: 3}
+  - {fileID: 21300000, guid: f4fbecd4dbabf5c4dbbae2b125a60021, type: 3}
+  - {fileID: 21300000, guid: 91d9227456507504a8d1684086b989d7, type: 3}
+  - {fileID: 21300000, guid: 8801e940428eabe4da6df8065061dcd2, type: 3}
   coin: {fileID: 21300000, guid: ec6d0c158f43d1648a6241a4e6651427, type: 3}
   range: {fileID: 21300000, guid: f8b84311f2a49734e972c1f07f47934e, type: 3}
   lightImage: {fileID: 21300000, guid: b01f769f8531c6c4397797b13abff7f7, type: 3}
+  energy: {fileID: 21300000, guid: b01f769f8531c6c4397797b13abff7f7, type: 3}
+  ultimate: {fileID: 21300000, guid: 9f07909b0c3596642851ba32d7b94384, type: 3}
+  health: {fileID: 21300000, guid: 1f636cc2ad795bb4abdef56b510793b4, type: 3}
   divideTo4:
   - {fileID: 21300000, guid: d94eb50a8a996314dbb058a4a616f66e, type: 3}
   - {fileID: 21300000, guid: 9a47fb82cb2bffc4ea1a731ba907c14d, type: 3}
@@ -126,3 +188,138 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 828c50ebb9d287646a882fabc3293fe3, type: 3}
   - {fileID: 21300000, guid: af9afb9ee3dc3df46a445f28cfe96661, type: 3}
   - {fileID: 21300000, guid: b1d26c0eb51bb384f9d882d298d69a57, type: 3}
+  punch: {fileID: 21300000, guid: ce5164c6550d15c46b26f6ccac37d8e7, type: 3}
+  itemBag: {fileID: 21300000, guid: 1505b3c0a56fddc4b88c40d3b1ab515d, type: 3}
+  treasureImage: {fileID: 21300000, guid: 9b87d6ffb616fb74785a5400c35481c7, type: 3}
+  merchant: {fileID: 21300000, guid: 994677f0cbf23a8409f520e243a9d84f, type: 3}
+  blue_portal: {fileID: 21300000, guid: eea2167c7a19d394cae3d29e0626f051, type: 3}
+  green_portal: {fileID: 21300000, guid: c8b741864274ff343978e231f80f27cb, type: 3}
+  itemCraftSystem:
+  - item1: 23
+    item2: 4
+    itemResult: 15
+    coin: 1
+  - item1: 23
+    item2: 5
+    itemResult: 18
+    coin: 1
+  - item1: 22
+    item2: 4
+    itemResult: 16
+    coin: 1
+  - item1: 22
+    item2: 5
+    itemResult: 19
+    coin: 1
+  - item1: 23
+    item2: 23
+    itemResult: 0
+    coin: 1
+  - item1: 22
+    item2: 22
+    itemResult: 1
+    coin: 1
+  - item1: 4
+    item2: 5
+    itemResult: 14
+    coin: 3
+  powerCraftSystem:
+  - power1: 0
+    power2: 0
+    powerResult: 12
+    coin: 10
+  - power1: 1
+    power2: 1
+    powerResult: 13
+    coin: 10
+  - power1: 2
+    power2: 2
+    powerResult: 14
+    coin: 10
+  - power1: 3
+    power2: 3
+    powerResult: 15
+    coin: 10
+  - power1: 4
+    power2: 4
+    powerResult: 16
+    coin: 10
+  - power1: 5
+    power2: 5
+    powerResult: 17
+    coin: 10
+  - power1: 6
+    power2: 6
+    powerResult: 18
+    coin: 10
+  - power1: 7
+    power2: 7
+    powerResult: 19
+    coin: 10
+  - power1: 8
+    power2: 8
+    powerResult: 20
+    coin: 10
+  - power1: 9
+    power2: 9
+    powerResult: 21
+    coin: 10
+  - power1: 10
+    power2: 10
+    powerResult: 22
+    coin: 10
+  - power1: 11
+    power2: 11
+    powerResult: 23
+    coin: 10
+  - power1: 12
+    power2: 12
+    powerResult: 24
+    coin: 20
+  - power1: 13
+    power2: 13
+    powerResult: 25
+    coin: 20
+  - power1: 14
+    power2: 14
+    powerResult: 26
+    coin: 20
+  - power1: 15
+    power2: 15
+    powerResult: 27
+    coin: 20
+  - power1: 16
+    power2: 16
+    powerResult: 28
+    coin: 20
+  - power1: 17
+    power2: 17
+    powerResult: 29
+    coin: 20
+  - power1: 18
+    power2: 18
+    powerResult: 30
+    coin: 20
+  - power1: 19
+    power2: 19
+    powerResult: 31
+    coin: 20
+  - power1: 20
+    power2: 20
+    powerResult: 32
+    coin: 20
+  - power1: 21
+    power2: 21
+    powerResult: 33
+    coin: 20
+  - power1: 22
+    power2: 22
+    powerResult: 34
+    coin: 20
+  - power1: 23
+    power2: 23
+    powerResult: 35
+    coin: 20
+  dice:
+  - {fileID: 21300000, guid: b79e1f10214094a468bc7d381fc0a653, type: 3}
+  - {fileID: 21300000, guid: e851f0b4cceb3e843a6ccf38b5d12056, type: 3}

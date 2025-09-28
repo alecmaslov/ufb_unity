@@ -26,7 +26,7 @@ namespace UFB.Map
         public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1));
         public bool IsMoving { get; private set; }
 
-        public string TilePosText => Coordinates.ColumnName + int.Parse(Coordinates.RowName).ToString("D2");
+        public string TilePosText => Coordinates.ColumnName + (int.Parse(Coordinates.RowName) + 1).ToString("D2");
 
         private MeshMapTile _meshMapTile;
         private TileState _state;
@@ -68,10 +68,10 @@ namespace UFB.Map
             _state = tileState;
             name = Coordinates.GameId + $" ({Coordinates.X}, {Coordinates.Y})" + Id;
 
-            if(tileState.type == "Bridge" || tileState.type == "Floor" || tileState.type == "Void")
-            {
-                SpawnWalls();
-            }
+            //if(tileState.type == "Bridge" || tileState.type == "Floor" || tileState.type == "Void")
+            //{
+                //SpawnWalls();
+            //}
         }
 
         public void Stretch(float height, float duration = 0.5f, Action onComplete = null)
@@ -90,6 +90,11 @@ namespace UFB.Map
             gameObject.transform.SetParent(transform);
             if (zeroLocalPosition)
                 gameObject.transform.localPosition = Vector3.zero;
+            if(_state.type == "Upper")
+            {
+                gameObject.transform.localPosition += Vector3.up * 2.15f;
+            }
+
         }
 
         public TileState GetTileState() { return _state; }

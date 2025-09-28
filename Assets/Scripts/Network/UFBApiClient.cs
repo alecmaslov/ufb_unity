@@ -31,15 +31,15 @@ namespace UFB.Network
             set
             {
                 // store in the local storage
-                UnityEngine.PlayerPrefs.SetString("token", value);
+                PlayerPrefs.SetString("token", value);
                 _token = value;
             }
         }
         private string _clientId;
         private string _token;
 
-        public UfbApiClient(string apiBase, int port)
-            : base(apiBase, port) { }
+        public UfbApiClient(string apiBase, int port, bool isHttps = false)
+            : base(apiBase, port, isHttps) { }
 
         private async Task<bool> ValidateToken()
         {
@@ -69,8 +69,9 @@ namespace UFB.Network
             }
         }
 
-        public async Task RegisterClient()
+        public async Task RegisterClient(string userId)
         {
+            // PlayerPrefs.SetString("token", "");
             if (IsRegistered)
             {
                 Debug.Log("Already registered!");
@@ -84,7 +85,7 @@ namespace UFB.Network
             }
 
             var platformType = GetPlatformType();
-            var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString() });
+            var jsonData = JsonConvert.SerializeObject(new { platform = platformType.ToString(), userId });
             var clientResponse = await Post<RegisterClientResponse>(
                 "/auth/register-client",
                 jsonData
@@ -109,6 +110,57 @@ namespace UFB.Network
 
         public async Task GenerateToken() => await GenerateToken(_clientId);
 
+        public async Task<RegisterUserResponse> SignUpHandler(string email, string password)
+        {
+            try
+            {
+                var response = await Post<RegisterUserResponse>(
+                    "/user/sign-up",
+                    JsonConvert.SerializeObject(new { email, password })
+                );
+                
+                string clientId = response.clientId;
+                string error = response.error;
+                
+                Debug.Log(error);
+                Debug.Log(clientId);
+                
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                RegisterUserResponse result = new RegisterUserResponse();
+                result.error = e.Message;
+                return  result;
+            }
+        }
+        
+        public async Task<RegisterUserResponse> LoginHandler(string email, string password)
+        {
+            try
+            {
+                var response = await Post<RegisterUserResponse>(
+                    "/user/sign-in",
+                    JsonConvert.SerializeObject(new { email, password })
+                );
+                
+                string clientId = response.clientId;
+                string error = response.error;
+                
+                Debug.Log(clientId);
+                Debug.Log(error);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                RegisterUserResponse result = new RegisterUserResponse();
+                result.error = e.Message;
+                return result;
+            }
+        }
+        
         public PlatformType GetPlatformType()
         {
             PlatformType type = PlatformType.WEB; // Default value
@@ -147,6 +199,12 @@ namespace UFB.Network
         public struct ValidTokenResponse
         {
             public string clientId;
+        }
+
+        public struct RegisterUserResponse
+        {
+            public string clientId;
+            public string error;
         }
     }
 }

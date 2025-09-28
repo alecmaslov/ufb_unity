@@ -1,4 +1,5 @@
 using Colyseus.Schema;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Character;
@@ -11,13 +12,25 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
+
 namespace UFB.UI
 {
+
     public class ResourcePanel : MonoBehaviour
     {
+        [Serializable]
+        public struct StackItem
+        {
+            public Text count;
+            public Image image;
+        }
+
         public static ResourcePanel instance;
+
         [SerializeField]
         private ItemCard item;
+
+        public StackItem[] stackItems;
 
         [SerializeField]
         private Image _avatarImage;
@@ -64,95 +77,20 @@ namespace UFB.UI
         [SerializeField]
         Image crystalBackImage;
 
-        private void OnEnable()
-        {
+        [SerializeField]
+        public ItemDetailPanel bombDetailPanel;
 
-            /*var gameService = ServiceLocator.Current.Get<GameService>();
-            if (gameService.Room == null)
-            {
-                Debug.LogError("Room is null");
-                return;
-            }
-            gameService.SubscribeToRoomMessage<GetResourceDataMessage>(
-                "sendResourceList",
-                GetResourceDataReceived
-            );*/
+        [SerializeField]
+        public ItemDetailPanel arrowDetailPanel;
 
-            /*EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    "getResourceList",
-                    new RequestGetResourceMessage
-                    {
-                        playerId = "",
-                    }
-                )
-            );*/
+        [SerializeField]
+        ItemDetailPanel itemsDetailPanel;
 
+        public GameObject bottomPart;
+        public GameObject bottomCloseBtn;
 
-        }
-
-        private void OnDisable()
-        {
-            
-        }
-
-        /*private void GetResourceDataReceived( GetResourceDataMessage message )
-        {
-            if ( message == null ) return;
-
-            CharacterState characterState = message.characterState;
-            coinText.text = characterState.stats.coin.ToString();
-            itemBagText.text = characterState.stats.bags.ToString();
-
-            ArraySchema<Item> items = characterState.items;
-            items.ForEach(item =>
-            {
-                ITEM type = (ITEM)item.id;
-                if (type == ITEM.Feather)
-                {
-                    featherText.text = item.count.ToString();
-                }
-                else if (type == ITEM.Potion)
-                {
-                    potionText.text = item.count.ToString();
-                }
-                else if (type == ITEM.Elixir)
-                {
-                    potionText.text = item.count.ToString();
-                }
-                else if (type == ITEM.WarpCrystal)
-                {
-                    potionText.text = item.count.ToString();
-                }
-            });
-
-            List<ITEM> arrows = new List<ITEM>
-                {
-                    ITEM.IceArrow,
-                    ITEM.BombArrow,
-                    ITEM.FireArrow,
-                    ITEM.VoidArrow,
-                    ITEM.Arrow
-                };
-
-            quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1);
-
-            List<ITEM> bombs = new List<ITEM>
-                {
-                    ITEM.Bomb,
-                    ITEM.IceBomb,
-                    ITEM.VoidBomb,
-                    ITEM.FireBomb
-                };
-
-            bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1);
-
-            heartText.text = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
-
-            crystalText.text = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
-
-        }*/
-
+        private CharacterState characterState;
+        
         private void Awake()
         {
             if (instance == null)
@@ -165,10 +103,10 @@ namespace UFB.UI
                 instance = this;
         }
 
-        public void OnCharacterValueEvent(ChangeCharacterStateEvent e)
+        public void OnCharacterValueEvent(CharacterState e)
         {
             Addressables
-            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
             .Completed += (op) =>
             {
                 if (
@@ -182,11 +120,52 @@ namespace UFB.UI
                     );
             };
 
+            InitResourceData(e);
+        }
 
-            coinText.text = e.state.stats.coin.ToString();
-            itemBagText.text = e.state.stats.bags.ToString();
+        public void InitButtonStatus()
+        {
+            if ((USER_TYPE) characterState.type == USER_TYPE.USER)
+            {
+                bottomPart.SetActive(true);
+                UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+                bottomCloseBtn.SetActive(false);
+            }
+            else
+            {
+                bottomPart.SetActive(false);
+                bottomCloseBtn.SetActive(true);
+            }
+        }
+        
+        public void InitResourceData(CharacterState _characterState)
+        {
+            characterState = _characterState;
+            
+            foreach(var si in stackItems)
+            {
+                si.count.text = "0";
+            }
 
-            ArraySchema<Item> items = e.state.items;
+            coinText.text = characterState.stats.coin.ToString();
+            itemBagText.text = characterState.stats.bags.ToString();
+
+            ArraySchema<Item> stacks = characterState.stacks;
+
+            stacks.ForEach(stack => {
+                if (stack != null)
+                {
+                    int stackId = stack.id;
+                    if (stackId < stackItems.Length)
+                    {
+                        stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stackId];
+                        stackItems[stackId].count.text = stack.count.ToString();
+                    }
+
+                }
+            });
+
+            ArraySchema<Item> items = characterState.items;
             items.ForEach(item =>
             {
                 ITEM type = (ITEM)item.id;
@@ -217,49 +196,48 @@ namespace UFB.UI
                 ITEM.Arrow
             };
 
-            quiverText.text = GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
+            quiverText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
 
             List<ITEM> bombs = new List<ITEM>
             {
                 ITEM.Bomb,
                 ITEM.IceBomb,
                 ITEM.VoidBomb,
-                ITEM.FireBomb
+                ITEM.FireBomb,
+                ITEM.caltropBomb,
             };
 
-            bombText.text = GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
+            bombText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
 
-            int heartPieceNum = GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
+            int heartPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
             heartText.text = heartPieceNum.ToString();
             heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceNum % 5];
 
-            int crystalPieceNum = GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
+            int crystalPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
             crystalText.text = crystalPieceNum.ToString();
             crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
+
+            Debug.Log($"heartPieceNum: {heartPieceNum}, crystalPieceNum: {crystalPieceNum} ");
+
         }
 
-        private int GetItemTotalCount(ArraySchema<Item> items, ITEM mainType, List<ITEM> subTypes, int divideNum = 1)
+        public void OnBombItemDetailClicked()
         {
-            int totalCount = 0;
-            int subCount = 0;
-            int mainCount = 0;
-            items.ForEach((item) =>
-            {
-                ITEM type = (ITEM)item.id;
-                if(type == mainType)
-                {
-                    mainCount++;
-                }
-                if(subTypes.FindIndex(tp => tp == type) != -1)
-                {
-                    subCount++;
-                }
-            });
+            bombDetailPanel.Init(0);
+        }
 
-            totalCount = mainCount + Mathf.FloorToInt((float)subCount / (float)divideNum);
+        public void OnArrowsItemDetailClicked()
+        {
+            arrowDetailPanel.Init(1);
+        }
 
-            return totalCount;
+        public void OnItemsItemDetailClicked()
+        {
+            itemsDetailPanel.Init(2);
         }
     }
+
+ 
+
 }
 

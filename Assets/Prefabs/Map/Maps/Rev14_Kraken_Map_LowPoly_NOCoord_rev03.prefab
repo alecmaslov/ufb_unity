@@ -118,6 +118,70 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1001 &4955185990429354475
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7409391962770498863}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+      propertyPath: m_Name
+      value: Rev15_Kraken_Map_NoCood
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: -117334987287769072, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+    - {fileID: 4088511875904941254, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+--- !u!4 &4850062454001356288 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7780b0bb27ebb854eb40adfab7fba84c, type: 3}
+  m_PrefabInstance: {fileID: 4955185990429354475}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7014861948960146116
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,8 +235,16 @@ PrefabInstance:
       value: Rev14_Kraken_Map_LowPoly_NOCoord_rev03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -604445015861202053, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
+    - {fileID: 8406448397189802380, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
+    - {fileID: -2061357512342206500, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
+    - {fileID: -8108263601232717723, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
+    - {fileID: 4839263914276569907, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4850062454001356288}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e21b3ab25915a38438c91a4ad5741a4e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4563221180592540643}

@@ -1,0 +1,509 @@
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Items;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PowerMoveItem : MonoBehaviour
+{
+
+    [SerializeField]
+    Text moveName;
+
+    [SerializeField]
+    Image image;
+
+    [SerializeField]
+    Transform costList;
+
+    public Transform resultList;
+    
+    [SerializeField]
+    ItemCard card;
+
+    public PowerMove pm;
+
+    public void Init(PowerMove powerMove)
+    {
+        pm = powerMove;
+        InitCostList();
+        CharacterState state = UIGameManager.instance.controller.State;
+
+        moveName.text = powerMove.name;
+        if (image != null) 
+        { 
+            image.sprite = GlobalResources.instance.powers[powerMove.powerImageId];
+        }
+        
+
+        foreach (var cost in powerMove.costList)
+        {
+            //if(((ITEM) cost.id == ITEM.RandomArrow || (ITEM) cost.id == ITEM.RandomBomb) && powerMove.extraItemId >= 0) continue;
+            
+            if (cost.id == (int)ITEM.RandomArrow)
+            {
+                List<ITEM> arrows = new List<ITEM>
+                {
+                    ITEM.IceArrow,
+                    ITEM.BombArrow,
+                    ITEM.FireArrow,
+                    ITEM.VoidArrow,
+                    ITEM.Arrow
+                };
+
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.Quiver, arrows, 1);
+                        
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitData(itemCount.ToString(), GlobalResources.instance.items[(int)ITEM.Quiver], itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+                
+            }
+            else if(cost.id == (int) ITEM.RandomBomb)
+            {
+                        
+                List<ITEM> bombs = new List<ITEM>
+                {
+                    ITEM.Bomb,
+                    ITEM.IceBomb,
+                    ITEM.VoidBomb,
+                    ITEM.FireBomb,
+                    ITEM.caltropBomb,
+                };
+
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombs, 1);
+                        
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitData(itemCount.ToString(), GlobalResources.instance.items[(int) ITEM.BombBag], itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
+            else if (cost.id == (int)ITEM.RandomArrowOrBomb)
+            {
+                List<ITEM> bombArrow = new List<ITEM>
+                {
+                    ITEM.Bomb,
+                    ITEM.Arrow,
+                };
+                
+                var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombArrow, 1);
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitData(itemCount.ToString(), GlobalResources.instance.randomBombOrArrow, itemCount < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
+            else
+            {
+                ItemCard itemCard = Instantiate(card, costList);
+                itemCard.InitData(cost.count.ToString(), GlobalResources.instance.items[cost.id], UIGameManager.instance.GetItemCount((ITEM) cost.id) < cost.count);
+                itemCard.gameObject.SetActive(true);
+            }
+        }
+
+        /*if (powerMove.extraItemId >= 0)
+        {
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitData(1.ToString(), GlobalResources.instance.items[powerMove.extraItemId], UIGameManager.instance.GetItemCount((ITEM) powerMove.extraItemId) < 1);
+            itemCard.gameObject.SetActive(true);
+        }*/
+
+        foreach (var stack in powerMove.stackCostList)
+        {
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitData(stack.count.ToString(), GlobalResources.instance.stacks[stack.id], UIGameManager.instance.GetStackCount((STACK) stack.id) < stack.count);
+            itemCard.gameObject.SetActive(true);
+        }
+        
+        if(powerMove.coin > 0)
+        {
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitData(powerMove.coin.ToString(), GlobalResources.instance.coin, state.stats.coin < powerMove.coin);
+            itemCard.gameObject.SetActive(true);
+        }
+
+        if(powerMove.light > 0)
+        {
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitData(powerMove.light.ToString(), GlobalResources.instance.lightImage, state.stats.energy.current < powerMove.light);
+            itemCard.gameObject.SetActive(true);
+        }
+        
+        if(powerMove.range > 0)
+        {
+            int currectRange = UIGameManager.instance.tapSelfPanel.gameObject.activeSelf? 0 : UIGameManager.instance.GetRange(state, HighlightRect.Instance.GetCharacterState());
+            Debug.Log("cost range: " + currectRange);
+            ItemCard itemCard = Instantiate(card, costList);
+            itemCard.InitData(powerMove.range.ToString(), GlobalResources.instance.range, currectRange > powerMove.range);
+            itemCard.gameObject.SetActive(true);
+        }
+    }
+
+    private void InitCostList()
+    {
+        for (int i = 1; i < costList.childCount; i++)
+        {
+            Destroy(costList.GetChild(i).gameObject);
+        }
+    }
+
+    public void InitResultList()
+    {
+        CharacterState state = UIGameManager.instance.controller.State;
+        
+        for (int i = 0; i < resultList.childCount; i++)
+        {
+            Destroy(resultList.GetChild(i).gameObject);
+        }
+
+        if (pm.result != null)
+        {
+            if (pm.result.dice > 0)
+            {
+                AddResultItem(0, GlobalResources.instance.health, false);
+
+                if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_4)
+                {
+                    AddResultItem(0, GlobalResources.instance.dice[1], false);
+                } 
+                else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6)
+                {
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                }
+                else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_4)
+                {
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                    AddResultItem(0, GlobalResources.instance.dice[1], false);
+                }
+                else if ((DICE_TYPE) pm.result.dice == DICE_TYPE.DICE_6_6)
+                {
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                    AddResultItem(0, GlobalResources.instance.dice[0], false);
+                }
+            }
+            
+            if (pm.result.items != null && pm.result.items.Length > 0)
+            {
+                foreach (var item in pm.result.items)
+                {
+                    if (item.id == (int)ITEM.RandomArrow)
+                    {
+                        
+                        List<ITEM> arrows = new List<ITEM>
+                        {
+                            ITEM.IceArrow,
+                            ITEM.BombArrow,
+                            ITEM.FireArrow,
+                            ITEM.VoidArrow,
+                            ITEM.Arrow
+                        };
+
+                        var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.Quiver, arrows, 1);
+                        
+                        AddResultItem(itemCount, GlobalResources.instance.items[(int) ITEM.Quiver]);
+                    }
+                    else if(item.id == (int) ITEM.RandomBomb)
+                    {
+                        
+                        List<ITEM> bombs = new List<ITEM>
+                        {
+                            ITEM.Bomb,
+                            ITEM.IceBomb,
+                            ITEM.VoidBomb,
+                            ITEM.FireBomb,
+                            ITEM.caltropBomb,
+                        };
+
+                        var itemCount = GlobalResources.instance.GetItemTotalCount(state.items, ITEM.BombBag, bombs, 1);
+                        
+                        AddResultItem(itemCount, GlobalResources.instance.items[(int) ITEM.BombBag]);
+                    }
+                    else
+                    {
+                        AddResultItem(item.count, GlobalResources.instance.items[item.id]);
+                    }
+                }
+            }
+
+            if (pm.result.stacks != null && pm.result.stacks.Length > 0)
+            {
+                foreach (var item in pm.result.stacks)
+                {
+                    AddResultItem(item.count, GlobalResources.instance.stacks[item.id]);
+                }
+            }
+
+            if (pm.result.coin > 0)
+            {
+                AddResultItem(pm.result.coin, GlobalResources.instance.coin);
+            }
+
+            /*if (pm.extraItemId >= 0)
+            {
+                ITEM _type = (ITEM) pm.extraItemId;
+
+                if (_type == ITEM.Arrow)
+                {
+                    AddResultItem(2, GlobalResources.instance.health);
+                }
+                else if (_type == ITEM.BombArrow)
+                {
+                    AddResultItem(6, GlobalResources.instance.health);
+                    AddResultItem(0, GlobalResources.instance.perks[(int)PERK.PUSH], false);
+                }
+                else if (_type == ITEM.FireArrow)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Burn]);
+                }
+                else if (_type == ITEM.IceArrow)
+                {
+                    AddResultItem(3, GlobalResources.instance.energy);
+                    AddResultItem(3, GlobalResources.instance.ultimate);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Freeze]);
+                }
+                else if (_type == ITEM.VoidArrow)
+                {
+                    AddResultItem(4, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Void]);
+                }
+                else if (_type == ITEM.Bomb)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                }
+                else if (_type == ITEM.caltropBomb)
+                {
+                    AddResultItem(4, GlobalResources.instance.energy);
+                    AddResultItem(4, GlobalResources.instance.ultimate);
+                }
+                else if (_type == ITEM.FireBomb)
+                {
+                    AddResultItem(4, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Burn]);
+                }
+                else if (_type == ITEM.IceBomb)
+                {
+                    AddResultItem(3, GlobalResources.instance.health);
+                    AddResultItem(2, GlobalResources.instance.energy);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Freeze]);
+                }
+                else if (_type == ITEM.VoidBomb)
+                {
+                    AddResultItem(5, GlobalResources.instance.health);
+                    AddResultItem(1, GlobalResources.instance.stacks[(int)STACK.Void]); 
+                }
+            }*/
+            
+            if (pm.result.energy > 0)
+            {
+                AddResultItem(pm.result.energy, GlobalResources.instance.energy);
+            }
+            
+            if (pm.result.health > 0)
+            {
+                AddResultItem(pm.result.health, GlobalResources.instance.health);
+            }
+            
+            if (pm.result.ultimate > 0)
+            {
+                AddResultItem(pm.result.ultimate, GlobalResources.instance.ultimate);
+            }
+            
+            if (pm.result.perkId >= 0)
+            {
+                AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId], false);
+            }
+            
+            if (pm.result.perkId1 >= 0)
+            {
+                AddResultItem(0, GlobalResources.instance.perks[pm.result.perkId1], false);
+            }
+            
+        }
+    }
+
+    public void AddResultItem(int count, Sprite sprite, bool isText = true)
+    {
+        ItemCard itemCard = Instantiate(card, resultList);
+        itemCard.InitText(count.ToString());
+        itemCard.InitImage(sprite);
+        itemCard.countText.gameObject.SetActive(isText);
+        itemCard.gameObject.SetActive(true);
+    }
+    
+    public void OnClickPowermove()
+    {
+        if (IsPowermoveEnabled())
+        {
+            if(UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                UIGameManager.instance.bottomAttackPanel.OnClickPowermoveItem(pm);
+            else if (UIGameManager.instance.tapSelfPanel.gameObject.activeSelf)
+            {
+                UIGameManager.instance.tapSelfPanel.OnClickPowermoveItem(pm);
+            }
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You cannot power move this item.");
+        }
+    }
+
+    public bool IsPowermoveEnabled()
+    {
+        bool isPowermoveEnabled = true;
+        CharacterState state = UIGameManager.instance.controller.State;
+        
+        foreach (var cost in pm.costList)
+        {
+            if (!((ITEM)cost.id == ITEM.RandomArrow || (ITEM)cost.id == ITEM.RandomBomb || (ITEM)cost.id == ITEM.RandomArrowOrBomb))
+            {
+                int count = UIGameManager.instance.GetItemCount((ITEM)cost.id);
+                if (count < cost.count)
+                {
+                    isPowermoveEnabled = false;
+                }
+            }
+        }
+
+        foreach (var stack in pm.stackCostList)
+        {
+            int count = UIGameManager.instance.GetStackCount((STACK) stack.id);
+            if (count < stack.count)
+            {
+                isPowermoveEnabled = false;
+            }
+        }
+
+        if (pm.extraItemId >= 0)
+        {
+            if (UIGameManager.instance.GetItemCount((ITEM)pm.extraItemId) < 1)
+            {
+                isPowermoveEnabled = false;
+            }
+        }
+
+        int currectRange = UIGameManager.instance.tapSelfPanel.gameObject.activeSelf? 0 : UIGameManager.instance.GetRange(state, HighlightRect.Instance.GetCharacterState());
+
+        if(state.stats.coin < pm.coin || state.stats.energy.current < pm.light || (currectRange > pm.range && pm.range > 0) || (pm.range == 0 && currectRange > 1))
+        {
+            isPowermoveEnabled = false;
+        }
+        
+        return isPowermoveEnabled;
+    }
+
+    public void OnPowermoveItem()
+    {
+        int selectPanelIdx = -1;
+        foreach (var item in pm.costList)
+        {
+            if (item.id == (int)ITEM.RandomArrow)
+            {
+                selectPanelIdx = 0;
+            }
+            else if (item.id == (int)ITEM.RandomBomb)
+            {
+                selectPanelIdx = 1;
+            }
+            else if (item.id == (int)ITEM.RandomArrowOrBomb)
+            {
+                selectPanelIdx = 2;
+            }
+        }
+
+        if (selectPanelIdx == 0)
+        {
+            UIGameManager.instance.arrowsAddPanel.Init(1);
+        }
+        else if (selectPanelIdx == 1)
+        {
+            UIGameManager.instance.bombsAddPanel.Init(0);
+        }
+        else if (selectPanelIdx == 2)
+        {
+            UIGameManager.instance.arrowOrBombPanel.Init(0);
+        }
+    }
+
+    public void OnAddExtraItem(int itemId)
+    {
+        if(!gameObject.activeSelf) return;
+        
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            pm.costList = new[]
+            {
+                new Item
+                {
+                    id = itemId,
+                    count = 1
+                },
+                new Item
+                {
+                    id = (int) ITEM.RandomArrowOrBomb,
+                    count = 1
+                }
+            };
+            var resultItemId = pm.powerImageId switch
+            {
+                (int)POWER.Fire2 => itemId == (int)ITEM.Arrow ? ITEM.FireArrow : ITEM.FireBomb,
+                (int)POWER.Ice2 => itemId == (int)ITEM.Arrow ? ITEM.IceArrow : ITEM.IceBomb,
+                (int)POWER.Void2 => itemId == (int)ITEM.Arrow ? ITEM.VoidArrow : ITEM.VoidBomb,
+                _ => ITEM.FireArrow
+            };
+            pm.result.items = new []
+            {
+                new ResultItem
+                {
+                    id = (int) resultItemId,
+                    count = 1
+                }
+            };
+            UIGameManager.instance.arrowOrBombPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough arrow item.");
+        }
+    }
+    
+    public void OnAddArrow(int itemId)
+    {
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            UIGameManager.instance.arrowsAddPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough arrow item.");
+        }
+    }
+
+    public void OnAddBomb(int itemId)
+    {
+        if (UIGameManager.instance.GetItemCount((ITEM)itemId) > 0)
+        {
+            pm.extraItemId = itemId;
+            UIGameManager.instance.bombsAddPanel.gameObject.SetActive(false);
+            Init(pm);
+            InitResultList();
+            
+            gameObject.SetActive(false);
+            UIGameManager.instance.bottomAttackPanel.ConfirmAttack();
+        }
+        else
+        {
+            UIGameManager.instance.OnNotificationMessage("error", "You dont have enough bomb item.");
+        }
+    }
+}

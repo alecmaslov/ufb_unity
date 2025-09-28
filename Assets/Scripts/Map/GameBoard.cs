@@ -26,9 +26,6 @@ namespace UFB.Map
         [SerializeField]
         private GameObject boardPos;
 
-        [SerializeField]
-        SpawnListPanel _spawnListPanel;
-
         private void OnEnable()
         {
             ServiceLocator.Current.Register(this);
@@ -98,7 +95,8 @@ namespace UFB.Map
             foreach (var meshMapTile in meshMapTiles)
             {
                 var tile = meshMapTile.GameObject.AddComponent<Tile>();
-                tile.Initialize(meshMapTile, state.TileStateAtCoordinates(meshMapTile.Coordinates));
+                TileState tileState = state.TileStateAtCoordinates(meshMapTile.Coordinates);
+                tile.Initialize(meshMapTile, tileState);
                 Tiles.Add(tile.Id, tile);
             }
         }
@@ -115,7 +113,11 @@ namespace UFB.Map
                 // SpawnEntity(entity.prefabAddress, tile);
                 SpawnEntity(entity);
             }
-            _spawnListPanel.InitSpawnItems(state, Tiles);
+
+            if (PlayerPrefs.GetInt("roomJoinOption") != 1)
+            {
+                UIGameManager.instance.InitSpawnItems(state);
+            }
         }
 
         public async void SpawnEntity(StateSchema.SpawnEntity spawnEntity)

@@ -1,0 +1,237 @@
+using Colyseus.Schema;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Character;
+using UFB.Core;
+using UFB.Events;
+using UFB.Items;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
+
+
+namespace UFB.UI
+{
+
+    public class ResourcePanel : MonoBehaviour
+    {
+        [Serializable]
+        public struct StackItem
+        {
+            public Text count;
+            public Image image;
+        }
+
+        public static ResourcePanel instance;
+
+        [SerializeField]
+        private ItemCard item;
+
+        public StackItem[] stackItems;
+
+        [SerializeField]
+        private Image _avatarImage;
+
+        [SerializeField]
+        private Text coinText;
+
+        [SerializeField]
+        private Text itemBagText;
+
+        [SerializeField]
+        private Text itemText;
+
+        [SerializeField]
+        private Text[] stacks;
+
+        [SerializeField]
+        private Text heartText;
+
+        [SerializeField]
+        private Text crystalText;
+
+        [SerializeField]
+        private Text quiverText;
+
+        [SerializeField]
+        private Text bombText;
+
+        [SerializeField]
+        private Text potionText;
+
+        [SerializeField]
+        private Text elixirText;
+
+        [SerializeField]
+        private Text featherText;
+
+        [SerializeField]
+        private Text warpCrystalText;
+
+        [SerializeField]
+        Image heartBackImage;
+
+        [SerializeField]
+        Image crystalBackImage;
+
+        [SerializeField]
+        public ItemDetailPanel bombDetailPanel;
+
+        [SerializeField]
+        public ItemDetailPanel arrowDetailPanel;
+
+        [SerializeField]
+        ItemDetailPanel itemsDetailPanel;
+
+        public GameObject bottomPart;
+        public GameObject bottomCloseBtn;
+        
+        private void Awake()
+        {
+            if (instance == null)
+                instance = this;
+        }
+
+        public void InitInstance()
+        {
+            if (instance == null)
+                instance = this;
+        }
+
+        public void OnCharacterValueEvent(CharacterState e)
+        {
+            Addressables
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
+            .Completed += (op) =>
+            {
+                if (
+                    op.Status
+                    == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+                )
+                    _avatarImage.sprite = op.Result.avatar;
+                else
+                    Debug.LogError(
+                        "Failed to load character avatar: " + op.OperationException.Message
+                    );
+            };
+
+            InitResourceData(e);
+        }
+
+        public void InitResourceData(CharacterState characterState)
+        {
+            foreach(var si in stackItems)
+            {
+                si.count.text = "0";
+            }
+
+            if ((USER_TYPE) characterState.type == USER_TYPE.USER)
+            {
+                bottomPart.SetActive(true);
+                UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+                bottomCloseBtn.SetActive(false);
+            }
+            else
+            {
+                bottomPart.SetActive(false);
+                bottomCloseBtn.SetActive(true);
+            }
+            
+
+            coinText.text = characterState.stats.coin.ToString();
+            itemBagText.text = characterState.stats.bags.ToString();
+
+            ArraySchema<Item> stacks = characterState.stacks;
+
+            stacks.ForEach(stack => {
+                if (stack != null)
+                {
+                    int stackId = stack.id;
+                    if (stackId < stackItems.Length)
+                    {
+                        stackItems[stackId].image.sprite = GlobalResources.instance.stacks[stackId];
+                        stackItems[stackId].count.text = stack.count.ToString();
+                    }
+
+                }
+            });
+
+            ArraySchema<Item> items = characterState.items;
+            items.ForEach(item =>
+            {
+                ITEM type = (ITEM)item.id;
+                if (type == ITEM.Feather)
+                {
+                    featherText.text = item.count.ToString();
+                }
+                else if (type == ITEM.Potion)
+                {
+                    potionText.text = item.count.ToString();
+                }
+                else if (type == ITEM.Elixir)
+                {
+                    elixirText.text = item.count.ToString();
+                }
+                else if (type == ITEM.WarpCrystal)
+                {
+                    warpCrystalText.text = item.count.ToString();
+                }
+            });
+
+            List<ITEM> arrows = new List<ITEM>
+            {
+                ITEM.IceArrow,
+                ITEM.BombArrow,
+                ITEM.FireArrow,
+                ITEM.VoidArrow,
+                ITEM.Arrow
+            };
+
+            quiverText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.Quiver, arrows, 1).ToString();
+
+            List<ITEM> bombs = new List<ITEM>
+            {
+                ITEM.Bomb,
+                ITEM.IceBomb,
+                ITEM.VoidBomb,
+                ITEM.FireBomb,
+                ITEM.caltropBomb,
+            };
+
+            bombText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
+
+            int heartPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
+            heartText.text = heartPieceNum.ToString();
+            heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceNum % 5];
+
+            int crystalPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
+            crystalText.text = crystalPieceNum.ToString();
+            crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
+
+            Debug.Log($"heartPieceNum: {heartPieceNum}, crystalPieceNum: {crystalPieceNum} ");
+
+        }
+
+        public void OnBombItemDetailClicked()
+        {
+            bombDetailPanel.Init(0);
+        }
+
+        public void OnArrowsItemDetailClicked()
+        {
+            arrowDetailPanel.Init(1);
+        }
+
+        public void OnItemsItemDetailClicked()
+        {
+            itemsDetailPanel.Init(2);
+        }
+    }
+
+ 
+
+}
+

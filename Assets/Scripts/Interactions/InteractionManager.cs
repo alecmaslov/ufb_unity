@@ -4,7 +4,6 @@ using UFB.Map;
 using UFB.Core;
 using UFB.UI;
 using UFB.Network.RoomMessageTypes;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UFB.Input;
@@ -52,20 +51,17 @@ namespace UFB.Interactions
 
     public class InteractionManager : MonoBehaviour, IService
     {
+        public static InteractionManager Instance;
         public InteractionMode Mode { get; private set; }
-        private UnityEngine.Camera _mainCamera;
         private GameInput _gameInput;
-        private CameraController _cameraController;
 
         private bool _isOrbitLocked = false;
         
         [SerializeField]
         private GameObject resourcePanel;
 
-        [SerializeField]
-        UIGameManager uiGameManager;
+        public bool isSpawn = true;
 
-        private bool isSpawn = true;
 
         private void Awake()
         {
@@ -77,8 +73,7 @@ namespace UFB.Interactions
 #endif
 
             _gameInput = new GameInput();
-            _mainCamera = UnityEngine.Camera.main;
-            _cameraController = _mainCamera.GetComponent<CameraController>();
+            Instance = this;
         }
 
         private void OnEnable()
@@ -86,28 +81,75 @@ namespace UFB.Interactions
             Events.EventBus.Subscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             Events.EventBus.Publish(new InteractionModeChangeEvent(InteractionMode.SelectItem));
             ServiceLocator.Current.Register(this);
-            // _gameInput.OrbitView.TouchPress.started += OnTouchPressStarted;
+            _gameInput.OrbitView.TouchPress.canceled += OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started += OnMouseClickStarted;
-            _gameInput.OrbitView.OrbitCamera.performed += OnOrbitCamera;
-            _gameInput.OrbitView.ScrollZoom.performed += OnScrollZoom;
-            _gameInput.OrbitView.TapSelect.performed += OnTapSelect;
+            //_gameInput.OrbitView.TapSelect.performed += OnTapSelect;
+            //_gameInput.OrbitView.MultitouchHold.started += MultitouchHold_started;
             _gameInput.Enable();
+        }
+
+        private float doubleTouchTime = 0.3f; // Time window for double touch
+        private float lastTouchTime = 0f;      // Time of the last touch
+
+        private void MultitouchHold_started(InputAction.CallbackContext obj)
+        {
+
+            Vector2 pointerPosition = _gameInput.OrbitView.PointerPosition.ReadValue<Vector2>();
+            Vector3 position3D = new Vector3(pointerPosition.x, pointerPosition.y, -4f);
+            Ray ray = CameraManager.instance.cam.ScreenPointToRay(position3D);
+            RaycastHit hit;
+
+            Debug.Log("Double clicked");
+
+            // Check if the click is on a UI element
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                    {
+                        OnRaycastDBClicked(hit.transform, clickable);
+                    }
+                }
+            }
+
         }
 
         private void OnDisable()
         {
             Events.EventBus.Unsubscribe<InteractionModeChangeEvent>(OnInteractionModeChangeEvent);
             ServiceLocator.Current.Unregister<InteractionManager>();
-            // _gameInput.OrbitView.TouchPress.started -= OnTouchPressStarted;
+            _gameInput.OrbitView.TouchPress.started -= OnTapSelect;
             // _gameInput.OrbitView.MouseClick.started -= OnMouseClickStarted;
-            _gameInput.OrbitView.OrbitCamera.performed -= OnOrbitCamera;
-            _gameInput.OrbitView.ScrollZoom.performed -= OnScrollZoom;
-            _gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
+            //_gameInput.OrbitView.TapSelect.performed -= OnTapSelect;
+            //_gameInput.OrbitView.MultitouchHold.started -= OnTapSelect;
             _gameInput.Disable();
         }
 
+        bool isTileClicked = false;
+
+
         private void OnTapSelect(InputAction.CallbackContext ctx)
         {
+
+            CameraManager.instance.OnUIClicked();
+
+            if (CameraManager.instance.IsUIClicked || CameraManager.instance.isMovingCamera) return;
+
+            // Check if the time since the last touch is within the double touch time window
+            if (Time.time - lastTouchTime < doubleTouchTime)
+            {
+                // Double touch detected
+                MultitouchHold_started(ctx);
+                lastTouchTime = Time.time;
+                return;
+            }
+
+            // Update the time of the last touch
+            lastTouchTime = Time.time;
+
+            isTileClicked = false;
+
             Debug.Log(
                 $"Tap select performed | {ctx.ReadValue<float>()} | {_gameInput.OrbitView.PointerPosition.ReadValue<Vector2>()}"
             );
@@ -120,69 +162,38 @@ namespace UFB.Interactions
             Vector2 pointerPosition = _gameInput.OrbitView.PointerPosition.ReadValue<Vector2>();
             Debug.Log($"Touch position: {pointerPosition.x} {pointerPosition.y}");
             RaycastObjects(pointerPosition);
-        }
 
-        // we're going to need to think of some way to toggle the orbit on and off
-        // because in top down mode, we need a different control
-        // we could consider having the camera controller add/remove the monobehavior
-        // responsivle for control, then we send the controller a simple Control
-        // or TemporaryControl message
-        private void OnOrbitCamera(InputAction.CallbackContext ctx)
-        {
-            if (_gameInput.OrbitView.PrimaryPress.ReadValue<float>() < 0.5f)
+            if (isTileClicked)
             {
-                return;
-            }
-
-            if (_isOrbitLocked)
-            {
-                _cameraController.Orbit.RotateTemporary(ctx.ReadValue<Vector2>() * 3f, 2f);
-            }
-            else
-            {
-                _cameraController.Orbit.Rotate(ctx.ReadValue<Vector2>() * 3f);
+                UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
+                if (pointerPosition.y < Screen.height / 2 - 80)
+                {
+                    CameraManager.instance.cameraTarget.position = hitTilePos;
+                }
             }
         }
 
-        private void OnScrollZoom(InputAction.CallbackContext ctx)
-        {
-            if (_isOrbitLocked)
-            {
-                _cameraController.Orbit.ChangeRadiusTemporary(ctx.ReadValue<Vector2>().y * 0.01f, 2f);
-            }
-            else
-            {
-                _cameraController.Orbit.ChangeRadius(ctx.ReadValue<Vector2>().y * 0.01f);
-            }
-        }
 
         private void RaycastObjects(Vector2 position)
         {
             // Convert mouse position to ray
             Vector3 position3D = new Vector3(position.x, position.y, -4f);
-            Ray ray = _mainCamera.ScreenPointToRay(position3D);
+            Ray ray = CameraManager.instance.cam.ScreenPointToRay(position3D);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+
+            // Check if the click is on a UI element
+            if(!EventSystem.current.IsPointerOverGameObject())
             {
-                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                if (Physics.Raycast(ray, out hit))
                 {
-                    OnRaycastClicked(hit.transform, clickable);
+                    if (hit.transform.TryGetComponent<IClickable>(out var clickable))
+                    {
+                        OnRaycastClicked(hit.transform, clickable);
+                    }
                 }
             }
         }
 
-        private void RaycastObjects(Vector3 position)
-        {
-            Ray ray = _mainCamera.ScreenPointToRay(position);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.TryGetComponent<IClickable>(out var clickable))
-                {
-                    OnRaycastClicked(hit.transform, clickable);
-                }
-            }
-        }
 
         private void OnRaycastClicked(Transform transform, IClickable clickable)
         {
@@ -191,147 +202,95 @@ namespace UFB.Interactions
                 return;
             }
 
-            string playerId = ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.Id;
+            string playerId = CharacterManager.Instance.SelectedCharacter.Id;
 
             string tileId = transform.GetComponent<Tile>().Id;
             Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
 
+
             if (tile != null)
             {
-                if(isSpawn)
-                {
-                    Events.EventBus.Publish(
-                        new CameraOrbitAroundEvent(transform, 0.3f)
-                    );
-                }
-
-
                 for (int i = 0; i < tile.transform.childCount; i++)
                 {
                     GameObject item = tile.transform.GetChild(i).gameObject;
                     
-                    if (item.GetComponent<CharacterController>() != null && !isSpawn && uiGameManager.TopPanel.activeSelf)
+                    if (item.GetComponent<CharacterController>() != null && !isSpawn && UIGameManager.instance.TopPanel.activeSelf)
                     {
                         if (resourcePanel != null && item.GetComponent<CharacterController>().Id == playerId)
                         {
-                            resourcePanel.gameObject.SetActive(true);
+                            //resourcePanel.gameObject.SetActive(true);
                         }
                     }
 
 
                     if (item.GetComponent<Chest>() != null && isSpawn)
                     {
-                        item.GetComponent<Chest>().OnClick();
+                        if(!item.GetComponent<Chest>().isItemBag)
+                        {
+                            item.GetComponent<Chest>().OnClick();
 
-                        Events.EventBus.Publish(
-                            RoomSendMessageEvent.Create(
-                                "initSpawnMove",
-                                new RequestSpawnMessage
-                                {
-                                    tileId = tile.Id,
-                                    destination = tile.Coordinates,
-                                    playerId = playerId,
-                                }
-                            )
-                        );
-                        uiGameManager.controller.InitMovePos(tile);
-
-                        ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
-                        Events.EventBus.Publish(
-                            new CameraOrbitAroundEvent(
-                                ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
-                                0.3f
-                            )
-                        );
-                        isSpawn = false;
+                            UIGameManager.instance.selectSpawnPanel.InitSpawnData(tile, playerId);
+                            
+                        }
                     }
 
+                }
+                Debug.Log("xxxx: xx: xxx");
+                if (!isSpawn/* && uiGameManager.isMoveTileStatus*/ && UIGameManager.instance.isPlayerTurn)
+                {
+                    if (UIGameManager.instance.bottomDrawer.IsExpanded) 
+                    {
+                        UIGameManager.instance.StepPanel.SetHighLightBtn(true);
+                        UIGameManager.instance.equipPanel.ClearHighLightItems();
+                        
+                        UIGameManager.instance.bottomDrawer.CloseBottomDrawer();
+                        HighlightRect.Instance.ClearHighLightRect();
+                    }
+                    else
+                    {
+                        UIGameManager.instance.movePanel.OnClickTile(tile);
+                        hitTilePos = tile.Position;
+                        isTileClicked = true;
+                    }
 
                 }
             }
+        }
 
-            /*if (transform.childCount > 0)
+        Vector3 hitTilePos = Vector3.zero;
+        
+        private void OnRaycastDBClicked(Transform transform, IClickable clickable)
+        {
+            if (Mode != InteractionMode.SelectItem)
             {
-                if(transform.GetChild(0).TryGetComponent(out CharacterController character))
+                return;
+            }
+
+            string playerId = CharacterManager.Instance.SelectedCharacter.Id;
+
+            string tileId = transform.GetComponent<Tile>().Id;
+            Tile tile = ServiceLocator.Current.Get<GameBoard>().Tiles[tileId];
+
+            if (tile != null)
+            {
+                Debug.Log("xxxx: xx: xxx");
+                if (!isSpawn)
                 {
-                    if(stepPanel != null && character != null && character.Id == playerId)
+                    for (int i = 0; i < tile.transform.childCount; i++)
                     {
-                        stepPanel.gameObject.SetActive(true);
-                    }
-                }
-                if (transform.GetChild(0).TryGetComponent(out Chest chest))
-                {
-                    if (stepPanel != null && chest != null)
-                    {
-                        Debug.Log("Click chest");
-                        chest.OnClick();
-                    }
-                }
-                if (transform.GetChild(0).TryGetComponent(out Merchant merchant))
-                {
-                    if (stepPanel != null && merchant != null)
-                    {
-                        Debug.Log("Click merchant");
-                        merchant.OnClick();
-                    }
-                }
-            }*/
+                        GameObject item = tile.transform.GetChild(i).gameObject;
 
-            var turnOrder = ServiceLocator.Current.Get<GameService>().RoomState.turnOrder;
-            Debug.Log(turnOrder.Serialize());
-
-            /*            new RoomSendMessageEvent(
-                            "move",
-                            new RequestMoveMessage
-                            {
-                                tileId = transform.GetComponent<Tile>().Id,
-                                destination = transform
-                                    .GetComponent<Tile>()
-                                    .Coordinates
-                            }
-                        );*/
-
-
-            ServiceLocator.Current
-                .Get<UIManager>()
-                .OnPopupMenuEvent(
-                    new PopupMenuEvent(
-                        transform.name,
-                        transform,
-                        () => Debug.Log("Calling Cancel"),
-                        new PopupMenuEvent.CreateButton[]
+                        if (item.GetComponent<CharacterController>() != null)
                         {
-                            new(
-                                "Move To",
-                                () => {
-                                    Events.EventBus.Publish(
-                                        new RoomSendMessageEvent(
-                                            "move",
-                                            new RequestMoveMessage
-                                            {
-                                                tileId = transform.GetComponent<Tile>().Id,
-                                                destination = transform
-                                                    .GetComponent<Tile>()
-                                                    .Coordinates
-                                            }
-                                        )
-                                    );
-                                    Events.EventBus.Publish(new CancelPopupMenuEvent());
-                                }
-                            ),
-                            new(
-                                "Focus",
-                                () =>
-                                    Events.EventBus.Publish(
-                                        new CameraOrbitAroundEvent(transform, 0.3f)
-                                    )
-                            )
-                            // we should make CreateButton a bit more feature rich, so
-                            // we can have certain types of buttons with certain icons
-                            // new("Move To", () => UFB.Events.EventBus.Publish<)
+                            CharacterController controller = item.GetComponent<CharacterController>();
+                            UIGameManager.instance.ResourcePanel.OnCharacterValueEvent(controller.State);
+                            UIGameManager.instance.ResourcePanel.InitButtonStatus();
+                            UIGameManager.instance.ResourcePanel.gameObject.SetActive(true);
                         }
-                    )
-                );
+                    }
+                }
+            }
+
         }
 
         public void ToggleLockOrbit()
@@ -345,17 +304,17 @@ namespace UFB.Interactions
             switch (Mode)
             {
                 case InteractionMode.FocusEntity:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.SelectItem)
                     );
                     break;
                 case InteractionMode.SelectItem:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.CameraControl)
                     );
                     break;
                 case InteractionMode.CameraControl:
-                    UFB.Events.EventBus.Publish(
+                    Events.EventBus.Publish(
                         new InteractionModeChangeEvent(InteractionMode.FocusEntity)
                     );
                     break;
@@ -365,6 +324,11 @@ namespace UFB.Interactions
         private void OnInteractionModeChangeEvent(InteractionModeChangeEvent e)
         {
             Mode = e.Mode;
+        }
+
+        private void Update()
+        {
+            //isMoveDirection = UIGameManager.instance.movePanel.globalDirection.gameObject.activeSelf;
         }
     }
 }

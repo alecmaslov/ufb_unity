@@ -19,10 +19,19 @@ namespace UFB.UI
         [SerializeField]
         private RectTransform _valueIndicatorContainer;
 
-        public void SetRangedValueState(RangedValueState state)
+        public string selectedId = "";
+
+        public void SetRangedValueState(RangedValueState state, CharacterState e)
         {
+            selectedId = e.characterId;
             SetFromState(state);
-            state.OnChange(() => SetFromState(state));
+            state.OnChange(() =>
+            {
+                if (selectedId == e.characterId) 
+                {
+                    SetFromState(state);
+                }
+            });
         }
 
         private void SetFromState(RangedValueState state)

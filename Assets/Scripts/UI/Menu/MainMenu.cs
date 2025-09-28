@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UFB.Events;
 using UFB.Core;
 using UFB.Network;
+using UFB.Network.RoomMessageTypes;
 
 namespace UFB.UI
 {
@@ -14,6 +15,8 @@ namespace UFB.UI
         public Menu joinGameMenu;
         public Menu selectCharacterMenu;
         public Menu settingMenu;
+
+        public AccountMenuPanel accountMenuPanel;
 
         // public override async void Start()
         // {
@@ -64,6 +67,16 @@ namespace UFB.UI
         {
             _menuManager.OpenMenu(selectCharacterMenu);
             ((SelectCharacterMenu)selectCharacterMenu).menuType = 1;
+        }
+
+        public void OnJoinRoomButton()
+        {
+            MainScene.instance.OnReconnectRoom();
+        }
+        
+        public void OnAccountGameButton()
+        {
+            accountMenuPanel.InitPanel();
         }
 
         public void OnSettingsButton()

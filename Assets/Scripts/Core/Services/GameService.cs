@@ -66,6 +66,35 @@ namespace UFB.Core
 
         public GameService() { }
 
+        public async void ReConnectRoom(string roomId, string token)
+        {
+            Debug.Log($"Re-Connect room {roomId}");
+            Debug.Log($"Re-Connect token {token}");
+
+            ReconnectionToken reconnectionToken = new ReconnectionToken()
+            {
+                RoomId = roomId,
+                Token = token
+            };
+            var tcs = new TaskCompletionSource<bool>();
+            await ServiceLocator.Current
+                .Get<NetworkService>()
+                .ReConnect(
+                    reconnectionToken,
+                    async (room) =>
+                    {
+                        PlayerPrefs.SetString("roomId", room.ReconnectionToken.RoomId);
+                        PlayerPrefs.SetString("sessionId", room.ReconnectionToken.Token);
+                        
+                        PlayerPrefs.SetInt("roomJoinOption", 1);
+                        
+                        tcs.SetResult(await LoadGame(room));
+                    }
+                );
+            await tcs.Task;
+
+        }
+        
         public async void JoinGame(string roomId, UfbRoomJoinOptions joinOptions)
         {
             Debug.Log("JoinGame called!");
@@ -77,6 +106,8 @@ namespace UFB.Core
                     joinOptions,
                     async (room) =>
                     {
+                        PlayerPrefs.SetInt("roomJoinOption", 0);
+
                         tcs.SetResult(await LoadGame(room));
                     }
                 );
@@ -97,6 +128,9 @@ namespace UFB.Core
                     joinOptions,
                     async (room) =>
                     {
+                        PlayerPrefs.SetString("roomId", room.ReconnectionToken.RoomId);
+                        PlayerPrefs.SetString("sessionId", room.ReconnectionToken.Token);
+                        PlayerPrefs.SetInt("roomJoinOption", 0);
                         tcs.SetResult(await LoadGame(room));
                     }
                 );

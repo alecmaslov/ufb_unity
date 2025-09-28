@@ -14,6 +14,7 @@ using UFB.Events;
 using UFB.Network.RoomMessageTypes;
 using UFB.Effects;
 using UFB.Camera;
+using Colyseus.Schema;
 
 namespace UFB.Character
 {
@@ -86,6 +87,8 @@ namespace UFB.Character
             if (_moveAlongPathCoroutine != null)
                 StopCoroutine(_moveAlongPathCoroutine);
 
+            CameraManager.instance.setCameraTarget(transform);
+
             var tcs = new TaskCompletionSource<bool>();
 
             _moveAlongPathCoroutine = StartCoroutine(
@@ -96,6 +99,9 @@ namespace UFB.Character
             await AnimationDispatcher.PlayAnimationAsync("HopEnd", "CharacterIdle", 1f);
             path.Last().AttachGameObject(gameObject, true);
             IsMoving = false;
+            
+            CameraManager.instance.setCameraTarget(null);
+
         }
 
         private IEnumerator MoveAlongPathCoroutine(
@@ -140,6 +146,7 @@ namespace UFB.Character
                     "forceMove",
                     new RequestMoveMessage
                     {
+                        characterId = Id,
                         tileId = destination.Id,
                         destination = destination.Coordinates
                     }
@@ -148,6 +155,7 @@ namespace UFB.Character
         }
 
         public void CancelMoveToTile(
+            List<Item> items,
             Tile destination,
             float originEnergy,
             float duration = 0.5f,
@@ -159,17 +167,19 @@ namespace UFB.Character
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     "cancelMove",
-                    new RequestMoveMessage
+                    new RequestCancelMoveMessage
                     {
+                        characterId = Id,
                         tileId = destination.Id,
                         destination = destination.Coordinates,
                         originEnergy = originEnergy,
+                        items = items
                     }
                 )
             );
         }
 
-        public void MoveToTile(Tile tile)
+        public void MoveToTile(Tile tile, bool isPath = false, bool isFeather = false)
         {
 
             EventBus.Publish(
@@ -177,8 +187,11 @@ namespace UFB.Character
                     "move",
                     new RequestMoveMessage
                     {
+                        characterId = Id,
                         tileId = tile.Id,
                         destination = tile.Coordinates,
+                        isPath = isPath,
+                        isFeather = isFeather
                     }
                 )
             );

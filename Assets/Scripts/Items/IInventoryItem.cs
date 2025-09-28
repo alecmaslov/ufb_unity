@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 
 namespace UFB.Items {
+    [Serializable]
     public enum ItemType {
         MagicToken,
         EnergyShard,
@@ -11,6 +13,7 @@ namespace UFB.Items {
         Gold
     }
 
+    [Serializable]
     public enum ITEM
     {
         HeartPiece = 0,
@@ -34,7 +37,44 @@ namespace UFB.Items {
         VoidArrow,
         FireBomb,
         IceBomb,
-        VoidBomb
+        VoidBomb,
+        caltropBomb,
+        IceTea,
+        FlameChili,
+
+        FlameChili2,
+        FlameChili3,
+        IceTea2,
+        IceTea3,
+        HeartPiece2,
+        Potion2,
+        Potion3,
+        Feather2,
+        Feather3,
+        Arrow2,
+        Arrow3,
+        Bomb2,
+        Bomb3,
+
+        Melee2,
+        Mana2,
+        Quiver2,
+        BombBag2,
+        WarpCrystal2,
+        Elixir2,
+        BombArrow2,
+        FireArrow2,
+        IceArrow2,
+        VoidArrow2,
+        FireBomb2,
+        IceBomb2,
+        VoidBomb2,
+        caltropBomb2,
+        
+        //Random Item
+        RandomArrow,
+        RandomBomb,
+        RandomArrowOrBomb
     }
 
     public enum POWER
@@ -79,17 +119,71 @@ namespace UFB.Items {
         Void3,
     }
 
-    public enum Stack
+    public enum STACK
     {
-        Dodge = 0,
-        Cure,
+        Cure = 0,
+        Block,
         Steady,
+        Barrier,
         Charge,
         Revenge,
-        Block,
-        Reflect,
         Revive,
+        Slow,
+        Dodge,
+        Freeze,
+        Burn,
+        Void,
+        PUMP,
 
+        Dodge2,
+        Cure2,
+        Charge2,
+        Barrier2,
+        Steady2,
+        Revenge2,
+        Block2,
+        
+    }
+
+    public enum PERK
+    {
+        PUSH,
+        PULL,
+        VAMPIRE,
+        X_RAY,
+        AREA_OF_EFFECT
+    }
+
+    public enum QUEST 
+    {
+        SLAYER,
+        GLITTER,
+        KILL,
+        CRAFTS,
+        LUCK,
+        ENERGY,
+        STRENGTH,
+        LIFE
+    }
+
+    public enum USER_TYPE 
+    { 
+        USER = 1,
+        MONSTER
+    }
+
+    public enum DICE_TYPE
+    {
+        DICE_6 = 1,
+        DICE_4,
+        DICE_6_6,
+        DICE_6_4
+    }
+
+    public enum END_TYPE 
+    {
+        VICTORY = 1,
+        DEFEAT
     }
 
     public enum PowerType {

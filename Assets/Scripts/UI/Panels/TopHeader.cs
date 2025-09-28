@@ -8,6 +8,8 @@ using TMPro;
 using UFB.Character;
 using UnityEngine.UI;
 using UFB.Map;
+using UFB.Items;
+using Unity.VisualScripting;
 
 namespace UFB.UI
 {
@@ -37,6 +39,8 @@ namespace UFB.UI
         [SerializeField]
         private Text _tilePosText;
 
+        public string selectedId = "";
+
         private void OnEnable()
         {
             //EventBus.Subscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
@@ -47,33 +51,54 @@ namespace UFB.UI
             //EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
         }
 
-        public void OnSelectedCharacterEvent(ChangeCharacterStateEvent e)
+        public void OnSelectedCharacterEvent(CharacterState e)
         {
-            _healthBar.SetRangedValueState(e.state.stats.health);
-            _energyBar.SetRangedValueState(e.state.stats.energy);
-            _ultimateBar.SetRangedValueState(e.state.stats.ultimate);
+            selectedId = e.characterId;
+            _healthBar.SetRangedValueState(e.stats.health, e);
+            _energyBar.SetRangedValueState(e.stats.energy, e);
+            _ultimateBar.SetRangedValueState(e.stats.ultimate, e);
 
-            _screenNameText.text = e.state.displayName;
-            _stepEnergeText.text = e.state.stats.energy.current.ToString();
-
-            string newTileId = e.state.currentTileId;
-            Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
-            _tilePosText.text = CurrentTile.TilePosText;
-
-            e.state.OnChange(() => 
+            if(_screenNameText != null)
             {
-                _screenNameText.text = e.state.displayName;
-                _stepEnergeText.text = e.state.stats.energy.current.ToString();
+                _screenNameText.text = e.displayName;
+            }
+            if (_stepEnergeText != null) 
+            { 
+                _stepEnergeText.text = e.stats.energy.current.ToString();
+            }
 
-                string newTileId = e.state.currentTileId;
-                Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+            string newTileId = e.currentTileId;
+            Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+
+            if(_tilePosText != null)
+            {
                 _tilePosText.text = CurrentTile.TilePosText;
+            }
+
+            e.OnChange(() => 
+            {
+                if(e.characterId == selectedId)
+                {
+                    if (_screenNameText != null)
+                    {
+                        _screenNameText.text = e.displayName;
+                    }
+                    if (_stepEnergeText != null)
+                    {
+                        _stepEnergeText.text = e.stats.energy.current.ToString();
+                    }
+
+                    string newTileId = e.currentTileId;
+                    Tile CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+                    if (_tilePosText != null)
+                    {
+                        _tilePosText.text = CurrentTile.TilePosText;
+                    }
+                }
             });
 
-
-
             Addressables
-                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.state.characterClass)
+                .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
                 .Completed += (op) =>
             {
                 if (
@@ -82,7 +107,10 @@ namespace UFB.UI
                 )
                 {
                     _avatarImage.sprite = op.Result.avatar;
-                    _resourceAvatarImage.sprite = op.Result.avatar;
+                    if (_resourceAvatarImage != null) 
+                    { 
+                        _resourceAvatarImage.sprite = op.Result.avatar;
+                    }
                 }
                 else
                     Debug.LogError(

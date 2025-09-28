@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7022959972003163415}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2108086547994479779
 MonoBehaviour:
@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2cff0d1a70985640ab9068184cbc46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bluePortalPrefab: {fileID: 7267599402638709667, guid: 721404fbd5ecadd44b29e57630eed806, type: 3}
-  _greenPortalPrefab: {fileID: 7267599402638709667, guid: 586f609039d573748a1ed75c27ef51ef, type: 3}
+  _bluePortalPrefab: {fileID: 2171240993455173569, guid: 491a7e751bf7f344c864b9ab44bd4573, type: 3}
+  _greenPortalPrefab: {fileID: 486856807619218528, guid: 054fb01d42139e840be8a205c70a1b38, type: 3}
