@@ -49,12 +49,27 @@ public class ItemDetailPanel : MonoBehaviour
 
         foreach (ITEM_DETAIL item in itemDetails)
         {
-            int count = UIGameManager.instance.GetItemCount(item.type);
-            if (type == 0 || type == 1) 
-            { 
-                total += count;
-            }
-            item.count.text = count.ToString();
+            UIGameManager.instance.controller.State.items.ForEach((item1) =>
+            {
+                if (item.type == (ITEM) item1.id)
+                {
+                    item.count.text = item1.count.ToString();
+                    item1.OnCountChange(((value, previousValue) =>
+                    {
+                        item.count.text = value.ToString();
+                        if (type is 0 or 1) 
+                        { 
+                            total += value;
+                        }
+                    }));
+                    
+                    if (type is 0 or 1) 
+                    { 
+                        total += item1.count;
+                    }
+                }
+            });
+            //int count = UIGameManager.instance.GetItemCount(item.type);
         }
         
         if(type == 2)

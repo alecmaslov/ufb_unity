@@ -38,11 +38,7 @@ public class UIGameManager : MonoBehaviour
 
     public PowerMovePanel powerMovePanel;
 
-    public UIDirection uIDirection;
-
     public MovePanel movePanel;
-
-    public AddExtraScore[] scoreTexts;
 
     public AddStackScore stackScoreText;
 
@@ -71,8 +67,6 @@ public class UIGameManager : MonoBehaviour
     public EndPanel endPanel;
 
     public FollowWorld reviveStack;
-
-    public DefencePanel defencePanel;
 
     public RewardBonusPanel rewardBonusPanel;
 
@@ -254,55 +248,7 @@ public class UIGameManager : MonoBehaviour
         isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
         turnPanel.InitData(curTurnTime);
         
-        if (isPlayerTurn) 
-        {
-            bottomDefeatPanel.gameObject.SetActive(false);
-            bottomDrawer.gameObject.SetActive(true);
-            reviveStack.gameObject.SetActive(false);
-            EventBus.Publish(
-                RoomSendMessageEvent.Create(
-                    GlobalDefine.CLIENT_MESSAGE.TURN_START_EQUIP,
-                    new RequestEndTurnMessage
-                    {
-                        characterId = controller.Id,
-                    }
-                )
-            );
-            CameraManager.instance.setCameraTarget(CharacterManager.Instance.PlayerCharacter.transform);
-        } 
-        else
-        {
-            resourceDetailPanel.gameObject.SetActive(false);
-            merchantPanel.CloseMerchant();
-            bottomAttackPanel.gameObject.SetActive(false);
-            movePanel.gameObject.SetActive(false);
-            tapSelfPanel.gameObject.SetActive(false);
-            equipBonusPanel.gameObject.SetActive(false);
-            if (stackTurnStartPanel.gameObject.activeSelf)
-            {
-                bottomDrawer.OpenBottomDrawer();
-            }
-            else
-            {
-                bottomDrawer.CloseBottomDrawer();
-            }
-            //stackTurnStartPanel.gameObject.SetActive(false);
-            enemyBombPanel.Init(CharacterManager.Instance.SelectedCharacter.State);
-            // bottomDrawer.SetActive(false);
-        }
-        HighlightRect.Instance.ClearHighLightRect();
-        
-        //REQUEST EQUIP ITEM LIST
-        EventBus.Publish(
-            RoomSendMessageEvent.Create(
-                GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST,
-                new RequestCharacterId
-                {
-                    characterId = controller.Id,
-                }
-            )
-        );
-
+        InitIfTurnClose();
     }
 
     private void GetTurnStartBonus(GetTurnStartEquipBonusMessage e)
@@ -369,10 +315,6 @@ public class UIGameManager : MonoBehaviour
         {
             //stackTurnStartPanel.OnLanuchDiceRoll(e);
         }
-        else if (defencePanel.gameObject.activeSelf)
-        {
-            defencePanel.OnLanuchDiceRoll(e);
-        }
         else if (bottomDefeatPanel.gameObject.activeSelf) 
         {
             bottomDefeatPanel.OnLanuchDiceRoll(e);
@@ -387,12 +329,10 @@ public class UIGameManager : MonoBehaviour
     {
         if (isPlayerTurn) 
         { 
-            //attackPanel.OnEnemyStackDiceRoll(e);
             bottomAttackPanel.OnEnemyStackDiceRoll(e);
         }
         else
         {
-            //defencePanel.OnEnemyStackDiceRoll(e);
             bottomDefeatPanel.OnEnemyStackDiceRoll(e);
 
         }
@@ -480,13 +420,11 @@ public class UIGameManager : MonoBehaviour
     {
         CharacterState origin = CharacterManager.Instance.GetCharacterFromId(e.originId).State;
         CharacterState target = CharacterManager.Instance.GetCharacterFromId(e.targetId).State;
-        //defencePanel.Init(e.pm, origin, target);
         bottomDefeatPanel.Init(e.pm, origin, target);
     }
 
     private void OnReceiveAIDefenceEndAttackMessage(EndAttackMessage e)
     {
-        // defencePanel.OnClosePanel();
         bottomDefeatPanel.OnClosePanel();
     }
 
@@ -523,13 +461,7 @@ public class UIGameManager : MonoBehaviour
     
     private void OnReceiveExtraScore(AddExtraScoreMessage message)
     {
-
         EventBus.Publish(message);
-
-       /* foreach (AddExtraScore item in scoreTexts)
-        {
-            item.OnReceiveExtraScore(message);
-        }*/
         stackScoreText.OnReceiveMessageData(message);
         ResourcePanel.OnCharacterValueEvent(controller.State);
         StepPanel.OnCharacterStateChanged(controller.State);
@@ -599,6 +531,7 @@ public class UIGameManager : MonoBehaviour
     
     public void OnChangeMonsterControl()
     {
+        if (!isPlayerTurn) return;
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.END_TURN,
@@ -609,6 +542,7 @@ public class UIGameManager : MonoBehaviour
             )
         );
         isPlayerTurn = false;
+
     }
 
     public void OnReduceHealthCharacter()
@@ -617,6 +551,75 @@ public class UIGameManager : MonoBehaviour
             RoomSendMessageEvent.Create(
                 "testHealth",
                 new RequestTestMessage
+                {
+                    characterId = controller.Id,
+                }
+            )
+        );
+    }
+
+    public void InitIfTurnClose()
+    {
+        StepPanel.SetHighLightBtn(true);
+        ResourcePanel.gameObject.SetActive(false);
+        resourceDetailPanel.gameObject.SetActive(false);
+        equipPanel.gameObject.SetActive(false);
+        powerMovePanel.gameObject.SetActive(false);
+        movePanel.gameObject.SetActive(false);
+        merchantPanel.CloseMerchant();
+        
+        equipBonusPanel.gameObject.SetActive(false);
+        stackTurnStartPanel.gameObject.SetActive(false);
+        rewardBonusPanel.gameObject.SetActive(false);
+        tapSelfPanel.gameObject.SetActive(false);
+        arrowsAddPanel.gameObject.SetActive(false);
+        bombsAddPanel.gameObject.SetActive(false);
+        arrowOrBombPanel.gameObject.SetActive(false);
+        arrowsStabPanel.gameObject.SetActive(false);
+        attackResultPanel.CloseAttackResult();
+        enemyBombPanel.gameObject.SetActive(false);
+        itemResultPanel.ClearResultList();
+        itemResultPanel.gameObject.SetActive(false);
+        ResourcePanel.bottomPart.gameObject.SetActive(false);
+        
+        stackTurnStartPanel.StopAllResult();
+        if (isPlayerTurn) 
+        {
+            bottomDefeatPanel.OnCancelBtnClicked();
+            bottomDrawer.gameObject.SetActive(true);
+            reviveStack.gameObject.SetActive(false);
+            EventBus.Publish(
+                RoomSendMessageEvent.Create(
+                    GlobalDefine.CLIENT_MESSAGE.TURN_START_EQUIP,
+                    new RequestEndTurnMessage
+                    {
+                        characterId = controller.Id,
+                    }
+                )
+            );
+            CameraManager.instance.setCameraTarget(CharacterManager.Instance.PlayerCharacter.transform);
+        } 
+        else
+        {
+            bottomAttackPanel.CancelAttack();
+            bottomAttackPanel.gameObject.SetActive(false);
+            if (stackTurnStartPanel.gameObject.activeSelf)
+            {
+                bottomDrawer.OpenBottomDrawer();
+            }
+            else
+            {
+                bottomDrawer.CloseBottomDrawer();
+            }
+            enemyBombPanel.Init(CharacterManager.Instance.SelectedCharacter.State);
+        }
+        HighlightRect.Instance.ClearHighLightRect();
+        
+        //REQUEST EQUIP ITEM LIST
+        EventBus.Publish(
+            RoomSendMessageEvent.Create(
+                GlobalDefine.SERVER_MESSAGE.GET_EQUIP_SLOT_LIST,
+                new RequestCharacterId
                 {
                     characterId = controller.Id,
                 }
@@ -654,7 +657,7 @@ public class UIGameManager : MonoBehaviour
         return !(spawnPanel.gameObject.activeSelf || ResourcePanel.gameObject.activeSelf || equipPanel.gameObject.activeSelf || powerMovePanel.gameObject.activeSelf || 
             merchantPanel.gameObject.activeSelf || wndPortalPanel.gameObject.activeSelf || /*turnPanel.gameObject.activeSelf ||*/ 
             punchPanel.gameObject.activeSelf || errorPanel.gameObject.activeSelf || equipBonusPanel.gameObject.activeSelf || stackTurnStartPanel.gameObject.activeSelf ||
-            endPanel.gameObject.activeSelf || defencePanel.gameObject.activeSelf || rewardBonusPanel.gameObject.activeSelf);
+            endPanel.gameObject.activeSelf || rewardBonusPanel.gameObject.activeSelf);
     }
 
     public void OnChangeMouseTileStatus()

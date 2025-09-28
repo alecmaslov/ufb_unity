@@ -108,7 +108,7 @@ public class StackTurnStartPanel : MonoBehaviour
                 i++;
             }
         }
-
+        StopCoroutine(StartDiceRoll());
         StartCoroutine(StartDiceRoll());
     }
 
@@ -223,6 +223,7 @@ public class StackTurnStartPanel : MonoBehaviour
 
         InitStackResult();
         Debug.Log("stack finished");
+        StopCoroutine(CheckStackCount());
         StartCoroutine(CheckStackCount());
         diceFinished = true;
     }
@@ -289,5 +290,11 @@ public class StackTurnStartPanel : MonoBehaviour
         UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         gameObject.SetActive (false);
+    }
+
+    public void StopAllResult()
+    {
+        StopCoroutine(CheckStackCount());
+        StopCoroutine(StartDiceRoll());
     }
 }

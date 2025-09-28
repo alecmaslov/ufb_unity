@@ -316,6 +316,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     public void ConfirmAttack()
     {
+        Debug.Log("confirm attack btn--------");
         InitAttack();
     }
 

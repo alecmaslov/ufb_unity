@@ -4,7 +4,6 @@ using UFB.Map;
 using UFB.Core;
 using UFB.UI;
 using UFB.Network.RoomMessageTypes;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UFB.Input;
@@ -63,7 +62,6 @@ namespace UFB.Interactions
 
         public bool isSpawn = true;
 
-        private bool isMoveDirection = false;
 
         private void Awake()
         {
@@ -203,11 +201,6 @@ namespace UFB.Interactions
             {
                 return;
             }
-            if (isMoveDirection) 
-            { 
-                clickable.OnClick();
-                //return;
-            }
 
             string playerId = CharacterManager.Instance.SelectedCharacter.Id;
 
@@ -272,11 +265,6 @@ namespace UFB.Interactions
             {
                 return;
             }
-            if (isMoveDirection)
-            {
-                clickable.OnClick();
-                //return;
-            }
 
             string playerId = CharacterManager.Instance.SelectedCharacter.Id;
 
@@ -340,7 +328,7 @@ namespace UFB.Interactions
 
         private void Update()
         {
-            isMoveDirection = UIGameManager.instance.movePanel.globalDirection.gameObject.activeSelf;
+            //isMoveDirection = UIGameManager.instance.movePanel.globalDirection.gameObject.activeSelf;
         }
     }
 }

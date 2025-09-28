@@ -168,6 +168,8 @@ public class BottomAttackPanel : MonoBehaviour
                 )
             );
             UIGameManager.instance.arrowsStabPanel.gameObject.SetActive(false);
+            
+            UIGameManager.instance.attackResultPanel.InitStab((ITEM) itemType);
         }
         else
         {

@@ -36,8 +36,13 @@ public class BottomDefeatPanel : MonoBehaviour
 
     public Text titleText;
     
+    public CharacterState _origin;
+    public CharacterState _target;
+    
     public void Init(PowerMove _powermove, CharacterState origin, CharacterState target)
     {
+        _origin = origin;
+        _target = target;
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
 
         //InitEnemyState(target);
@@ -166,7 +171,7 @@ public class BottomDefeatPanel : MonoBehaviour
         diceRect.SetActive(false);
 
         enemyStackImage.sprite = GlobalResources.instance.stacks[e.stackId];
-        enemyStackText.text = UIGameManager.instance.GetStackCount((STACK) e.stackId).ToString();
+        enemyStackText.text = UIGameManager.instance.GetStackCount((STACK) e.stackId, _target).ToString();
         enemyStackImage.gameObject.SetActive(true);
         enemyStackImage.transform.parent.gameObject.SetActive(true);
 

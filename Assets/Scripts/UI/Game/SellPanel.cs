@@ -25,8 +25,13 @@ public class SellPanel : MonoBehaviour
         coinText.text = state.stats.coin.ToString();
         state.stats.OnCoinChange((int newCoin, int preCoin) =>
         {
-            if(gameObject.activeSelf)
+            if(gameObject.activeSelf && UIGameManager.instance.merchantPanel.gameObject.activeSelf)
                 StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
+            else
+            {
+                coinText.color = Color.white;
+                coinText.text = newCoin.ToString();
+            }
             //coinText.text = newCoin.ToString();
         });
 

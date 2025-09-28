@@ -20,10 +20,13 @@ public class CraftPanel : MonoBehaviour
         coinText.text = state.stats.coin.ToString();
         state.stats.OnCoinChange((int newCoin, int preCoin) =>
         {
-            if(preCoin == 0) return;
-            //coinText.text = newCoin.ToString();
-            if(gameObject.activeSelf)
+            //if(preCoin == 0) return;
+            if(gameObject.activeSelf && UIGameManager.instance.merchantPanel.gameObject.activeSelf)
                 StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
+            else
+            {
+                coinText.text = newCoin.ToString();
+            }
         });
 
         InitList();

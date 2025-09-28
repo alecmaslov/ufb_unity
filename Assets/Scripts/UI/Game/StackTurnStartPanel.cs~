@@ -234,7 +234,7 @@ public class StackTurnStartPanel : MonoBehaviour
             Destroy(banStackList.GetChild(j).gameObject);
         }
 
-        for (int k = 0; k < goodStackList.childCount; k++)
+        for (int k = 1; k < goodStackList.childCount; k++)
         {
             Destroy(goodStackList.GetChild(k).gameObject);
         }
@@ -289,5 +289,11 @@ public class StackTurnStartPanel : MonoBehaviour
         UIGameManager.instance.bottomDrawer.gameObject.SetActive(true);
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
         gameObject.SetActive (false);
+    }
+
+    public void StopAllResult()
+    {
+        StopCoroutine(CheckStackCount());
+        StopCoroutine(StartDiceRoll());
     }
 }

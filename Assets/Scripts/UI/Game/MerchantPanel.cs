@@ -10,8 +10,6 @@ using UnityEngine;
 
 public class MerchantPanel : MonoBehaviour
 {
-    public static MerchantPanel instance;
-
     public BuyPanel buyPanel;
     public SellPanel sellPanel;
     public QuestPanel questPanel;
@@ -40,7 +38,6 @@ public class MerchantPanel : MonoBehaviour
     
     private void Awake()
     {
-        instance = this;
     }
 
     private void OnEnable()
@@ -124,6 +121,7 @@ public class MerchantPanel : MonoBehaviour
 
     public void CloseMerchant()
     {
+        if (!gameObject.activeSelf) return;
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 "leaveMerchant",

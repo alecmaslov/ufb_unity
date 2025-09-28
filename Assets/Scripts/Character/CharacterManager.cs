@@ -143,29 +143,11 @@ namespace UFB.Character
                 }
             );
 
-            /*_characterStates.ForEach(
-                (key, character) =>
-                {
-                    character.stats.OnChange(() =>
-                    {
-                        Debug.Log($"key: {key}, coin: {character.stats.coin}");
-                        EventBus.Publish(new ChangeCharacterStateEvent
-                        {
-                            state = character,
-                            isPlayer = character.id == _selectedCharacterId
-                        });
-                    });
-                }
-            );*/
-
             _characterStates.OnChange(
                 (newState, oldState) => {
                     /// subscribe to changes in player stats
                 }
             );
-
-            // message can be scoped on the server to send only to specific client
-            // EventBus.Subscribe<RequestCharacterMoveEvent>(OnRequestCharacterMove);
 
             // for now, do this for default behavior, but eventually this will be triggered by some UI handler
             EventBus.Subscribe<TileClickedEvent>(
@@ -188,12 +170,6 @@ namespace UFB.Character
             {
                 character.transform.position = new Vector3(-100, -100, 100);
             }
-            /*EventBus.Publish(
-                new SetCameraPresetStateEvent
-                {
-                    presetState = CameraController.PresetState.TopDown
-                }
-            );*/
 
             // now it's up to any listeners to register events with these
             EventBus.Publish(
