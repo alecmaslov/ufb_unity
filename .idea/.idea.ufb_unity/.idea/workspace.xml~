@@ -6,62 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2768ae09-9609-4612-9406-86d69bf85a54" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Meshes/dice1.renderTexture" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Meshes/dice1.renderTexture" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Meshes/dice2.renderTexture" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Meshes/dice2.renderTexture" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Meshes/dice3.renderTexture" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Meshes/dice3.renderTexture" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/API.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/API.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ObjectAnimatorTesting.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ObjectAnimatorTesting.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ShaderTesting.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ShaderTesting.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestGameBoard.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestGameBoard.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestObjects.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestObjects.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestUI.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestUI.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/UXMLMainMenu.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/UXMLMainMenu.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interactions/InteractionManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interactions/InteractionManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interactions/InteractionManager.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interactions/InteractionManager.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Project.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Project/Build.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Project/Build.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomSlotPanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomSlotPanel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BuyPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/CraftPanel.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/DefencePanel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/ItemDetailPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MerchantPanel.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/SellPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/UIDirection.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/UIDirection.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Panels/PlayerStatsDrawer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Panels/PlayerStatsDrawer.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +101,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758694298800</updated>
-      <workItem from="1758694309794" duration="34019000" />
+      <workItem from="1758694309794" duration="42195000" />
     </task>
     <servers />
   </component>
