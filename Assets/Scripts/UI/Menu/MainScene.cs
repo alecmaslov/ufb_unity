@@ -12,6 +12,11 @@ public class MainScene : MonoBehaviour
 {
     public static MainScene instance;
     
+    public UserData userData = new UserData();
+    
+    public GameObject LoginPanel;
+    public GameObject RegisterPanel;
+    
     public InputField loginEmailField;
     public InputField passwordField;
     
@@ -65,6 +70,8 @@ public class MainScene : MonoBehaviour
         } 
         else if (result == GlobalDefine.RESPONSE_MESSAGE.SUCCESS)
         {
+            LoginPanel.SetActive(true);
+            RegisterPanel.SetActive(false);
             ShowNotificationMessage("error", "User registration success.");
         }
     }
@@ -96,6 +103,12 @@ public class MainScene : MonoBehaviour
             ShowNotificationMessage("error", "User successfully signed in.");
             PlayerPrefs.SetString("email", email);
             PlayerPrefs.SetString("password", password);
+            PlayerPrefs.SetString("displayName", data.displayName);
+            
+            userData.displayName = data.displayName;
+            userData.email = email;
+            userData.gold = data.gold;
+            
             Debug.Log(data.clientId);
             ConnectServer(data.clientId);
         }
@@ -105,6 +118,11 @@ public class MainScene : MonoBehaviour
         }
     }
 
+    public void OnLogOut()
+    {
+        
+    }
+    
     public async void ConnectServer(string userId)
     {
         // we must wait until we are connected to try and perform any other actions

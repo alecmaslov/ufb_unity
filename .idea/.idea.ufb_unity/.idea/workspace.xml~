@@ -6,6 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="2768ae09-9609-4612-9406-86d69bf85a54" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4-2.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4-2.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6-2.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6-2.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountMenuPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountMenuPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,28 +25,31 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 6
-}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="338MYm6rAlMq8OtvehuTJmglacy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "develop",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.26f1\Editor\Unity.exe" />
@@ -101,7 +114,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1758694298800</updated>
-      <workItem from="1758694309794" duration="42195000" />
+      <workItem from="1758694309794" duration="59328000" />
+      <workItem from="1759909417158" duration="1000" />
+      <workItem from="1764677681093" duration="15176000" />
     </task>
     <servers />
   </component>

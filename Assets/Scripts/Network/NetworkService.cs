@@ -186,5 +186,17 @@ namespace UFB.Network
             UfbApiClient.RegisterUserResponse result = await ApiClient.LoginHandler(email, password);
             return result;
         }
+        
+        public async Task<UfbApiClient.RegisterUserResponse> ChangeUserPasswordHandler(string email, string oldPassword, string password)
+        {
+            UfbApiClient.RegisterUserResponse result = await ApiClient.ChangePasswordHandler(email, oldPassword, password);
+            return result;
+        }
+        
+        public async Task<UfbApiClient.RegisterUserResponse> ChangeUserNameHandler(string email, string displayName)
+        {
+            UfbApiClient.RegisterUserResponse result = await ApiClient.ChangeUserNameHandler(email, displayName);
+            return result;
+        }
     }
 }

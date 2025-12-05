@@ -161,6 +161,56 @@ namespace UFB.Network
             }
         }
         
+        public async Task<RegisterUserResponse> ChangePasswordHandler(string email, string oldPassword, string password)
+        {
+            try
+            {
+                var response = await Post<RegisterUserResponse>(
+                    "/user/change-user-password",
+                    JsonConvert.SerializeObject(new { email, oldPassword, password })
+                );
+                
+                string clientId = response.clientId;
+                string error = response.error;
+                
+                Debug.Log(clientId);
+                Debug.Log(error);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                RegisterUserResponse result = new RegisterUserResponse();
+                result.error = e.Message;
+                return result;
+            }
+        }
+        
+        public async Task<RegisterUserResponse> ChangeUserNameHandler(string email, string displayName)
+        {
+            try
+            {
+                var response = await Post<RegisterUserResponse>(
+                    "/user/change-user-name",
+                    JsonConvert.SerializeObject(new { email, displayName })
+                );
+                
+                string clientId = response.clientId;
+                string error = response.error;
+                
+                Debug.Log(clientId);
+                Debug.Log(error);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                RegisterUserResponse result = new RegisterUserResponse();
+                result.error = e.Message;
+                return result;
+            }
+        }
+        
         public PlatformType GetPlatformType()
         {
             PlatformType type = PlatformType.WEB; // Default value
@@ -204,6 +254,8 @@ namespace UFB.Network
         public struct RegisterUserResponse
         {
             public string clientId;
+            public string displayName;
+            public int gold;
             public string error;
         }
     }
