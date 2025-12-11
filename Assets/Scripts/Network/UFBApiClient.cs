@@ -91,6 +91,8 @@ namespace UFB.Network
                 jsonData
             );
             _clientId = clientResponse.clientId;
+            Debug.Log("Client registered!" +  clientResponse.clientId);
+            Debug.Log("User Id registered!" +  userId);
             await GenerateToken(_clientId);
         }
 
@@ -207,6 +209,28 @@ namespace UFB.Network
                 Debug.Log("Exception: " + e);
                 RegisterUserResponse result = new RegisterUserResponse();
                 result.error = e.Message;
+                return result;
+            }
+        }
+        
+        public async Task<HeroData> GetHeroDetail(string userId, string characterClass)
+        {
+            try
+            {
+                var response = await Post<HeroData>(
+                    "/character/get-hero-detail",
+                    JsonConvert.SerializeObject(new { userId, characterClass })
+                );
+                
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                var result = new HeroData
+                {
+                    error = e.Message
+                };
                 return result;
             }
         }

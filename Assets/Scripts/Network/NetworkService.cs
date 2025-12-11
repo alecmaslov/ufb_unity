@@ -198,5 +198,11 @@ namespace UFB.Network
             UfbApiClient.RegisterUserResponse result = await ApiClient.ChangeUserNameHandler(email, displayName);
             return result;
         }
+        
+        public async Task<HeroData> GetHeroDetail(string userId, string characterClass)
+        {
+            var result = await ApiClient.GetHeroDetail(userId, characterClass);
+            return result;
+        }
     }
 }

@@ -108,6 +108,7 @@ public class MainScene : MonoBehaviour
             userData.displayName = data.displayName;
             userData.email = email;
             userData.gold = data.gold;
+            userData.id = data.clientId;
             
             Debug.Log(data.clientId);
             ConnectServer(data.clientId);

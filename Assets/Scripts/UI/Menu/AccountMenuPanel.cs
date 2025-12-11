@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UFB.Character;
 using UFB.Core;
 using UFB.Network;
 using UnityEngine;
@@ -22,6 +24,25 @@ public class AccountMenuPanel : MonoBehaviour
     
     public AccountDetailPanel accountDetailPanel;
     
+    [SerializeField]
+    private List<UfbCharacter> _characters;
+    public ItemCard characterCard;
+    public Transform characterCardHolder;
+    
+    private void Start()
+    {
+        _characters.ForEach(c =>
+        {
+            var item = Instantiate(characterCard, characterCardHolder);
+            item.InitData(c.characterName, c.avatar);
+            item.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OnInitUserDetail(c.characterName);
+            });
+            item.gameObject.SetActive(true);
+        });
+    }
+
     public void InitPanel()
     {
         var email = MainScene.instance.userData.email;
@@ -36,9 +57,9 @@ public class AccountMenuPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void OnInitUserDetail(int type)
+    public void OnInitUserDetail(string characterClass)
     {
-        accountDetailPanel.InitPanel(type);
+        accountDetailPanel.InitPanel(characterClass);
     }
 
     public void OnUserEditPanel()

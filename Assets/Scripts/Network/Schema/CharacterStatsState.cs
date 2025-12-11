@@ -34,16 +34,37 @@ namespace UFB.StateSchema {
 		[Type(7, "int32")]
 		public int itemBox = default(int);
 
-		[Type(8, "int16")]
+		[Type(8, "int32")]
+		public int damage_taken = default(int);
+
+		[Type(9, "int32")]
+		public int used_energy = default(int);
+
+		[Type(10, "int32")]
+		public int damage_deal = default(int);
+
+		[Type(11, "int32")]
+		public int used_stack = default(int);
+
+		[Type(12, "int32")]
+		public int damage_heal = default(int);
+
+		[Type(13, "int32")]
+		public int traveled_tile = default(int);
+
+		[Type(14, "int32")]
+		public int kills = default(int);
+
+		[Type(15, "int16")]
 		public short arrowLimit = default(short);
 
-		[Type(9, "int16")]
+		[Type(16, "int16")]
 		public short bombLimit = default(short);
 
-		[Type(10, "int8")]
+		[Type(17, "int8")]
 		public sbyte maxMelee = default(sbyte);
 
-		[Type(11, "int8")]
+		[Type(18, "int8")]
 		public sbyte maxMana = default(sbyte);
 
 		/*
@@ -146,6 +167,90 @@ namespace UFB.StateSchema {
 			};
 		}
 
+		protected event PropertyChangeHandler<int> __damage_takenChange;
+		public Action OnDamage_takenChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.damage_taken));
+			__damage_takenChange += __handler;
+			if (__immediate && this.damage_taken != default(int)) { __handler(this.damage_taken, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(damage_taken));
+				__damage_takenChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __used_energyChange;
+		public Action OnUsed_energyChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.used_energy));
+			__used_energyChange += __handler;
+			if (__immediate && this.used_energy != default(int)) { __handler(this.used_energy, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(used_energy));
+				__used_energyChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __damage_dealChange;
+		public Action OnDamage_dealChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.damage_deal));
+			__damage_dealChange += __handler;
+			if (__immediate && this.damage_deal != default(int)) { __handler(this.damage_deal, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(damage_deal));
+				__damage_dealChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __used_stackChange;
+		public Action OnUsed_stackChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.used_stack));
+			__used_stackChange += __handler;
+			if (__immediate && this.used_stack != default(int)) { __handler(this.used_stack, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(used_stack));
+				__used_stackChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __damage_healChange;
+		public Action OnDamage_healChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.damage_heal));
+			__damage_healChange += __handler;
+			if (__immediate && this.damage_heal != default(int)) { __handler(this.damage_heal, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(damage_heal));
+				__damage_healChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __traveled_tileChange;
+		public Action OnTraveled_tileChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.traveled_tile));
+			__traveled_tileChange += __handler;
+			if (__immediate && this.traveled_tile != default(int)) { __handler(this.traveled_tile, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(traveled_tile));
+				__traveled_tileChange -= __handler;
+			};
+		}
+
+		protected event PropertyChangeHandler<int> __killsChange;
+		public Action OnKillsChange(PropertyChangeHandler<int> __handler, bool __immediate = true) {
+			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
+			__callbacks.AddPropertyCallback(nameof(this.kills));
+			__killsChange += __handler;
+			if (__immediate && this.kills != default(int)) { __handler(this.kills, default(int)); }
+			return () => {
+				__callbacks.RemovePropertyCallback(nameof(kills));
+				__killsChange -= __handler;
+			};
+		}
+
 		protected event PropertyChangeHandler<short> __arrowLimitChange;
 		public Action OnArrowLimitChange(PropertyChangeHandler<short> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
@@ -204,6 +309,13 @@ namespace UFB.StateSchema {
 				case nameof(range): __rangeChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(bags): __bagsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(itemBox): __itemBoxChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(damage_taken): __damage_takenChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(used_energy): __used_energyChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(damage_deal): __damage_dealChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(used_stack): __used_stackChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(damage_heal): __damage_healChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(traveled_tile): __traveled_tileChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
+				case nameof(kills): __killsChange?.Invoke((int) change.Value, (int) change.PreviousValue); break;
 				case nameof(arrowLimit): __arrowLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(bombLimit): __bombLimitChange?.Invoke((short) change.Value, (short) change.PreviousValue); break;
 				case nameof(maxMelee): __maxMeleeChange?.Invoke((sbyte) change.Value, (sbyte) change.PreviousValue); break;
