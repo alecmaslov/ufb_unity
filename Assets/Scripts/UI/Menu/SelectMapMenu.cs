@@ -10,6 +10,7 @@ using UFB.Core;
 using UnityEngine.TextCore.Text;
 using UI.ThreeDimensional;
 using UFB.Network.ApiTypes;
+using UnityEngine.Serialization;
 
 namespace UFB.UI
 {
@@ -45,6 +46,10 @@ namespace UFB.UI
 
         private int _characterIndex = 0;
 
+        public bool IsSoloMode = false;
+        
+        [FormerlySerializedAs("joinRoomPanel")] public CreateRoomPanel createRoomPanel;
+        
         // 0 : NEW GAME, 1 : JOIN GAME
         [SerializeField]
         public int menuType = 0;
@@ -118,14 +123,49 @@ namespace UFB.UI
 
         public void OnConfirmButton()
         {
-            _menuManager.OpenMenu(loadingMenu);
+            try
+            {
+                var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
+                var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
 
-            ServiceLocator.Current
-                .Get<GameService>()
-                .CreateGame(
-                    _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions,
-                    _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions
-                );
+                if (IsSoloMode)
+                {
+                    _menuManager.OpenMenu(loadingMenu);
+
+                    ServiceLocator.Current
+                        .Get<GameService>()
+                        .CreateGame(
+                            createOptions,
+                            joinOptions
+                        );
+                }
+                else
+                {
+                    ServiceLocator.Current
+                        .Get<GameService>()
+                        .CreateGame(
+                            createOptions,
+                            joinOptions,
+                            false
+                        );
+                    createRoomPanel.InitPanel();
+                    gameObject.SetActive(false);
+                }
+            }
+            catch (Exception e)
+            {
+                throw; // TODO handle exception
+            }
+        }
+
+        public void OnSoloCreateButton()
+        {
+            IsSoloMode = true;
+        }
+
+        public void OnMultiPlayerCreateButton()
+        {
+            IsSoloMode = false;
         }
     }
 }

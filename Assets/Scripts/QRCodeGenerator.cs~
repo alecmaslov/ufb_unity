@@ -1,0 +1,48 @@
+using UnityEngine;
+using UnityEngine.UI;
+using ZXing;
+using ZXing.QrCode;
+using ZXing.Common;
+
+public class QRCodeGenerator : MonoBehaviour
+{
+    [Header("UI")]
+    public RawImage qrImage;
+
+    [Header("QR Settings")]
+    public int width = 512;
+    public int height = 512;
+
+    void Start()
+    {
+        GenerateQRCode("Hello World from Unity!");
+    }
+
+    public void GenerateQRCode(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            Debug.LogWarning("QR text is empty!");
+            return;
+        }
+
+        var writer = new QRCodeWriter()
+        {
+            Format = BarcodeFormat.QR_CODE,
+            Options = new EncodingOptions
+            {
+                Width = width,
+                Height = height,
+                Margin = 1
+            }
+        };
+
+        var pixels = writer.encode(text);
+
+        var qrTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        qrTexture.SetPixels32(pixels);
+        qrTexture.Apply();
+
+        qrImage.texture = qrTexture;
+    }
+}

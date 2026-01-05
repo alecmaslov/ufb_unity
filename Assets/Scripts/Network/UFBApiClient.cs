@@ -163,6 +163,31 @@ namespace UFB.Network
             }
         }
         
+        public async Task<UIRoomData> GetRoomDataById(string roomId)
+        {
+            try
+            {
+                var response = await Post<UIRoomData>(
+                    "/lobby/get-room",
+                    JsonConvert.SerializeObject(new { roomId })
+                );
+                
+                string clientId = response.id;
+                string error = response.ownerId;
+                
+                Debug.Log(clientId);
+                Debug.Log(error);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                UIRoomData result = new UIRoomData();
+                result.id = "error";
+                return result;
+            }
+        }
+        
         public async Task<RegisterUserResponse> ChangePasswordHandler(string email, string oldPassword, string password)
         {
             try

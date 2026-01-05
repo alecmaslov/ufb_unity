@@ -117,15 +117,17 @@ public class BottomDefeatPanel : MonoBehaviour
         if (pm.result.dice > 0 && diceTimes == 0)
         {
             diceRect.SetActive(true);
-            DiceArea.instance.SetDiceType((DICE_TYPE)pm.result.dice, false, true);
+            DiceAreaUpdate.instance.ClearDices();
+            //DiceArea.instance.SetDiceType((DICE_TYPE)pm.result.dice, false, true);
             powermoveImage.sprite = pm.id < 0 ? GlobalResources.instance.punch : GlobalResources.instance.powers[pm.powerImageId];
             moveImage.sprite = pm.id < 0 ? GlobalResources.instance.punch : GlobalResources.instance.powers[pm.powerImageId];
         }
         else if (pm.result.perkId == (int)PERK.VAMPIRE)
         {
+            DiceAreaUpdate.instance.ClearDices();
             isVampired = true;
             diceRect.SetActive(true);
-            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4, false, true);
+            //DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4, false, true);
             powermoveImage.sprite = GlobalResources.instance.perks[(int)PERK.VAMPIRE];
             moveImage.sprite = GlobalResources.instance.perks[(int)PERK.VAMPIRE];
 
@@ -175,7 +177,8 @@ public class BottomDefeatPanel : MonoBehaviour
         enemyStackImage.gameObject.SetActive(true);
         enemyStackImage.transform.parent.gameObject.SetActive(true);
 
-        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, true);
+        DiceAreaUpdate.instance.InitEnemyTurn(true);
+        //DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, true);
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
 
         enemyStackDiceRect.SetActive(true);
@@ -190,13 +193,16 @@ public class BottomDefeatPanel : MonoBehaviour
         data[0].diceCount = diceCount;
         enemyStackImage.gameObject.SetActive(false);
         enemyStackImage.transform.parent.gameObject.SetActive(false);
-        DiceArea.instance.LaunchDice(data, true);
+        DiceAreaUpdate.instance.LaunchDice(data);
+        //DiceArea.instance.LaunchDice(data, true);
     }
 
     public void OnLanuchDiceRoll(SetDiceRollMessage message)
     {
         //Debug.Log(message.diceData);
-        DiceArea.instance.LaunchDice(message.diceData);
+        DiceAreaUpdate.instance.InitEnemyTurn(true);
+        DiceAreaUpdate.instance.LaunchDice(message.diceData);
+        //DiceArea.instance.LaunchDice(message.diceData);
         Sprite sp = pm.id < 0
             ? GlobalResources.instance.punch
             : GlobalResources.instance.powers[pm.powerImageId];

@@ -62,6 +62,8 @@ public class EndPanel : MonoBehaviour
     
     private void AddEndResultItem(Item data)
     {
+        if(data.id is (int)ITEM.Mana or (int) ITEM.Melee) return;
+        
         var item = Instantiate(endResultItem, endResultPanel);
 
         item.InitData(GlobalResources.instance.items[data.id], data.sell.ToString());

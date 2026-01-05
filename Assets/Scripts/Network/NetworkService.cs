@@ -139,6 +139,7 @@ namespace UFB.Network
         {
             joinOptions.token = ApiClient.Token;
             joinOptions.playerId = ApiClient.ClientId;
+            createOptions.ownerId =  ApiClient.ClientId;
 
             var room = await _colyseusClient.Create<UfbRoomState>(
                 _roomType,
@@ -186,6 +187,13 @@ namespace UFB.Network
             UfbApiClient.RegisterUserResponse result = await ApiClient.LoginHandler(email, password);
             return result;
         }
+        
+        public async Task<UIRoomData> GetRoomDataById(string roomId)
+        {
+            UIRoomData result = await ApiClient.GetRoomDataById(roomId);
+            return result;
+        }
+        
         
         public async Task<UfbApiClient.RegisterUserResponse> ChangeUserPasswordHandler(string email, string oldPassword, string password)
         {

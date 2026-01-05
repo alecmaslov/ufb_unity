@@ -316,6 +316,7 @@ public class BottomAttackPanel : MonoBehaviour
 
     public void ConfirmAttack()
     {
+        Debug.Log("confirm attack btn--------");
         InitAttack();
     }
 
@@ -451,7 +452,9 @@ public class BottomAttackPanel : MonoBehaviour
 
         stackCountText.text = target.stacks[e.stackId].count.ToString();
 
-        DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, false, true);
+        DiceAreaUpdate.instance.InitEnemyTurn(false);
+        
+        //DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4, false, true);
         StartCoroutine(LanchEnemyDiceRoll(e.enemyDiceCount));
 
         enemyDiceRect.SetActive(true);
@@ -473,12 +476,15 @@ public class BottomAttackPanel : MonoBehaviour
         data[0].diceCount = diceCount;
         enemyStackImage.gameObject.SetActive(false);
         enemyStackImage.transform.parent.gameObject.SetActive(false);
-        DiceArea.instance.LaunchDice(data, true);
+        DiceAreaUpdate.instance.LaunchDice(data);
+        
+        //DiceArea.instance.LaunchDice(data, true);
     }
 
     public void OnLanuchDiceRoll(SetDiceRollMessage message)
     {
-        DiceArea.instance.LaunchDice(message.diceData);
+        DiceAreaUpdate.instance.LaunchDice(message.diceData);
+        // DiceArea.instance.LaunchDice(message.diceData);
         Sprite sp = selectedPowermove.id < 0
             ? GlobalResources.instance.punch
             : GlobalResources.instance.powers[selectedPowermove.powerImageId];
@@ -495,7 +501,9 @@ public class BottomAttackPanel : MonoBehaviour
         if (selectedPowermove.result.dice > 0 && diceTimes == 0)
         {
             playerDiceRect.SetActive(true);
-            DiceArea.instance.SetDiceType((DICE_TYPE)selectedPowermove.result.dice);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            
+            // DiceArea.instance.SetDiceType((DICE_TYPE)selectedPowermove.result.dice);
             powermoveImage.sprite = selectedPowermove.id < 0 ? GlobalResources.instance.punch : GlobalResources.instance.powers[selectedPowermove.powerImageId];
             StartCoroutine(OnStartDiceRect(0.1f));
         }
@@ -503,7 +511,8 @@ public class BottomAttackPanel : MonoBehaviour
         {
             isVampired = true;
             playerDiceRect.SetActive(true);
-            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            //DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
             powermoveImage.sprite = GlobalResources.instance.perks[(int)PERK.VAMPIRE];
             StartCoroutine(OnStartDiceRect(0.1f));
         }
@@ -540,12 +549,12 @@ public class BottomAttackPanel : MonoBehaviour
         int vampireCount = 0;
         if (isVampired)
         {
-            totalDiceCount += DiceArea.instance.diceData[0].diceCount;
-            vampireCount = DiceArea.instance.diceData[1].diceCount;
+            totalDiceCount += DiceAreaUpdate.instance.diceData[0].diceCount;
+            vampireCount = DiceAreaUpdate.instance.diceData[1].diceCount;
         }
         else
         {
-            totalDiceCount += DiceArea.instance.diceResultCount;
+            totalDiceCount += DiceAreaUpdate.instance.GetDiceCount();
         }
 
         Debug.Log($"dice times: {diceTimes}, {selectedPowermove.getDiceTime()}");

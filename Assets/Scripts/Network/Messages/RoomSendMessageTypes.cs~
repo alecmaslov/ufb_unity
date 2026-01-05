@@ -23,6 +23,7 @@ namespace UFB.Network.RoomMessageTypes
     public class UfbRoomCreateOptions : ISendMessage
     {
         public string mapName = "kaiju";
+        public string ownerId = "";
         public UfbRoomRules rules = new UfbRoomRules();
     }
 
@@ -93,7 +94,7 @@ namespace UFB.Network.RoomMessageTypes
     public class RequestSetStabAttack : RequestCharacterId
     {
         public string enemyId;
-        public int itemType;
+        public int itemId;
     }
     
     public class RequestGetMerchantList: ISendMessage

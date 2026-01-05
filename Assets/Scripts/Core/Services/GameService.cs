@@ -116,7 +116,8 @@ namespace UFB.Core
 
         public async void CreateGame(
             UfbRoomCreateOptions createOptions,
-            UfbRoomJoinOptions joinOptions
+            UfbRoomJoinOptions joinOptions,
+            bool isSoloMode = true
         )
         {
             Debug.Log("CreateGame called!");
@@ -131,7 +132,13 @@ namespace UFB.Core
                         PlayerPrefs.SetString("roomId", room.ReconnectionToken.RoomId);
                         PlayerPrefs.SetString("sessionId", room.ReconnectionToken.Token);
                         PlayerPrefs.SetInt("roomJoinOption", 0);
-                        tcs.SetResult(await LoadGame(room));
+                        
+                        MainScene.instance.roomData.id =  room.ReconnectionToken.RoomId;
+                        MainScene.instance.roomData.name = room.Name;
+                        //Room = room;
+                        
+                        if(isSoloMode)
+                            tcs.SetResult(await LoadGame(room));
                     }
                 );
             await tcs.Task;

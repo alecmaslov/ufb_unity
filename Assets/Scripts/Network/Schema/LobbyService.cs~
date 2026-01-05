@@ -1,0 +1,75 @@
+using Colyseus;
+using UnityEngine;
+using System.Threading.Tasks;
+using UFB.StateSchema;
+
+public class LobbyService : MonoBehaviour
+{
+    public static LobbyService Instance;
+    private ColyseusClient client;
+    private ColyseusRoom<LobbyState> lobby;
+
+    async void Awake()
+    {
+        Instance = this;
+        client = new ColyseusClient("ws://localhost:2567");
+        await ConnectLobby();
+        HandleMessage();
+    }
+
+    public async Task ConnectLobby()
+    {
+        lobby = await client.JoinOrCreate<LobbyState>("lobby");
+        lobby.OnStateChange += OnLobbyUpdate;
+    }
+
+    private void HandleMessage()
+    {
+        lobby.OnMessage<UIRoomData>("room-by-id", GetRoomById);
+    }
+
+    private void GetRoomById(UIRoomData message)
+    {
+        MainScene.instance.joinRoomPanel.InitData(message);
+    }
+
+    void OnLobbyUpdate(LobbyState state, bool first)
+    {
+        foreach (RoomData room in state.rooms.Values)
+        {
+            Debug.Log($"Room: {room.name} ({room.playerCount}/{room.maxPlayers})");
+        }
+    }
+
+    public async Task GetRoomById(string roomId)
+    {
+        if (lobby == null)
+        {
+            await ConnectLobby();
+        }
+        lobby.Send("room-by-id", roomId);
+    }
+    
+    public void CreateRoom(string name, int maxPlayers, bool isPrivate)
+    {
+        lobby.Send("create", new
+        {
+            name,
+            maxPlayers,
+            isPrivate
+        });
+    }
+
+    public async Task JoinRoom(string roomId, string inviteToken = null)
+    {
+        /*await client.JoinById(roomId, new
+        {
+            inviteToken
+        });*/
+    }
+
+    public void DeleteRoom(string roomId)
+    {
+        lobby.Send("delete", roomId);
+    }
+}

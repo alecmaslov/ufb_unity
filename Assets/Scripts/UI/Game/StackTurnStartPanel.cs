@@ -116,18 +116,21 @@ public class StackTurnStartPanel : MonoBehaviour
     {
         if(stackId == STACK.Cure || stackId == STACK.Burn || stackId == STACK.Freeze || stackId == STACK.Charge)
         {
-            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            //DiceArea.instance.SetDiceType(DICE_TYPE.DICE_4);
             return DICE_TYPE.DICE_4;
         }
         else if(stackId == STACK.Void || stackId == STACK.Slow)
         {
-            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            // DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6_4);
             return DICE_TYPE.DICE_6_4;
 
         } 
         else if (stackId == STACK.PUMP)
         {
-            DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            // DiceArea.instance.SetDiceType(DICE_TYPE.DICE_6);
             return DICE_TYPE.DICE_6;
         }
         else
@@ -146,7 +149,8 @@ public class StackTurnStartPanel : MonoBehaviour
         Debug.LogError("IsRed : " + isRed);
         if (idx == 0)
         {
-            DiceArea.instance.SetDiceType(type, false, isRed);
+            DiceAreaUpdate.instance.InitEnemyTurn(false);
+            // DiceArea.instance.SetDiceType(type, false, isRed);
         }
         else if (idx == 1)
         {
@@ -162,7 +166,8 @@ public class StackTurnStartPanel : MonoBehaviour
     {
         if (idx == 0)
         {
-            DiceArea.instance.LaunchDice(diceResult[diceIdx].diceData);
+            DiceAreaUpdate.instance.LaunchDice(diceResult[diceIdx].diceData);
+            //DiceArea.instance.LaunchDice(diceResult[diceIdx].diceData);
         }
         else if (idx == 1)
         {

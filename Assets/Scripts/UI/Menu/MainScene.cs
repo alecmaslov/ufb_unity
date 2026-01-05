@@ -6,6 +6,7 @@ using UFB.Network;
 using UFB.Network.RoomMessageTypes;
 using UFB.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class MainScene : MonoBehaviour
@@ -13,6 +14,9 @@ public class MainScene : MonoBehaviour
     public static MainScene instance;
     
     public UserData userData = new UserData();
+    public UIRoomData roomData = new UIRoomData();
+    
+    [FormerlySerializedAs("joinRoomPanel")] public CreateRoomPanel createRoomPanel;
     
     public GameObject LoginPanel;
     public GameObject RegisterPanel;

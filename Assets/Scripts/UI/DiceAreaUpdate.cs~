@@ -1,0 +1,169 @@
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Items;
+using UFB.Network.RoomMessageTypes;
+using UnityEngine;
+
+public class DiceAreaUpdate : MonoBehaviour
+{
+    public static DiceAreaUpdate instance;
+
+    [Header("Dice Prefabs")]
+    public DiceCountObject diceD6Prefab;
+    public DiceCountObject diceD4Prefab;
+
+    [Header("Spawn Points")]
+    public Transform playerStart;
+    public Transform enemyStart;
+
+    [Header("Colors")]
+    public Color originDiceColor;
+    public Color enemyDiceColor;
+    public Material[] diceMaterials;
+
+    private readonly List<DiceCountObject> activeDices = new();
+    private bool isEnemyDiceTurn;
+    private bool isLaunched;
+    public DiceData[] diceData;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    public void InitEnemyTurn(bool _isEnemy)
+    {
+        isEnemyDiceTurn = _isEnemy;
+    }
+
+    public int GetDiceCount()
+    {
+        var diceResultCount = 0;
+        foreach (DiceData dice in dices)
+        {
+            diceResultCount += dice.diceCount;
+        }
+        return diceResultCount;
+    }
+    
+    // ===============================
+    // MAIN ENTRY POINT
+    // ===============================
+    public void LaunchDice(DiceData[] diceDatas)
+    {
+        ClearDices();
+
+        diceData = diceDatas;
+        
+        Transform basePos = isEnemyDiceTurn ? enemyStart : playerStart;
+
+        ApplyDiceColor(isEnemyDiceTurn);
+
+        for (int i = 0; i < diceDatas.Length; i++)
+        {
+            DiceCountObject dice = CreateDice(diceDatas[i]);
+
+            dice.transform.position = basePos.position + new Vector3(i * 1.3f, 0, i * 0.5f);
+            dice.transform.rotation = Random.rotation;
+
+            dice.rigidbody.isKinematic = false;
+            dice.isStoped = false;
+            dice.gameObject.SetActive(true);
+            dice.LanchDiceModel(diceDatas[i].diceCount, isEnemyDiceTurn);
+            activeDices.Add(dice);
+        }
+
+        isLaunched = true;
+    }
+
+    // ===============================
+    // DICE CREATION
+    // ===============================
+    private DiceCountObject CreateDice(DiceData data)
+    {
+        DiceCountObject prefab = data.type switch
+        {
+            DICE_TYPE.DICE_4 => diceD4Prefab,
+            DICE_TYPE.DICE_6 => diceD6Prefab,
+            _ => diceD6Prefab
+        };
+
+        return Instantiate(prefab, transform);
+    }
+
+    private void ApplyDiceColor(bool isEnemy)
+    {
+        foreach (var mat in diceMaterials)
+        {
+            mat.color = isEnemy ? enemyDiceColor : originDiceColor;
+        }
+    }
+
+    public void ClearDices()
+    {
+        foreach (var dice in activeDices)
+        {
+            if (dice != null)
+                Destroy(dice.gameObject);
+        }
+        activeDices.Clear();
+    }
+
+    // ===============================
+    // UPDATE CHECK
+    // ===============================
+    private void Update()
+    {
+        if (!isLaunched) return;
+
+        foreach (var dice in activeDices)
+        {
+            if (!dice.isStoped)
+                return;
+        }
+
+        isLaunched = false;
+        StartCoroutine(EndDiceAnim());
+    }
+
+    IEnumerator EndDiceAnim()
+    {
+        yield return new WaitForSeconds(1f);
+
+        // Your existing UI flow
+        if (isEnemyDiceTurn)
+        {
+            if (UIGameManager.instance.isPlayerTurn)
+            {
+                if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+                {
+                    UIGameManager.instance.bottomAttackPanel.OnFinishEnemy();
+                }
+            }
+            else
+            {
+                // DEFENCE PANEL
+            }
+        }
+        else if (UIGameManager.instance.isPlayerTurn)
+        {
+            if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+            {
+                UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+            }
+            else if (UIGameManager.instance.bottomAttackPanel.gameObject.activeSelf)
+            {
+                UIGameManager.instance.bottomAttackPanel.OnFinishDice();
+            }
+        }
+        else
+        {
+            // DEFENCE PANEL
+            if (UIGameManager.instance.stackTurnStartPanel.isStackTurn)
+            {
+                UIGameManager.instance.stackTurnStartPanel.OnFinishDice();
+            }
+            //UIGameManager.instance.defencePanel.OnFinishDice();
+        }
+    }
+}

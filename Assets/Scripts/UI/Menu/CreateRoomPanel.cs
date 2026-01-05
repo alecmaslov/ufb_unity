@@ -1,0 +1,87 @@
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Core;
+using UFB.Events;
+using UFB.Network;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CreateRoomPanel : MonoBehaviour
+{
+    public List<RoomCharaterItem> characterItems = new List<RoomCharaterItem>();
+    public RoomCharaterItem characterItemPrefab;
+    public Transform characterItemParent;
+    
+    public Text roomNameText;
+    public QRCodeGenerator qrCodeImage;
+    public Text tokenText;
+    
+    public UIRoomData roomData;
+    // Start is called before the first frame update
+
+    public void InitPanel()
+    {
+        gameObject.SetActive(true);
+        StartCoroutine(GetRoomData());
+    }
+
+    IEnumerator GetRoomData()
+    {
+        yield return new WaitForSeconds(2f);
+        GetRoomDataById(MainScene.instance.roomData.id);
+    }
+
+    public async void GetRoomDataById(string roomId)
+    {
+        var data = await ServiceLocator.Current.Get<NetworkService>().GetRoomDataById(roomId);
+        InitData(data);
+    }
+    
+    public void InitData()
+    {
+        qrCodeImage.GenerateQRCode(roomData.id);
+        roomNameText.text = roomData.id;
+        tokenText.text = roomData.inviteToken ?? "";
+        for (var i = 1; i < characterItemParent.childCount; i++)
+        {
+            Destroy(characterItemParent.GetChild(i).gameObject);
+        }
+        
+        foreach (var roomDataMember in roomData.members)
+        {
+            var item =  Instantiate(characterItemPrefab, characterItemParent);
+            item.InitData(roomDataMember, roomDataMember.id == roomData.ownerId);
+            characterItems.Add(item);
+        }
+        gameObject.SetActive(true);
+    }
+
+    public void InitData(UIRoomData message)
+    {
+        roomData = message;
+        InitData();
+    }
+
+    public void OnJoinRoomButtonClick()
+    {
+        
+        /*
+        var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
+        var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
+
+        ServiceLocator.Current.Get<GameService>().JoinGame(MainScene.instance.roomData.id, joinOptions);*/
+        
+        var joinOptions = new UfbRoomJoinOptions {
+            displayName = MainScene.instance.userData.displayName,
+            characterId = MainScene.instance.userData.id
+        };
+        ServiceLocator.Current.Get<GameService>().JoinGame(roomData.id, joinOptions);
+    }
+
+    public void OnTokenGenerate()
+    {
+        MainScene.instance.roomData.inviteToken = tokenText.text;
+    }
+}

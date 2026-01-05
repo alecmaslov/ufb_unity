@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class UserData
@@ -42,4 +43,23 @@ public struct HeroData
     public int used_stacks;
     public int traveled_tiles;
     public int chests;
+}
+
+[Serializable]
+public class UIRoomData
+{
+    public string id;
+    public string name;
+    public RoomUserData[] members;
+    public string ownerId;
+    public bool isPrivate;
+    public string inviteToken;
+}
+
+[Serializable]
+public struct RoomUserData
+{
+    public string id;
+    public string name;
+    public string characterClass;
 }

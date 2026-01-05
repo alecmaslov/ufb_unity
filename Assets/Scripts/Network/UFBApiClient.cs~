@@ -163,6 +163,31 @@ namespace UFB.Network
             }
         }
         
+        public async Task<UIRoomData> GetRoomDataById(string roomId)
+        {
+            try
+            {
+                var response = await Post<UIRoomData>(
+                    "/lobby/get-room-data",
+                    JsonConvert.SerializeObject(new { email, password })
+                );
+                
+                string clientId = response.clientId;
+                string error = response.error;
+                
+                Debug.Log(clientId);
+                Debug.Log(error);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                RegisterUserResponse result = new RegisterUserResponse();
+                result.error = e.Message;
+                return result;
+            }
+        }
+        
         public async Task<RegisterUserResponse> ChangePasswordHandler(string email, string oldPassword, string password)
         {
             try
@@ -218,7 +243,7 @@ namespace UFB.Network
             try
             {
                 var response = await Post<HeroData>(
-                    "/user/get-hero-detail",
+                    "/character/get-hero-detail",
                     JsonConvert.SerializeObject(new { userId, characterClass })
                 );
                 

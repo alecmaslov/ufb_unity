@@ -23,6 +23,8 @@ namespace UFB.Network.RoomMessageTypes
     public class UfbRoomCreateOptions : ISendMessage
     {
         public string mapName = "kaiju";
+        public string ownerId = "";
+        public bool isPrivate = false;
         public UfbRoomRules rules = new UfbRoomRules();
     }
 

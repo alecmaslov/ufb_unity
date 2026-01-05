@@ -1,0 +1,41 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UFB.Core;
+using UFB.Network.RoomMessageTypes;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class JoinRoomPanel : MonoBehaviour
+{
+    public InputField roomName;
+    public InputField roomToken;
+    public QRScanner qrScanner;
+
+    private void OnEnable()
+    {
+        qrScanner.Init();
+    }
+
+    public void JoinRoom()
+    {
+        var joinOptions = new UfbRoomJoinOptions {
+            displayName = MainScene.instance.userData.displayName,
+            characterId = MainScene.instance.userData.id
+        };
+        ServiceLocator.Current.Get<GameService>().JoinGame(roomName.text, joinOptions);
+    }
+
+    public void OnScanQRCode()
+    {
+        qrScanner.gameObject.SetActive(true);
+        qrScanner.StartScan();
+    }
+
+    public void EndScanQRCode(string code)
+    {
+        qrScanner.gameObject.SetActive(false);
+        roomName.text = code;
+        Debug.Log("QR CODE: " + code);
+    }
+}
