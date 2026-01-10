@@ -21,7 +21,7 @@ public class RoomCharaterItem : MonoBehaviour
         gameObject.SetActive(true);
         
         Addressables
-            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + e.characterClass)
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + data.characterClass)
             .Completed += (op) =>
         {
             if (

@@ -1,33 +1,47 @@
 using Colyseus;
 using UnityEngine;
 using System.Threading.Tasks;
+using UFB.Core;
+using UFB.Network;
+using UFB.Network.RoomMessageTypes;
 using UFB.StateSchema;
 
 public class LobbyService : MonoBehaviour
 {
     public static LobbyService Instance;
-    private ColyseusClient client;
     private ColyseusRoom<LobbyState> lobby;
 
     async void Awake()
     {
         Instance = this;
-        client = new ColyseusClient("ws://localhost:2567");
+        //await ConnectLobby();
+    }
+
+    public async void OnConnectLobby()
+    {
         await ConnectLobby();
         HandleMessage();
     }
-
+    
     public async Task ConnectLobby()
     {
-        lobby = await client.JoinOrCreate<LobbyState>("lobby");
+        
+        lobby = await ServiceLocator.Current
+            .Get<NetworkService>().ColyseusClient.JoinOrCreate<LobbyState>("lobby");
         lobby.OnStateChange += OnLobbyUpdate;
     }
 
     private void HandleMessage()
     {
         lobby.OnMessage<UIRoomData>("room-by-id", GetRoomById);
+        lobby.OnMessage<string>("create-room", ShowWaitingRoom);
     }
 
+    private async void ShowWaitingRoom(string roomId)
+    {
+        Debug.Log("ShowWaitingRoom : " +  roomId);
+        await WaitingRoomManager.instance.Join(roomId);
+    }
     private void GetRoomById(UIRoomData message)
     {
         MainScene.instance.createRoomPanel.InitData(message);
@@ -35,7 +49,7 @@ public class LobbyService : MonoBehaviour
 
     void OnLobbyUpdate(LobbyState state, bool first)
     {
-        foreach (RoomData room in state.rooms.Values)
+        foreach (LobbyRoomInfo room in state.rooms.Values)
         {
             Debug.Log($"Room: {room.name} ({room.playerCount}/{room.maxPlayers})");
         }
@@ -50,22 +64,19 @@ public class LobbyService : MonoBehaviour
         lobby.Send("room-by-id", roomId);
     }
     
-    public void CreateRoom(string name, int maxPlayers, bool isPrivate)
+    public void CreateRoom(UfbRoomCreateOptions createOptions, UfbRoomJoinOptions  joinOptions)
     {
-        lobby.Send("create", new
+        var name = createOptions.mapName;
+        var isPrivate = createOptions.isPrivate;
+        var maxPlayers = createOptions.rules.maxPlayers;
+        var ownerId = createOptions.ownerId;
+        lobby.Send("create_room", new
         {
             name,
+            ownerId,
             maxPlayers,
             isPrivate
         });
-    }
-
-    public async Task JoinRoom(string roomId, string inviteToken = null)
-    {
-        /*await client.JoinById(roomId, new
-        {
-            inviteToken
-        });*/
     }
 
     public void DeleteRoom(string roomId)

@@ -22,9 +22,11 @@ namespace UFB.Network.RoomMessageTypes
 
     public class UfbRoomCreateOptions : ISendMessage
     {
+        public string roomId = "";
         public string mapName = "kaiju";
         public string ownerId = "";
         public bool isPrivate = false;
+        public string[] turnIds;
         public UfbRoomRules rules = new UfbRoomRules();
     }
 

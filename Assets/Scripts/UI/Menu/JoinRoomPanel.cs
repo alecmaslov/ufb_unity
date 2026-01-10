@@ -17,13 +17,17 @@ public class JoinRoomPanel : MonoBehaviour
         qrScanner.Init();
     }
 
-    public void JoinRoom()
+    public async void JoinRoom()
     {
-        var joinOptions = new UfbRoomJoinOptions {
+        /*var joinOptions = new UfbRoomJoinOptions {
             displayName = MainScene.instance.userData.displayName,
             characterId = MainScene.instance.userData.id
         };
-        ServiceLocator.Current.Get<GameService>().JoinGame(roomName.text, joinOptions);
+        ServiceLocator.Current.Get<GameService>().JoinGame(roomName.text, joinOptions);*/
+        if(roomName.text == "") return;
+        await WaitingRoomManager.instance.Join(roomName.text);
+        
+        gameObject.SetActive(false);
     }
 
     public void OnScanQRCode()

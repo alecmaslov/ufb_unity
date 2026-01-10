@@ -114,7 +114,7 @@ namespace UFB.Core
             await tcs.Task;
         }
 
-        public async Task CreateGame(
+        public async void CreateGame(
             UfbRoomCreateOptions createOptions,
             UfbRoomJoinOptions joinOptions,
             bool isSoloMode = true
@@ -135,7 +135,7 @@ namespace UFB.Core
                         
                         MainScene.instance.roomData.id =  room.ReconnectionToken.RoomId;
                         MainScene.instance.roomData.name = room.Name;
-                        Room = room;
+                        //Room = room;
                         
                         if(isSoloMode)
                             tcs.SetResult(await LoadGame(room));
@@ -144,9 +144,9 @@ namespace UFB.Core
             await tcs.Task;
         }
 
-        public async Task<bool> LoadGame(ColyseusRoom<UfbRoomState> room)
+        private async Task<bool> LoadGame(ColyseusRoom<UfbRoomState> room)
         {
-            //Room = room;
+            Room = room;
             var tcs = new TaskCompletionSource<bool>();
             SceneManager.LoadSceneAsync("Game").completed += (op) =>
             {

@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Colyseus;
+using UFB.Core;
+using UFB.Network;
+using UFB.Network.RoomMessageTypes;
+using UFB.StateSchema;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class WaitingRoomManager : MonoBehaviour
+{
+    public static WaitingRoomManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    ColyseusRoom<WaitingState> room;
+
+    public async Task Join(string roomId)
+    {
+        var createOptions = MainScene.instance.userData.createOptions;
+        var joinOptions = MainScene.instance.userData.joinOptions;
+        createOptions.roomId = roomId;
+        room = await ServiceLocator.Current
+            .Get<NetworkService>().ColyseusClient.JoinById<WaitingState>(
+                roomId,                 
+                new Dictionary<string, object>()
+                {
+                    { "createOptions", createOptions.ConvertToDictionary() },
+                    { "joinOptions", joinOptions.ConvertToDictionary() }
+                }
+            );
+        room.OnMessage<string>("go_to_game", StartGame);
+        room.OnStateChange += OnStateChanged;
+    }
+
+    public async void PlayGame(string ownerId)
+    {
+        var createOptions = MainScene.instance.userData.createOptions;
+        var joinOptions = MainScene.instance.userData.joinOptions;
+        joinOptions.playerId = MainScene.instance.userData.id;
+        var turnIds = new List<string>();
+        room.State.players.ForEach(p =>
+        {
+            turnIds.Add(p.id);
+        });
+        
+        createOptions.turnIds =  turnIds.ToArray();
+        
+        await ServiceLocator.Current
+            .Get<GameService>()
+            .CreateGame(
+                createOptions,
+                joinOptions
+            );
+        
+        room.Send("start_game", ownerId);
+    }
+
+    void StartGame(string gameRoomId)
+    {
+        //SceneManager.LoadScene("Game");
+        //GameManager.Instance.JoinGame(gameRoomId);
+        if(MainScene.instance.userData.id == room.State.ownerId) return;
+        
+        var joinOptions = MainScene.instance.userData.joinOptions;
+        joinOptions.playerId = MainScene.instance.userData.id;
+        ServiceLocator.Current.Get<GameService>().JoinGame(gameRoomId, joinOptions);
+    }
+
+    void OnStateChanged(WaitingState state, bool isFirstState)
+    {
+        UIRoomData data = MainScene.instance.createRoomPanel.roomData;
+        data.id = state.roomId;
+        data.ownerId = state.ownerId;
+        data.members.Clear();
+        
+        state.players.ForEach(p =>
+        {
+            data.members.Add(new RoomUserData()
+            {
+                id = p.id,
+                name = p.displayName,
+                characterClass = p.characterClass
+            });
+        });
+        
+        MainScene.instance.createRoomPanel.roomData = data;
+        
+        MainScene.instance.createRoomPanel.InitPanel();
+    }
+}

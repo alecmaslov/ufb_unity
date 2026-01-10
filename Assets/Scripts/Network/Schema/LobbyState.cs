@@ -10,15 +10,15 @@ using Action = System.Action;
 
 namespace UFB.StateSchema {
 	public partial class LobbyState : Schema {
-		[Type(0, "map", typeof(MapSchema<RoomData>))]
-		public MapSchema<RoomData> rooms = new MapSchema<RoomData>();
+		[Type(0, "map", typeof(MapSchema<LobbyRoomInfo>))]
+		public MapSchema<LobbyRoomInfo> rooms = new MapSchema<LobbyRoomInfo>();
 
 		/*
 		 * Support for individual property change callbacks below...
 		 */
 
-		protected event PropertyChangeHandler<MapSchema<RoomData>> __roomsChange;
-		public Action OnRoomsChange(PropertyChangeHandler<MapSchema<RoomData>> __handler, bool __immediate = true) {
+		protected event PropertyChangeHandler<MapSchema<LobbyRoomInfo>> __roomsChange;
+		public Action OnRoomsChange(PropertyChangeHandler<MapSchema<LobbyRoomInfo>> __handler, bool __immediate = true) {
 			if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
 			__callbacks.AddPropertyCallback(nameof(this.rooms));
 			__roomsChange += __handler;
@@ -31,7 +31,7 @@ namespace UFB.StateSchema {
 
 		protected override void TriggerFieldChange(DataChange change) {
 			switch (change.Field) {
-				case nameof(rooms): __roomsChange?.Invoke((MapSchema<RoomData>) change.Value, (MapSchema<RoomData>) change.PreviousValue); break;
+				case nameof(rooms): __roomsChange?.Invoke((MapSchema<LobbyRoomInfo>) change.Value, (MapSchema<LobbyRoomInfo>) change.PreviousValue); break;
 				default: break;
 			}
 		}

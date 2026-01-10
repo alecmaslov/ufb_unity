@@ -6,29 +6,130 @@
   <component name="ChangeListManager">
     <list default="true" id="2768ae09-9609-4612-9406-86d69bf85a54" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/Menu/bottom-back.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Menu/bottom-back.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/Menu/card.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Menu/card.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/Menu/letter.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Menu/letter.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/Menu/toggle-off.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Menu/toggle-off.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/Menu/toggle-on.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/Menu/toggle-on.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/UI/bottom.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/UI/bottom.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Images/merchant/ui-set.psd.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Images/merchant/ui-set.psd.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/Panels/MainMenuPanel.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/Panels/MainMenuPanel.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Character/CharacterManager.cs~" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs~" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Messages/RoomSendMessageTypes.cs~" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Avartar.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Avartar/Adaster 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Avartar/Adaster 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Background.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Background/background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Background/background.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/BtnBack.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/BtnBack.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/Group 43.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/Group 43.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/avatar 8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/avatar 8.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/avatarBack.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/avatarBack.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/but3 (1).png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/but3 (1).png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/but3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/but3.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/frame-map 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/frame-map 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/pins 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Button/pins 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Card.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Card/card 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Card/card 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Logo.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Logo/Logo-1 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Logo/Logo-1 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Logo/Logo-1 1@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Logo/Logo-1 1@2x.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Map.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Map/Group 52.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Map/Group 52.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/power_shield2 3.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 3.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 4.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/Skill/questKill 5.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/Group 63.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/Group 63.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/GroupMenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/GroupMenu.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/Layer_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/Layer_1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/back 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/back 2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/back 8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/back 8.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/bottom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/bottom.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/but2 3 (1).png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/but2 3 (1).png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/energy2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/energy2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/foto 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/foto 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/health2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/health2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/line 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/line 2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/sett 1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/sett 1.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/ulti-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/ulti-2.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/ultimate.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/New Design/UI/ultimate.png.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomAttackPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/BottomDefeatPanel.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EndPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EndPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EndPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EndPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/StackTurnStartPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateGameMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateGameMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/GameMenuLogic.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/GameMenuLogic.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinGameMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinGameMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinRoomPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinRoomPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinRoomPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/JoinRoomPanel.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainMenu.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs~" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectCharacterMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectCharacterMenu.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectMapMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectMapMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectMapMenu.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SelectMapMenu.cs~" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SettingMenu.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/SettingMenu.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIGameManager.cs~" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +151,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/QRCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/DiceAreaUpdate.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/WaitingRoomManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.21.21/Runtime/ResourceManager/Util/MonoBehaviourCallbackHooks.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/io.colyseus.sdk@802bd87577/Runtime/Colyseus/Models/ColyseusClient.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/io.colyseus.sdk@802bd87577/Runtime/Colyseus/Room/ColyseusRoom.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/io.colyseus.sdk@802bd87577/Runtime/Colyseus/Serializer/Schema/Schema.cs" root0="SKIP_HIGHLIGHTING" />
@@ -116,15 +219,13 @@
       <option name="useMixedMode" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="22856">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="22856" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
@@ -152,7 +253,8 @@
       <workItem from="1766229750276" duration="31172000" />
       <workItem from="1767027115446" duration="1227000" />
       <workItem from="1767584425450" duration="2659000" />
-      <workItem from="1767601153676" duration="16281000" />
+      <workItem from="1767601153676" duration="51025000" />
+      <workItem from="1767897678925" duration="21006000" />
     </task>
     <servers />
   </component>
@@ -184,58 +286,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs</url>
-          <line>49</line>
-          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\Network\Schema\LobbyService.cs" containingFunctionPresentation="Method 'GetRoomById'">
-            <startOffsets>
-              <option value="1192" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1225" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Network/Schema/LobbyService.cs</url>
-          <line>45</line>
-          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\Network\Schema\LobbyService.cs" containingFunctionPresentation="Method 'GetRoomById'">
-            <startOffsets>
-              <option value="1111" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1129" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs</url>
-          <line>131</line>
-          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\Core\Services\GameService.cs" containingFunctionPresentation="Lambda expression inside Method 'CreateGame'">
-            <startOffsets>
-              <option value="3862" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3925" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Core/Services/GameService.cs</url>
-          <line>143</line>
-          <properties documentPath="E:\Unity\Money\Project\ufb_unity\Assets\Scripts\Core\Services\GameService.cs" containingFunctionPresentation="Method 'CreateGame'">
-            <startOffsets>
-              <option value="4486" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4501" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

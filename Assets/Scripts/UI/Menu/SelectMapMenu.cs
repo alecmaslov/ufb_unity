@@ -47,6 +47,7 @@ namespace UFB.UI
         private int _characterIndex = 0;
 
         public bool IsSoloMode = false;
+        public bool IsJoinMode = false;
         
         [FormerlySerializedAs("joinRoomPanel")] public CreateRoomPanel createRoomPanel;
         
@@ -116,6 +117,7 @@ namespace UFB.UI
         {
             var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
             createOptions.mapName = map.name;
+            createOptions.ownerId = MainScene.instance.userData.id;
             _characterName.text = map.name;
             SetItemImage(map.id);
             _menuManager.SetMenuData("createOptions", createOptions);
@@ -128,10 +130,16 @@ namespace UFB.UI
                 var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
                 var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
 
+                MainScene.instance.userData.createOptions = createOptions;
+                MainScene.instance.userData.joinOptions = joinOptions;
+                //joinOptions.playerId =  MainScene.instance.userData.id;
+                
                 if (IsSoloMode)
                 {
                     _menuManager.OpenMenu(loadingMenu);
-
+                    createOptions.roomId = MainScene.instance.userData.id;
+                    createOptions.ownerId = MainScene.instance.userData.id;
+                    createOptions.turnIds = new[] { MainScene.instance.userData.id };
                     ServiceLocator.Current
                         .Get<GameService>()
                         .CreateGame(
@@ -139,18 +147,17 @@ namespace UFB.UI
                             joinOptions
                         );
                 }
-                else
+                else if(!IsJoinMode)
                 {
-                    ServiceLocator.Current
-                        .Get<GameService>()
-                        .CreateGame(
-                            createOptions,
-                            joinOptions,
-                            false
-                        );
-                    createRoomPanel.InitPanel();
+                    LobbyService.Instance.CreateRoom(createOptions, joinOptions);
                     gameObject.SetActive(false);
                 }
+                else
+                {
+                    MainScene.instance.joinRoomPanel.gameObject.SetActive(true);
+                }
+                
+                CloseMenu();
             }
             catch (Exception e)
             {
@@ -166,6 +173,13 @@ namespace UFB.UI
         public void OnMultiPlayerCreateButton()
         {
             IsSoloMode = false;
+            IsJoinMode = false;
+        }
+
+        public void OnMultiPlayerJoinButton()
+        {
+            IsSoloMode = false;
+            IsJoinMode = true;
         }
     }
 }

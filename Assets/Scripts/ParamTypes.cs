@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
+using UFB.Network.RoomMessageTypes;
 
 [Serializable]
 public class UserData
 {
+    public string sessionId;
     public string id;
     public string email;
     public string displayName;
     public int gold;
+    
+    public UfbRoomJoinOptions  joinOptions;
+    public UfbRoomCreateOptions createOptions;
     
     public int collectedGold;
     public int losses;
@@ -50,7 +55,7 @@ public class UIRoomData
 {
     public string id;
     public string name;
-    public RoomUserData[] members;
+    public List<RoomUserData> members = new ();
     public string ownerId;
     public bool isPrivate;
     public string inviteToken;

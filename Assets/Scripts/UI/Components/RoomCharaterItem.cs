@@ -13,11 +13,11 @@ public class RoomCharaterItem : MonoBehaviour
 
     public Text owerText;
 
-    public void InitData(RoomUserData data, bool isOwner = false)
+    public void InitData(RoomUserData data, bool isMe = false)
     {
         characterName.text = data.name;
         characterClass.text = $"Mount {data.characterClass}";
-        owerText.text = isOwner ? "Me" : "";
+        owerText.text = isMe ? "Me" : "";
         gameObject.SetActive(true);
         
         Addressables

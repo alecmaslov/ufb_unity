@@ -25,6 +25,12 @@ namespace UFB.Network
         {
             get { return _clientId; }
         }
+
+        public string PlayerId
+        {
+            get { return _playerId; }
+            set { _playerId = value; }
+        }
         public string Token
         {
             get { return _token; }
@@ -36,6 +42,7 @@ namespace UFB.Network
             }
         }
         private string _clientId;
+        private string _playerId;
         private string _token;
 
         public UfbApiClient(string apiBase, int port, bool isHttps = false)

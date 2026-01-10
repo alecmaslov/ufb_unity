@@ -168,12 +168,12 @@ namespace UFB.Network
             try
             {
                 var response = await Post<UIRoomData>(
-                    "/lobby/get-room-data",
-                    JsonConvert.SerializeObject(new { email, password })
+                    "/lobby/get-room",
+                    JsonConvert.SerializeObject(new { roomId })
                 );
                 
-                string clientId = response.clientId;
-                string error = response.error;
+                string clientId = response.id;
+                string error = response.ownerId;
                 
                 Debug.Log(clientId);
                 Debug.Log(error);
@@ -182,8 +182,8 @@ namespace UFB.Network
             catch (Exception e)
             {
                 Debug.Log("Exception: " + e);
-                RegisterUserResponse result = new RegisterUserResponse();
-                result.error = e.Message;
+                UIRoomData result = new UIRoomData();
+                result.id = "error";
                 return result;
             }
         }

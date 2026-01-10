@@ -11,8 +11,6 @@ namespace UFB.UI
 {
     public class MainMenu : Menu
     {
-        public Menu newGameMenu;
-        public Menu joinGameMenu;
         public Menu selectCharacterMenu;
         public Menu settingMenu;
 

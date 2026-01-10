@@ -70,7 +70,8 @@ namespace UFB.Character
     public class CharacterManager : MonoBehaviourService
     {
         public static CharacterManager Instance { get; private set; }
-        public CharacterController PlayerCharacter => _characters[_playerCharacterId];
+        public CharacterController PlayerCharacter => _characters.ContainsKey(_playerCharacterId)? _characters[_playerCharacterId] : null;
+
         public CharacterController SelectedCharacter => _characters[_selectedCharacterId];
 
         // public MapSchema<CharacterState> State { get; private set; }
@@ -115,7 +116,9 @@ namespace UFB.Character
             ServiceLocator.Current.Register(this);
 
             var gameService = ServiceLocator.Current.Get<GameService>();
-            _playerCharacterId = ServiceLocator.Current.Get<NetworkService>().ClientId;
+            _playerCharacterId = ServiceLocator.Current.Get<NetworkService>().PlayerId;
+            
+            Debug.Log($"game service player id : {_playerCharacterId}");
             // _selectedCharacterId = _playerCharacterId;
 
             if (gameService.Room == null)
@@ -160,6 +163,8 @@ namespace UFB.Character
 
         private void SetSelectedCharacter(string characterId)
         {
+            Debug.Log($"Selected player character : {characterId}");
+            
             _selectedCharacterId = characterId;
 
             CharacterController character = _characters[characterId];
@@ -219,8 +224,10 @@ namespace UFB.Character
 
                 character.transform.localEulerAngles = new Vector3(0, 180, 0);
 
+                Debug.Log($"[CharacterManager] Player {character.Id} : {characterState.id} : {key} has joined the game! {_playerCharacterId}, {characterState.type}");
                 if (character.Id == _playerCharacterId)
                 {
+                    Debug.Log("Selected player character");
                     SetSelectedCharacter(character.Id);
                 } else
                 {

@@ -114,7 +114,7 @@ namespace UFB.Core
             await tcs.Task;
         }
 
-        public async void CreateGame(
+        public async Task CreateGame(
             UfbRoomCreateOptions createOptions,
             UfbRoomJoinOptions joinOptions,
             bool isSoloMode = true

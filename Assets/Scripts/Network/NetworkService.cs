@@ -75,8 +75,15 @@ namespace UFB.Network
             get { return ApiClient.ClientId; }
         }
 
+        public string PlayerId
+        {
+            get { return ApiClient.PlayerId; }
+        }
+
         private ColyseusClient _colyseusClient;
 
+        public ColyseusClient ColyseusClient => _colyseusClient;
+        
         private readonly string _roomType = "ufbRoom";
 
         public NetworkService(UfbApiClient apiClient)
@@ -119,7 +126,7 @@ namespace UFB.Network
         )
         {
             joinRoomOptions.token = ApiClient.Token;
-            joinRoomOptions.playerId = ApiClient.ClientId;
+            //joinRoomOptions.playerId = ApiClient.ClientId;
             var room = await _colyseusClient.JoinById<UfbRoomState>(
                 roomId,
                 new Dictionary<string, object>()
@@ -138,8 +145,8 @@ namespace UFB.Network
         )
         {
             joinOptions.token = ApiClient.Token;
-            joinOptions.playerId = ApiClient.ClientId;
-            createOptions.ownerId =  ApiClient.ClientId;
+            //joinOptions.playerId = ApiClient.ClientId;
+            //createOptions.ownerId =  ApiClient.ClientId;
 
             var room = await _colyseusClient.Create<UfbRoomState>(
                 _roomType,

@@ -67,8 +67,13 @@ namespace UFB.UI
 
         public void OnConfirmButton()
         {
-            var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
-            joinOptions.characterClass = _characters[_characterIndex].id;
+            if (_menuManager.GetMenuData("joinOptions") is UfbRoomJoinOptions joinOptions)
+            {
+                joinOptions.characterClass = _characters[_characterIndex].id;
+                joinOptions.playerId = MainScene.instance.userData.id;
+                joinOptions.displayName = MainScene.instance.userData.displayName;
+            }
+
             // _menuManager.SetMenuData("joinOptions", joinOptions);
             _menuManager.CloseMenu();
             _menuManager.OpenMenu(selectMapMenu);

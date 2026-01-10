@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UFB.Core;
-using UFB.Events;
-using UFB.Network;
 using UFB.Network.RoomMessageTypes;
-using UFB.StateSchema;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +11,10 @@ public class CreateRoomPanel : MonoBehaviour
     public Transform characterItemParent;
     
     public Text roomNameText;
-    public Image qrCodeImage;
+    public QRCodeGenerator qrCodeImage;
     public Text tokenText;
+    
+    public GameObject StartGameButton;
     
     public UIRoomData roomData;
     // Start is called before the first frame update
@@ -24,23 +22,13 @@ public class CreateRoomPanel : MonoBehaviour
     public void InitPanel()
     {
         gameObject.SetActive(true);
-        StartCoroutine(GetRoomData());
-    }
-
-    IEnumerator GetRoomData()
-    {
-        yield return new WaitForSeconds(2f);
-        GetRoomDataById(MainScene.instance.roomData.id);
-    }
-
-    public async void GetRoomDataById(string roomId)
-    {
-        var data = await ServiceLocator.Current.Get<NetworkService>().GetRoomDataById(roomId);
-        InitData(data);
+        //StartCoroutine(GetRoomData());
+        InitData();
     }
     
     public void InitData()
     {
+        qrCodeImage.GenerateQRCode(roomData.id);
         roomNameText.text = roomData.id;
         tokenText.text = roomData.inviteToken ?? "";
         for (var i = 1; i < characterItemParent.childCount; i++)
@@ -51,9 +39,10 @@ public class CreateRoomPanel : MonoBehaviour
         foreach (var roomDataMember in roomData.members)
         {
             var item =  Instantiate(characterItemPrefab, characterItemParent);
-            item.InitData(roomDataMember, roomDataMember.id == roomData.ownerId);
+            item.InitData(roomDataMember, roomDataMember.id == MainScene.instance.userData.id);
             characterItems.Add(item);
         }
+        StartGameButton.SetActive(roomData.ownerId == MainScene.instance.userData.id);
         gameObject.SetActive(true);
     }
 
@@ -65,7 +54,11 @@ public class CreateRoomPanel : MonoBehaviour
 
     public void OnJoinRoomButtonClick()
     {
-        
+        if (MainScene.instance.userData.id == roomData.ownerId)
+        {
+            WaitingRoomManager.instance.PlayGame(roomData.ownerId);
+            return;
+        }
         /*
         var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
         var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;

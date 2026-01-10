@@ -763,6 +763,8 @@ public class UIGameManager : MonoBehaviour
             curTurnTime -= Time.deltaTime;
         }
 
+        if(CharacterManager.Instance.PlayerCharacter == null) return;
+        
         if (CharacterManager.Instance.PlayerCharacter.State.stats.energy.current == 0 && isPlayerTurn)
         {
             curNextTurnTime += Time.deltaTime;

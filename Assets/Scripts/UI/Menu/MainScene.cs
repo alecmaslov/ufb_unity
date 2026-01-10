@@ -16,7 +16,8 @@ public class MainScene : MonoBehaviour
     public UserData userData = new UserData();
     public UIRoomData roomData = new UIRoomData();
     
-    [FormerlySerializedAs("joinRoomPanel")] public CreateRoomPanel createRoomPanel;
+    public CreateRoomPanel createRoomPanel;
+    public JoinRoomPanel joinRoomPanel;
     
     public GameObject LoginPanel;
     public GameObject RegisterPanel;
@@ -42,7 +43,7 @@ public class MainScene : MonoBehaviour
         if (email != "" && password != "")
         {
             Debug.Log("Please fill all the fields");
-            SignIn();
+            //SignIn();
         }
     }
 
@@ -114,8 +115,15 @@ public class MainScene : MonoBehaviour
             userData.gold = data.gold;
             userData.id = data.clientId;
             
+            ServiceLocator.Current.Get<NetworkService>().ApiClient.PlayerId = userData.id;
+            
+            
+            Debug.Log($"player id : {ServiceLocator.Current.Get<NetworkService>().ApiClient.PlayerId}");
+            
             Debug.Log(data.clientId);
             ConnectServer(data.clientId);
+            
+            LobbyService.Instance.OnConnectLobby();
         }
         else
         {
@@ -133,6 +141,8 @@ public class MainScene : MonoBehaviour
         // we must wait until we are connected to try and perform any other actions
         await ServiceLocator.Current.Get<NetworkService>().Connect(userId);
         MenuManager.Instance.OpenMenu(MenuManager.Instance.initialMenu);
+
+        userData.sessionId = ServiceLocator.Current.Get<NetworkService>().ApiClient.ClientId;
         
         gameObject.SetActive(false);
         // OnReconnectRoom();
