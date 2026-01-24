@@ -64,6 +64,7 @@ public class GlobalDefine
 
         public static string COMPLETE_QUEST = "COMPLETE_QUEST";
         public static string ACTIVE_USER = "ACTIVE_USER";
+        public static string SET_STAB_ATTACK = "SET_STAB_ATTACK";
     }
 
     public static class CLIENT_MESSAGE
