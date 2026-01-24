@@ -6,7 +6,7 @@ public class DiceCountObject : MonoBehaviour
 {
     public int diceCount = 1;
     public Rigidbody rigidbody;
-    public float speed = 20.0f;
+    private float speed = 8.0f;
     public float rotspeed = 400.0f;
     public float upHeight = 5;
 

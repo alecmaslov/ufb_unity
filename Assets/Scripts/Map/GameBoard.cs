@@ -108,7 +108,7 @@ namespace UFB.Map
             {
                 // var tile = Tiles[entity.tileId];
                 Debug.Log(
-                    $"Spawning entity {entity.prefabAddress}"
+                    $"Spawning entity {entity.prefabAddress}........."
                 );
                 // SpawnEntity(entity.prefabAddress, tile);
                 SpawnEntity(entity);
@@ -133,6 +133,18 @@ namespace UFB.Map
                 var go = await task.Task;
                 tile.AttachGameObject(go, true);
                 go.GetComponent<ISpawnableEntity>().Initialize(spawnEntity);
+
+                spawnEntity.OnTileIdChange(((value, previousValue) =>
+                {
+                    Debug.Log("Change chest tile id : " +  value + " , " + spawnEntity.prefabAddress);
+                    if (spawnEntity.prefabAddress is "Entities/chest" or "Entities/ItemBag" or "Entities/merchant")
+                    {
+                        Debug.Log("change position");
+                        var tile1 = Tiles[value]; 
+                        tile1.AttachGameObject(go, true);
+                    }
+
+                }));
             }
             catch (Exception e)
             {

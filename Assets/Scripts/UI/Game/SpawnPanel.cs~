@@ -153,7 +153,14 @@ public class SpawnPanel : MonoBehaviour
         List<ResultItem> powers = new List<ResultItem>();
         
         items.Add(new ResultItem(itemIdx, 1));
-        powers.Add(new ResultItem(powerIdx, 1));
+        if (_spawnId == "default")
+        {
+            powers.Add(new ResultItem(powerIdx, 1));
+        }
+        else
+        {
+            stacks.Add(new ResultItem(powerIdx, 1));
+        }
         UIGameManager.instance.itemResultPanel.InitPanel(items, stacks, powers, coin);
 
         // posPanel.SetActive(true);

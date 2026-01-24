@@ -28,7 +28,6 @@ public class GlobalDefine
         public static string ADD_EXTRA_SCORE = "addExtraScore";
         public static string GET_BOMB_DAMAGE = "getBombDamage";
         public static string GET_MERCHANT_DATA = "getMerchantData";
-        public static string RESPAWN_MERCHANT = "respawnMerchant";
         public static string UNEQUIP_POWER_RECEIVED = "unEquipPowerReceived";
         public static string CHARACTER_MOVED = "characterMoved";
         public static string SET_HIGHLIGHT_RECT = "setHighLightRect";
@@ -64,6 +63,8 @@ public class GlobalDefine
         public static string MERCHANT_RESULT = "MERCHANT_RESULT";
 
         public static string COMPLETE_QUEST = "COMPLETE_QUEST";
+        public static string ACTIVE_USER = "ACTIVE_USER";
+        public static string SET_STAB_ATTACK = "SET_STAB_ATTACK";
     }
 
     public static class CLIENT_MESSAGE

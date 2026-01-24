@@ -168,8 +168,6 @@ public class BottomAttackPanel : MonoBehaviour
                 )
             );
             UIGameManager.instance.arrowsStabPanel.gameObject.SetActive(false);
-            
-            UIGameManager.instance.attackResultPanel.InitStab((ITEM) itemType);
         }
         else
         {
@@ -588,7 +586,7 @@ public class BottomAttackPanel : MonoBehaviour
     {
         enemyStackImage.gameObject.SetActive(false);
         enemyStackImage.transform.parent.gameObject.SetActive(false);
-        int diceCount = DiceArea.instance.diceResultCount;
+        int diceCount = DiceAreaUpdate.instance.GetDiceCount();
         EventBus.Publish(
             RoomSendMessageEvent.Create(
                 GlobalDefine.CLIENT_MESSAGE.END_POWER_MOVE_ITEM,

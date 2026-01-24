@@ -194,13 +194,6 @@ public class SpawnPanel : MonoBehaviour
         }
         gameObject.SetActive(false);
         
-        EventBus.Publish(
-            new SpawnItemEvent
-            {
-                tileId = tileId,
-            }
-        );
-        
         Debug.Log("-----<<<<<<");
         // moveText.text = "Move To";
     }

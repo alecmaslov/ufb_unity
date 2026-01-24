@@ -27,14 +27,6 @@ namespace UFB.Events
         }
     }
 
-    public class SpawnItemEvent
-    {
-        public string tileId = "";
-        public Transform target = null;
-        public string targetTileId = "";
-        public Tile tile = null;
-    }
-
     public class SetCameraStateEvent
     {
         public CameraState cameraState;

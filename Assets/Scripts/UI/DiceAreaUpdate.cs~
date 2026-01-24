@@ -39,7 +39,7 @@ public class DiceAreaUpdate : MonoBehaviour
     public int GetDiceCount()
     {
         var diceResultCount = 0;
-        foreach (DiceData dice in dices)
+        foreach (DiceData dice in diceData)
         {
             diceResultCount += dice.diceCount;
         }

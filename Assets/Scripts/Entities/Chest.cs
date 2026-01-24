@@ -22,19 +22,10 @@ namespace UFB.Entities {
 
         private void OnEnable()
         {
-            EventBus.Subscribe<SpawnItemEvent>(OnGetItemEvent);
 
         }
         private void OnDisable()
         {
-            EventBus.Unsubscribe<SpawnItemEvent>(OnGetItemEvent);
-        }
-
-        private void OnGetItemEvent(SpawnItemEvent e)
-        {
-            if (e.tileId != SpawnEntity.tileId) return;
-            Destroy(gameObject);
-
         }
 
         public void OnClick()

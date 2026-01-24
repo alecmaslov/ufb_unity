@@ -130,8 +130,9 @@ public class CraftPanel : MonoBehaviour
     IEnumerator ChangeCoinAnimation(int newCoin, int preCoin)
     {
         float count = Mathf.Abs(newCoin - preCoin);
-        float duration = 1f;
-        float delta = duration / count;
+        var duration = 1f;
+        var delta = duration / count;
+        
         for (int i = 1; i <= count; i++)
         {
             yield return new WaitForSeconds(delta);

@@ -168,8 +168,6 @@ public class BottomAttackPanel : MonoBehaviour
                 )
             );
             UIGameManager.instance.arrowsStabPanel.gameObject.SetActive(false);
-            
-            UIGameManager.instance.attackResultPanel.InitStab((ITEM) itemType);
         }
         else
         {
@@ -323,6 +321,8 @@ public class BottomAttackPanel : MonoBehaviour
     public void InitAttack()
     {
         diceTimes = 0;
+        gameObject.SetActive(true);
+        
         InitDiceData();
 
         enemyStackImage.gameObject.SetActive(false);
@@ -341,7 +341,6 @@ public class BottomAttackPanel : MonoBehaviour
         }
 
         totalDiceCount = 0;
-        gameObject.SetActive(true);
         detailPart.SetActive(false); 
         punchPart.SetActive(false);
         monsterInfo.gameObject.SetActive(false);

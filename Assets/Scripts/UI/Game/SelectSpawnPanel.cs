@@ -44,17 +44,17 @@ public class SelectSpawnPanel : MonoBehaviour
                 }
             )
         );
-        UIGameManager.instance.controller.InitMovePos(tile);
-
-        ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
-        EventBus.Publish(
-            new CameraOrbitAroundEvent(
-                ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
-                0.3f
-            )
-        );
-        CameraManager.instance.SetTarget(UIGameManager.instance.controller.transform);
-        CameraManager.instance.OnActiveInputAction();
+        // UIGameManager.instance.controller.InitMovePos(tile);
+        //
+        // ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.gameObject.SetActive(true);
+        // EventBus.Publish(
+        //     new CameraOrbitAroundEvent(
+        //         ServiceLocator.Current.Get<CharacterManager>().PlayerCharacter.transform,
+        //         0.3f
+        //     )
+        // );
+        // CameraManager.instance.SetTarget(UIGameManager.instance.controller.transform);
+        // CameraManager.instance.OnActiveInputAction();
 
         InteractionManager.Instance.isSpawn = false;
 

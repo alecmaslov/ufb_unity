@@ -733,7 +733,7 @@ public class MovePanel : MonoBehaviour
                         UIGameManager.instance.bottomAttackPanel.gameObject.SetActive(false);
                         UIGameManager.instance.tapSelfPanel.gameObject.SetActive(false);
 
-                        if(controller.State.type == (int) USER_TYPE.MONSTER)
+                        if(controller.State.type == (int) USER_TYPE.MONSTER || (controller.State.type == (int) USER_TYPE.USER && controller.State.id != CharacterManager.Instance.PlayerCharacter.Id))
                         {
                             UIGameManager.instance.bottomAttackPanel.Init(controller.State);
                             UIGameManager.instance.selectNamePanel.UpdateTarget(tile.transform, controller.State.displayName);

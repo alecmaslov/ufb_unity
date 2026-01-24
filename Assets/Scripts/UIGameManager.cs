@@ -12,6 +12,7 @@ using UFB.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using UFB.Interactions;
+using CharacterController = UnityEngine.CharacterController;
 
 public class UIGameManager : MonoBehaviour
 {
@@ -135,7 +136,6 @@ public class UIGameManager : MonoBehaviour
         gameService.SubscribeToRoomMessage<AddExtraScoreMessage>(GlobalDefine.SERVER_MESSAGE.ADD_EXTRA_SCORE, OnReceiveExtraScore);
         gameService.SubscribeToRoomMessage<GetBombMessage>( GlobalDefine.SERVER_MESSAGE.GET_BOMB_DAMAGE, OnReceiveBombAttack );
         gameService.SubscribeToRoomMessage<GetMerchantDataMessage>(GlobalDefine.SERVER_MESSAGE.GET_MERCHANT_DATA, merchantPanel.InitMerchantData);
-        gameService.SubscribeToRoomMessage<GetReSpawnMerchantMessage>( GlobalDefine.SERVER_MESSAGE.RESPAWN_MERCHANT , OnReSpawnMerchant);
         gameService.SubscribeToRoomMessage<UnEquipItemMessage>(GlobalDefine.SERVER_MESSAGE.UNEQUIP_POWER_RECEIVED, OnUnEquipPowerReceived);
         gameService.SubscribeToRoomMessage<SetHighLightRectMessage>(GlobalDefine.SERVER_MESSAGE.SET_HIGHLIGHT_RECT, OnSetHighLightRectReceived);
         gameService.SubscribeToRoomMessage<SetDiceRollMessage>(GlobalDefine.SERVER_MESSAGE.SET_DICE_ROLL, OnSetDiceRoll);
@@ -175,7 +175,10 @@ public class UIGameManager : MonoBehaviour
 
         // Merchant result...
         gameService.SubscribeToRoomMessage<MerchantResultMessage>(GlobalDefine.SERVER_MESSAGE.MERCHANT_RESULT, OnReceiveMerchantResult);
+        gameService.SubscribeToRoomMessage<ActiveUserMessage>(GlobalDefine.SERVER_MESSAGE.ACTIVE_USER, OnReceiveActiveUser);
 
+        gameService.SubscribeToRoomMessage<StabAttackMessage>(GlobalDefine.SERVER_MESSAGE.SET_STAB_ATTACK, OnStabAttackResult);
+        
     }
 
     private void OnDisable()
@@ -184,6 +187,28 @@ public class UIGameManager : MonoBehaviour
         EventBus.Unsubscribe<SelectedCharacterEvent>(OnSelectedCharacterEvent);
     }
 
+    private void OnReceiveActiveUser(ActiveUserMessage message)
+    {
+        var user = CharacterManager.Instance.GetCharacterFromId(message.characterId);
+        var tile = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId];
+        
+        if(user == null) return;
+        
+        user.InitMovePos(tile);
+        user.gameObject.SetActive(true);
+
+        if (message.characterId != controller.Id) return;
+        
+        EventBus.Publish(
+            new CameraOrbitAroundEvent(
+                user.transform,
+                0.3f
+            )
+        );
+        CameraManager.instance.SetTarget(user.transform);
+        CameraManager.instance.OnActiveInputAction();
+    }
+    
     private void InitTurn(TurnMessage e)
     {
         isPlayerTurn = CharacterManager.Instance.PlayerCharacter.Id == e.characterId;
@@ -194,6 +219,10 @@ public class UIGameManager : MonoBehaviour
         { 
             CameraManager.instance.isRotate = true;
             //CameraManager.instance.isCameraMove = false;
+        }
+        else
+        {
+            bottomDrawer.CloseBottomDrawer();
         }
 
     }
@@ -261,6 +290,11 @@ public class UIGameManager : MonoBehaviour
         endPanel.InitData((END_TYPE) e.endType);
     }
 
+    private void OnStabAttackResult(StabAttackMessage e)
+    {
+        attackResultPanel.InitStab((ITEM) e.itemType);
+    }
+    
     private void OnReceiveReviveStackMessage(GameEndMessage e)
     {
         reviveStack.lookAt = CharacterManager.Instance.GetCharacterFromId(e.characterId).transform;
@@ -338,21 +372,6 @@ public class UIGameManager : MonoBehaviour
         }
     }
 
-
-    private void OnReSpawnMerchant(GetReSpawnMerchantMessage message)
-    {
-        Debug.Log("===> respawn event");
-        
-        Tile target = ServiceLocator.Current.Get<GameBoard>().Tiles[message.tileId];
-        SpawnItemEvent sEvent = new SpawnItemEvent();
-        sEvent.tileId = message.oldTileId;
-        sEvent.target = target.transform;
-        sEvent.targetTileId = message.tileId;
-        sEvent.tile = target;
-        EventBus.Publish(
-            sEvent
-        );
-    }
 
     private void OnSelectedCharacterEvent(SelectedCharacterEvent e) 
     {

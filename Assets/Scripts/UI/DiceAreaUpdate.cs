@@ -63,7 +63,7 @@ public class DiceAreaUpdate : MonoBehaviour
         {
             DiceCountObject dice = CreateDice(diceDatas[i]);
 
-            dice.transform.position = basePos.position + new Vector3(i * 1.3f, 0, i * 0.5f);
+            dice.transform.position = basePos.position + new Vector3(i * 0.8f, 0, 0);
             dice.transform.rotation = Random.rotation;
 
             dice.rigidbody.isKinematic = false;

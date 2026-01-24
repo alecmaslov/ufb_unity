@@ -45,6 +45,8 @@ public class BottomDefeatPanel : MonoBehaviour
         _target = target;
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
 
+        gameObject.SetActive(true);
+        
         //InitEnemyState(target);
         InitCharacterState(origin);
 
@@ -69,7 +71,7 @@ public class BottomDefeatPanel : MonoBehaviour
 
         totalDiceCount = 0;
         diceTimes = 0;
-        gameObject.SetActive(true);
+        
         redPanelImage.SetActive(true);
         
         UIGameManager.instance.bottomAttackPanel.topButtonPart.gameObject.SetActive(false);

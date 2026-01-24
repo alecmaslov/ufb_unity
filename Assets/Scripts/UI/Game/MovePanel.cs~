@@ -45,9 +45,6 @@ public class MovePanel : MonoBehaviour
     private Tile currentTile;
 
     [SerializeField]
-    public UIDirection globalDirection;
-
-    [SerializeField]
     Text[] btnList;
 
     [SerializeField]
@@ -191,9 +188,6 @@ public class MovePanel : MonoBehaviour
         });
 
         // character.MoveToTile(character.CurrentTile);
-
-        // globalDirection.gameObject.SetActive(true);
-        globalDirection.transform.position = character.transform.position;
     }
 
     public void InitMoveBtns()
@@ -223,7 +217,6 @@ public class MovePanel : MonoBehaviour
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
-        globalDirection.gameObject.SetActive(false) ;
 
         Tile tile = character.CurrentTile;
         if (selectedTile != null)
@@ -283,7 +276,6 @@ public class MovePanel : MonoBehaviour
         stepPanel.gameObject.SetActive(true);
         resourcePanel.SetActive(true);
         gameObject.SetActive(false);
-        globalDirection.gameObject.SetActive(false);
 
         character.CancelMoveToTile(
             originItems,
@@ -444,12 +436,6 @@ public class MovePanel : MonoBehaviour
     {
         selectedItemId = message.itemId;
         Sprite sprite = GlobalResources.instance.items[message.itemId];
-        globalDirection.InitItemDirection(
-            message.left == 1? sprite : null,
-            message.right == 1? sprite : null,
-            message.top == 1? sprite : null,
-            message.down == 1? sprite : null
-        );
 
         if ((ITEM)selectedItemId == ITEM.Bomb)
         {
@@ -553,7 +539,6 @@ public class MovePanel : MonoBehaviour
         InitBomBList(result);
         
         //explosionBtn.gameObject.SetActive( true );
-        globalDirection.gameObject.SetActive(false);
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
 
         if (UIGameManager.instance.isPlayerTurn)
@@ -850,9 +835,7 @@ public class MovePanel : MonoBehaviour
     
     private void Update()
     {
-        if (character == null || !gameObject.activeSelf) return;
 
-        globalDirection.transform.position = character.transform.position;
     }
 
 }

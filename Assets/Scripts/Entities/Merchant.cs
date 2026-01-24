@@ -29,12 +29,10 @@ namespace UFB.Entities
 
         private void OnEnable()
         {
-            EventBus.Subscribe<SpawnItemEvent>(OnGetItemEvent);
 
         }
         private void OnDisable()
         {
-            EventBus.Unsubscribe<SpawnItemEvent>(OnGetItemEvent);
         }
 
         public void Initialize(SpawnEntity spawnEntity)
@@ -44,21 +42,6 @@ namespace UFB.Entities
                 spawnEntity.parameters
             );
             Debug.Log($"Merchant initialized with parameters {_parameters.ToDetailedString()}");
-        }
-
-        private void OnGetItemEvent(SpawnItemEvent e)
-        {
-            if (e.tileId != SpawnEntity.tileId) return;
-            Debug.Log($"merchant ==>> {e.tileId}, {e.targetTileId}");
-
-            SpawnEntity.tileId = e.targetTileId;
-
-            if (e.target != null) 
-            {
-                e.tile.AttachGameObject(gameObject, true);
-            }
-            //Destroy(gameObject);
-
         }
 
         public void OnFocus()

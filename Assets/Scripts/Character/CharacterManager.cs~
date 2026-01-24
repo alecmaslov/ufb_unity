@@ -163,6 +163,8 @@ namespace UFB.Character
 
         private void SetSelectedCharacter(string characterId)
         {
+            Debug.Log($"Selected player character : {characterId}");
+            
             _selectedCharacterId = characterId;
 
             CharacterController character = _characters[characterId];
@@ -225,6 +227,7 @@ namespace UFB.Character
                 Debug.Log($"[CharacterManager] Player {character.Id} : {characterState.id} : {key} has joined the game! {_playerCharacterId}, {characterState.type}");
                 if (character.Id == _playerCharacterId)
                 {
+                    Debug.Log("Selected player character");
                     SetSelectedCharacter(character.Id);
                 } else
                 {

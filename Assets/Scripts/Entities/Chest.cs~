@@ -1,0 +1,59 @@
+using UnityEngine;
+using UFB.Entities;
+using UFB.StateSchema;
+using UFB.Camera;
+using UFB.Events;
+
+namespace UFB.Entities {
+    public class Chest : MonoBehaviour, ISpawnableEntity, ICameraFocusable, IClickable
+    {
+        public bool isItemBag = false;
+
+        public SpawnEntity SpawnEntity { get; private set; }
+
+        public SpawnEntityParameters Parameters => throw new System.NotImplementedException();
+
+        public void Initialize(SpawnEntity spawnEntity)
+        {
+            SpawnEntity = spawnEntity;
+
+            return;
+        }
+
+        private void OnEnable()
+        {
+            EventBus.Subscribe<SpawnItemEvent>(OnGetItemEvent);
+
+        }
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<SpawnItemEvent>(OnGetItemEvent);
+        }
+
+        private void OnGetItemEvent(SpawnItemEvent e)
+        {
+            if (e.tileId != SpawnEntity.tileId) return;
+            //Destroy(gameObject);
+
+        }
+
+        public void OnClick()
+        {
+            // have some global way of determining click behavior of items,
+            // which is informed by the ui manager and its current state
+            OnFocus();
+        }
+
+        public void OnFocus()
+        {
+            Debug.Log("Chest focused");
+            EventBus.Publish(new CameraOrbitAroundEvent(transform, 0.5f));
+        }
+
+        public void OnUnfocus()
+        {
+            // throw new System.NotImplementedException();
+        }
+    }
+
+}

@@ -235,6 +235,12 @@ namespace UFB.Network.RoomMessageTypes
         public int endType;
     }
 
+    public class StabAttackMessage : IReceiveMessage
+    {
+        public string characterId;
+        public int itemType;
+    }
+    
     public class ToastStackPerkMessage : IReceiveMessage
     {
         public string characterId;
@@ -324,6 +330,12 @@ namespace UFB.Network.RoomMessageTypes
     public class BecomeZombieMessage : IReceiveMessage
     {
         public string playerId; // the playerId the zombie will takeover
+    }
+
+    public class ActiveUserMessage : IReceiveMessage
+    {
+        public string characterId;
+        public string tileId;
     }
 
     public class UnEquipItemMessage : IReceiveMessage
