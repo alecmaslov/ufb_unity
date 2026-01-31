@@ -267,6 +267,50 @@ namespace UFB.Network
             }
         }
         
+        public async Task<HeroData> GetUserDetail(string userId)
+        {
+            try
+            {
+                var response = await Post<HeroData>(
+                    "/character/get-hero-detail",
+                    JsonConvert.SerializeObject(new { userId })
+                );
+                
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                var result = new HeroData
+                {
+                    error = e.Message
+                };
+                return result;
+            }
+        }
+        
+        public async Task<CharacterClassServerData> GetHeroList(string userId)
+        {
+            try
+            {
+                var response = await Post<CharacterClassServerData>(
+                    "/character/get-hero-list",
+                    JsonConvert.SerializeObject(new { userId })
+                );
+                
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                var result = new CharacterClassServerData
+                {
+                    error = e.Message
+                };
+                return result;
+            }
+        }
+        
         public PlatformType GetPlatformType()
         {
             PlatformType type = PlatformType.WEB; // Default value

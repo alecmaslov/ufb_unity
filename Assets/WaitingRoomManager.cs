@@ -58,7 +58,7 @@ public class WaitingRoomManager : MonoBehaviour
                 joinOptions
             );
         
-        room.Send("start_game", ownerId);
+        await room.Send("start_game", ownerId);
     }
 
     void StartGame(string gameRoomId)
@@ -67,6 +67,7 @@ public class WaitingRoomManager : MonoBehaviour
         
         var joinOptions = MainScene.instance.userData.joinOptions;
         joinOptions.playerId = MainScene.instance.userData.id;
+        MainScene.instance.loadingMenu.InitLoading();
         ServiceLocator.Current.Get<GameService>().JoinGame(gameRoomId, joinOptions);
     }
 

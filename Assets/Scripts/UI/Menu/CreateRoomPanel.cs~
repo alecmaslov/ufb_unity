@@ -57,19 +57,7 @@ public class CreateRoomPanel : MonoBehaviour
         if (MainScene.instance.userData.id == roomData.ownerId)
         {
             WaitingRoomManager.instance.PlayGame(roomData.ownerId);
-            return;
         }
-        /*
-        var createOptions = _menuManager.GetMenuData("createOptions") as UfbRoomCreateOptions;
-        var joinOptions = _menuManager.GetMenuData("joinOptions") as UfbRoomJoinOptions;
-
-        ServiceLocator.Current.Get<GameService>().JoinGame(MainScene.instance.roomData.id, joinOptions);*/
-        
-        var joinOptions = new UfbRoomJoinOptions {
-            displayName = MainScene.instance.userData.displayName,
-            characterId = MainScene.instance.userData.id
-        };
-        ServiceLocator.Current.Get<GameService>().JoinGame(roomData.id, joinOptions);
     }
 
     public void OnTokenGenerate()

@@ -34,6 +34,13 @@ namespace UFB.UI
             });
         }
 
+        public void SetCharacterState(float value, float maxValue)
+        {
+            _slider.value = value / maxValue;
+            _valueText.text = $"{value} / {maxValue}";
+            // _maxValueText.text = maxValue.ToString();
+        }
+
         private void SetFromState(RangedValueState state)
         {
             _slider.value = state.Percent();

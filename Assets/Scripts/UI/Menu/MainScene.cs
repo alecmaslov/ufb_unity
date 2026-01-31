@@ -16,6 +16,8 @@ public class MainScene : MonoBehaviour
     public UserData userData = new UserData();
     public UIRoomData roomData = new UIRoomData();
     
+    public LoadingMenu loadingMenu;
+    
     public CreateRoomPanel createRoomPanel;
     public JoinRoomPanel joinRoomPanel;
     
@@ -75,6 +77,9 @@ public class MainScene : MonoBehaviour
         } 
         else if (result == GlobalDefine.RESPONSE_MESSAGE.SUCCESS)
         {
+            loginEmailField.text = email;
+            passwordField.text = password;
+            
             LoginPanel.SetActive(true);
             RegisterPanel.SetActive(false);
             ShowNotificationMessage("error", "User registration success.");

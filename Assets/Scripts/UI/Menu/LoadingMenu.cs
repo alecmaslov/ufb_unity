@@ -1,14 +1,26 @@
 using TMPro;
+using UnityEngine;
 
 namespace UFB.UI
 {
-    public class LoadingMenu : Menu
+    public class LoadingMenu : MonoBehaviour
     {
         public TextMeshProUGUI loadingStatusText;
 
         private void OnEnable()
         {
             loadingStatusText.text = "Loading...";
+        }
+
+        public void InitLoading()
+        {
+            loadingStatusText.text = "Loading...";
+            gameObject.SetActive(true);
+        }
+
+        public void CloseLoading()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

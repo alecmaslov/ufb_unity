@@ -36,13 +36,19 @@ public class ItemCard : MonoBehaviour
             countText.text = text;
     }
 
+    public void InitText2(string text) 
+    {
+        if(itemCountText != null)
+            itemCountText.text = text;
+    }
+    
     public void InitTextBG(Color bgColor)
     {
         if(countText != null)
             countText.transform.parent.GetComponent<Image>().color = bgColor;
     }
 
-    public void InitDate(string count, Sprite sprite, bool isRed = false, bool isBlack = false) 
+    public void InitData(string count, Sprite sprite, bool isRed = false, bool isBlack = false) 
     {
         if (countText != null) 
         {

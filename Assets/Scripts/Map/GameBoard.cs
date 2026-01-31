@@ -143,7 +143,12 @@ namespace UFB.Map
                         var tile1 = Tiles[value]; 
                         tile1.AttachGameObject(go, true);
                     }
+                }));
 
+                spawnEntity.OnRemove((() =>
+                {
+                    Debug.Log("Remove chest tile id : " + spawnEntity.prefabAddress);
+                    Destroy(go);
                 }));
             }
             catch (Exception e)

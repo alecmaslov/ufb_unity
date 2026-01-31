@@ -1,13 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UFB.Character;
 using UFB.Core;
 using UFB.Network;
+using UFB.UI;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 public class AccountDetailPanel : MonoBehaviour
 {
+    public Image heroAvatar;
+    
+    public Image skillTreeBtnImage;
+    public Image heroDetailImage;
+    
+    public Sprite selectedImage;
+    public Sprite unselectedImage;
+
+    public GameObject skillTreePart;
+    public GameObject heroStatusPart;
+    
     public Text levelText;
     public Text goldText;
     
@@ -24,7 +38,17 @@ public class AccountDetailPanel : MonoBehaviour
     public Text collectGoldText;
     public Text traveledTilesText;
     public Text chestsText;
+
+    public string characterClassName = "";
     
+    [SerializeField]
+    private LinearIndicatorBar _healthBar;
+
+    [SerializeField]
+    private LinearIndicatorBar _energyBar;
+
+    [SerializeField]
+    private LinearIndicatorBar _ultimateBar;
     
     // Start is called before the first frame update
     void Start()
@@ -46,11 +70,49 @@ public class AccountDetailPanel : MonoBehaviour
         levelText.text = $"Lvl. 1";
         goldText.text = gold.ToString();
 
-        await GetHeroDetail(characterClass);
+        characterClassName = characterClass;
         
+        Addressables
+            .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + characterClass)
+            .Completed += (op) =>
+        {
+            if (
+                op.Status
+                == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded
+            )
+            {
+                heroAvatar.sprite = op.Result.avatar;
+            }
+            else
+                Debug.LogError(
+                    "Failed to load character avatar: " + op.OperationException.Message
+                );
+        };
+        
+        OnHeroDetailClick();
         gameObject.SetActive(true);
     }
 
+    public async void OnHeroDetailClick()
+    {
+        skillTreeBtnImage.sprite = unselectedImage;
+        heroDetailImage.sprite = selectedImage;
+        
+        await GetHeroDetail(characterClassName);
+        
+        heroStatusPart.SetActive(true);
+        skillTreePart.SetActive(false);
+    }
+
+    public void OnHeroSkillTreeClick()
+    {
+        skillTreeBtnImage.sprite = selectedImage;
+        heroDetailImage.sprite = unselectedImage;
+        
+        heroStatusPart.SetActive(false);
+        skillTreePart.SetActive(true);
+    }
+    
     public async Task GetHeroDetail(string characterClass)
     {
         var userId = MainScene.instance.userData.id;
@@ -97,5 +159,9 @@ public class AccountDetailPanel : MonoBehaviour
         collectGoldText.text = data.collect_golds.ToString();
         traveledTilesText.text = data.traveled_tiles.ToString();
         chestsText.text = data.chests.ToString();
+
+        _healthBar.SetCharacterState(40, 40);
+        _energyBar.SetCharacterState(20, 20);
+        _ultimateBar.SetCharacterState(0, 100);
     }
 }

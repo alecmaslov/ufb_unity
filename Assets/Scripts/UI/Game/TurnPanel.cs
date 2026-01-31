@@ -68,7 +68,7 @@ public class TurnPanel : MonoBehaviour
 
     IEnumerator ClosePanel()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         if (gameObject.activeSelf)
         {
             CloseTurnPanel();

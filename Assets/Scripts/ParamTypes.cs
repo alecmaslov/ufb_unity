@@ -51,6 +51,24 @@ public struct HeroData
 }
 
 [Serializable]
+public struct CharacterClassData
+{
+    public string error;
+    public string id;
+    public string name;
+    public string className; // Character Class Id [name]
+    public int level;
+    public string ownerId;
+}
+
+[Serializable]
+public struct CharacterClassServerData
+{
+    public string error;
+    public CharacterClassData[] data;
+}
+
+[Serializable]
 public class UIRoomData
 {
     public string id;

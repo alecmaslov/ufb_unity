@@ -54,19 +54,19 @@ MonoBehaviour:
     - ObjectPefabs
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2943fe5020f8334ba61c569bf1e3cae
-    m_Address: UfbCharacter/kirin
+    m_Address: UfbCharacter/Kirin
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d04d4dbe303e2214d96f22d89e76fb81
-    m_Address: UfbCharacter/mevisto
+    m_Address: UfbCharacter/Mevisto
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 14447a12c26c1f1408b39601d1ac0dd2
-    m_Address: UfbCharacter/ophaia
+    m_Address: UfbCharacter/Ophaia
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character
@@ -156,7 +156,7 @@ MonoBehaviour:
     - Character
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e83c06a23f4a97488d98978c0911cf9
-    m_Address: UfbCharacter/data
+    m_Address: UfbCharacter/Data Avenger
     m_ReadOnly: 0
     m_SerializedLabels:
     - Character

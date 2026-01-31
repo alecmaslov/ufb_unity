@@ -5,6 +5,7 @@ using UFB.Network.RoomMessageTypes;
 [Serializable]
 public class UserData
 {
+    public string sessionId;
     public string id;
     public string email;
     public string displayName;
@@ -47,6 +48,25 @@ public struct HeroData
     public int used_stacks;
     public int traveled_tiles;
     public int chests;
+}
+
+[Serializable]
+public struct CharacterClassData
+{
+    public string error;
+    public string id;
+    public string name;
+    public string className; // Character Class Id [name]
+    public string avatar;
+    public int level;
+    public string ownerId;
+}
+
+[Serializable]
+public struct CharacterClassServerData
+{
+    public string error;
+    public CharacterClassData[] data;
 }
 
 [Serializable]

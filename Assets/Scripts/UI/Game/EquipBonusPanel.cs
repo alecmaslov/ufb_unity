@@ -114,7 +114,7 @@ public class EquipBonusPanel : MonoBehaviour
 
     IEnumerator InitDataShow(EquipBonus[] bonuses)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         InitData(bonuses, false);
         yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);

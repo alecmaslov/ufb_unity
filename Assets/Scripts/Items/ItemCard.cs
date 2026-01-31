@@ -14,6 +14,8 @@ public class ItemCard : MonoBehaviour
 
     public Text itemCountText;
 
+    public Text[] stateTexts;
+    
     public Image banImage;
     
     [HideInInspector]
@@ -36,6 +38,23 @@ public class ItemCard : MonoBehaviour
             countText.text = text;
     }
 
+    public void InitText2(string text) 
+    {
+        if(itemCountText != null)
+            itemCountText.text = text;
+    }
+
+    public void InitStateText(string[] texts)
+    {
+        for (var i = 0; i < texts.Length; i++)
+        {
+            if (stateTexts[i] != null)
+            {
+                stateTexts[i].text = texts[i];
+            }
+        }
+    }
+    
     public void InitTextBG(Color bgColor)
     {
         if(countText != null)

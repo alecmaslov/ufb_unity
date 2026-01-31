@@ -219,5 +219,17 @@ namespace UFB.Network
             var result = await ApiClient.GetHeroDetail(userId, characterClass);
             return result;
         }
+        
+        public async Task<HeroData> GetUserDetail(string userId)
+        {
+            var result = await ApiClient.GetUserDetail(userId);
+            return result;
+        }
+        
+        public async Task<CharacterClassServerData> GetHeroList(string userId)
+        {
+            var result = await ApiClient.GetHeroList(userId);
+            return result;
+        }
     }
 }

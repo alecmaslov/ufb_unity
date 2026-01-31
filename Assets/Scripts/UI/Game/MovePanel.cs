@@ -632,6 +632,9 @@ public class MovePanel : MonoBehaviour
             posImage.gameObject.SetActive(true);
             posImage.enabled = true;
             Debug.Log("send message: xxxxo onclick");
+
+            var featherCount = UIGameManager.instance.GetItemCount(ITEM.Feather, CharacterManager.Instance.PlayerCharacter.State);
+            
             EventBus.Publish(
                 RoomSendMessageEvent.Create(
                     GlobalDefine.CLIENT_MESSAGE.SET_MOVE_POINT,
@@ -640,7 +643,7 @@ public class MovePanel : MonoBehaviour
                         characterId = character.Id,
                         tileId = tile.Id,
                         itemId = -1,
-                        isFeather = CharacterManager.Instance.PlayerCharacter.State.items.ContainsKey(ITEM.Feather) && CharacterManager.Instance.PlayerCharacter.State.items[(int) ITEM.Feather].count > 0
+                        isFeather = featherCount > 0
                     }
                 )
             );
@@ -701,12 +704,9 @@ public class MovePanel : MonoBehaviour
                     moveImage.gameObject.SetActive(true);
                     bombPart.gameObject.SetActive(false);
 
-                    wrapText.text = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
-                                    character.State.items[(int)ITEM.WarpCrystal].count > 0
-                        ? $"{character.State.items[(int)ITEM.WarpCrystal].count}"
-                        : "0";
-                    wrapText.color = character.State.items.ContainsKey(ITEM.WarpCrystal) &&
-                                     character.State.items[(int)ITEM.WarpCrystal].count > 0? Color.white : Color.red;
+                    var wrapCount = UIGameManager.instance.GetItemCount(ITEM.WarpCrystal, character.State);
+                    wrapText.text = $"{wrapCount}";
+                    wrapText.color = wrapCount > 0? Color.white : Color.red;
                     wrapBtn.SetActive(true);
                 }
                 else if(item.GetComponent<Merchant>() != null )
@@ -788,11 +788,12 @@ public class MovePanel : MonoBehaviour
             bombPrevTile = tiles[tiles.Count - 2];
         }
 
+        var featherCount = UIGameManager.instance.GetItemCount(ITEM.Feather, character.State);
         if (character.State.stats.energy.current < m.cost || 
-            (character.State.items.ContainsKey(ITEM.Feather) && character.State.items[(int)ITEM.Feather].count < m.featherCount))
+            (featherCount < m.featherCount))
         {
             lessPartenergyText.text = $"{Mathf.Max(m.cost - character.State.stats.energy.current, 0)}";
-            lessPartFeatherText.text = $"{Mathf.Max(character.State.items.ContainsKey(ITEM.Feather)? (m.featherCount - character.State.items[(int)ITEM.Feather].count): 0, 0)}";
+            lessPartFeatherText.text = $"{Mathf.Max(featherCount != 0? (m.featherCount - featherCount): 0, 0)}";
             lessPart.SetActive(true);
             defaultPart.SetActive(false);
         }

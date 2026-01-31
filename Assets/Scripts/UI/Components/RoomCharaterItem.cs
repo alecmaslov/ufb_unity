@@ -16,7 +16,7 @@ public class RoomCharaterItem : MonoBehaviour
     public void InitData(RoomUserData data, bool isMe = false)
     {
         characterName.text = data.name;
-        characterClass.text = $"Mount {data.characterClass}";
+        characterClass.text = $"{data.characterClass}";
         owerText.text = isMe ? "Me" : "";
         gameObject.SetActive(true);
         

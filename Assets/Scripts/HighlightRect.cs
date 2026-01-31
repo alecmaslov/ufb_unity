@@ -45,19 +45,21 @@ public class HighlightRect : MonoBehaviour
         {
             TileState state = tile.GetTileState();
             Debug.Log($"index : {k}, x : {tile.GetTileState().coordinates.x}, y : {tile.GetTileState().coordinates.y}");
-            highlightObjects[k].transform.position = tile.transform.position;
-
-            if (state.type == "Upper")
+            if (k < highlightObjects.Count)
             {
-                highlightObjects[k].transform.position += Vector3.up * 0.3f;
-            }
-            else
-            {
-                highlightObjects[k].transform.position += Vector3.up * 0.1f;
-            }
+                highlightObjects[k].transform.position = tile.transform.position;
 
-            highlightObjects[k].gameObject.SetActive(true);
+                if (state.type == "Upper")
+                {
+                    highlightObjects[k].transform.position += Vector3.up * 0.3f;
+                }
+                else
+                {
+                    highlightObjects[k].transform.position += Vector3.up * 0.1f;
+                }
 
+                highlightObjects[k].gameObject.SetActive(true);
+            }
             k++;
         }
 

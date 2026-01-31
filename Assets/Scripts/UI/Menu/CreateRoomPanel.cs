@@ -56,6 +56,7 @@ public class CreateRoomPanel : MonoBehaviour
     {
         if (MainScene.instance.userData.id == roomData.ownerId)
         {
+            MainScene.instance.loadingMenu.InitLoading();
             WaitingRoomManager.instance.PlayGame(roomData.ownerId);
         }
     }

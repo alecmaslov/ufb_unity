@@ -25,6 +25,12 @@ namespace UFB.Network
         {
             get { return _clientId; }
         }
+
+        public string PlayerId
+        {
+            get { return _playerId; }
+            set { _playerId = value; }
+        }
         public string Token
         {
             get { return _token; }
@@ -36,6 +42,7 @@ namespace UFB.Network
             }
         }
         private string _clientId;
+        private string _playerId;
         private string _token;
 
         public UfbApiClient(string apiBase, int port, bool isHttps = false)
@@ -245,6 +252,28 @@ namespace UFB.Network
                 var response = await Post<HeroData>(
                     "/character/get-hero-detail",
                     JsonConvert.SerializeObject(new { userId, characterClass })
+                );
+                
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Exception: " + e);
+                var result = new HeroData
+                {
+                    error = e.Message
+                };
+                return result;
+            }
+        }
+        
+        public async Task<HeroData> GetUserDetail(string userId)
+        {
+            try
+            {
+                var response = await Post<HeroData>(
+                    "/character/get-hero-detail",
+                    JsonConvert.SerializeObject(new { userId })
                 );
                 
                 return response;

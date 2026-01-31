@@ -16,6 +16,8 @@ public class MainScene : MonoBehaviour
     public UserData userData = new UserData();
     public UIRoomData roomData = new UIRoomData();
     
+    public LoadingMenu loadingMenu;
+    
     public CreateRoomPanel createRoomPanel;
     public JoinRoomPanel joinRoomPanel;
     
@@ -75,6 +77,8 @@ public class MainScene : MonoBehaviour
         } 
         else if (result == GlobalDefine.RESPONSE_MESSAGE.SUCCESS)
         {
+            loginEmailField.text = email;
+            passwordField.text = password;
             LoginPanel.SetActive(true);
             RegisterPanel.SetActive(false);
             ShowNotificationMessage("error", "User registration success.");
@@ -116,6 +120,9 @@ public class MainScene : MonoBehaviour
             userData.id = data.clientId;
             
             ServiceLocator.Current.Get<NetworkService>().ApiClient.PlayerId = userData.id;
+            
+            
+            Debug.Log($"player id : {ServiceLocator.Current.Get<NetworkService>().ApiClient.PlayerId}");
             
             Debug.Log(data.clientId);
             ConnectServer(data.clientId);

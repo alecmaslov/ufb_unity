@@ -63,8 +63,6 @@ public class WaitingRoomManager : MonoBehaviour
 
     void StartGame(string gameRoomId)
     {
-        //SceneManager.LoadScene("Game");
-        //GameManager.Instance.JoinGame(gameRoomId);
         if(MainScene.instance.userData.id == room.State.ownerId) return;
         
         var joinOptions = MainScene.instance.userData.joinOptions;
