@@ -6,46 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2768ae09-9609-4612-9406-86d69bf85a54" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ufb_unity/.idea/workspace.xml~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/highlight.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/highlight.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d4/Materials/2k/dice4.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/Dice_d6/Materials/2k/dice6.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Data.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Data.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Kirin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Kirin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Mevisto.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Mevisto.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Ophaia.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Characters/Ophaia.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GlobalDefine.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HighlightRect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HighlightRect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HighlightRect.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HighlightRect.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemCard.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Map/GameBoard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Map/GameBoard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Map/GameBoard.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/NetworkService.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Network/UFBApiClient.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ParamTypes.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/LinearIndicatorBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/LinearIndicatorBar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Components/RoomCharaterItem.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/EquipBonusPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/MovePanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TurnPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Game/TurnPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountDetailPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountDetailPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountDetailPanel.cs~" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountMenuPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/AccountMenuPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/CreateRoomPanel.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/LoadingMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/LoadingMenu.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/Menu/MainScene.cs~" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/WaitingRoomManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WaitingRoomManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/WaitingRoomManager.cs~" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WaitingRoomManager.cs~" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,15 +132,13 @@
       <option name="useMixedMode" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="56792">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="56792" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
@@ -209,7 +172,8 @@
       <workItem from="1768155029182" duration="5023000" />
       <workItem from="1768537146898" duration="4938000" />
       <workItem from="1769028978886" duration="14510000" />
-      <workItem from="1769391419732" duration="32846000" />
+      <workItem from="1769391419732" duration="34115000" />
+      <workItem from="1770016013373" duration="2803000" />
     </task>
     <servers />
   </component>

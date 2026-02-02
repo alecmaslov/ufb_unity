@@ -12,8 +12,8 @@ using UnityEngine.UI;
 public class AccountDetailPanel : MonoBehaviour
 {
     public Image heroAvatar;
-
-    public Text heroNameText;
+    
+    public Text hero
     
     public Image skillTreeBtnImage;
     public Image heroDetailImage;
@@ -73,8 +73,6 @@ public class AccountDetailPanel : MonoBehaviour
         goldText.text = gold.ToString();
 
         characterClassName = characterClass;
-        
-        heroNameText.text = characterClassName;
         
         Addressables
             .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + characterClass)
