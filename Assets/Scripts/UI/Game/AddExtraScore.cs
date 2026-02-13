@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UFB.Core;
@@ -28,6 +29,12 @@ public class AddExtraScore : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<AddExtraScoreMessage> (OnReceiveExtraScore);
+    }
+
+    private void OnDisable()
+    {
+        transValue = 0;
+        totalScore = 0;
     }
 
     public void OnReceiveExtraScore(AddExtraScoreMessage message)

@@ -18,8 +18,6 @@ public class AddExtraScore : MonoBehaviour
     private float transValue = 0.1f;
     private float delay = 2;
 
-    private float curTime = 0;
-    private float delayScoreTime = 0;
     private int totalScore = 0;
     
     private void Start()
@@ -39,7 +37,6 @@ public class AddExtraScore : MonoBehaviour
         {
             totalScore += message.score;
             Init(totalScore);
-            curTime = 0;
         }
     }
 

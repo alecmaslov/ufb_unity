@@ -63,16 +63,6 @@ public class LobbyService : MonoBehaviour
         }
         lobby.Send("room-by-id", roomId);
     }
-
-    public void OnCreateRoom()
-    {
-        //CreateRoom("waiting", 4, false);
-    }
-
-    public void OnJoinRoom()
-    {
-        JoinRoom("akame", "");
-    }
     
     public void CreateRoom(UfbRoomCreateOptions createOptions, UfbRoomJoinOptions  joinOptions)
     {
@@ -87,19 +77,6 @@ public class LobbyService : MonoBehaviour
             maxPlayers,
             isPrivate
         });
-    }
-
-    public async Task JoinRoom(string roomId, string inviteToken = null)
-    {
-        lobby.Send("join", new
-        {
-            roomId,
-            inviteToken
-        });
-        /*await client.JoinById(roomId, new
-        {
-            inviteToken
-        });*/
     }
 
     public void DeleteRoom(string roomId)

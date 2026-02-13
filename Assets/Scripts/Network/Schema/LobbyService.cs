@@ -1,3 +1,4 @@
+using System;
 using Colyseus;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -15,6 +16,11 @@ public class LobbyService : MonoBehaviour
     {
         Instance = this;
         //await ConnectLobby();
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("OnDisable");
     }
 
     public async void OnConnectLobby()

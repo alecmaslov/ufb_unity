@@ -18,17 +18,18 @@ public class CraftPanel : MonoBehaviour
         CharacterState state = UIGameManager.instance.controller.State;
 
         coinText.text = state.stats.coin.ToString();
-        state.stats.OnCoinChange((int newCoin, int preCoin) =>
-        {
-            //if(preCoin == 0) return;
+        
+        state.stats.OnCoinChange((int newCoin, int preCoin) => {
+            if(preCoin == 0) return;
             if(gameObject.activeSelf && UIGameManager.instance.merchantPanel.gameObject.activeSelf)
                 StartCoroutine(ChangeCoinAnimation(newCoin, preCoin));
             else
             {
                 coinText.text = newCoin.ToString();
             }
-        });
-
+        }, true);
+        
+        
         InitList();
 
     }
@@ -75,6 +76,11 @@ public class CraftPanel : MonoBehaviour
         bool isStatus1 = false;
         bool isStatus2 = false;
 
+        var powerCnt1 = UIGameManager.instance.GetPowerCount(powerCraft.power1);
+        var powerCnt2 = UIGameManager.instance.GetPowerCount(powerCraft.power2);
+        
+        return powerCnt1 > 0 && powerCnt2 > 0;
+        
         state.powers.ForEach(p => 
         { 
             if(p.id == (int) powerCraft.power1 && p.count > 0)
@@ -102,6 +108,11 @@ public class CraftPanel : MonoBehaviour
         bool isStatus1 = false;
         bool isStatus2 = false;
 
+        var itemCnt1 = UIGameManager.instance.GetItemCount(craftItemSystem.item1);
+        var itemCnt2 = UIGameManager.instance.GetItemCount(craftItemSystem.item2);
+        
+        return itemCnt1 > 0 && itemCnt2 > 0;
+        
         state.items.ForEach(p =>
         {
             if (p.id == (int)craftItemSystem.item1 && p.count > 0)
@@ -129,13 +140,19 @@ public class CraftPanel : MonoBehaviour
 
     IEnumerator ChangeCoinAnimation(int newCoin, int preCoin)
     {
+        Debug.Log($"-----------newCoin : {newCoin}, preCoin : {preCoin}");
         float count = Mathf.Abs(newCoin - preCoin);
-        var duration = 1f;
-        var delta = duration / count;
+        float duration = 1f;
+        float delta = duration / count;
         
+        Debug.Log($"-----------count : {count}, delta : {delta}");
+
         for (int i = 1; i <= count; i++)
         {
             yield return new WaitForSeconds(delta);
+            
+            Debug.Log($"-----------count : {(preCoin - i)}, ddd : {newCoin - preCoin}");
+
             coinText.text = (preCoin - i).ToString();
             coinText.color = (newCoin - preCoin) < 0 ? Color.red : Color.green;
         }

@@ -147,8 +147,8 @@ public class ItemResultPanel : MonoBehaviour
         int energyCrystalCount = UIGameManager.instance.GetItemCount(ITEM.EnergyCrystal);
         int energyShardCount = UIGameManager.instance.GetItemCount(ITEM.EnergyShard);
 
-        int presentHeart = heartPieceCount;
-        int presentEnergy = energyShardCount;
+        int presentHeart = Mathf.CeilToInt(heartPieceCount / 4);
+        int presentEnergy = Mathf.CeilToInt(energyShardCount / 3);
         
         heartCount += hCount;
         heartPieceCount += hPiece;
@@ -170,8 +170,8 @@ public class ItemResultPanel : MonoBehaviour
         heartText.text = heartCount.ToString();
         crystalText.text = energyCrystalCount.ToString();
                     
-        heartResultPart.SetActive(presentHeart != 0 && presentHeart % 4 == 0);
-        crystalResultPart.SetActive(presentEnergy != 0 && presentEnergy % 3 == 0);
+        heartResultPart.SetActive(presentHeart != beforeHeart);
+        crystalResultPart.SetActive(presentEnergy != beforeEnergy);
         
         bottomPanel.SetActive(true);
     }

@@ -1205,6 +1205,7 @@ MonoBehaviour:
   itemImage: {fileID: 13968353}
   countText: {fileID: 936309078}
   itemCountText: {fileID: 936309078}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &15395825
 GameObject:
@@ -2978,6 +2979,7 @@ MonoBehaviour:
   itemImage: {fileID: 1614188714}
   countText: {fileID: 1520649861}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &38768520
 MonoBehaviour:
@@ -8225,6 +8227,7 @@ MonoBehaviour:
   itemImage: {fileID: 125369653}
   countText: {fileID: 1219023796}
   itemCountText: {fileID: 1219023796}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &125369653
 MonoBehaviour:
@@ -8318,6 +8321,7 @@ MonoBehaviour:
   itemImage: {fileID: 127367359}
   countText: {fileID: 884981681}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &127367359
 MonoBehaviour:
@@ -13149,6 +13153,7 @@ MonoBehaviour:
   itemImage: {fileID: 256941648}
   countText: {fileID: 232694795}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &201648150
 MonoBehaviour:
@@ -14588,6 +14593,7 @@ MonoBehaviour:
   itemImage: {fileID: 1611492342}
   countText: {fileID: 1783873770}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &221077988
 GameObject:
@@ -17966,6 +17972,7 @@ MonoBehaviour:
   itemImage: {fileID: 1636215657}
   countText: {fileID: 511211014}
   itemCountText: {fileID: 511211014}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &273553471
 CanvasRenderer:
@@ -18631,6 +18638,7 @@ MonoBehaviour:
   itemImage: {fileID: 409048640}
   countText: {fileID: 766488594}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &288231051
 CanvasRenderer:
@@ -22785,6 +22793,7 @@ MonoBehaviour:
   itemImage: {fileID: 2032636954}
   countText: {fileID: 132340194}
   itemCountText: {fileID: 132340194}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &358764264
 GameObject:
@@ -30946,6 +30955,7 @@ MonoBehaviour:
   itemImage: {fileID: 880968062}
   countText: {fileID: 1247630023}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &490801202
 CanvasRenderer:
@@ -31723,6 +31733,7 @@ MonoBehaviour:
   itemImage: {fileID: 1915423032}
   countText: {fileID: 806840922}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &500133300
 MonoBehaviour:
@@ -37023,6 +37034,7 @@ MonoBehaviour:
   itemImage: {fileID: 583808845}
   countText: {fileID: 547273894}
   itemCountText: {fileID: 547273894}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &584672972
 GameObject:
@@ -37292,7 +37304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 187.99634
+      value: 187.99628
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -37652,6 +37664,7 @@ MonoBehaviour:
   itemImage: {fileID: 1296953678}
   countText: {fileID: 820756792}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &584796859
 CanvasRenderer:
@@ -42097,7 +42110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 13.0000305
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -42254,6 +42267,7 @@ MonoBehaviour:
   itemImage: {fileID: 919499871}
   countText: {fileID: 2136931761}
   itemCountText: {fileID: 2136931761}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &676958582
 MonoBehaviour:
@@ -46687,6 +46701,7 @@ MonoBehaviour:
   itemImage: {fileID: 231489860}
   countText: {fileID: 414063065}
   itemCountText: {fileID: 414063065}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &741962386
 MonoBehaviour:
@@ -47078,6 +47093,7 @@ MonoBehaviour:
   itemImage: {fileID: 748999961}
   countText: {fileID: 1715547256}
   itemCountText: {fileID: 1715547256}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &748999961
 MonoBehaviour:
@@ -48940,6 +48956,7 @@ MonoBehaviour:
   itemImage: {fileID: 768074818}
   countText: {fileID: 691523053}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &768074818
 MonoBehaviour:
@@ -49547,6 +49564,7 @@ MonoBehaviour:
   itemImage: {fileID: 781121148}
   countText: {fileID: 434492992}
   itemCountText: {fileID: 434492992}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &781121148
 MonoBehaviour:
@@ -53314,6 +53332,7 @@ MonoBehaviour:
   itemImage: {fileID: 1246641483}
   countText: {fileID: 0}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &854046480
 MonoBehaviour:
@@ -55796,6 +55815,7 @@ MonoBehaviour:
   itemImage: {fileID: 959315765}
   countText: {fileID: 25021797}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 2087589815}
 --- !u!222 &905090079
 CanvasRenderer:
@@ -56260,6 +56280,7 @@ MonoBehaviour:
   itemImage: {fileID: 909678187}
   countText: {fileID: 766387729}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &909678187
 MonoBehaviour:
@@ -58395,6 +58416,7 @@ MonoBehaviour:
   itemImage: {fileID: 727171319}
   countText: {fileID: 935605848}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &970773324
 MonoBehaviour:
@@ -60105,6 +60127,7 @@ MonoBehaviour:
   itemImage: {fileID: 1002350987}
   countText: {fileID: 745628026}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1002350987
 MonoBehaviour:
@@ -63875,6 +63898,7 @@ MonoBehaviour:
   itemImage: {fileID: 1963973534}
   countText: {fileID: 1666021342}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1046602679
 MonoBehaviour:
@@ -66731,6 +66755,7 @@ MonoBehaviour:
   itemImage: {fileID: 1391667111}
   countText: {fileID: 1571579885}
   itemCountText: {fileID: 1571579885}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &1091137626
 CanvasRenderer:
@@ -67504,6 +67529,7 @@ MonoBehaviour:
   itemImage: {fileID: 262928576}
   countText: {fileID: 1880394614}
   itemCountText: {fileID: 1880394614}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &1106598249
 CanvasRenderer:
@@ -70759,6 +70785,7 @@ MonoBehaviour:
   itemImage: {fileID: 595717261}
   countText: {fileID: 1057000372}
   itemCountText: {fileID: 4189227}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1154029466
 MonoBehaviour:
@@ -71759,6 +71786,7 @@ MonoBehaviour:
   itemImage: {fileID: 493278068}
   countText: {fileID: 1427895052}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 1414367527}
 --- !u!222 &1173404210
 CanvasRenderer:
@@ -75661,6 +75689,7 @@ MonoBehaviour:
   itemImage: {fileID: 1234413499}
   countText: {fileID: 1817110636}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1234413499
 MonoBehaviour:
@@ -77776,6 +77805,7 @@ MonoBehaviour:
   itemImage: {fileID: 1968585047}
   countText: {fileID: 1907771873}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1270711584
 MonoBehaviour:
@@ -78396,6 +78426,7 @@ MonoBehaviour:
   itemImage: {fileID: 1629778968}
   countText: {fileID: 2005372775}
   itemCountText: {fileID: 2005372775}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &1289212005
 GameObject:
@@ -80049,6 +80080,7 @@ MonoBehaviour:
   itemImage: {fileID: 669962535}
   countText: {fileID: 2037636889}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &1313303195
 CanvasRenderer:
@@ -83542,6 +83574,7 @@ MonoBehaviour:
   itemImage: {fileID: 1366558837}
   countText: {fileID: 407853319}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &1367061872
 GameObject:
@@ -86401,6 +86434,7 @@ MonoBehaviour:
   itemImage: {fileID: 1413267534}
   countText: {fileID: 1662474275}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &1414367525
 GameObject:
@@ -88315,6 +88349,7 @@ MonoBehaviour:
   itemImage: {fileID: 513765224}
   countText: {fileID: 385547104}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!222 &1450100265
 CanvasRenderer:
@@ -90478,7 +90513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 187.99646
+      value: 187.9964
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -92845,6 +92880,7 @@ MonoBehaviour:
   itemImage: {fileID: 1512146923}
   countText: {fileID: 834756286}
   itemCountText: {fileID: 834756286}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!224 &1512146922
 RectTransform:
@@ -93090,6 +93126,7 @@ MonoBehaviour:
   itemImage: {fileID: 1514011374}
   countText: {fileID: 1589349060}
   itemCountText: {fileID: 1589349060}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1514011374
 MonoBehaviour:
@@ -95415,6 +95452,7 @@ MonoBehaviour:
   itemImage: {fileID: 145774715}
   countText: {fileID: 1997942068}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1546753856
 MonoBehaviour:
@@ -96199,6 +96237,7 @@ MonoBehaviour:
   itemImage: {fileID: 1560329824}
   countText: {fileID: 1312691938}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &1562078578
 GameObject:
@@ -96773,7 +96812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 12.0000305
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -99377,6 +99416,7 @@ MonoBehaviour:
   itemImage: {fileID: 423883392}
   countText: {fileID: 936277255}
   itemCountText: {fileID: 16482184}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1620189116
 MonoBehaviour:
@@ -104495,6 +104535,7 @@ MonoBehaviour:
   itemImage: {fileID: 438555065}
   countText: {fileID: 1108891155}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1693337300
 MonoBehaviour:
@@ -107114,6 +107155,7 @@ MonoBehaviour:
   itemImage: {fileID: 695817108}
   countText: {fileID: 938204454}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1731775544
 MonoBehaviour:
@@ -118191,6 +118233,7 @@ MonoBehaviour:
   itemImage: {fileID: 1920712825}
   countText: {fileID: 718367038}
   itemCountText: {fileID: 0}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &1920712825
 MonoBehaviour:
@@ -129724,6 +129767,7 @@ MonoBehaviour:
   itemImage: {fileID: 460983421}
   countText: {fileID: 691715896}
   itemCountText: {fileID: 872626855}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!114 &2118643813
 MonoBehaviour:
@@ -130908,6 +130952,7 @@ MonoBehaviour:
   itemImage: {fileID: 2021160176}
   countText: {fileID: 141770320}
   itemCountText: {fileID: 141770320}
+  stateTexts: []
   banImage: {fileID: 0}
 --- !u!1 &2140539617
 GameObject:
@@ -131921,7 +131966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 211.99646
+      value: 211.9964
       objectReference: {fileID: 0}
     - target: {fileID: 2650507137231308302, guid: 014c060d1e19d4b26ab8fca618f6788e, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -133775,7 +133820,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 13.0000305
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9091629964656967218, guid: f7c23bc8a32cdba48a85c0fe8edf46aa, type: 3}
       propertyPath: m_AnchoredPosition.y
