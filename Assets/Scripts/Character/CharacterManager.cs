@@ -72,7 +72,7 @@ namespace UFB.Character
         public static CharacterManager Instance { get; private set; }
         public CharacterController PlayerCharacter => _characters.ContainsKey(_playerCharacterId)? _characters[_playerCharacterId] : null;
 
-        public CharacterController SelectedCharacter => _characters[_selectedCharacterId];
+        public CharacterController SelectedCharacter => _characters.ContainsKey(_selectedCharacterId)? _characters[_selectedCharacterId] : null;
 
         // public MapSchema<CharacterState> State { get; private set; }
         public List<string> monsterKeys = new List<string>();

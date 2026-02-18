@@ -209,7 +209,7 @@ namespace UFB.Character
 
             try
             {
-                if(characterState.type == (int)USER_TYPE.MONSTER)
+                if(characterState.type == (int)USER_TYPE.MONSTER || (characterState.type == (int) USER_TYPE.USER && characterState.id != _playerCharacterId))
                 {
                     monsterKeys.Add(characterState.id);
                 }
