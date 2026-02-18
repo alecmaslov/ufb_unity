@@ -54,8 +54,8 @@ namespace UFB.Character
             _model = await task.Task;
             AnimationDispatcher = new AnimationDispatcher(_model.GetComponent<Animator>());
             
+            Debug.Log("Character Model initialized...." +  State.currentTileId);
             var tiles = ServiceLocator.Current.Get<GameBoard>().Tiles;
-            Debug.Log("Character Model initialized...." +  State.currentTileId + "tile count : " + tiles.Count);
             if (tiles.TryGetValue(State.currentTileId, out var tile))
             {
                 CurrentTile = tile;
@@ -67,9 +67,7 @@ namespace UFB.Character
                 (newTileId, oldTileId) =>
                 {
                     Debug.Log($"Character {Id} moved to tile {newTileId} from {oldTileId}");
-                    var _tiles = ServiceLocator.Current.Get<GameBoard>().Tiles;
-                    if(_tiles.ContainsKey(newTileId))
-                        CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
+                    CurrentTile = ServiceLocator.Current.Get<GameBoard>().Tiles[newTileId];
                 }
             );
 

@@ -75,11 +75,11 @@ namespace UFB.Map
                 _state = state;
             };
 
-            // var task1 = Addressables.LoadAssetAsync<GameObject>($"maps/{state.name}");
-            // task1.Completed += (obj) =>
-            // {
-            //     Instantiate(obj.Result, boardPos.transform);
-            // };
+            var task1 = Addressables.LoadAssetAsync<GameObject>($"maps/{state.name}");
+            task1.Completed += (obj) =>
+            {
+                Instantiate(obj.Result, boardPos.transform);
+            };
         }
 
         private void LoadBoardFromSprite(Sprite boardSprite, MapState state)
