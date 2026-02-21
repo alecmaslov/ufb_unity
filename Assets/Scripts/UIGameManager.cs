@@ -287,12 +287,20 @@ public class UIGameManager : MonoBehaviour
 
     private void OnGameEndMessage( GameEndMessage e )
     {
-        endPanel.InitData((END_TYPE) e.endType);
+        if(e.characterId == CharacterManager.Instance.PlayerCharacter.Id)
+            endPanel.InitData((END_TYPE) e.endType);
+        
+        var character = CharacterManager.Instance.GetCharacterFromId(e.characterId);
+        if (character.State.stats.health.current <= 0 || (END_TYPE)e.endType == END_TYPE.DEFEAT)
+        {
+            character.gameObject.SetActive(false);
+        }
     }
 
     private void OnStabAttackResult(StabAttackMessage e)
     {
-        attackResultPanel.InitStab((ITEM) e.itemType);
+        bottomDrawer.OpenBottomDrawer();
+        attackResultPanel.InitStab((ITEM) e.itemType, e.enemyId);
     }
     
     private void OnReceiveReviveStackMessage(GameEndMessage e)

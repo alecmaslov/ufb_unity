@@ -209,15 +209,18 @@ namespace UFB.UI
 
             bombText.text = GlobalResources.instance.GetItemTotalCount(items, ITEM.BombBag, bombs, 1).ToString();
 
-            int heartPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.HeartCrystal, new List<ITEM> { ITEM.HeartPiece }, 4);
-            heartText.text = heartPieceNum.ToString();
-            heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceNum % 5];
+            int heartCount = UIGameManager.instance.GetItemCount(ITEM.HeartCrystal);
+            int heartPieceCount = UIGameManager.instance.GetItemCount(ITEM.HeartPiece);
+            int energyCrystalCount = UIGameManager.instance.GetItemCount(ITEM.EnergyCrystal);
+            int energyShardCount = UIGameManager.instance.GetItemCount(ITEM.EnergyShard);
+            
+            heartText.text = heartCount.ToString();
+            heartBackImage.sprite = GlobalResources.instance.divideTo4[heartPieceCount % 4];
 
-            int crystalPieceNum = GlobalResources.instance.GetItemTotalCount(items, ITEM.EnergyCrystal, new List<ITEM> { ITEM.EnergyShard }, 3);
-            crystalText.text = crystalPieceNum.ToString();
-            crystalBackImage.sprite = GlobalResources.instance.divideTo3[crystalPieceNum % 4];
+            crystalText.text = energyCrystalCount.ToString();
+            crystalBackImage.sprite = GlobalResources.instance.divideTo3[energyShardCount % 3];
 
-            Debug.Log($"heartPieceNum: {heartPieceNum}, crystalPieceNum: {crystalPieceNum} ");
+            Debug.Log($"heartPieceNum: {heartPieceCount}, crystalPieceNum: {energyShardCount} ");
 
         }
 

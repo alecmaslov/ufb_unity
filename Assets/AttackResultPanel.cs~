@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UFB.Character;
 using UFB.Items;
 using UFB.Network.RoomMessageTypes;
 using UnityEngine;
@@ -248,20 +247,20 @@ public class AttackResultPanel : MonoBehaviour
             itemResult.stackId = (int) STACK.Void;
         }
         
-        StartCoroutine(CheckStabResult(itemResult, enemyId));
+        StartCoroutine(CheckStabResult(itemResult));
     }
 
-    IEnumerator CheckStabResult(ItemResult result, string enemyId)
+    IEnumerator CheckStabResult(ItemResult result)
     {
         ClearStack();
         yield return new WaitForSeconds(0.5f);
 
-        CheckStabStack(enemyId, result);
+        CheckStabStack(result);
         
         yield return new WaitForSeconds(0.5f);
         
         ClearStack();
-        CheckStabStack(enemyId, result, false);
+        CheckStabStack(result, false);
 
         yield return new WaitForSeconds(0.5f);
         ClearStack();
@@ -313,7 +312,7 @@ public class AttackResultPanel : MonoBehaviour
         }
     }
     
-    void CheckStabStack(string enemyId, ItemResult result, bool isOld = true)
+    void CheckStabStack(ItemResult result, bool isOld = true)
     {
         bool isBanStack = false;
         banStackMessages.ForEach(msg =>
@@ -322,7 +321,7 @@ public class AttackResultPanel : MonoBehaviour
             {
                 isBanStack = true;
                 int banStackId = msg.stack2;
-                int count = UIGameManager.instance.GetStackCount((STACK) banStackId, CharacterManager.Instance.GetCharacterFromId(enemyId).State);
+                int count = UIGameManager.instance.GetStackCount((STACK) banStackId, UIGameManager.instance.bottomAttackPanel.target);
                 AddResultItem(isOld ? count + 1 : count, GlobalResources.instance.stacks[banStackId], true, isOld? Color.gray : new Color(0.735849f, 0, 0));
                 
                 UIGameManager.instance.movePanel.InitBomBList(result, true);
@@ -333,7 +332,7 @@ public class AttackResultPanel : MonoBehaviour
         {
             if (result.stackId > -1)
             {
-                int count = UIGameManager.instance.GetStackCount((STACK) result.stackId, CharacterManager.Instance.GetCharacterFromId(enemyId).State);
+                int count = UIGameManager.instance.GetStackCount((STACK) result.stackId, UIGameManager.instance.bottomAttackPanel.target);
                 AddResultItem(isOld ? Mathf.Max(0, count - 1) : count , GlobalResources.instance.stacks[result.stackId], true, isOld? Color.gray : Color.green);
             }
         }

@@ -205,7 +205,9 @@ public class BottomAttackPanel : MonoBehaviour
             Coordinates targetPos = target.coordinates.ToCoordinates();
             
             bool isAdjusted = (Mathf.Abs(currentPos.X - targetPos.X) + Mathf.Abs(currentPos.Y - targetPos.Y)) == 1;
-
+            
+            Debug.Log($"current pos : {currentPos.X}, {currentPos.Y}, target Pos : {targetPos.X}, {targetPos.Y}");
+            
             if (!isAdjusted)
             {
                 UIGameManager.instance.OnNotificationMessage("error", "You don't attack punch because of position.");

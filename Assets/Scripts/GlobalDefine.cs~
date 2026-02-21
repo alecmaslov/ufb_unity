@@ -82,11 +82,11 @@ public class GlobalDefine
         public static string EQUIP_POWER = "EQUIP_POWER";
         public static string GET_STACK_ON_TURN_START = "GET_STACK_ON_TURN_START";
         public static string SET_STACK_ON_START = "SET_STACK_ON_START";
-        public static string SET_DICE_STACK_TURN_ROLL = "SET_DICE_STACK_TURN_ROLL";
         public static string GET_EQUIP_SLOT_LIST = "GET_EQUIP_SLOT_LIST";
         public static string GET_ROOM_DATA = "GET_ROOM_DATA";
         public static string EQUIP_BONUS_LIST = "EQUIP_BONUS_LIST";
         public static string SET_STAB_ATTACK = "SET_STAB_ATTACK";
+        public static string SEND_ATTACK_BROADCAST = "SEND_ATTACK_BROADCAST";
     }
 
     public static class RESPONSE_MESSAGE

@@ -238,7 +238,6 @@ namespace UFB.Network.RoomMessageTypes
     public class StabAttackMessage : IReceiveMessage
     {
         public string characterId;
-        public string enemyId;
         public int itemType;
     }
     

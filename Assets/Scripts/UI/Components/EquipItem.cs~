@@ -18,14 +18,11 @@ public class EquipItem : MonoBehaviour
     [SerializeField]
     Text costText;
 
-    [SerializeField] private Text countText;
-
-    public void Init(Sprite image, string _name, string level, string cost, string count)
+    public void Init(Sprite image, string name, string level, string cost)
     {
         powerImage.sprite = image;
-        powerText.text = _name;
+        powerText.text = name;
         levelText.text = level;
         costText.text = cost;
-        countText.text = count;
     }
 }

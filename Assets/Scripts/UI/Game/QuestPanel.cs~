@@ -33,13 +33,6 @@ public class QuestPanel : MonoBehaviour
 
     public void InitData()
     {
-        var activeQuests = UIGameManager.instance.controller.State.quests;
-        if (activeQuests is { Count: > 0 })
-        {
-            InitActiveData();
-            return;
-        }
-        
         title.text = "CHOOSE A QUEST";
 
         ClearList();

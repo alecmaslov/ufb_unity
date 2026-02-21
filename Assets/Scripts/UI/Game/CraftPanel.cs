@@ -69,68 +69,30 @@ public class CraftPanel : MonoBehaviour
 
     }
 
-    public bool CheckCraftPower( CraftPowerSystem powerCraft )
+    private bool CheckCraftPower( CraftPowerSystem powerCraft )
     {
-        CharacterState state = UIGameManager.instance.controller.State;
-
-        bool isStatus1 = false;
-        bool isStatus2 = false;
-
         var powerCnt1 = UIGameManager.instance.GetPowerCount(powerCraft.power1);
         var powerCnt2 = UIGameManager.instance.GetPowerCount(powerCraft.power2);
-        
+
+        if (powerCraft.power1 == powerCraft.power2)
+        {
+            return powerCnt1 > 1;
+        }
+
         return powerCnt1 > 0 && powerCnt2 > 0;
-        
-        state.powers.ForEach(p => 
-        { 
-            if(p.id == (int) powerCraft.power1 && p.count > 0)
-            {
-                isStatus1 = true;
-            }
-            if (p.id == (int)powerCraft.power2 && p.count > 0)
-            {
-                isStatus2 = true;
-            }
-
-            if (powerCraft.power1 == powerCraft.power2)
-            {
-                isStatus1 = p.count > 1;
-            }
-        });
-
-        return isStatus1 && isStatus2;
     }
 
-    public bool CheckCraftItem(CraftItemSystem craftItemSystem) 
+    private bool CheckCraftItem(CraftItemSystem craftItemSystem) 
     {
-        CharacterState state = UIGameManager.instance.controller.State;
-
-        bool isStatus1 = false;
-        bool isStatus2 = false;
-
         var itemCnt1 = UIGameManager.instance.GetItemCount(craftItemSystem.item1);
         var itemCnt2 = UIGameManager.instance.GetItemCount(craftItemSystem.item2);
+
+        if (craftItemSystem.item1 == craftItemSystem.item2)
+        {
+            return itemCnt1 > 1;
+        }
         
         return itemCnt1 > 0 && itemCnt2 > 0;
-        
-        state.items.ForEach(p =>
-        {
-            if (p.id == (int)craftItemSystem.item1 && p.count > 0)
-            {
-                isStatus1 = true;
-            }
-            if (p.id == (int)craftItemSystem.item2 && p.count > 0)
-            {
-                isStatus2 = true;
-            }
-
-            if (craftItemSystem.item1 == craftItemSystem.item2)
-            {
-                isStatus1 = p.count > 1;
-            }
-        });
-
-        return isStatus1 && isStatus2;
     }
 
     public void OnClickCraftItem(CraftItem item)

@@ -81,7 +81,7 @@ public class MerchantPanel : MonoBehaviour
         panelIdx += idx;
         if (panelIdx < 0) 
         { 
-            panelIdx = 3;
+            panelIdx = 0;
         }
         panelIdx %= 4;
 

@@ -88,6 +88,8 @@ namespace UFB.UI
 
         public GameObject bottomPart;
         public GameObject bottomCloseBtn;
+
+        private CharacterState characterState;
         
         private void Awake()
         {
@@ -121,13 +123,8 @@ namespace UFB.UI
             InitResourceData(e);
         }
 
-        public void InitResourceData(CharacterState characterState)
+        public void InitButtonStatus()
         {
-            foreach(var si in stackItems)
-            {
-                si.count.text = "0";
-            }
-
             if ((USER_TYPE) characterState.type == USER_TYPE.USER)
             {
                 bottomPart.SetActive(true);
@@ -139,7 +136,16 @@ namespace UFB.UI
                 bottomPart.SetActive(false);
                 bottomCloseBtn.SetActive(true);
             }
+        }
+        
+        public void InitResourceData(CharacterState _characterState)
+        {
+            characterState = _characterState;
             
+            foreach(var si in stackItems)
+            {
+                si.count.text = "0";
+            }
 
             coinText.text = characterState.stats.coin.ToString();
             itemBagText.text = characterState.stats.bags.ToString();

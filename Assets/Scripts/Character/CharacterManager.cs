@@ -233,6 +233,11 @@ namespace UFB.Character
                 {
                     //character.gameObject.SetActive(false);
                 }
+
+                if ((characterState.type == (int)USER_TYPE.USER && characterState.id != _playerCharacterId) && PlayerPrefs.GetInt("roomJoinOption") != 1)
+                {
+                    character.transform.position = new Vector3(-100, -100, 100);
+                }
             }
             catch (Exception e)
             {
