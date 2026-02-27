@@ -441,6 +441,7 @@ public class BottomAttackPanel : MonoBehaviour
     private EnemyDiceRollMessage enemyMessage;
     public void OnEnemyStackDiceRoll(EnemyDiceRollMessage e)
     {
+        target = CharacterManager.Instance.GetCharacterFromId(e.enemyId).State;
         Debug.Log( "enemy dice attack start:::" );
         enemyMessage = e;
         //powermoveImage.gameObject.SetActive(false);

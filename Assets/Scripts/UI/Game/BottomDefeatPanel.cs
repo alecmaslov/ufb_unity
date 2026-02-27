@@ -13,7 +13,7 @@ public class BottomDefeatPanel : MonoBehaviour
 {
     public Image powermoveImage;
 
-    public Image avatarImage;
+    public TopHeader defeatTargetInfo;
 
     [HideInInspector]
     public PowerMove pm;
@@ -46,9 +46,9 @@ public class BottomDefeatPanel : MonoBehaviour
         UIGameManager.instance.bottomDrawer.OpenBottomDrawer();
 
         gameObject.SetActive(true);
-        
+        addedStackPart.SetActive(false);
         //InitEnemyState(target);
-        InitCharacterState(origin);
+        InitCharacterState(target);
 
         titleText.text = $"{origin.displayName.ToUpper()} ATTACKS!";
         
@@ -82,35 +82,8 @@ public class BottomDefeatPanel : MonoBehaviour
 
     public void InitCharacterState(CharacterState state)
     {
-        Addressables
-        .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + state.characterClass)
-        .Completed += (op) =>
-        {
-            if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-            {
-                avatarImage.sprite = op.Result.avatar;
-            }
-            else
-                Debug.LogError("Failed to load character avatar: " + op.OperationException.Message);
-        };
+        defeatTargetInfo.OnSelectedCharacterEvent(state);
     }
-
-    public void InitEnemyState(CharacterState target)
-    {
-        Addressables
-        .LoadAssetAsync<UfbCharacter>("UfbCharacter/" + target.characterClass)
-        .Completed += (op) =>
-        {
-            if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-            {
-                avatarImage.sprite = op.Result.avatar;
-            }
-            else
-                Debug.LogError("Failed to load character avatar: " + op.OperationException.Message);
-        };
-
-    }
-
 
     public bool isVampired = false;
     public void InitDiceData()

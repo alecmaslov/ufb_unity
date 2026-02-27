@@ -293,7 +293,10 @@ public class UIGameManager : MonoBehaviour
         var character = CharacterManager.Instance.GetCharacterFromId(e.characterId);
         if (character.State.stats.health.current <= 0 || (END_TYPE)e.endType == END_TYPE.DEFEAT)
         {
-            character.gameObject.SetActive(false);
+            character.transform.localPosition += Vector3.up * -100;
+            character.transform.localScale = Vector3.one * 0.001f;
+
+            // character.gameObject.SetActive(false);
         }
     }
 
@@ -445,8 +448,8 @@ public class UIGameManager : MonoBehaviour
     // DEFENCE PANEL PART - AI ATTACK
     private void OnReceiveDefenceAttackMessage(DefenceAttackMessage e)
     {
-        CharacterState origin = CharacterManager.Instance.GetCharacterFromId(e.originId).State;
-        CharacterState target = CharacterManager.Instance.GetCharacterFromId(e.targetId).State;
+        var origin = CharacterManager.Instance.GetCharacterFromId(e.originId).State;
+        var target = CharacterManager.Instance.GetCharacterFromId(e.targetId).State;
         bottomDefeatPanel.Init(e.pm, origin, target);
     }
 
@@ -461,7 +464,8 @@ public class UIGameManager : MonoBehaviour
 
         if (obj != null) 
         {
-            obj.gameObject.SetActive(false);
+            obj.transform.localPosition = new Vector3(-500, -500, -500);
+            // obj.gameObject.SetActive(false);
         }
     }
 
